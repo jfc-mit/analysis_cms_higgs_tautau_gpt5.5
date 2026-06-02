@@ -10,8 +10,8 @@ bibliography: references.bib
 **Phase 4a v1**
 
 - Initial AN version (Phase 4a).
-- Added the expected-only visible-mass template-fit note for the reduced CMS 2012 Open Data H to tau tau search in the mu tauh final state.
-- Added the Asimov expected CLs limit, discovery diagnostic, signal-injection validation, limited GoF toy study, systematic program, missing-component limitations, and reproduction contract.
+- Updated the Phase 4a expected note to the current categorized score-template model: a simultaneous pyhf fit over `vbf`, `boosted`, and `zero_jet` channels using `mva_score_hist_gradient_boosting` binned as `[0.0, 0.2, 0.35, 0.5, 1.0]`.
+- Added the current Asimov expected CLs limit, discovery diagnostic, signal-injection validation, limited GoF toy study, systematic program, candidate-comparison context, missing-component limitations, and reproduction contract.
 - Recorded that 10% data validation and full observed signal-region results are intentionally absent until the Phase 4b and Phase 4c gates.
 
 # Introduction
@@ -22,7 +22,7 @@ The primary result in this Phase 4a document is expected-only. The fit observati
 
 The Phase 1 strategy decision [D1] defines this work as a search/template-fit analysis rather than a measurement. The parameter of interest is the signal-strength modifier $\mu$, which scales the Standard Model H to tau tau signal templates. Because the reduced sample set is single-channel, uses visible mass rather than the full CMS SVFit reconstruction, and lacks several paper-level background and calibration components, the expected sensitivity reported here is a reduced-open-data benchmark rather than an attempt to reproduce the all-channel CMS Run 1 result.
 
-The current model fits the visible mu tauh mass, $m_{vis}$, simultaneously in three mutually exclusive categories: VBF, boosted, and zero-jet. The Phase 4a expected median 95% CLs upper limit is $\mu = 11.374$, with an Asimov observed-on-background limit of $\mu = 11.374$. The discovery diagnostic on signal-plus-background Asimov data gives $Z = 0.191$, so this configuration is an expected-limit demonstration, not an expected-discovery analysis.
+The current model is a simultaneous pyhf score-template fit in three mutually exclusive channels: `vbf`, `boosted`, and `zero_jet`. The fitted observable is `mva_score_hist_gradient_boosting`, using score-bin edges `[0.0, 0.2, 0.35, 0.5, 1.0]` from `nominal_yields.json`. The Phase 4a expected median 95% CLs upper limit is $\mu = 4.199$, with an Asimov observed-on-background limit of $\mu = 4.199$. The discovery diagnostic on signal-plus-background Asimov data gives $Z = 0.526$, so this configuration remains an expected-limit result, but it is the current expected-primary candidate pending Phase 4b score-modelling validation.
 
 # Data Samples
 
@@ -144,7 +144,9 @@ Signal-region events are assigned to exactly one fit category. The VBF category 
 
 # Template Construction and Statistical Model
 
-The Phase 4a statistical model is a binned template fit in $m_{vis}$. The bin edges are `0`, `40`, `60`, `80`, `100`, `120`, `160`, and `250 GeV`, read from `phase4_inference/4a_expected/outputs/nominal_yields.json`. The categories are VBF, boosted, and zero-jet, and the observation vector is the background-only Asimov expectation.
+The Phase 4a statistical model is a binned template fit in the classifier score `mva_score_hist_gradient_boosting`. The current workspace preserves the Phase 3 event categories and fits `vbf`, `boosted`, and `zero_jet` channels simultaneously. The score-bin edges are `[0.0, 0.2, 0.35, 0.5, 1.0]`, read from `phase4_inference/4a_expected/outputs/nominal_yields.json`; the observation vector is the background-only Asimov expectation, not observed signal-region data.
+
+This is the current cohesive method. The older visible-mass and inclusive-score fits are retained only as comparison history in @tbl:method-comparison and the Change Log. The inclusive score comparison has a higher expected-only diagnostic `Z = 0.590`, but it collapses the categories into `inclusive_sr`; the user-requested Phase 4a method preserves `vbf`, `boosted`, and `zero_jet`, so the category-preserving HGB score model is the primary expected candidate.
 
 The per-entry MC weight for a background sample $s$ is
 
@@ -152,13 +154,13 @@ $$
 w_s = \frac{\sigma_s L_{int}}{N_{gen,s}}.
 $$
 
-For signal samples, the stored cross section is the H to tau tau effective cross section, so the same expression is written in the source JSON as
+For signal samples, the stored cross section is the H to tau tau effective cross section, so the source JSON writes the same expression as
 
 $$
 w_s = \frac{\sigma_{prod,s} B(H \to \tau\tau) L_{int}}{N_{gen,s}}.
 $$
 
-The expected bin yield in category $c$ and visible-mass bin $b$ is the sum of weighted entries over the samples that belong to a process group:
+The expected bin yield in category $c$ and score bin $b$ is the sum of weighted entries over the samples that belong to a process group:
 
 $$
 \nu_{cb}(\mu,\theta) =
@@ -232,30 +234,32 @@ $$
 
 with the logarithmic term set to zero when $n_b = 0$. The Phase 4a Asimov saturated statistic is identically zero by construction because $n^A_b = \nu_b$, so the GoF toy distribution validates toy generation and statistic plumbing rather than data/model agreement.
 
-Table: Phase 4a workspace configuration. Values are read from `expected_results.json`, `nominal_yields.json`, and the Phase 4a workspace metadata. {#tbl:workspace-config}
+Table: Phase 4a workspace configuration. Values are read from `expected_results.json` and `nominal_yields.json`. {#tbl:workspace-config}
 
 | Quantity | Value | Source |
 |---|---:|---|
 | pyhf version | 0.7.6 | `expected_results.json` |
 | Parameter of interest | mu | `expected_results.json` |
-| Number of parameters | 25 | `expected_results.json` |
-| Fit categories | 3 | `nominal_yields.json` |
-| Visible-mass bins per category | 7 | `nominal_yields.json` |
+| Number of parameters | 17 | `expected_results.json` |
+| Fit channels | 3 | `nominal_yields.json` |
+| Score bins per channel | 4 | `nominal_yields.json` |
+| Score-bin edges | `[0.0, 0.2, 0.35, 0.5, 1.0]` | `nominal_yields.json` |
 | POI scan range | 0 to 50 | `expected_results.json` |
 | Observation source | background-only Asimov | `expected_results.json` |
 
 # Systematic Uncertainties
 
-The Phase 4a systematic program is deliberately narrower than the CMS reference analyses. It implements only sources that can be justified from the reduced open-data inputs and the predeclared Phase 1 strategy. Detector-shape variations requiring unavailable scale-factor machinery or shifted reduced inputs are documented as downscoped limitations instead of being replaced by arbitrary variations.
+The Phase 4a systematic program is deliberately narrower than the CMS reference analyses. It implements sources that can be justified from the reduced open-data inputs and the predeclared Phase 1 strategy. Detector-shape variations requiring unavailable scale-factor machinery or shifted reduced inputs are documented as downscoped limitations instead of being replaced by arbitrary variations.
 
 Table: Implemented Phase 4a nuisance parameters. Values are read from `phase4_inference/4a_expected/outputs/systematics.json`. {#tbl:implemented-systematics}
 
 | Nuisance | Type | Size | Applies to | Source in artifact |
 |---|---|---|---|---|
-| lumi_2012 | normsys | 2.6% | all MC-normalized samples | CMS PAS LUM-13-001 |
-| dy_norm_open_data | normsys | 15% | DYJetsToLL | Phase 1 [D6] and user 10-15% requirement |
-| tau_open_data_acceptance | normsys | 15% | all selected MC templates | Phase 1 [D5]/[L2] and CMS Run 1 tau range |
-| per-category staterror | staterror | sqrt(sum weights squared) per bin | all selected MC templates | finite selected MC counts and official weights |
+| `lumi_2012` | normsys | 2.6% | all MC-normalized samples | CMS PAS LUM-13-001 |
+| `dy_norm_open_data` | normsys | 15% | DYJetsToLL | Phase 1 [D6] and user 10-15% requirement |
+| `wjets_high_mt_control` | normsys | 2.637% | W1/W2/W3JetsToLNu | expected high-mT W+jets control precision |
+| `tau_open_data_acceptance` | normsys | 15% | all selected MC templates | Phase 1 [D5]/[L2] and CMS Run 1 tau range |
+| per-category staterror | staterror | sqrt(sum weights squared) per bin | selected MC templates | finite selected MC counts and official weights |
 
 Table: Systematic completeness against search conventions and CMS references. The row content is copied from `systematics.json` and maps the current reduced-sample implementation to `conventions/search.md`, CMS JHEP 05 (2014) 104, and CMS Phys. Lett. B 779 (2018) 283. {#tbl:systematic-completeness}
 
@@ -268,7 +272,7 @@ Table: Systematic completeness against search conventions and CMS references. Th
 | Tau ID/trigger/open-data acceptance | object calibration | tau ID/trigger range | tau ID/trigger effects | 15% correlated rate NP | implemented |
 | MC statistics | required | limited event counts | bin-by-bin MC stat | per-category staterror modifiers | implemented |
 | QCD multijet | background norm/shape | data-driven estimate | data-driven estimate | missing reduced sample; sideband deferred | downscoped |
-| W+jets transfer/control | background norm | high-mT control region | mT control region | W1/W2/W3 MC only in expected SR model | downscoped |
+| W+jets transfer/control | background norm | high-mT control region | mT control region | expected high-mT control scaffold with central SF=1 | partial |
 | Diboson and single top | pp electroweak backgrounds | included | included | no reduced samples; omitted | downscoped |
 
 ### Luminosity Normalization
@@ -281,11 +285,11 @@ $$
 w_s(\theta_L) = w_s(0)(1 + 0.026\theta_L).
 $$
 
-The numerical impact is visible in the expected nuisance summary figure and in the workspace configuration: `lumi_2012` is one of the rate constraints in the `25`-parameter pyhf model. Its impact is subdominant relative to the larger open-data acceptance and DY normalization nuisances because the luminosity uncertainty is much smaller. It remains mandatory because it is a real external normalization uncertainty on simulation-normalized predictions.
+The numerical impact is visible in the expected nuisance summary figure and in the workspace configuration: `lumi_2012` is one of the rate constraints in the `17`-parameter pyhf model. Its impact is subdominant relative to the larger open-data acceptance and DY normalization nuisances because the luminosity uncertainty is much smaller. It remains mandatory because it is a real external normalization uncertainty on simulation-normalized predictions.
 
 ### DY/Z Normalization
 
-The DY/Z normalization nuisance covers the dominant Z/gamma* background in the visible-mass fit. Its physical origin is the incomplete reduced-open-data calibration path: the available reduced files lack the full trigger turn-on, tau efficiency scale-factor, and embedded Z to tau tau machinery used in the CMS reference analysis. Phase 1 decision [D6] required a `10-15%` DY/Z normalization uncertainty before unblinding, and Phase 4a implements the high end, `15%`, as `dy_norm_open_data`.
+The DY/Z normalization nuisance covers the dominant Z/gamma* background in the score-template fit. Its physical origin is the incomplete reduced-open-data calibration path: the available reduced files lack the full trigger turn-on, tau efficiency scale-factor, and embedded Z to tau tau machinery used in the CMS reference analysis. Phase 1 decision [D6] required a `10-15%` DY/Z normalization uncertainty before unblinding, and Phase 4a implements the high end, `15%`, as `dy_norm_open_data`.
 
 The variation applies only to the DYJetsToLL template. It is not derived by scaling DY to the observed signal region or by fitting the Drell-Yan peak in full data. In the model, the DY contribution in each category and bin is multiplied by a constrained factor:
 
@@ -294,7 +298,13 @@ $$
 \nu_{cb}^{DY}(0)(1 + 0.15\theta_{DY}).
 $$
 
-The numerical impact is largest in the zero-jet category, where DY contributes most of the background total. This source is physically expected to matter because the zero-jet background total is `7060.345` expected events and the DY-rich validation handle contains `5514` data events at Phase 3. The interpretation is conservative but predeclared: Phase 4b must verify whether the `15%` prior covers the 10% validation sample without making all pulls trivially small.
+The numerical impact is largest in the zero-jet channel, where the nominal background total is `7068.898` expected events. This source is physically expected to matter because the zero-jet channel is DY-rich and the Z-rich validation handle contains `5514` data events at Phase 3. The interpretation is conservative but predeclared: Phase 4b must verify whether the `15%` prior covers the 10% validation sample without making all pulls trivially small.
+
+### W+jets High-mT Control Normalization
+
+The W+jets nuisance represents the expected precision of the high-mT W control-region normalization scaffold. Its physical origin is the reducible W+jets background in events where a W decay supplies the muon and a jet-like object passes the tauh selection. Phase 4a uses the Phase 3 `is_w_high_mt` control flag but does not use real control-region data to set a central scale factor.
+
+The Phase 4a central W scale factor is fixed to `1.0` in the expected-only model. The nuisance size is the expected W+jets high-mT control statistical precision, `2.637%`, read from `systematics.json`; the corresponding normsys factors are `hi = 1.0263711789977958` and `lo = 0.9736288210022043`. Phase 4b must replace or validate the central value with observed high-mT data after the 10% data-validation gate.
 
 ### Tau Trigger, Tau ID, and Open-Data Acceptance
 
@@ -311,7 +321,7 @@ The numerical impact is larger than luminosity and comparable in size to the DY 
 
 ### MC Statistical Uncertainty
 
-The MC statistical nuisance accounts for finite selected MC counts after category and visible-mass binning. Its physical origin is the limited number of reduced events in each process, especially for the small VBF category and for high-mass tail bins. The implementation uses per-category Barlow-Beeston-lite `staterror` modifiers in pyhf, with bin uncertainties derived from the weighted sum of squared MC weights.
+The MC statistical nuisance accounts for finite selected MC counts after category and score binning. Its physical origin is the limited number of reduced events in each process, especially for the small VBF channel and for high-score bins. The implementation uses per-category Barlow-Beeston-lite `staterror` modifiers in pyhf, with bin uncertainties derived from the weighted sum of squared MC weights.
 
 For a bin filled by events with weights $w_i$, the MC statistical variance is
 
@@ -319,7 +329,7 @@ $$
 \sigma_{MC,b}^2 = \sum_i w_i^2.
 $$
 
-The numerical impact is embedded in each category's `staterror` modifier and summarized in `expected_nuisance_summary.pdf`. The smallest expected background bin remains above `10.141` events in the VBF category, so the asymptotic expected limit is not forced into a low-count toy-only regime by the final binning. The interpretation is that MC statistics are an implemented source, but the missing sample set can still bias the composition even when the finite-sample uncertainty on the included samples is represented.
+The numerical impact is embedded in each category's `staterror` modifier and summarized in `expected_nuisance_summary.pdf`. The smallest expected background bin is `13.617` events in the VBF channel, so the asymptotic expected limit is not forced into a low-count toy-only regime by the final score binning. MC statistics are represented for the included samples, but the missing sample set can still bias the composition even when finite-sample uncertainty is modelled.
 
 ### Downscoped Systematic Sources
 
@@ -329,7 +339,7 @@ Table: Downscoped systematic and model sources. Each source is carried to the li
 
 | Source | Reason | Impact |
 |---|---|---|
-| tau_energy_scale | no reduced tau energy scale variation or scale-factor prescription | could shift $m_{vis}$ templates |
+| tau_energy_scale | no reduced tau energy scale variation or scale-factor prescription | could shift score-template inputs through tau kinematics |
 | muon_efficiency_scale | no official reduced-file muon trigger/ID scale factors | rate uncertainty partly covered but not separately measured |
 | JES_JER_MET | no shifted reduced inputs or variation machinery | VBF and boosted acceptances may be understated |
 | pileup | PV_npvs exists but no pileup weights/profile weights | qualitative validation limitation |
@@ -343,16 +353,32 @@ Table: Downscoped systematic and model sources. Each source is carried to the li
 
 The Phase 4a validation suite checks the expected model under its own assumptions. It does not claim data closure in the signal region, because the Phase 4a observation is Asimov pseudo-data. The checks therefore answer a narrower question: whether the expected workspace, scan, signal injection, and toy machinery behave coherently before data validation.
 
-The Phase 3 validation remediation remains relevant context. The broad mixed validation/control union failed as a final background-only closure test, but separating the validation handles gave a Z-rich visible-mass chi2 per degree of freedom of `1.409` after `4` remediation attempts. That result supports the current reduced DY shape handle while leaving W, QCD, top, and missing-background treatment as Phase 4b/4c validation obligations.
+The method-comparison context is read from `sensitivity_recommendation.json` and `mva_sensitivity.json`. The baseline categorized visible-mass model gives `Z = 0.1906097504953417` and median expected limit `11.404384834571836`. The add-MET mass comparison gives `Z = 0.1636083293830189`. The selected category-preserving HGB score gives Phase 3 scan `Z = 0.5264362537642254` and median expected limit `4.24380622771541`; the updated Phase 4a pyhf workspace gives `Z = 0.5264171907925044` and median expected limit `4.199448081748937`.
+
+Table: Candidate method comparison. Values are read from `phase3_selection/outputs/sensitivity_recommendation.json`, `phase3_selection/outputs/mva_sensitivity.json`, and `phase4_inference/4a_expected/outputs/expected_results.json`. {#tbl:method-comparison}
+
+| Candidate | Channels | Observable | Z | Median limit | Status |
+|---|---|---|---:|---:|---|
+| Baseline categorized visible mass | `vbf`, `boosted`, `zero_jet` | `m_vis` | 0.190610 | 11.404385 | comparison baseline |
+| Add-MET mass | `vbf`, `boosted`, `zero_jet` | `m_addmet` | 0.163608 | not evaluated | comparison only |
+| HGB score, categorized | `vbf`, `boosted`, `zero_jet` | `mva_score_hist_gradient_boosting` | 0.526436 | 4.243806 | selected Phase 3 candidate |
+| HGB score, Phase 4a workspace | `vbf`, `boosted`, `zero_jet` | `mva_score_hist_gradient_boosting` | 0.526417 | 4.199448 | current expected-primary candidate |
+| MLP score, categorized | `vbf`, `boosted`, `zero_jet` | `mva_score_mlp` | 0.338149 | not evaluated | comparison only |
+| XGBoost score, categorized | `vbf`, `boosted`, `zero_jet` | `mva_score_xgboost` | 0.313006 | not evaluated | comparison only |
+| HGB score, inclusive | `inclusive_sr` | `mva_score_hist_gradient_boosting` | 0.590234 | not evaluated | comparison-only; categories not preserved |
+
+The transformer option was preferred by the user, but it was not attempted in this quick Phase 4a method update because `mva_sensitivity.json` records no available `torch`, `pytorch_tabular`, or `tabpfn` stack in the current pixi environment. The reduced selected-event artifact also makes genMET direction/phi regression infeasible: `genmet_regression_feasibility` records no genMET or genMET-phi target branch, only reconstructed `met_pt`. Training a genMET-direction regressor without a target would fabricate labels, so no transformer or genMET-regression result is claimed.
+
+The Phase 3 tight tau anti-muon veto is implemented. The machine-readable `tau_antimuon_veto` record states that the tau candidate selection requires `Tau_idAntiMuTight > 0` in `phase3_selection/src/build_selection.py`; the selected-event summary keeps selected tau variables rather than a separate veto flag.
 
 Table: Signal-injection recovery. Values are read from `phase4_inference/4a_expected/outputs/signal_injection.json`. The pass criterion is relative bias below 20% for nonzero injections and near-zero absolute bias for the zero injection. {#tbl:signal-injection}
 
 | Injected mu | Fitted mu | Abs. bias | Rel. bias | Pass |
 |---:|---:|---:|---:|---|
-| 0.0 | 0.0000 | 0.0000 | 0.0000 | true |
-| 1.0 | 1.0000 | 0.0000 | 0.0000 | true |
-| 2.0 | 1.9989 | −0.0011 | −0.0006 | true |
-| 5.0 | 4.9992 | −0.0008 | −0.0002 | true |
+| 0.0 | 0.000324 | 0.000324 | 0.000000 | true |
+| 1.0 | 1.000000 | 0.000000 | 0.000000 | true |
+| 2.0 | 1.997675 | −0.002325 | −0.001163 | true |
+| 5.0 | 5.000482 | 0.000482 | 0.000096 | true |
 
 ![Signal-injection recovery. The Phase 4a injection study fits Asimov pseudo-data generated at injected signal strengths `0`, `1`, `2`, and `5`. The recovered signal strengths lie on the diagonal within the predeclared tolerance, which validates the workspace response under nominal model assumptions.](figures/signal_injection_recovery.pdf){#fig:p4a-injection}
 
@@ -362,129 +388,133 @@ Table: Limited GoF toy summary. Values are read from `phase4_inference/4a_expect
 
 | Category | NDF | Asimov stat | Pearson chi2/ndf | Toy count | Toy mean | Toy median | Toy p95 | Fraction >= Asimov |
 |---|---:|---:|---:|---:|---:|---:|---:|---:|
-| VBF | 7 | 0.000 | 0.000 | 500 | 6.802 | 6.418 | 13.241 | 1.000 |
-| Boosted | 7 | 0.000 | 0.000 | 500 | 6.933 | 6.579 | 13.096 | 1.000 |
-| Zero-jet | 7 | 0.000 | 0.000 | 500 | 7.120 | 6.669 | 13.676 | 1.000 |
+| VBF | 4 | 0.000 | 0.000 | 500 | 4.012 | 3.412 | 9.926 | 1.000 |
+| Boosted | 4 | 0.000 | 0.000 | 500 | 3.683 | 3.178 | 8.178 | 1.000 |
+| Zero-jet | 4 | 0.000 | 0.000 | 500 | 4.019 | 3.313 | 9.479 | 1.000 |
+| Combined | 12 | 0.000 | 0.000 | 500 | 11.932 | 11.295 | 20.159 | 1.000 |
 
 ![Limited toy GoF distribution. The toy distribution is generated from background-only expected templates and compared with the Asimov saturated statistic. The vertical marker at zero is expected by construction, so the figure validates toy generation and statistic evaluation rather than real-data agreement.](figures/gof_toys.pdf){#fig:p4a-gof-toys}
 
-The alternative-observable gates were also evaluated before Phase 4a. Visible mass remained the primary observable because the Phase 3 raw MC-only separation metric was `60.63` for visible mass and `58.37` for add-MET mass, while the formal expected-sensitivity gate requires a nuisance-constrained statistical model. The NN classifier was downscoped because `13` of `16` candidate inputs failed the data/background-MC modelling gate, leaving only tau relative isolation, dijet mass, and dijet eta separation as passing inputs. The NN genMET regression was downscoped because the reduced MC files contain no direct GenMET branch and Phase 2 found no neutrino truth target.
+<!-- COMPOSE: side-by-side -->
+
+![Approach comparison. The Phase 3 plot compares visible mass and add-MET mass using the same raw MC-only binned separation metric across the exclusive categories. It remains comparison context for the current score-template result rather than the Phase 4a primary model.](../../../phase3_selection/outputs/figures/approach_comparison.pdf){#fig:p3-approach}
+
+![MVA input modelling gate. The Phase 3 gate compares validation/control-region data and background-MC shapes for candidate classifier inputs. Most candidate inputs exceed the predeclared chi2/ndf threshold of `5`, so the HGB score is carried as an expected-primary candidate pending Phase 4b score-modelling validation and calibration.](../../../phase3_selection/outputs/figures/mva_input_modeling_chi2.pdf){#fig:p3-mva-gate}
 
 <!-- COMPOSE: side-by-side -->
 
-![Approach comparison. The Phase 3 plot compares visible mass and add-MET mass using the same raw MC-only binned separation metric across the exclusive categories. Visible mass remains the Phase 4a primary because it has the better diagnostic metric and because add-MET has not passed a full nuisance-constrained expected-sensitivity replacement gate.](../../../phase3_selection/outputs/figures/approach_comparison.pdf){#fig:p3-approach}
+![Expected-only sensitivity variant summary. This Phase 3 diagnostic ranks the strongest expected-only selection, category, observable, and classifier variants using simulated templates. It documents why the category-preserving HGB score was selected for the current Phase 4a expected workspace even though the inclusive score comparison is retained only as comparison context.](../../../phase3_selection/outputs/figures/sensitivity_variant_summary.pdf){#fig:p3-sensitivity-variant-summary}
 
-![MVA input modelling gate. The Phase 3 gate compares validation/control-region data and background-MC shapes for candidate classifier inputs. Most candidate inputs exceed the predeclared chi2/ndf threshold of `5`, so the classifier is not trained or promoted in this Phase 4a model.](../../../phase3_selection/outputs/figures/mva_input_modeling_chi2.pdf){#fig:p3-mva-gate}
+![Gradient-boosted classifier score templates. This Phase 3 plot shows expected signal and background score distributions after official Open Data normalization inputs. It is an expected-only MVA diagnostic; Phase 4b must validate score modelling before the score fit can be used without qualification on data.](../../../phase3_selection/outputs/figures/mva_score_templates.pdf){#fig:p3-mva-score-templates}
 
 # Expected Results
 
 The expected-result tables and plots in this section are derived from `expected_results.json` and `nominal_yields.json`. They are Asimov/MC expected results only. No observed full-data signal-region result, observed signal strength, or observed full-data post-fit template is presented in this Phase 4a note.
 
-The expected yields are small for signal relative to background in all categories. The VBF category has the best VBF enrichment but still contains only `1.590` expected signal events and `144.926` expected background events. The zero-jet category has the largest expected signal yield, `14.341`, but it is embedded in `7060.345` expected background events.
+The expected yields are small for signal relative to background in all categories. The VBF channel has the largest integrated S/B, `0.010528`, but contains only `1.590` expected signal events and `150.995` expected background events. The zero-jet channel has the largest expected signal yield, `14.341`, but it is embedded in `7068.898` expected background events.
 
 Table: Nominal expected yields by category. Values are read from `phase4_inference/4a_expected/outputs/nominal_yields.json`. {#tbl:expected-yields}
 
-| Category | Signal yield | Background yield | S/sqrt(B) | Minimum background bin |
-|---|---:|---:|---:|---:|
-| VBF | 1.590 | 144.926 | 0.132 | 10.141 |
-| Boosted | 9.170 | 2093.690 | 0.200 | 101.333 |
-| Zero-jet | 14.341 | 7,060.345 | 0.171 | 74.130 |
+| Category | Signal yield | Background yield | S/B | S/sqrt(B) | Minimum background bin |
+|---|---:|---:|---:|---:|---:|
+| VBF | 1.590 | 150.995 | 0.010528 | 0.129 | 13.617 |
+| Boosted | 9.175 | 2118.332 | 0.004331 | 0.199 | 93.004 |
+| Zero-jet | 14.341 | 7068.898 | 0.002029 | 0.171 | 32.318 |
 
 <!-- COMPOSE: 1x3 grid -->
 
-![Expected visible-mass templates in the VBF category. This Phase 4a plot shows the background-only expected stack and nominal Higgs signal overlay after official Open Data normalization. The fit observation is the Asimov background expectation, not real collision data.](figures/expected_mvis_vbf.pdf){#fig:p4a-mvis-vbf}
+![Expected HGB score templates in the VBF channel. This Phase 4a plot shows the background-only expected stack and nominal Higgs signal overlay after official Open Data normalization. The fit observation is the Asimov background expectation, not real collision data, and the minimum expected background score bin remains `13.617`.](figures/expected_mva_score_vbf.pdf){#fig:p4a-score-vbf}
 
-![Expected visible-mass templates in the boosted category. This Phase 4a plot shows the non-VBF category with at least one clean jet. The category has the largest expected S/sqrt(B) among the three retained categories, but the expected signal remains much smaller than the background.](figures/expected_mvis_boosted.pdf){#fig:p4a-mvis-boosted}
+![Expected HGB score templates in the boosted channel. This Phase 4a plot shows the non-VBF category with at least one clean jet. The channel has the largest expected S/sqrt(B) among the three retained channels, but the expected signal remains much smaller than the background.](figures/expected_mva_score_boosted.pdf){#fig:p4a-score-boosted}
 
-![Expected visible-mass templates in the zero-jet category. This Phase 4a plot shows the DY-dominated category retained from Phase 3. The category supplies the largest absolute expected signal yield and the largest background constraint in the simplified reduced-sample model.](figures/expected_mvis_zero_jet.pdf){#fig:p4a-mvis-zero}
+![Expected HGB score templates in the zero-jet channel. This Phase 4a plot shows the DY-dominated score-template channel retained from Phase 3. The channel supplies the largest absolute expected signal yield and the largest background constraint in the simplified reduced-sample model.](figures/expected_mva_score_zero_jet.pdf){#fig:p4a-score-zero}
 
-![Expected signal-to-background ratio. This figure summarizes the category-integrated nominal Higgs signal divided by nominal background. The boosted category has the largest S/sqrt(B), while the VBF category remains important for topology coverage despite the small absolute signal yield.](figures/expected_s_over_b.pdf){#fig:p4a-sob}
+![Expected signal-to-background ratio. This figure summarizes the category-integrated nominal Higgs signal divided by nominal background. The VBF channel has the largest integrated S/B, while the boosted channel has the largest S/sqrt(B) because of its balance of signal yield and background size.](figures/expected_s_over_b.pdf){#fig:p4a-sob}
 
-The asymptotic modified-frequentist CLs calculation scans $\mu$ from `0` to `50`. The expected median 95% upper limit is `11.374`, with the minus-two, minus-one, plus-one, and plus-two expected bands listed in @tbl:expected-limit. The Asimov observed-on-background limit is numerically equal to the median expected limit within rounding, as expected for a background-only Asimov observation.
+The asymptotic modified-frequentist CLs calculation scans $\mu$ from `0` to `50`. The expected median 95% upper limit is `4.199`, with the minus-two, minus-one, plus-one, and plus-two expected bands listed in @tbl:expected-limit. The Asimov observed-on-background limit is numerically equal to the median expected limit within rounding, as expected for a background-only Asimov observation.
 
 Table: Expected 95% CLs upper limit on signal strength. Values are read from `phase4_inference/4a_expected/outputs/expected_results.json`. {#tbl:expected-limit}
 
 | Quantity | mu |
 |---|---:|
-| Expected minus-two band | 5.828 |
-| Expected minus-one band | 7.958 |
-| Expected median | 11.374 |
-| Expected plus-one band | 16.472 |
-| Expected plus-two band | 23.194 |
-| Observed-on-background Asimov | 11.374 |
+| Expected minus-two band | 2.144 |
+| Expected minus-one band | 2.920 |
+| Expected median | 4.199 |
+| Expected plus-one band | 6.146 |
+| Expected plus-two band | 8.817 |
+| Observed-on-background Asimov | 4.199 |
 
-The expected discovery diagnostic is intentionally weak. The pyhf asymptotic $q_0$ test on signal-plus-background Asimov data gives `p = 0.4244` and `Z = 0.1906`. This is numerically compatible with a low-sensitivity expected-limit result rather than with an expected discovery claim, and it is consistent with the small expected S/sqrt(B) values in @tbl:expected-yields.
+The expected discovery diagnostic is intentionally modest. The pyhf asymptotic $q_0$ test on signal-plus-background Asimov data gives `p = 0.2993` and `Z = 0.5264`. This is numerically compatible with a low-sensitivity expected-limit result rather than with an expected discovery claim, and it is consistent with the small expected S/sqrt(B) values in @tbl:expected-yields.
 
 Table: Expected discovery diagnostic. Values are read from `expected_results.json`. {#tbl:discovery-diagnostic}
 
 | Method | p-value | Z | Status |
 |---|---:|---:|---|
-| pyhf asymptotic q0 on signal-plus-background Asimov | 0.4244 | 0.1906 | evaluated |
+| pyhf asymptotic q0 on signal-plus-background Asimov | 0.2993 | 0.5264 | evaluated |
 
 # Comparison to Prior Results and Theory
 
-The most relevant Run 1 reference is CMS JHEP 05 (2014) 104, which reported evidence for H to tau tau using 7 TeV and 8 TeV data, multiple channels, CMS calibrations, embedded backgrounds, and a full category/control-region program [@cms_htt_2014]. That publication quotes a global best-fit signal strength of `0.78 ± 0.27` and local significance above `3` standard deviations in the Higgs-mass range used in the strategy artifact. This Phase 4a reduced mu tauh expected limit of $\mu = 11.374$ is therefore weaker by a factor of about `14.6` relative to a Standard Model signal-strength target of `0.78`, but the comparison is a sensitivity-scale context, not a direct observed-data pull.
+The most relevant Run 1 reference is CMS JHEP 05 (2014) 104, which reported evidence for H to tau tau using 7 TeV and 8 TeV data, multiple channels, CMS calibrations, embedded backgrounds, and a full category/control-region program [@cms_htt_2014]. That publication quotes a global best-fit signal strength of `0.78 ± 0.27` and local significance above `3` standard deviations in the Higgs-mass range used in the strategy artifact. This Phase 4a reduced mu tauh expected limit of $\mu = 4.199$ is weaker by a factor of about `5.38` relative to a Standard Model signal-strength target of `0.78`, but the comparison is a sensitivity-scale context, not a direct observed-data pull.
 
-CMS Phys. Lett. B 779 (2018) 283 reported H to tau tau observation at 13 TeV with `35.9/fb`, observed significance `4.9`, expected significance `4.7`, and signal strength `1.09` with uncertainties near `0.27` [@cms_htt_2018]. The current reduced expected discovery diagnostic of `Z = 0.191` is lower by a factor of about `24.6` relative to the `4.7` expected significance from that 13 TeV analysis. The comparison is quantitative but not a compatibility test because the energy, luminosity, channels, reconstruction, and training/calibration programs differ.
+CMS Phys. Lett. B 779 (2018) 283 reported H to tau tau observation at 13 TeV with `35.9/fb`, observed significance `4.9`, expected significance `4.7`, and signal strength `1.09` with uncertainties near `0.27` [@cms_htt_2018]. The current reduced expected discovery diagnostic of `Z = 0.526` is lower by a factor of about `8.93` relative to the `4.7` expected significance from that 13 TeV analysis. The comparison is quantitative but not a compatibility test because the energy, luminosity, channels, reconstruction, and training/calibration programs differ.
 
-The ATLAS+CMS Run 1 combination reported a combined Higgs signal yield relative to the Standard Model of `1.09 ± 0.11` and an H to tau tau observed significance of `5.5` in the Phase 1 strategy's reference table [@atlas_cms_higgs_combination_2016]. The Phase 4a expected limit is therefore not competitive with world-level Higgs coupling precision. Its purpose is to provide a transparent open-data search model with honest limitations and a reproducible statistical workflow.
+The ATLAS+CMS Run 1 combination reported a combined Higgs signal yield relative to the Standard Model of `1.09 ± 0.11` and an H to tau tau observed significance of `5.5` in the Phase 1 strategy's reference table [@atlas_cms_higgs_combination_2016]. The Phase 4a expected limit is therefore not competitive with world-level Higgs coupling precision. Its purpose is to provide a transparent open-data score-template search model with honest limitations and a reproducible statistical workflow.
 
 Table: Prior-result context. External reference numbers are from the cited publications as recorded in the Phase 1 strategy, while this-analysis numbers are from Phase 4a JSON. {#tbl:prior-context}
 
 | Source | Quantity | Value | Comparison status |
 |---|---|---:|---|
-| This Phase 4a note | expected 95% CLs limit on mu | 11.374 | internal expected result |
-| This Phase 4a note | expected discovery Z | 0.191 | internal expected diagnostic |
+| This Phase 4a note | expected 95% CLs limit on mu | 4.199 | internal expected result |
+| This Phase 4a note | expected discovery Z | 0.526 | internal expected diagnostic |
 | CMS 2014 Run 1 | global best-fit mu | 0.78 ± 0.27 | global observed context, not direct pull |
 | CMS 2014 Run 1 | local H to tau tau significance | > 3 sigma | global observed context |
 | CMS 2018 13 TeV | observed significance | 4.9 | different energy and dataset |
-| CMS 2018 13 TeV | expected significance | 4.7 | about 24.6 times larger than this expected Z |
+| CMS 2018 13 TeV | expected significance | 4.7 | about 8.93 times larger than this expected Z |
 | CMS 2018 13 TeV | signal strength | 1.09 | global observed context |
 | ATLAS+CMS Run 1 | combined signal yield relative to SM | 1.09 ± 0.11 | world-level coupling context |
 | ATLAS+CMS Run 1 | H to tau tau observed significance | 5.5 | global observed context |
 
 # Conclusions
 
-Phase 4a has produced an expected-only pyhf template model for the reduced CMS 2012 Open Data H to tau tau search in the mu tauh final state. The model uses visible mass in VBF, boosted, and zero-jet categories, official Open Data normalization metadata, a 2.6% luminosity nuisance, 15% DY and tau/open-data acceptance nuisances, and per-category MC statistical uncertainties. The expected median 95% CLs upper limit is $\mu = 11.374$, and the expected discovery diagnostic is $Z = 0.191$.
+Phase 4a has produced an expected-only pyhf template model for the reduced CMS 2012 Open Data H to tau tau search in the mu tauh final state. The model uses `mva_score_hist_gradient_boosting` in simultaneous `vbf`, `boosted`, and `zero_jet` channels, official Open Data normalization metadata, a 2.6% luminosity nuisance, 15% DY and tau/open-data acceptance nuisances, a 2.637% expected W high-mT control nuisance, and per-category MC statistical uncertainties. The expected median 95% CLs upper limit is $\mu = 4.199$, and the expected discovery diagnostic is $Z = 0.526$.
 
-The result should be interpreted as a reduced-open-data expected sensitivity benchmark. It is not a full CMS reproduction, and it is not yet an observed result. Phase 4b will add 10% data validation with a compiled PDF and human gate, and Phase 4c will add full observed signal-region results only after approval.
+The result should be interpreted as a reduced-open-data expected sensitivity benchmark and not as a full CMS reproduction. It is not yet an observed result. Phase 4b will add 10% data validation with a compiled PDF and human gate, including score-modelling validation and observed high-mT W control checks; Phase 4c will add full observed signal-region results only after approval.
 
 # Future Directions
 
-The next required step is Phase 4b 10% data validation. That phase must compare the 10% observed result to the expected model, validate the Z-rich, W high-mT, QCD same-sign, top, VBF, and category-stability handles, and recompile the analysis note PDF before human review. It must not silently tune the signal-region background model to improve agreement.
+The next required step is Phase 4b 10% data validation. That phase must compare the 10% observed result to the expected score-template model, validate the Z-rich, W high-mT, QCD same-sign, top, VBF, and category-stability handles, and recompile the analysis note PDF before human review. It must not silently tune the signal-region background model to improve agreement.
 
-Phase 4c must then compare the full observed result to both the Phase 4a expectation and the Phase 4b 10% validation result. If data-level nuisance pulls or GoF tests reveal a physics issue traceable to earlier phases, the regression protocol must be triggered. Phase 5 should add final typesetting, figure compositing, more complete comparison plots, and any additional citable calibration or detector variation inputs that can be implemented without violating the reduced-sample scope.
+Phase 4c must then compare the full observed result to both the Phase 4a expectation and the Phase 4b 10% validation result. If data-level nuisance pulls, score-modelling checks, or GoF tests reveal a physics issue traceable to earlier phases, the regression protocol must be triggered. Phase 5 should add final typesetting, figure compositing, more complete comparison plots, and any additional citable calibration or detector variation inputs that can be implemented without violating the reduced-sample scope.
 
 # Known Limitations and Open Questions
 
-The dominant limitation is missing detector and efficiency correction machinery. The reduced files do not include the full trigger, tau ID, tau trigger, tau energy scale, muon efficiency, pileup, JES/JER, MET, or b-tag variation workflow used in the CMS reference analyses. Phase 4a represents this with a 15% tau/open-data acceptance nuisance and explicit downscope rows, but this is not a substitute for source-specific detector systematics.
+The dominant limitation is missing detector and efficiency correction machinery. The reduced files do not include the full trigger, tau ID, tau trigger, tau energy scale, muon efficiency, pileup, JES/JER, MET, or b-tag variation workflow used in the CMS reference analyses. Phase 4a represents this with a 15% tau/open-data acceptance nuisance and explicit downscope rows, but this is not a substitute for source-specific detector systematics or score-shape variations.
 
 The second limitation is missing background and signal components. The expected workspace omits QCD multijet, diboson, single top, W4 or inclusive W+jets, embedded Z to tau tau, associated Higgs, H to WW, and additional DY categories. The largest practical consequence is that the expected background composition is incomplete relative to the CMS papers, especially for fake-tau and electroweak backgrounds.
 
 The third limitation is expected-only blinding. Phase 4a uses background-only Asimov pseudo-data, so the GoF statistic is identically zero by construction and cannot validate real data agreement. This is correct for Phase 4a, but the limitation must be removed by 10% validation and full observed fits in later phases.
 
-The fourth limitation is method sensitivity. Visible mass is robust in reduced files, but CMS JHEP 05 (2014) 104 used stronger mass reconstruction and a broader channel/category program [@cms_htt_2014]. The current expected limit and discovery diagnostic show that this reduced single-channel model is not expected to observe H to tau tau by itself.
+The fourth limitation is score-model validation. The HGB score improves expected sensitivity in MC, but Phase 3 already documented broad data/background-MC input-shape failures. The score fit is therefore an expected-primary candidate pending Phase 4b validation, not an unqualified observed-data primary result.
 
 # Appendix A: Limitation Index
 
-Table: Limitation and decision index propagated to Phase 4a. Labels originate in Phase 1 and are tracked through `COMMITMENTS.md`. {#tbl:limitation-index}
+Table: Limitation and decision index propagated to Phase 4a. Labels originate in Phase 1 and are tracked through `COMMITMENTS.md` and current Phase 3/4 machine-readable outputs. {#tbl:limitation-index}
 
 | Label | Description | Phase 4a status | Impact |
 |---|---|---|---|
-| [D1] | Search/template-fit strategy | fulfilled | pyhf visible-mass model built |
-| [D2] | Visible mass primary observable | fulfilled | expected fit uses $m_{vis}$ |
-| [D3] | VBF, boosted, zero-jet categories | fulfilled | simultaneous three-category fit |
-| [D4] | W high-mT data normalization | downscoped in 4a | expected-only phase defers real-data CR use |
-| [D5] | Tight tau anti-muon veto | fulfilled | inherited from Phase 3 selection |
+| [D1] | Search/template-fit strategy | fulfilled | simultaneous pyhf score-template model built |
+| [D2] | Visible mass baseline observable | superseded by Phase 3 expected-sensitivity regression | visible mass retained as comparison baseline, not current primary |
+| [D3] | VBF, boosted, zero-jet categories | fulfilled | simultaneous three-channel fit preserved |
+| [D4] | W high-mT data normalization | partial in 4a | expected central SF=1 with 2.637% nuisance; observed control update deferred to 4b |
+| [D5] | Tight tau anti-muon veto | fulfilled | `Tau_idAntiMuTight > 0` in Phase 3 tau selection |
 | [D6] | DY/Z 10-15% uncertainty | fulfilled | 15% DY norm nuisance |
-| [D7] | pyhf workspace with MC stat terms | fulfilled | 25-parameter pyhf model |
+| [D7] | pyhf workspace with MC stat terms | fulfilled | 17-parameter pyhf model |
 | [D8] | Blinding | fulfilled | real signal-region data not used |
-| [D9] | Alternative observable gate | downscoped | NN and genMET alternatives rejected; add-MET diagnostic only |
+| [D9] | Alternative observable gate | updated | HGB score selected as expected-primary candidate; add-MET, MLP, XGBoost, inclusive score retained as comparisons |
 | [L1] | Single-channel scope | carried | sensitivity weaker than CMS all-channel |
 | [L2] | Missing trigger/tau scale factors | carried | 15% tau/open-data acceptance nuisance |
-| [L3] | Visible mass weaker than SVFit | carried | expected discovery diagnostic small |
+| [L3] | Visible mass weaker than SVFit | carried | visible mass baseline superseded by expected-only score candidate |
 | [L4] | QCD/multijet unavailable | carried | fake background deferred to sideband validation |
-
 # Appendix B: Numerical Source Map
 
 The AN numerical values are rendered from JSON outputs and external cited records. Result values are not transcribed from prose artifacts. Table @tbl:numeric-source-map maps the main numerical classes to their machine-readable sources.
@@ -494,12 +524,13 @@ Table: Numerical source map. This table is intended as the audit bridge between 
 | Numerical class | Source file | Example fields |
 |---|---|---|
 | Expected CLs limit and discovery diagnostic | `phase4_inference/4a_expected/outputs/expected_results.json` | expected band, Asimov limit, p-value, Z |
-| Nominal yields and binning | `phase4_inference/4a_expected/outputs/nominal_yields.json` | bin edges, category yields, S/sqrt(B) |
+| Nominal yields and binning | `phase4_inference/4a_expected/outputs/nominal_yields.json` | score-bin edges, category yields, S/B, S/sqrt(B) |
 | Systematics | `phase4_inference/4a_expected/outputs/systematics.json` | nuisance sizes, completeness table, downscopes |
 | Signal injection | `phase4_inference/4a_expected/outputs/signal_injection.json` | injected mu, fitted mu, biases |
 | GoF toys | `phase4_inference/4a_expected/outputs/gof_validation.json` | toy count, medians, p95, Asimov statistic |
 | Missing components | `phase4_inference/4a_expected/outputs/limitations_downscope.json` | missing sample list and statuses |
 | Selection raw yields | `phase3_selection/outputs/category_yields.json`, `region_yields.json` | category and region counts |
+| Method comparison | `phase3_selection/outputs/sensitivity_recommendation.json`, `mva_sensitivity.json` | candidate Z values, median limits, feasibility records |
 | Normalization inputs | `phase3_selection/outputs/normalization_inputs.json` | luminosity, N_gen, cross sections, weights |
 
 # Appendix C: Auxiliary Phase 2 Figures
@@ -530,19 +561,19 @@ The Phase 2 figures in this appendix document early feasibility and branch-range
 
 # Appendix D: Auxiliary Phase 3 Template Figures
 
-The Phase 3 template figures in this appendix are shape-normalized diagnostics produced before the Phase 4a expected model added official Open Data normalization and nuisance parameters. They document the primary visible-mass observable and the add-MET alternative by category.
+The Phase 3 template figures in this appendix are shape-normalized diagnostics produced before the Phase 4a expected model added official Open Data normalization and nuisance parameters. They document the visible-mass baseline and add-MET alternative by category; both are comparison inputs for the current score-template result.
 
 <!-- COMPOSE: 2x3 grid -->
 
-![Phase 3 visible mass in the VBF category. This normalized diagnostic shows the primary observable before Phase 4a absolute normalization. The Phase 4a expected VBF template in @fig:p4a-mvis-vbf supersedes it for the expected statistical model.](../../../phase3_selection/outputs/figures/visible_mass_vbf.pdf){#fig:p3-mvis-vbf}
+![Phase 3 visible mass in the VBF category. This normalized diagnostic shows the primary observable before Phase 4a absolute normalization. The current Phase 4a score-template fit supersedes it for the expected statistical model.](../../../phase3_selection/outputs/figures/visible_mass_vbf.pdf){#fig:p3-mvis-vbf}
 
-![Phase 3 visible mass in the boosted category. This normalized diagnostic shows the primary observable in the non-VBF one-or-more-jet category. The Phase 4a expected boosted template in @fig:p4a-mvis-boosted supersedes it for the expected fit.](../../../phase3_selection/outputs/figures/visible_mass_boosted.pdf){#fig:p3-mvis-boosted}
+![Phase 3 visible mass in the boosted category. This normalized diagnostic shows the primary observable in the non-VBF one-or-more-jet category. The current Phase 4a score-template fit supersedes it for the expected fit.](../../../phase3_selection/outputs/figures/visible_mass_boosted.pdf){#fig:p3-mvis-boosted}
 
-![Phase 3 visible mass in the zero-jet category. This normalized diagnostic shows the DY-rich zero-jet mass shape before Phase 4a absolute weighting. The Phase 4a expected zero-jet template in @fig:p4a-mvis-zero is the model input used for the expected result.](../../../phase3_selection/outputs/figures/visible_mass_zero_jet.pdf){#fig:p3-mvis-zero}
+![Phase 3 visible mass in the zero-jet category. This normalized diagnostic shows the DY-rich zero-jet mass shape before Phase 4a absolute weighting. The current Phase 4a score-template fit is the model input used for the expected result.](../../../phase3_selection/outputs/figures/visible_mass_zero_jet.pdf){#fig:p3-mvis-zero}
 
-![Phase 3 add-MET mass in the VBF category. This alternative-observable diagnostic is retained for audit because add-MET mass was required by the user prompt. It is not promoted over visible mass in Phase 4a.](../../../phase3_selection/outputs/figures/addmet_mass_vbf.pdf){#fig:p3-addmet-vbf}
+![Phase 3 add-MET mass in the VBF category. This alternative-observable diagnostic is retained for audit because add-MET mass was required by the user prompt. It is not promoted over the HGB score in Phase 4a.](../../../phase3_selection/outputs/figures/addmet_mass_vbf.pdf){#fig:p3-addmet-vbf}
 
-![Phase 3 add-MET mass in the boosted category. This diagnostic shows the add-MET alternative in the boosted category. The raw comparison did not pass the full expected-sensitivity replacement gate, so it remains an auxiliary study.](../../../phase3_selection/outputs/figures/addmet_mass_boosted.pdf){#fig:p3-addmet-boosted}
+![Phase 3 add-MET mass in the boosted category. This diagnostic shows the add-MET alternative in the boosted category. The expected comparison does not outperform the HGB score, so it remains an auxiliary study.](../../../phase3_selection/outputs/figures/addmet_mass_boosted.pdf){#fig:p3-addmet-boosted}
 
 ![Phase 3 add-MET mass in the zero-jet category. This diagnostic completes the category-by-category add-MET audit trail. It supports the documented alternative-observable study but does not enter the Phase 4a expected result.](../../../phase3_selection/outputs/figures/addmet_mass_zero_jet.pdf){#fig:p3-addmet-zero}
 
