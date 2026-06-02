@@ -42,3 +42,11 @@ Started expected-only sensitivity regression scan.
 ## 2026-06-02T14:18:13Z
 
 Completed scan over 78 expected-only variants. Best variant `mva_hist_gradient_boosting_score_single_category` reached Z=0.596, median limit=3.977.
+
+## 2026-06-02T14:34:45Z
+
+Started expected-only sensitivity regression scan.
+
+## 2026-06-02T14:36:37Z
+
+Completed scan over 78 expected-only variants. Best variant `mva_hist_gradient_boosting_score_single_category` reached Z=0.596, median limit=3.977.

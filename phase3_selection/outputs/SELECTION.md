@@ -394,7 +394,25 @@ two expected-only classifiers. Machine-readable results are written to
 `sensitivity_recommendation.json`, `sensitivity_selected_events.npz`, and
 `missing_component_feasibility.json`.
 
-The best expected-only variant is `mva_hist_gradient_boosting_score_single_category` with Asimov
+![Expected-only sensitivity variant summary. This figure ranks the strongest
+selection, category, observable, and classifier variants by Asimov discovery
+sensitivity using only simulated signal and background templates. The dashed
+reference line is the Phase 4a visible-mass baseline, so the comparison is an
+optimization diagnostic and not an observed-data result.](figures/sensitivity_variant_summary.pdf){#fig:p3-sensitivity-variant-summary}
+
+![Gradient-boosted classifier score templates. The figure shows the expected
+signal and background score distributions in the signal region after applying
+the official Open Data normalization inputs. The classifier was trained only on
+MC, and Phase 4b must validate the score modelling before this expected-only
+gain can be promoted as a primary result.](figures/mva_score_templates.pdf){#fig:p3-mva-score-templates}
+
+![Sensitivity nuisance diagnostic. The figure compares the visible-mass
+baseline and the strongest classifier-score candidate under nominal, reduced,
+and removed nuisance-parameter configurations. These curves are diagnostic
+stress tests of the expected model only; configurations with removed or
+reduced nuisances are not final statistical results.](figures/sensitivity_nuisance_audit.pdf){#fig:p3-sensitivity-nuisance-audit}
+
+The best expected-only variant is the Gradient-boosted classifier score, inclusive signal region with Asimov
 discovery `Z = 0.596`. Its median expected CLs limit is
 `3.977` where evaluated. Relative to the Phase 4a
 baseline this is a `Z` improvement factor of

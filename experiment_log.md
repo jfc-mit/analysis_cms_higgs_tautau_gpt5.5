@@ -324,3 +324,12 @@ Phase 4a expected-only model built from Phase 3 selected MC using official Open 
 ## 2026-06-02T14:15:07Z
 
 Phase 3 sensitivity regression fixer ran expected-only category, observable, MVA, nuisance, and missing-component scans. Best variant `mva_hist_gradient_boosting_score_single_category` reached Z=0.596 versus Phase 4a baseline Z=0.191; see `phase3_selection/outputs/sensitivity_recommendation.json`.
+
+## 2026-06-02T14:34:08Z
+
+Phase 3 plot-label fixer addressed the sensitivity plot validation failure by
+replacing raw/internal plotted labels with display labels, moving the
+gradient-boosted classifier score legend out of the plotted data region, and
+adding the three sensitivity figures to `SELECTION.md` with expected-only
+interpretive captions. Physics logic, MVA training, scores, and sensitivity
+ranking were intentionally left unchanged.

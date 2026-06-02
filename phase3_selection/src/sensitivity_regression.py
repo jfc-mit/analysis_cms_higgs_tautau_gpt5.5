@@ -68,6 +68,19 @@ MVA_INPUTS = [
     "btag_max",
 ]
 
+MODEL_DISPLAY_LABELS = {
+    "hist_gradient_boosting": "Gradient-boosted classifier",
+    "mlp": "Neural-network classifier",
+}
+
+NUISANCE_DISPLAY_LABELS = {
+    "nominal": "Nominal nuisances",
+    "no_staterror": "No MC-stat nuisance",
+    "no_normsys": "No normalization nuisances",
+    "no_nuisance": "No nuisances",
+    "low_nuisance_diagnostic": "Reduced nuisance diagnostic",
+}
+
 
 @dataclass(frozen=True)
 class ModelSpec:
@@ -128,6 +141,42 @@ def weighted_hist(values: np.ndarray, event_weight: float, bins: np.ndarray) -> 
 
 def sanitize_category(name: str) -> str:
     return name.replace("-", "_").replace("/", "_")
+
+
+def model_display_label(name: str) -> str:
+    return MODEL_DISPLAY_LABELS.get(name, name.replace("_", " ").title())
+
+
+def spec_display_label(name: str) -> str:
+    if name == "baseline_phase4a_mvis":
+        return "Visible mass baseline"
+    if name == "baseline_addmet":
+        return "Add-MET mass baseline"
+    if name == "baseline_pt_tautau_proxy":
+        return "pT(tau tau) proxy baseline"
+    if name == "jhep_refined_mvis":
+        return "Boosted/VBF refined categories"
+    if name.startswith("mva_") and name.endswith("_score_baseline_categories"):
+        model_name = name.removeprefix("mva_").removesuffix("_score_baseline_categories")
+        return f"{model_display_label(model_name)} score, baseline categories"
+    if name.startswith("mva_") and name.endswith("_score_single_category"):
+        model_name = name.removeprefix("mva_").removesuffix("_score_single_category")
+        return f"{model_display_label(model_name)} score, inclusive signal region"
+    if name.startswith("grid_"):
+        rest = name.removeprefix("grid_mjj")
+        try:
+            mjj_cut, rest = rest.split("_deta", maxsplit=1)
+            detajj_cut, pttt_cut = rest.split("_pt", maxsplit=1)
+            return f"Dijet/boost scan, {mjj_cut} GeV, separation {detajj_cut}, boost pT {pttt_cut} GeV"
+        except ValueError:
+            return "Dijet/boost category scan"
+    if name.startswith("btag_veto_le") and name.endswith("_split"):
+        threshold = name.removeprefix("btag_veto_le").removesuffix("_split")
+        return f"Top-veto scan, max b tag <= {threshold}"
+    if name.startswith("taupt_split_"):
+        threshold = name.removeprefix("taupt_split_")
+        return f"Tau pT scan, threshold {threshold} GeV"
+    return name.replace("_", " ").title()
 
 
 def assign_baseline(selected: dict[str, np.ndarray]) -> np.ndarray:
@@ -793,21 +842,22 @@ def label(ax: plt.Axes, llabel: str = "Open Simulation") -> None:
 
 def plot_variant_summary(results: list[dict[str, Any]]) -> None:
     valid = [row for row in results if rank_key(row) >= 0]
-    top = sorted(valid, key=rank_key, reverse=True)[:12]
-    names = [row["spec"]["name"].replace("_", " ") for row in top]
+    top = sorted(valid, key=rank_key, reverse=True)[:10]
+    names = [spec_display_label(row["spec"]["name"]) for row in top]
     values = [rank_key(row) for row in top]
-    x = np.arange(len(top))
+    y = np.arange(len(top))
     fig, ax = plt.subplots(figsize=(10, 10))
-    ax.errorbar(x, values, yerr=np.zeros(len(values)), marker="o", linestyle="", color="tab:blue", label="Variant")
-    ax.axhline(0.1906097504953417, color="tab:red", linestyle="--", label="Phase 4a baseline")
-    ax.set_xticks(x)
-    ax.set_xticklabels(names, rotation=90)
-    ax.set_xlabel("Expected-only variant")
-    ax.set_ylabel("Asimov discovery Z")
-    ax.legend(fontsize="x-small", loc="upper right")
-    ymin, ymax = ax.get_ylim()
-    if ymax > ymin:
-        ax.set_ylim(ymin, ymax * 1.25)
+    ax.errorbar(values, y, xerr=np.zeros(len(values)), marker="o", linestyle="", color="tab:blue", label="Variant")
+    ax.axvline(0.1906097504953417, color="tab:red", linestyle="--", label="Phase 4a baseline")
+    ax.set_yticks(y)
+    ax.set_yticklabels(names)
+    ax.invert_yaxis()
+    ax.set_xlabel("Asimov discovery Z")
+    ax.set_ylabel("Expected-only variant")
+    ax.legend(fontsize="x-small", loc="lower right")
+    xmin, xmax = ax.get_xlim()
+    if xmax > xmin:
+        ax.set_xlim(xmin, xmax * 1.10)
     label(ax)
     save_figure(fig, "sensitivity_variant_summary")
 
@@ -826,10 +876,10 @@ def plot_nuisance_audit(payload: dict[str, Any]) -> None:
             yerr=np.zeros(len(values)),
             marker="o",
             linestyle="",
-            label=row["model"].replace("_", " "),
+            label=spec_display_label(row["model"]),
         )
     ax.set_xticks(x)
-    ax.set_xticklabels([mode.replace("_", " ") for mode in modes], rotation=45, ha="right")
+    ax.set_xticklabels([NUISANCE_DISPLAY_LABELS[mode] for mode in modes], rotation=30, ha="right")
     ax.set_xlabel("Nuisance diagnostic mode")
     ax.set_ylabel("Asimov discovery Z")
     ax.legend(fontsize="x-small", loc="upper right")
@@ -871,13 +921,13 @@ def plot_mva_scores(selected: dict[str, np.ndarray], scores: dict[str, np.ndarra
             label=role.title(),
             color=color,
         )
-    ax.set_xlabel("HistGradientBoosting score")
+    ax.set_xlabel("Gradient-boosted classifier score")
     ax.set_ylabel("Expected events")
     ax.set_yscale("log")
-    ax.legend(fontsize="x-small", loc="upper left")
     ymin, ymax = ax.get_ylim()
     if ymax > ymin:
-        ax.set_ylim(max(ymin, 1e-3), ymax * 2.0)
+        ax.set_ylim(max(ymin, 1e-3), ymax * 3.0)
+    ax.legend(fontsize="x-small", loc="upper left", bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0)
     label(ax)
     save_figure(fig, "mva_score_templates")
 
@@ -930,7 +980,25 @@ two expected-only classifiers. Machine-readable results are written to
 `sensitivity_recommendation.json`, `sensitivity_selected_events.npz`, and
 `missing_component_feasibility.json`.
 
-The best expected-only variant is `{best_summary['name']}` with Asimov
+![Expected-only sensitivity variant summary. This figure ranks the strongest
+selection, category, observable, and classifier variants by Asimov discovery
+sensitivity using only simulated signal and background templates. The dashed
+reference line is the Phase 4a visible-mass baseline, so the comparison is an
+optimization diagnostic and not an observed-data result.](figures/sensitivity_variant_summary.pdf){{#fig:p3-sensitivity-variant-summary}}
+
+![Gradient-boosted classifier score templates. The figure shows the expected
+signal and background score distributions in the signal region after applying
+the official Open Data normalization inputs. The classifier was trained only on
+MC, and Phase 4b must validate the score modelling before this expected-only
+gain can be promoted as a primary result.](figures/mva_score_templates.pdf){{#fig:p3-mva-score-templates}}
+
+![Sensitivity nuisance diagnostic. The figure compares the visible-mass
+baseline and the strongest classifier-score candidate under nominal, reduced,
+and removed nuisance-parameter configurations. These curves are diagnostic
+stress tests of the expected model only; configurations with removed or
+reduced nuisances are not final statistical results.](figures/sensitivity_nuisance_audit.pdf){{#fig:p3-sensitivity-nuisance-audit}}
+
+The best expected-only variant is the {spec_display_label(best_summary['name'])} with Asimov
 discovery `Z = {best_summary['z_value']:.3f}`. Its median expected CLs limit is
 `{best_summary['median_limit']:.3f}` where evaluated. Relative to the Phase 4a
 baseline this is a `Z` improvement factor of
