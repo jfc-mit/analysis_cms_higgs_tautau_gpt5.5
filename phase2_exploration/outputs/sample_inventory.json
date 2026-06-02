@@ -1,0 +1,4709 @@
+{
+  "base_url": "https://root.cern/files/HiggsTauTauReduced",
+  "prompt_only_files": {
+    "Run2012B_SingleMu.root": {
+      "checked_url": "https://root.cern/files/HiggsTauTauReduced/Run2012B_SingleMu.root",
+      "size_bytes": null,
+      "status": "not_listed_in_root_cern_index"
+    },
+    "Run2012C_SingleMu.root": {
+      "checked_url": "https://root.cern/files/HiggsTauTauReduced/Run2012C_SingleMu.root",
+      "size_bytes": null,
+      "status": "not_listed_in_root_cern_index"
+    }
+  },
+  "samples": {
+    "DYJetsToLL": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "DYJetsToLL.root",
+      "role": "background",
+      "size_bytes": 925979447,
+      "trees": {
+        "Events": {
+          "entries": 3045887
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/DYJetsToLL.root"
+    },
+    "GluGluToHToTauTau": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "GluGluToHToTauTau.root",
+      "role": "signal",
+      "size_bytes": 20460281,
+      "trees": {
+        "Events": {
+          "entries": 47696
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/GluGluToHToTauTau.root"
+    },
+    "Run2012B_TauPlusX": {
+      "branch_count": 62,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": false,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "Run2012B_TauPlusX.root",
+      "role": "data",
+      "size_bytes": 1088113510,
+      "trees": {
+        "Events": {
+          "entries": 3564750
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/Run2012B_TauPlusX.root"
+    },
+    "Run2012C_TauPlusX": {
+      "branch_count": 62,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": false,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "Run2012C_TauPlusX.root",
+      "role": "data",
+      "size_bytes": 1549014154,
+      "trees": {
+        "Events": {
+          "entries": 5130317
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/Run2012C_TauPlusX.root"
+    },
+    "TTbar": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "TTbar.root",
+      "role": "background",
+      "size_bytes": 353710208,
+      "trees": {
+        "Events": {
+          "entries": 642310
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/TTbar.root"
+    },
+    "VBF_HToTauTau": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "VBF_HToTauTau.root",
+      "role": "signal",
+      "size_bytes": 24184554,
+      "trees": {
+        "Events": {
+          "entries": 49165
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/VBF_HToTauTau.root"
+    },
+    "W1JetsToLNu": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "W1JetsToLNu.root",
+      "role": "background",
+      "size_bytes": 1073460654,
+      "trees": {
+        "Events": {
+          "entries": 2978480
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/W1JetsToLNu.root"
+    },
+    "W2JetsToLNu": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "W2JetsToLNu.root",
+      "role": "background",
+      "size_bytes": 1217271275,
+      "trees": {
+        "Events": {
+          "entries": 3069385
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/W2JetsToLNu.root"
+    },
+    "W3JetsToLNu": {
+      "branch_count": 69,
+      "branches": [
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "run",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "luminosityBlock",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsDtype('>u8')",
+          "name": "event",
+          "tags": [],
+          "typename": "uint64_t"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24_eta2p1",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu24",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('bool')",
+          "name": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+          "tags": [
+            "hlt",
+            "iso"
+          ],
+          "typename": "bool"
+        },
+        {
+          "interpretation": "AsDtype('>i4')",
+          "name": "PV_npvs",
+          "tags": [],
+          "typename": "int32_t"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_x",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_y",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "PV_z",
+          "tags": [],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nMuon",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso03_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_pfRelIso04_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_tightId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Muon_softId",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxy",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dxyErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dz",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Muon_dzErr",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Muon_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nTau",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_charge",
+          "tags": [
+            "charge"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_decayMode",
+          "tags": [],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_relIso_all",
+          "tags": [
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_jetIdx",
+          "tags": [
+            "id"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "Tau_genPartIdx",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idDecayMode",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Tau_idIsoRaw",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoVLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoLoose",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoMedium",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idIsoTight",
+          "tags": [
+            "id",
+            "iso"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiEleTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuLoose",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuMedium",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Tau_idAntiMuTight",
+          "tags": [
+            "id"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_pt",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_phi",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_sumet",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_significance",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXX",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovXY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>f4')",
+          "name": "MET_CovYY",
+          "tags": [
+            "met"
+          ],
+          "typename": "float"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nJet",
+          "tags": [],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_pt",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_eta",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_phi",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_mass",
+          "tags": [],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('bool'))",
+          "name": "Jet_puId",
+          "tags": [
+            "id",
+            "pu"
+          ],
+          "typename": "bool[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "Jet_btag",
+          "tags": [
+            "btag"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsDtype('>u4')",
+          "name": "nGenPart",
+          "tags": [
+            "gen"
+          ],
+          "typename": "uint32_t"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_pt",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_eta",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_phi",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>f4'))",
+          "name": "GenPart_mass",
+          "tags": [
+            "gen"
+          ],
+          "typename": "float[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_pdgId",
+          "tags": [
+            "id",
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        },
+        {
+          "interpretation": "AsJagged(AsDtype('>i4'))",
+          "name": "GenPart_status",
+          "tags": [
+            "gen"
+          ],
+          "typename": "int32_t[]"
+        }
+      ],
+      "feature_flags": {
+        "has_btag": true,
+        "has_direct_genmet": false,
+        "has_event_weight": false,
+        "has_genpart": true,
+        "has_met_covariance": true,
+        "has_pileup_weight": false,
+        "has_pv_npvs": true,
+        "has_tau_antimu_tight": true
+      },
+      "file": "W3JetsToLNu.root",
+      "role": "background",
+      "size_bytes": 655005007,
+      "trees": {
+        "Events": {
+          "entries": 1524114
+        }
+      },
+      "url": "https://root.cern/files/HiggsTauTauReduced/W3JetsToLNu.root"
+    }
+  }
+}

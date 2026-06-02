@@ -19,3 +19,17 @@
     https://opendata.cern.ch/record/12352.
   - ATLAS+CMS JHEP 08 (2016) 045, DOI 10.1007/JHEP08(2016)045,
     arXiv:1606.02266.
+
+## 2026-06-02 Phase 2 executor
+
+- SciTreeRAG MCP tools were still unavailable in this execution environment.
+  Phase 2 therefore used public CERN/CMS/ROOT web sources and direct ROOT file
+  metadata via uproot as fallback retrieval.
+- Resolved reduced H to tau tau ROOT files from the public ROOT mirror:
+  `https://root.cern/files/HiggsTauTauReduced/`.
+- Used CERN Open Data record context from Phase 1 for the reduced H to tau tau
+  outreach sample provenance, including records 12350 and 12352.
+- Blocker: object-definition and known-data-quality corpus queries could not be
+  performed through SciTreeRAG. Phase 3 should retrieve official object
+  definitions, luminosity, cross sections, and scale-factor documentation from
+  authoritative CMS/CERN sources before production selection and normalization.

@@ -1,0 +1,4504 @@
+{
+  "entry_stop": 5000,
+  "samples": {
+    "DYJetsToLL": {
+      "GenPart_eta": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 8.145806312561035,
+        "mean": -0.025966739469613403,
+        "min": -7.949443817138672,
+        "nontrivial": true,
+        "std": 1.9639157183362828
+      },
+      "GenPart_mass": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 0.42825868572534376,
+        "min": 0.0005099152913317084,
+        "nontrivial": true,
+        "std": 0.7207563853527567
+      },
+      "GenPart_pdgId": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -0.11133140155558945,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 12.636889481309401,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 3.1412603855133057,
+        "mean": -0.025763493447517036,
+        "min": -3.140578031539917,
+        "nontrivial": true,
+        "std": 1.8279245187082984
+      },
+      "GenPart_pt": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 266.5170593261719,
+        "mean": 31.635469153123616,
+        "min": 0.00016964723181445152,
+        "nontrivial": true,
+        "std": 18.871907201176647
+      },
+      "GenPart_status": {
+        "entries": 26228,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.2214808601494587,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.41524340902284596,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1634,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3697302259756429,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2228,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.416125173475482,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2112,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.40815996863974785,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 14086,
+        "finite_fraction": 1.0,
+        "max": 0.9999949932098389,
+        "mean": -4.563161566560493,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.806547193721932
+      },
+      "Jet_puId": {
+        "entries": 14086,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9772824080647451,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.14900168774855574,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 271580.15625,
+        "mean": 282.6844842521667,
+        "min": 30.262657165527344,
+        "nontrivial": true,
+        "std": 3838.084141186925
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 247.8013153076172,
+        "mean": -22.716245477279184,
+        "min": -111421.4765625,
+        "nontrivial": true,
+        "std": 1575.7128300011298
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 45945.53125,
+        "mean": 240.01305315246583,
+        "min": 35.09931182861328,
+        "nontrivial": true,
+        "std": 652.504132965769
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1413509845733643,
+        "mean": -0.22028845634200114,
+        "min": -3.1412723064422607,
+        "nontrivial": true,
+        "std": 1.7632250329425962
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 148.82640075683594,
+        "mean": 21.90747457026839,
+        "min": 0.16916733980178833,
+        "nontrivial": true,
+        "std": 13.963711201765141
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 54.19203567504883,
+        "mean": 2.992336484708148,
+        "min": 0.0003166039823554456,
+        "nontrivial": true,
+        "std": 3.9060862804216234
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2069.371826171875,
+        "mean": 784.4674379760742,
+        "min": 132.13267517089844,
+        "nontrivial": true,
+        "std": 295.72348162831025
+      },
+      "Muon_charge": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0074487895716946,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9999722573821318,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 5.0,
+        "mean": 0.42209807572936064,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6183483077809703,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 24.0,
+        "mean": 0.3923029174425822,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 2.070463346844043
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 15.148061752319336,
+        "mean": -125.1558774788366,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 330.868063334036
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 15.791838645935059,
+        "mean": -125.10823746733918,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 330.8862268400558
+      },
+      "Muon_softId": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8559900682805711,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3510998024573559,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 3222,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.7945375543140907,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4040391430278434,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.005603796445880453,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.5597560509371097,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 29.0,
+        "mean": 4.544577948303716,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.846041526511307
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.23899434571890146,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4264692819339931,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.19461833602584813,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3959066042747686,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.08769184168012924,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2828462171973958,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.881159127625202,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32360117340330363,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8807047657512116,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32413559097130185,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8801999192245558,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32472761111682713,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2822092084006462,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.45007462836126055,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.21784127625201938,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4127789415812182,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.18527867528271405,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3885234713221283,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 166.03358459472656,
+        "mean": 0.6891529589152272,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.9794023451386002
+      },
+      "Tau_idIsoTight": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.17492932148626816,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.37990663849243544,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.23561187399030695,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4243806296534783,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 19808,
+        "finite_fraction": 1.0,
+        "max": 28.0,
+        "mean": 1.9697092084006462,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 3.0896655474214816
+      },
+      "Tau_relIso_all": {
+        "entries": 19808,
+        "finite_fraction": 0.313358239095315,
+        "max": 6.048644065856934,
+        "mean": 0.142806732456296,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.31377874237219167
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 30.0,
+        "mean": 5.2456,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.870875952546142
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 29.0,
+        "mean": 2.8172,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.1275204491737543
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 6.0,
+        "mean": 0.6444,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.8792887125398574,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 27.0,
+        "mean": 3.9616,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.5839817856680014
+      }
+    },
+    "GluGluToHToTauTau": {
+      "GenPart_eta": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 8.491815567016602,
+        "mean": -0.0017985641954945295,
+        "min": -8.981894493103027,
+        "nontrivial": true,
+        "std": 1.8119280766113501
+      },
+      "GenPart_mass": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 1.421058662385425,
+        "min": 0.0005099955596961081,
+        "nontrivial": true,
+        "std": 0.7089942553322628
+      },
+      "GenPart_pdgId": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -0.04776874916744372,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 14.313092457916918,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 3.140841484069824,
+        "mean": 0.005558936450188709,
+        "min": -3.1414687633514404,
+        "nontrivial": true,
+        "std": 1.809789399796022
+      },
+      "GenPart_pt": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 515.247802734375,
+        "mean": 45.20053757363237,
+        "min": 0.0002521072165109217,
+        "nontrivial": true,
+        "std": 34.22746026747635
+      },
+      "GenPart_status": {
+        "entries": 37535,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.798641268149727,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.4010154522682672,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0734,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.26079194772845266,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0842,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.27768752222597254,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0812,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2731420143441869,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 31333,
+        "finite_fraction": 1.0,
+        "max": 0.9999703168869019,
+        "mean": -3.8370135254254154,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.580065729198062
+      },
+      "Jet_puId": {
+        "entries": 31333,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9956914435259949,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.06549803672718252,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1654.8521728515625,
+        "mean": 283.03310691833497,
+        "min": 19.769886016845703,
+        "nontrivial": true,
+        "std": 118.2370825292221
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 381.1373596191406,
+        "mean": -1.3823309416633565,
+        "min": -1634.7589111328125,
+        "nontrivial": true,
+        "std": 38.732394144261555
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2586.363037109375,
+        "mean": 284.58591766281126,
+        "min": 32.31669616699219,
+        "nontrivial": true,
+        "std": 123.35509949962676
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1405491828918457,
+        "mean": -0.15656661421273566,
+        "min": -3.140833854675293,
+        "nontrivial": true,
+        "std": 1.798891511118318
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 421.31353759765625,
+        "mean": 32.86187490260005,
+        "min": 0.42172491550445557,
+        "nontrivial": true,
+        "std": 24.40747911768124
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 228.51536560058594,
+        "mean": 5.429045167897339,
+        "min": 0.0006982054328545928,
+        "nontrivial": true,
+        "std": 8.38205196508139
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2593.126220703125,
+        "mean": 957.6771989959717,
+        "min": 140.12554931640625,
+        "nontrivial": true,
+        "std": 385.3176170462247
+      },
+      "Muon_charge": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.010869565217391304,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9999409245310369,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 6.0,
+        "mean": 0.28507905138339923,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6527947622767949,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 39.0,
+        "mean": 2.3967391304347827,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 4.4413402482495945
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 86.32150268554688,
+        "mean": -256.88846824254995,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 436.9318560883148
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 87.92799377441406,
+        "mean": -256.76681263695343,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 437.0041331387659
+      },
+      "Muon_softId": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.7302371541501976,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.443836515902892,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 2024,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6259881422924901,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.48386670478726607,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": -0.0003974319779883828,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.4774010846016724,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 40.0,
+        "mean": 6.383216141852644,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.631905077742724
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2128401100580862,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.40931552329290904,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1860898807704066,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3891791837255205,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.15239987771323754,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3594080619382762,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9739834912870682,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.15918432707814476,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9730357688780189,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.16197889171735136,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9727606236624885,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.162780197549502,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.19617853867318863,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3971051745284124,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.11916845001528585,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3239866209216673,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.09752369306022624,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.29666955076670914,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 200.24163818359375,
+        "mean": 1.265950043442942,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 7.10382482629108
+      },
+      "Tau_idIsoTight": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.09040048914704983,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.28675466989924325,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.13766432283705288,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3445473219383204,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 32710,
+        "finite_fraction": 1.0,
+        "max": 40.0,
+        "mean": 4.927514521553042,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 5.853795829797545
+      },
+      "Tau_relIso_all": {
+        "entries": 32710,
+        "finite_fraction": 0.22791195353103028,
+        "max": 7.754868030548096,
+        "mean": 0.2902626186027426,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.48456283799433547
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 7.507,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.95657208468092
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 43.0,
+        "mean": 6.2666,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.429457554102056
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 7.0,
+        "mean": 0.4048,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6868311000529898,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 40.0,
+        "mean": 6.542,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.770982238752776
+      }
+    },
+    "Run2012B_TauPlusX": {
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.275,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.44651427748729383,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2228,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.416125173475482,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2224,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4158584374519772,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 15513,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": -2.8034039935178625,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.466670791421185
+      },
+      "Jet_puId": {
+        "entries": 15513,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9879455940179205,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.10912881048787597,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 886.4356079101562,
+        "mean": 250.82018325500488,
+        "min": 64.2145767211914,
+        "nontrivial": true,
+        "std": 80.46946314861353
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 290.4207458496094,
+        "mean": -1.7036276180808432,
+        "min": -514.2662353515625,
+        "nontrivial": true,
+        "std": 36.48717650780441
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 982.365966796875,
+        "mean": 253.8404437286377,
+        "min": 66.81177520751953,
+        "nontrivial": true,
+        "std": 82.47911140578643
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1403610706329346,
+        "mean": -0.10670918091363274,
+        "min": -3.1392292976379395,
+        "nontrivial": true,
+        "std": 1.7046903632941306
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 301.24957275390625,
+        "mean": 24.228142986595632,
+        "min": 0.2537824213504791,
+        "nontrivial": true,
+        "std": 17.89065018447744
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 155.25485229492188,
+        "mean": 3.500827697641676,
+        "min": 0.00045886068255640566,
+        "nontrivial": true,
+        "std": 6.2403325740374305
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1841.49169921875,
+        "mean": 823.1157338256836,
+        "min": 266.1812438964844,
+        "nontrivial": true,
+        "std": 229.2853212775926
+      },
+      "Muon_charge": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.045577728504557775,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9989607953590395,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": 27.08310890197754,
+        "mean": -264.8590482395644,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 441.47965812857313
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": 28.10664176940918,
+        "mean": -264.7575820682529,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 441.54129070073327
+      },
+      "Muon_softId": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.7107661985710766,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.45340667125649736,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 4059,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6444937176644494,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.47866644498596966,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.016946603158686388,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.6710080437986082,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.40701930308347956,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4912785258902715,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.3490097768864377,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.47665705966041944,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.24582602155928804,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.43057588028548516,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8796690899974932,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32534809374034374,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8769616445224367,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32848123014708175,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.8767109551265981,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3287686972441357,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.3911255953873151,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.48800242214586736,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.14284281774880922,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.34991248501073763,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.11120581599398345,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.31438683573441134,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 263.2792663574219,
+        "mean": 3.7138115893404087,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 10.119948181158588
+      },
+      "Tau_idIsoTight": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.10318375532714966,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3041987310357106,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1719227876660817,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.37731332171976795,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 19945,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Tau_relIso_all": {
+        "entries": 19945,
+        "finite_fraction": 0.4505389822010529,
+        "max": 16.63490104675293,
+        "mean": 0.4277920529011634,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6088945289208982
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 24.0,
+        "mean": 3.1026,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 2.2911292499551394
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 7.0,
+        "mean": 0.8118,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.9171590701726718,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 30.0,
+        "mean": 3.989,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 2.7950096600906407
+      }
+    },
+    "Run2012C_TauPlusX": {
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.273,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.44550084175004656,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.228,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4195426080864732,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2278,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.41941287533884797,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 24232,
+        "finite_fraction": 1.0,
+        "max": 0.9999997019767761,
+        "mean": -4.243067097050197,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.834927853819581
+      },
+      "Jet_puId": {
+        "entries": 24232,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9947589963684385,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.07220481640787912,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1724.169189453125,
+        "mean": 304.903056892395,
+        "min": 92.34160614013672,
+        "nontrivial": true,
+        "std": 86.12552712430895
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 216.67135620117188,
+        "mean": -1.158236675369367,
+        "min": -441.2300109863281,
+        "nontrivial": true,
+        "std": 34.464872006075026
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1068.644287109375,
+        "mean": 305.48374011535645,
+        "min": 90.9443359375,
+        "nontrivial": true,
+        "std": 84.20799423958027
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1401166915893555,
+        "mean": -0.12807991264814045,
+        "min": -3.140944480895996,
+        "nontrivial": true,
+        "std": 1.6532144757528613
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 281.9290771484375,
+        "mean": 26.444057122594863,
+        "min": 0.04765963926911354,
+        "nontrivial": true,
+        "std": 17.696695886886484
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 153.3180694580078,
+        "mean": 3.241582975411225,
+        "min": 8.929268005886115e-06,
+        "nontrivial": true,
+        "std": 5.097194323081603
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2269.057373046875,
+        "mean": 1012.8890344970703,
+        "min": 343.4127197265625,
+        "nontrivial": true,
+        "std": 255.34485704247584
+      },
+      "Muon_charge": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.016338298894762134,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9998665210863026,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": 32.640419006347656,
+        "mean": -300.8570669899134,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 458.71820454308715
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": 44.42640686035156,
+        "mean": -300.7592122610566,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 458.7833294627779
+      },
+      "Muon_softId": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6792407496395964,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.46676841545742526,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 4162,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.5985103315713599,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4901996680677178,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.004578416912487709,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.5214286513914335,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.24526794493608653,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4302459530581495,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.21017699115044247,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.407434195351089,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.14823008849557523,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.35532791807029346,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9276671583087512,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.25903822440735946,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9264687807276303,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.26100647322372755,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9261307767944936,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.26155794973298263,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.23045722713864306,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.42112550813054644,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.08668264503441495,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2813694441197419,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.06763151425762046,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.25111250971793847,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 271.3689270019531,
+        "mean": 2.033343603505625,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 7.54598943810163
+      },
+      "Tau_idIsoTight": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.062161996066863325,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.24144954402907162,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.10247664700098329,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.30327410674243055,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 32544,
+        "finite_fraction": 1.0,
+        "max": -1.0,
+        "mean": -1.0,
+        "min": -1.0,
+        "nontrivial": false,
+        "std": 0.0,
+        "unique_values": [
+          -1.0
+        ]
+      },
+      "Tau_relIso_all": {
+        "entries": 32544,
+        "finite_fraction": 0.27190880039331367,
+        "max": 10.059188842773438,
+        "mean": 0.43373267753484396,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.5814008955636859
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 36.0,
+        "mean": 4.8464,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.9378683370575
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 8.0,
+        "mean": 0.8324,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.9467366265229207,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 31.0,
+        "mean": 6.5088,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 4.536465866729298
+      }
+    },
+    "TTbar": {
+      "GenPart_eta": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 7.792387962341309,
+        "mean": 0.0025635644369303777,
+        "min": -8.084634780883789,
+        "nontrivial": true,
+        "std": 1.549125532376717
+      },
+      "GenPart_mass": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 1.7773357629776,
+        "mean": 0.2447966440995186,
+        "min": -0.026438048109412193,
+        "nontrivial": true,
+        "std": 0.5697856044875924
+      },
+      "GenPart_pdgId": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": 0.15657809206768175,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 12.231670856966417,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 3.1414592266082764,
+        "mean": -0.016435212216445665,
+        "min": -3.1405835151672363,
+        "nontrivial": true,
+        "std": 1.798727765110018
+      },
+      "GenPart_pt": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 456.8592529296875,
+        "mean": 21.655485945774384,
+        "min": 0.000989360036328435,
+        "nontrivial": true,
+        "std": 29.949421382116558
+      },
+      "GenPart_status": {
+        "entries": 50767,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.120806823330116,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.32590264614912556,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.137,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.34384734985164567,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.139,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3459465276599839,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1364,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3432128202733692,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 45284,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": -2.396583870176379,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.24646363742994
+      },
+      "Jet_puId": {
+        "entries": 45284,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.99611341754262,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.06222119360942923,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 17762.705078125,
+        "mean": 396.7712442626953,
+        "min": 72.8305435180664,
+        "nontrivial": true,
+        "std": 300.2320656186762
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 128120.671875,
+        "mean": 26.412663312846423,
+        "min": -1226.0050048828125,
+        "nontrivial": true,
+        "std": 1813.5062628995386
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 947615.625,
+        "mean": 580.0619104675293,
+        "min": 47.8812255859375,
+        "nontrivial": true,
+        "std": 13395.449984398265
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1399123668670654,
+        "mean": -0.10450624413349432,
+        "min": -3.1388914585113525,
+        "nontrivial": true,
+        "std": 1.7858898031162609
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 548.8607177734375,
+        "mean": 49.64961463240385,
+        "min": 0.528709352016449,
+        "nontrivial": true,
+        "std": 39.77168707527567
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 287.6878967285156,
+        "mean": 11.171852971738275,
+        "min": 0.0011495166691020131,
+        "nontrivial": true,
+        "std": 19.02902322455865
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3608.43115234375,
+        "mean": 1183.0047601318358,
+        "min": 259.1182861328125,
+        "nontrivial": true,
+        "std": 410.2919012820005
+      },
+      "Muon_charge": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.02241979126401237,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9997486448901434,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 13.0,
+        "mean": 0.7947429454967143,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 1.2694575303491522,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0,
+          11.0,
+          12.0,
+          13.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 47.0,
+        "mean": 2.3705063780440665,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.2401836312026684
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 68.72457122802734,
+        "mean": -437.0204546425218,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 497.2662587746765
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 79.47586059570312,
+        "mean": -436.7557659556406,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 497.5037610437734
+      },
+      "Muon_softId": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.5817549284885968,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4932708502109408,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 5174,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.47680711248550445,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4994618003098335,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": -0.0016040170165283493,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.6398388174524792,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 51.0,
+        "mean": 7.5358114233907525,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 6.1505000655728574
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.39035730060208756,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.48783037878830293,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.3445149592021759,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4752098505798244,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.30494920612780996,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.46038591182814054,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9648975986237999,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.18403864483804552,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.963549294464979,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.1874087820808305,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9634330613478392,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.18769602459767198,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.3597182509240533,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4799177334462576,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.057512146360741104,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.23281859758559192,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.04623753399818677,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.20999910582655654,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 333.44476318359375,
+        "mean": 7.103380445343829,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 16.557029667505912
+      },
+      "Tau_idIsoTight": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.04349443243368901,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.20396731792363273,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.06983285677755306,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2548651190175674,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 43017,
+        "finite_fraction": 1.0,
+        "max": 60.0,
+        "mean": 5.572796801264617,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.9130323146915345
+      },
+      "Tau_relIso_all": {
+        "entries": 43017,
+        "finite_fraction": 0.4093962851895762,
+        "max": 15.367348670959473,
+        "mean": 0.8067734898885979,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.866821983272464
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 52.0,
+        "mean": 10.1534,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.544147648089856
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 62.0,
+        "mean": 9.0568,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 6.185206040222104
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 14.0,
+        "mean": 1.0348,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 1.310415567673095,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0,
+          9.0,
+          10.0,
+          14.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 50.0,
+        "mean": 8.6034,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.8431933426851455
+      }
+    },
+    "VBF_HToTauTau": {
+      "GenPart_eta": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 8.40753173828125,
+        "mean": -0.005030317142326135,
+        "min": -8.73038101196289,
+        "nontrivial": true,
+        "std": 1.7483558803513084
+      },
+      "GenPart_mass": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 1.4048807649098742,
+        "min": 0.0005099438712932169,
+        "nontrivial": true,
+        "std": 0.7201889210806641
+      },
+      "GenPart_pdgId": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -0.04707012487992315,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 14.287990750848467,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 3.1414108276367188,
+        "mean": 0.008076004509380192,
+        "min": -3.1407182216644287,
+        "nontrivial": true,
+        "std": 1.8008944657465868
+      },
+      "GenPart_pt": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 709.0159301757812,
+        "mean": 54.24968473466535,
+        "min": 0.0003423538582865149,
+        "nontrivial": true,
+        "std": 46.282788375238965
+      },
+      "GenPart_status": {
+        "entries": 45804,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.7892105492970047,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.4078691679636067,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0962,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2948653251910099,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0988,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.29839329751185767,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0974,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.29650166947253437,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 37777,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": -3.8366229849696323,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.6277591848504205
+      },
+      "Jet_puId": {
+        "entries": 37777,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.994546946554782,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.07364317791446527,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2034.177490234375,
+        "mean": 325.06765914840696,
+        "min": 43.54507827758789,
+        "nontrivial": true,
+        "std": 134.3235191010134
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 572.63330078125,
+        "mean": -1.6375319130850956,
+        "min": -691.4227294921875,
+        "nontrivial": true,
+        "std": 51.833522975215644
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1435.7908935546875,
+        "mean": 327.140774917984,
+        "min": 28.407377243041992,
+        "nontrivial": true,
+        "std": 133.039785314815
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1412203311920166,
+        "mean": -0.11975555653227493,
+        "min": -3.1395423412323,
+        "nontrivial": true,
+        "std": 1.802138714327975
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 538.5556030273438,
+        "mean": 48.235179294765,
+        "min": 0.6679236888885498,
+        "nontrivial": true,
+        "std": 36.382103340306884
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 173.80027770996094,
+        "mean": 10.170387400557985,
+        "min": 0.0012138509191572666,
+        "nontrivial": true,
+        "std": 14.89777788471973
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2934.3310546875,
+        "mean": 1055.830971218872,
+        "min": 122.96955871582031,
+        "nontrivial": true,
+        "std": 397.2431360377951
+      },
+      "Muon_charge": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.02857142857142857,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9995917534020515,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 7.0,
+        "mean": 0.4048979591836735,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.831114625187114,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 31.0,
+        "mean": 2.775918367346939,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 4.305951229790708
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 36.92167282104492,
+        "mean": -343.8127767542212,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 474.97031783482663
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 89.42047882080078,
+        "mean": -343.6929455521584,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 475.06088868022454
+      },
+      "Muon_softId": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6726530612244898,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.46924505372972514,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 2450,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.5677551020408164,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.495387975376309,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0037843663066088567,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.5260185695082205,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 6.920829051903461,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.717076855317221
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2607202826996817,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4390275810113526,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.23047041427533144,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4211339483099036,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.19503270594721936,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.39622588198920683,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9760407007343175,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.1529223699933402,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9750382195934939,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.15600862131768065,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9748377233653291,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.15661780380669085,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2427257462218992,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4287306361142406,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.11603719205032455,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.32026951480183163,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.09643868574722438,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2951919132337004,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 303.8075256347656,
+        "mean": 2.66658680906301,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 10.39905401850255
+      },
+      "Tau_idIsoTight": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.09082479135861257,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.28735978952051916,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.13160071176160998,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3380561557277838,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 39901,
+        "finite_fraction": 1.0,
+        "max": 46.0,
+        "mean": 5.015889326082053,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 5.717179931263186
+      },
+      "Tau_relIso_all": {
+        "entries": 39901,
+        "finite_fraction": 0.2767098568958172,
+        "max": 14.005033493041992,
+        "mean": 0.3896376901608949,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.5814507479011306
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 42.0,
+        "mean": 9.1608,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.086620027568667
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 50.0,
+        "mean": 7.5554,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.342501938509755
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 8.0,
+        "mean": 0.49,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.8041765975207187,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0,
+          7.0,
+          8.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 7.9802,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.838236716680816
+      }
+    },
+    "W1JetsToLNu": {
+      "GenPart_eta": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 8.479676246643066,
+        "mean": 0.02111957743777796,
+        "min": -7.733428478240967,
+        "nontrivial": true,
+        "std": 2.137234590332335
+      },
+      "GenPart_mass": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 0.4181911550669372,
+        "min": 0.0005099723930470645,
+        "nontrivial": true,
+        "std": 0.7204363059945573
+      },
+      "GenPart_pdgId": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -1.8025935336896521,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 12.399307610544009,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 3.1408562660217285,
+        "mean": -0.011274550496499483,
+        "min": -3.1413943767547607,
+        "nontrivial": true,
+        "std": 1.8122737627381678
+      },
+      "GenPart_pt": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 190.34539794921875,
+        "mean": 25.63425147295144,
+        "min": 0.00017874465265776962,
+        "nontrivial": true,
+        "std": 21.205506709941442
+      },
+      "GenPart_status": {
+        "entries": 34239,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.2188148018341658,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.41344272194880943,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0454,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.20817982611194583,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1506,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.35765855225340265,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.142,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3490501396647765,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 28186,
+        "finite_fraction": 1.0,
+        "max": 0.9956631064414978,
+        "mean": -4.342422175193844,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.593966867732142
+      },
+      "Jet_puId": {
+        "entries": 28186,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9958135244447598,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.06456739872153411,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 877.5286865234375,
+        "mean": 266.3783630340576,
+        "min": 18.973854064941406,
+        "nontrivial": true,
+        "std": 109.75435622712615
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 143.35552978515625,
+        "mean": -0.9454541032247246,
+        "min": -161.30636596679688,
+        "nontrivial": true,
+        "std": 18.252563700531407
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 837.714599609375,
+        "mean": 268.0915048347473,
+        "min": 36.12255096435547,
+        "nontrivial": true,
+        "std": 109.18101875920091
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1414759159088135,
+        "mean": -0.061307737676275426,
+        "min": -3.1394999027252197,
+        "nontrivial": true,
+        "std": 1.7952279819825059
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 275.2803649902344,
+        "mean": 37.791925579857825,
+        "min": 0.3481510877609253,
+        "nontrivial": true,
+        "std": 21.33132091850212
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 138.44627380371094,
+        "mean": 7.580314191995352,
+        "min": 0.0007347831269726157,
+        "nontrivial": true,
+        "std": 8.746152505734624
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2713.15283203125,
+        "mean": 919.971528527832,
+        "min": 117.02743530273438,
+        "nontrivial": true,
+        "std": 387.597155059714
+      },
+      "Muon_charge": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.16043054843669913,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9870471311585378,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 6.0,
+        "mean": 0.17016914402870323,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.5019203737650487,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 38.0,
+        "mean": 2.1691440287032293,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 4.602619007433694
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 16.197792053222656,
+        "mean": -217.44906390093,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 412.4539067068377
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 16.484615325927734,
+        "mean": -217.3750002091608,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 412.4932035083272
+      },
+      "Muon_softId": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.7708867247565351,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.42026227804869326,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 1951,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6822142491030241,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.46561568640223133,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.017649217629199614,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.3799807876567286,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 45.0,
+        "mean": 6.245420878790912,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.491037468191523
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.12060854769292363,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3256718070639941,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.10302605678443932,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3039929084828934,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.06625963367030327,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.24873539075929765,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9602976011743903,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.19525910568550175,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9599639675708137,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.19604374138573108,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9599306042104561,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.1961220010876006,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.12184299202615688,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3271043829120465,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.07016314683214893,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.25542176817718426,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.058285790544823676,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.23428307059066097,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 140.0194549560547,
+        "mean": 0.5953448321640775,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 3.548174340669609
+      },
+      "Tau_idIsoTight": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.054215460581189735,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.22644236444437507,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.07960497781336537,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.27068067038615623,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 29973,
+        "finite_fraction": 1.0,
+        "max": 47.0,
+        "mean": 4.949654689220298,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 5.882231000359348
+      },
+      "Tau_relIso_all": {
+        "entries": 29973,
+        "finite_fraction": 0.1446968938711507,
+        "max": 3.9288594722747803,
+        "mean": 0.2856406127577783,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4092133857795929
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 46.0,
+        "mean": 6.8478,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.941467424803405
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 48.0,
+        "mean": 5.6372,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.538316003375792
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 7.0,
+        "mean": 0.3902,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6088874772895235,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          6.0,
+          7.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 5.9946,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.775376250946772
+      }
+    },
+    "W2JetsToLNu": {
+      "GenPart_eta": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 8.661104202270508,
+        "mean": -0.0040717454499142715,
+        "min": -8.56421184539795,
+        "nontrivial": true,
+        "std": 2.055859746412029
+      },
+      "GenPart_mass": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 0.4145195387845191,
+        "min": 0.0005099723930470645,
+        "nontrivial": true,
+        "std": 0.7196393997491103
+      },
+      "GenPart_pdgId": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -1.7294104749636856,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 12.378761648555356,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 3.1409924030303955,
+        "mean": -0.021123415507761888,
+        "min": -3.1409494876861572,
+        "nontrivial": true,
+        "std": 1.8164863922860628
+      },
+      "GenPart_pt": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 289.4961242675781,
+        "mean": 27.65242499955012,
+        "min": 0.0003227106062695384,
+        "nontrivial": true,
+        "std": 25.703229960430438
+      },
+      "GenPart_status": {
+        "entries": 36487,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.2175295310658591,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.41256567256635224,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0748,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.26306835613581503,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1448,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.35189907644095914,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.137,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3438473498516456,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 30897,
+        "finite_fraction": 1.0,
+        "max": 0.9999698996543884,
+        "mean": -3.8649397228082325,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.565651942819412
+      },
+      "Jet_puId": {
+        "entries": 30897,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9949833317150533,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.0706505578482263,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 4053.486572265625,
+        "mean": 285.4295211456299,
+        "min": 33.818668365478516,
+        "nontrivial": true,
+        "std": 123.66852192830989
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 508.99786376953125,
+        "mean": -2.440872737248987,
+        "min": -9094.0908203125,
+        "nontrivial": true,
+        "std": 131.82671153345794
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 23430.6796875,
+        "mean": 289.50367928886413,
+        "min": 31.005800247192383,
+        "nontrivial": true,
+        "std": 345.6050797683452
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1409103870391846,
+        "mean": -0.08934934175387024,
+        "min": -3.1410579681396484,
+        "nontrivial": true,
+        "std": 1.8139491084884003
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 400.2637939453125,
+        "mean": 43.65083706250191,
+        "min": 0.28519368171691895,
+        "nontrivial": true,
+        "std": 27.133454942701164
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 276.2059020996094,
+        "mean": 9.58258606743709,
+        "min": 0.0003995492006652057,
+        "nontrivial": true,
+        "std": 12.760716596423647
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2661.9052734375,
+        "mean": 963.9283823364258,
+        "min": 134.9593048095703,
+        "nontrivial": true,
+        "std": 375.3249513906284
+      },
+      "Muon_charge": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.17647058823529413,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9843059135695007,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 5.0,
+        "mean": 0.22950819672131148,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.5804406343213633,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 33.0,
+        "mean": 2.1485053037608486,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 3.9051100443220577
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 40.2343635559082,
+        "mean": -253.51306618412457,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 435.114700635101
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 41.30752182006836,
+        "mean": -253.42976631287516,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 435.1636971023317
+      },
+      "Muon_softId": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.742526518804243,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4372423672023277,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 2074,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6562198649951784,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4749687924283955,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.013687345542107598,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.4476981756816121,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 37.0,
+        "mean": 6.270673594829225,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.457059811791864
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.17277105379887206,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3780492253240302,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.14764590330143842,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3547486300745088,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.110924529497497,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.31403865725935065,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.961567708003295,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.19223748575287,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9610607692795133,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.19345016679078716,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9609974019390406,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.19360112449429268,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.17096508459539952,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3764784515011283,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.07242887016031938,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2591966992992368,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.060864330524047904,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.23908129118337001,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 294.7029724121094,
+        "mean": 1.5744910813357798,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 7.086200760174295
+      },
+      "Tau_idIsoTight": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.05636524935048476,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.23062568810985132,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0826626956466637,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2753717022409724,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 31562,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 4.861225524364742,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 5.653392282515315
+      },
+      "Tau_relIso_all": {
+        "entries": 31562,
+        "finite_fraction": 0.20062099993663265,
+        "max": 6.651826858520508,
+        "mean": 0.44232176651591165,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.5730081835736123
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 38.0,
+        "mean": 7.2974,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.823311192096813
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 44.0,
+        "mean": 6.1794,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.202194421331856
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 6.0,
+        "mean": 0.4148,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6581344543480457,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 37.0,
+        "mean": 6.3124,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.633684961017966
+      }
+    },
+    "W3JetsToLNu": {
+      "GenPart_eta": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 8.055883407592773,
+        "mean": 0.02030828355021068,
+        "min": -7.46735143661499,
+        "nontrivial": true,
+        "std": 2.061912949194278
+      },
+      "GenPart_mass": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 1.7769999504089355,
+        "mean": 0.3970697958765991,
+        "min": 0.0005099902045913041,
+        "nontrivial": true,
+        "std": 0.706632627358311
+      },
+      "GenPart_pdgId": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 15.0,
+        "mean": -2.043706868222149,
+        "min": -15.0,
+        "nontrivial": true,
+        "std": 12.305722671013571,
+        "unique_values": [
+          -15.0,
+          -13.0,
+          -11.0,
+          11.0,
+          13.0,
+          15.0
+        ]
+      },
+      "GenPart_phi": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 3.141394853591919,
+        "mean": -0.001582385607337524,
+        "min": -3.1397039890289307,
+        "nontrivial": true,
+        "std": 1.8047863307681176
+      },
+      "GenPart_pt": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 347.1662292480469,
+        "mean": 29.785056458855216,
+        "min": 0.0001903483789646998,
+        "nontrivial": true,
+        "std": 29.736700942962077
+      },
+      "GenPart_status": {
+        "entries": 39559,
+        "finite_fraction": 1.0,
+        "max": 2.0,
+        "mean": 1.2071336484744306,
+        "min": 1.0,
+        "nontrivial": true,
+        "std": 0.40525214391055553,
+        "unique_values": [
+          1.0,
+          2.0
+        ]
+      },
+      "HLT_IsoMu17_eta2p1_LooseIsoPFTau20": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.0952,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.2934909879365975,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.15,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.35707142142714243,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "HLT_IsoMu24_eta2p1": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.1414,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3484336952707071,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Jet_btag": {
+        "entries": 35038,
+        "finite_fraction": 1.0,
+        "max": 0.9999987483024597,
+        "mean": -3.6268897429774025,
+        "min": -10.0,
+        "nontrivial": true,
+        "std": 4.543627638810132
+      },
+      "Jet_puId": {
+        "entries": 35038,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.995661852845482,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.06572159183847953,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "MET_CovXX": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1419.4246826171875,
+        "mean": 305.4299983428955,
+        "min": 57.06112289428711,
+        "nontrivial": true,
+        "std": 122.09172279690965
+      },
+      "MET_CovXY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 565.6404418945312,
+        "mean": -0.041744334191130474,
+        "min": -302.0154724121094,
+        "nontrivial": true,
+        "std": 41.45647056451741
+      },
+      "MET_CovYY": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 1298.772705078125,
+        "mean": 307.83847864608765,
+        "min": 51.1721076965332,
+        "nontrivial": true,
+        "std": 122.02336009175458
+      },
+      "MET_phi": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 3.1377739906311035,
+        "mean": -0.11369191972978879,
+        "min": -3.1412811279296875,
+        "nontrivial": true,
+        "std": 1.8056953512579124
+      },
+      "MET_pt": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 285.4715881347656,
+        "mean": 48.005425105571746,
+        "min": 0.4373939037322998,
+        "nontrivial": true,
+        "std": 30.10546362434862
+      },
+      "MET_significance": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 161.72349548339844,
+        "mean": 10.992139646624581,
+        "min": 0.0003821053251158446,
+        "nontrivial": true,
+        "std": 14.110731233696109
+      },
+      "MET_sumet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 2738.76171875,
+        "mean": 1015.5841120452881,
+        "min": 206.3111572265625,
+        "nontrivial": true,
+        "std": 385.5278313345484
+      },
+      "Muon_charge": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.167876975651431,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.9858079534301438,
+        "unique_values": [
+          -1.0,
+          1.0
+        ]
+      },
+      "Muon_genPartIdx": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 5.0,
+        "mean": 0.2759504485262708,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6369432590008979,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0
+        ]
+      },
+      "Muon_jetIdx": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 46.0,
+        "mean": 2.3904314395557456,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 3.8863140440930457
+      },
+      "Muon_pfRelIso03_all": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 50.95427703857422,
+        "mean": -303.45298325082626,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 459.8438873109042
+      },
+      "Muon_pfRelIso04_all": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 51.338829040527344,
+        "mean": -303.34090299484177,
+        "min": -999.0,
+        "nontrivial": true,
+        "std": 459.9188358089448
+      },
+      "Muon_softId": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.7001281503630927,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4582016187577771,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Muon_tightId": {
+        "entries": 2341,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.6134130713370355,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.48696763265118603,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_charge": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.01604560949806042,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 0.48774927006914276,
+        "unique_values": [
+          -1.0,
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_genPartIdx": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 42.0,
+        "mean": 6.481015634183613,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.5077788266894645
+      },
+      "Tau_idAntiEleLoose": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.2152345127542024,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4109849355799595,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleMedium": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.18555307393910897,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3887455860725065,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiEleTight": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.14776066768543553,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.3548625829396357,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuLoose": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9637945221582226,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.186801073915612,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuMedium": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9632361584577407,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.18818145896265917,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idAntiMuTight": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.9631186082050076,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.18847056728905082,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idDecayMode": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.20242153520630068,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.4018047502096324,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoLoose": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.06538732808275538,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.24720806097082174,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoMedium": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.051986599271188434,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.22199998371037175,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoRaw": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 296.6905822753906,
+        "mean": 2.694712119549507,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 9.947352468795183
+      },
+      "Tau_idIsoTight": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.04831315387328083,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.21442712756574786,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_idIsoVLoose": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 1.0,
+        "mean": 0.07502644880686493,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.26343401600077354,
+        "unique_values": [
+          0.0,
+          1.0
+        ]
+      },
+      "Tau_jetIdx": {
+        "entries": 34028,
+        "finite_fraction": 1.0,
+        "max": 47.0,
+        "mean": 5.1452921123780415,
+        "min": -1.0,
+        "nontrivial": true,
+        "std": 5.8830928588326055
+      },
+      "Tau_relIso_all": {
+        "entries": 34028,
+        "finite_fraction": 0.2381568120371459,
+        "max": 13.983514785766602,
+        "mean": 0.5814355125855668,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.6978209819829457
+      },
+      "nGenPart": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 43.0,
+        "mean": 7.9118,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.876633454623489
+      },
+      "nJet": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 48.0,
+        "mean": 7.0076,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 6.3680406908247695
+      },
+      "nMuon": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 6.0,
+        "mean": 0.4682,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 0.712312262985834,
+        "unique_values": [
+          0.0,
+          1.0,
+          2.0,
+          3.0,
+          4.0,
+          5.0,
+          6.0
+        ]
+      },
+      "nTau": {
+        "entries": 5000,
+        "finite_fraction": 1.0,
+        "max": 41.0,
+        "mean": 6.8056,
+        "min": 0.0,
+        "nontrivial": true,
+        "std": 5.671208745937677
+      }
+    }
+  }
+}

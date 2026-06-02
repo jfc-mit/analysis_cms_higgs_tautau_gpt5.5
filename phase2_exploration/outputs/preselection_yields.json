@@ -1,0 +1,104 @@
+{
+  "entry_stop": 5000,
+  "samples": {
+    "DYJetsToLL": {
+      "baseline_os_lowmt": 13,
+      "full_events": 3045887,
+      "has_mu_tau": 1974,
+      "high_mt_w_cr": 3,
+      "loose_accept": 26,
+      "role": "background",
+      "same_sign_loose": 8,
+      "slice_events": 5000,
+      "vbf_like": 0
+    },
+    "GluGluToHToTauTau": {
+      "baseline_os_lowmt": 82,
+      "full_events": 47696,
+      "has_mu_tau": 1566,
+      "high_mt_w_cr": 6,
+      "loose_accept": 138,
+      "role": "signal",
+      "same_sign_loose": 11,
+      "slice_events": 5000,
+      "vbf_like": 12
+    },
+    "Run2012B_TauPlusX": {
+      "baseline_os_lowmt": 51,
+      "full_events": 3564750,
+      "has_mu_tau": 2739,
+      "high_mt_w_cr": 1,
+      "loose_accept": 152,
+      "role": "data",
+      "same_sign_loose": 83,
+      "slice_events": 5000,
+      "vbf_like": 5
+    },
+    "Run2012C_TauPlusX": {
+      "baseline_os_lowmt": 53,
+      "full_events": 5130317,
+      "has_mu_tau": 2799,
+      "high_mt_w_cr": 6,
+      "loose_accept": 155,
+      "role": "data",
+      "same_sign_loose": 77,
+      "slice_events": 5000,
+      "vbf_like": 12
+    },
+    "TTbar": {
+      "baseline_os_lowmt": 75,
+      "full_events": 642310,
+      "has_mu_tau": 2783,
+      "high_mt_w_cr": 43,
+      "loose_accept": 283,
+      "role": "background",
+      "same_sign_loose": 113,
+      "slice_events": 5000,
+      "vbf_like": 19
+    },
+    "VBF_HToTauTau": {
+      "baseline_os_lowmt": 75,
+      "full_events": 49165,
+      "has_mu_tau": 1799,
+      "high_mt_w_cr": 11,
+      "loose_accept": 136,
+      "role": "signal",
+      "same_sign_loose": 21,
+      "slice_events": 5000,
+      "vbf_like": 37
+    },
+    "W1JetsToLNu": {
+      "baseline_os_lowmt": 1,
+      "full_events": 2978480,
+      "has_mu_tau": 1643,
+      "high_mt_w_cr": 2,
+      "loose_accept": 17,
+      "role": "background",
+      "same_sign_loose": 10,
+      "slice_events": 5000,
+      "vbf_like": 0
+    },
+    "W2JetsToLNu": {
+      "baseline_os_lowmt": 3,
+      "full_events": 3069385,
+      "has_mu_tau": 1699,
+      "high_mt_w_cr": 5,
+      "loose_accept": 32,
+      "role": "background",
+      "same_sign_loose": 13,
+      "slice_events": 5000,
+      "vbf_like": 0
+    },
+    "W3JetsToLNu": {
+      "baseline_os_lowmt": 11,
+      "full_events": 1524114,
+      "has_mu_tau": 1864,
+      "high_mt_w_cr": 8,
+      "loose_accept": 60,
+      "role": "background",
+      "same_sign_loose": 24,
+      "slice_events": 5000,
+      "vbf_like": 5
+    }
+  }
+}

@@ -76,3 +76,32 @@
   FLAG FOR HUMAN: NO.
 - Produced `phase2_exploration/plan.md` before ROOT file access or script
   writing.
+- Resolved the public ROOT mirror
+  `https://root.cern/files/HiggsTauTauReduced/`: it lists the prompt MC files
+  but data files are `Run2012B_TauPlusX.root` and `Run2012C_TauPlusX.root`,
+  not the prompt-listed `SingleMu` names. This is a Phase 2 provenance finding
+  for [A3].
+- Found that `uproot` access through pixi needs
+  `SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt`; without it, fsspec
+  reports a certificate verification failure even though system `curl` can
+  reach the mirror.
+- Added Phase 2 exploration and plotting scripts with pixi tasks
+  `phase2-explore`, `phase2-plots`, and `all`.
+- `pixi run phase2-explore` wrote sample inventory and branch diagnostics, then
+  stalled during the 20k-event derived-variable survey. The active process was
+  terminated and the survey was reduced to a 5k-event prototype with progress
+  logging before each remote read.
+- The reduced `pixi run phase2-explore` completed and wrote variable
+  histograms, preselection yields, and variable separation JSON files.
+- `pixi run phase2-plots` completed after replacing unavailable
+  `mplhep.plot.mpl_magic` with a local legend-headroom helper. `pixi run
+  lint-plots` passed after patching an explicit label.
+- PDF stub test: `pixi run build-pdf` failed after pandoc/postprocess because
+  `tectonic` is missing; `pdflatex` is also absent from pixi. The build task
+  additionally emitted a citation warning because it does not pass
+  `--bibliography=references.bib`. Phase 3/5 should add a TeX engine and fix
+  the build task bibliography argument before relying on PDF compilation.
+- Completed Phase 2 executor deliverables: wrote
+  `phase2_exploration/outputs/EXPLORATION.md`, wrote executor self-review under
+  `phase2_exploration/review/self/`, and preserved machine-readable inventory,
+  diagnostics, preselection, separation, and figure outputs.

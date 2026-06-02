@@ -51,8 +51,6 @@ lint-plots = "python conventions/lint_plots.py ."
 # --- Analysis tasks: add as you write scripts ---
 # Each script gets an independently runnable task.
 # The "all" task chains the full sequence — this is the reproducibility contract.
-# Example:
-#   select = "python phase3_selection/src/apply_selection.py"
-#   unfold = "python phase4_inference/src/unfold.py"
-#   systematics = "python phase4_inference/src/run_systematics.py"
-#   all = "python phase3_selection/src/apply_selection.py && python phase4_inference/src/unfold.py && python phase4_inference/src/run_systematics.py"
+phase2-explore = "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt python phase2_exploration/src/explore_samples.py"
+phase2-plots = "python phase2_exploration/src/plot_exploration.py"
+all = "pixi run phase2-explore && pixi run phase2-plots"
