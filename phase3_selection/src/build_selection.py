@@ -258,7 +258,7 @@ def normalization_metadata() -> dict[str, object]:
             "source": "CMS Open Data H to tau tau tutorial skim.cxx",
             "source_url": (
                 "https://github.com/cms-opendata-analyses/"
-                "HiggsTauTauNanoAODOutreachAnalysis/blob/master/skim.cxx"
+                "HiggsTauTauNanoAODOutreachAnalysis/blob/2012/skim.cxx"
             ),
             "record_12350_context": {
                 "record_id": 12350,

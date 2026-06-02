@@ -52,7 +52,7 @@
       }
     },
     "source": "CMS Open Data H to tau tau tutorial skim.cxx",
-    "source_url": "https://github.com/cms-opendata-analyses/HiggsTauTauNanoAODOutreachAnalysis/blob/master/skim.cxx",
+    "source_url": "https://github.com/cms-opendata-analyses/HiggsTauTauNanoAODOutreachAnalysis/blob/2012/skim.cxx",
     "status": "resolved_from_official_open_data_tutorial_and_luminosity_records",
     "total_record_number_events": 86950679,
     "value_fb_inv": 11.467,
