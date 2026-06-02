@@ -1,0 +1,18 @@
+{
+  "anti_tuning_statement": "No MC sample has been manually scaled to data in Phase 3.",
+  "available_phase3_outputs": [
+    "raw selected counts",
+    "shape-normalized templates",
+    "control-region raw yields for W high-mT normalization preparation"
+  ],
+  "missing_citable_inputs": [
+    "TauPlusX Run2012B/Run2012C effective integrated luminosity for the localized reduced files",
+    "ggH and VBF 8 TeV production cross sections and branching fraction applicable to the reduced samples",
+    "DYJetsToLL, TTbar, and W1/W2/W3 jet-bin cross sections",
+    "W+jets exclusive jet-bin stitching prescription for W1/W2/W3 without inclusive WJets or W4",
+    "official trigger, muon, tau, b-tag, and pileup scale-factor prescriptions for these reduced files"
+  ],
+  "reason": "Reduced ROOT files contain no event or generator weights, pileup weights, embedded luminosity, or cross-section metadata.",
+  "resolved_in_phase3": false,
+  "status": "blocking_for_phase4_absolute_templates"
+}

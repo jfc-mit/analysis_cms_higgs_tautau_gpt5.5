@@ -1,0 +1,130 @@
+{
+  "samples": {
+    "DYJetsToLL": {
+      "raw_counts": {
+        "category_boosted": 825,
+        "category_none": 3040355,
+        "category_vbf": 34,
+        "category_zero_jet": 4673,
+        "qcd_same_sign": 527,
+        "signal": 5532,
+        "top_btag_handle": 1027,
+        "w_high_mt": 136,
+        "z_rich": 2973
+      },
+      "role": "background"
+    },
+    "GluGluToHToTauTau": {
+      "raw_counts": {
+        "category_boosted": 256,
+        "category_none": 46944,
+        "category_vbf": 23,
+        "category_zero_jet": 473,
+        "qcd_same_sign": 9,
+        "signal": 752,
+        "top_btag_handle": 259,
+        "w_high_mt": 24,
+        "z_rich": 615
+      },
+      "role": "signal"
+    },
+    "Run2012B_TauPlusX": {
+      "raw_counts": {
+        "category_boosted": 875,
+        "category_none": 3560540,
+        "category_vbf": 35,
+        "category_zero_jet": 3300,
+        "qcd_same_sign": 1279,
+        "signal": 4210,
+        "top_btag_handle": 2639,
+        "w_high_mt": 1637,
+        "z_rich": 2132
+      },
+      "role": "data"
+    },
+    "Run2012C_TauPlusX": {
+      "raw_counts": {
+        "category_boosted": 1386,
+        "category_none": 5123400,
+        "category_vbf": 48,
+        "category_zero_jet": 5483,
+        "qcd_same_sign": 1948,
+        "signal": 6917,
+        "top_btag_handle": 4212,
+        "w_high_mt": 2574,
+        "z_rich": 3631
+      },
+      "role": "data"
+    },
+    "TTbar": {
+      "raw_counts": {
+        "category_boosted": 1541,
+        "category_none": 640506,
+        "category_vbf": 172,
+        "category_zero_jet": 91,
+        "qcd_same_sign": 189,
+        "signal": 1804,
+        "top_btag_handle": 8988,
+        "w_high_mt": 4092,
+        "z_rich": 859
+      },
+      "role": "background"
+    },
+    "VBF_HToTauTau": {
+      "raw_counts": {
+        "category_boosted": 516,
+        "category_none": 48177,
+        "category_vbf": 372,
+        "category_zero_jet": 100,
+        "qcd_same_sign": 28,
+        "signal": 988,
+        "top_btag_handle": 913,
+        "w_high_mt": 40,
+        "z_rich": 706
+      },
+      "role": "signal"
+    },
+    "W1JetsToLNu": {
+      "raw_counts": {
+        "category_boosted": 44,
+        "category_none": 2978057,
+        "category_vbf": 5,
+        "category_zero_jet": 374,
+        "qcd_same_sign": 128,
+        "signal": 423,
+        "top_btag_handle": 78,
+        "w_high_mt": 611,
+        "z_rich": 256
+      },
+      "role": "background"
+    },
+    "W2JetsToLNu": {
+      "raw_counts": {
+        "category_boosted": 248,
+        "category_none": 3068752,
+        "category_vbf": 17,
+        "category_zero_jet": 368,
+        "qcd_same_sign": 244,
+        "signal": 633,
+        "top_btag_handle": 1368,
+        "w_high_mt": 1096,
+        "z_rich": 338
+      },
+      "role": "background"
+    },
+    "W3JetsToLNu": {
+      "raw_counts": {
+        "category_boosted": 238,
+        "category_none": 1523730,
+        "category_vbf": 18,
+        "category_zero_jet": 128,
+        "qcd_same_sign": 152,
+        "signal": 384,
+        "top_btag_handle": 1315,
+        "w_high_mt": 617,
+        "z_rich": 191
+      },
+      "role": "background"
+    }
+  }
+}

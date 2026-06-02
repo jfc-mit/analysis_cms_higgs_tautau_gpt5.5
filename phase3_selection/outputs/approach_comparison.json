@@ -1,0 +1,67 @@
+{
+  "approaches": {
+    "addmet_mass": {
+      "categories": {
+        "boosted": {
+          "background_events": 2896,
+          "signal_events": 772,
+          "sqrt_sum_s2_over_b_plus_1": 17.419732340495624,
+          "sum_s_over_sqrt_b_plus_1": 55.6496657322989
+        },
+        "vbf": {
+          "background_events": 246,
+          "signal_events": 395,
+          "sqrt_sum_s2_over_b_plus_1": 32.12685665906452,
+          "sum_s_over_sqrt_b_plus_1": 98.79636358693236
+        },
+        "zero_jet": {
+          "background_events": 5634,
+          "signal_events": 573,
+          "sqrt_sum_s2_over_b_plus_1": 9.68335298833585,
+          "sum_s_over_sqrt_b_plus_1": 32.92673147831765
+        }
+      },
+      "combined_metric_sum_over_categories": 59.22994198789599,
+      "variable": "m_addmet"
+    },
+    "nn_classifier": {
+      "reason": "Majority of candidate MVA inputs failed the data/MC modelling gate in validation/control regions.",
+      "status": "downscoped_or_diagnostic_only"
+    },
+    "visible_mass": {
+      "categories": {
+        "boosted": {
+          "background_events": 2896,
+          "signal_events": 772,
+          "sqrt_sum_s2_over_b_plus_1": 17.681957752022242,
+          "sum_s_over_sqrt_b_plus_1": 47.06689650652585
+        },
+        "vbf": {
+          "background_events": 246,
+          "signal_events": 395,
+          "sqrt_sum_s2_over_b_plus_1": 33.1124024155605,
+          "sum_s_over_sqrt_b_plus_1": 84.34011032998148
+        },
+        "zero_jet": {
+          "background_events": 5634,
+          "signal_events": 573,
+          "sqrt_sum_s2_over_b_plus_1": 10.873956483896418,
+          "sum_s_over_sqrt_b_plus_1": 27.690429385955873
+        }
+      },
+      "combined_metric_sum_over_categories": 61.66831665147916,
+      "variable": "m_vis"
+    }
+  },
+  "metric": "MC-only binned separation over mutually exclusive categories",
+  "normalization": "raw unweighted MC counts; Phase 3 ranking only",
+  "phase3_decision": {
+    "genmet_regression": {
+      "phase3_decision": "Do not construct or fit NN genMET mass. Keep add-MET mass as the reconstructed-MET alternative.",
+      "reason": "Reduced MC files contain no direct GenMET branch and Phase 2 found no neutrino generator-particle truth target.",
+      "status": "formally_downscoped"
+    },
+    "reason": "Phase 1 [D9] requires a >=10% improvement and validation gates before replacing visible mass.",
+    "recommended_primary": "visible_mass_primary"
+  }
+}

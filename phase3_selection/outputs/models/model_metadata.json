@@ -1,0 +1,5 @@
+{
+  "reason": "Majority of candidate MVA inputs failed the data/MC modelling gate in validation/control regions.",
+  "status": "downscoped",
+  "trained": false
+}

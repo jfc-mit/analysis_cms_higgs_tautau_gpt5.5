@@ -180,3 +180,35 @@
   markdown, generated TeX, and generated PDF were then removed. The existing
   `references.bib` file contains no citation entries, so the stub used inline
   math but no real citation key.
+# 2026-06-02T11:05:16Z - Phase 3 executor start
+
+Read the Phase 3 executor template, activation matrix, phase instructions,
+Phase 1/2 artifacts, and search conventions. Phase 3 will implement the
+Phase 1 [D1] search/template-fit strategy despite the scaffolded measurement
+label in `phase3_selection/CLAUDE.md`. Wrote the required
+`phase3_selection/plan.md` before implementation.
+
+# 2026-06-02T11:19:30Z - Phase 3 selection implementation
+
+Implemented full-file Phase 3 processing over all localized reduced samples.
+Retained mutually exclusive VBF, boosted/1-jet, and zero-jet categories with
+VBF assigned first. Aggregate selected raw counts are data 83/2261/8783,
+signal 395/772/573, and background 246/2896/5634 in VBF/boosted/zero-jet.
+
+DECISION: Keep visible mass as the Phase 4 primary observable and retain
+add-MET mass as an alternative cross-check.
+ALTERNATIVES: Add-MET mass had a lower combined raw MC-only separation metric
+than visible mass; NN classifier was downscoped because 13 of 16 candidate
+inputs failed the data/MC modelling gate; NN genMET regression was downscoped
+because no GenMET/neutrino truth target exists in the reduced files.
+CONFIDENCE: HIGH for Phase 3 processing; MEDIUM for eventual sensitivity
+until Phase 4 resolves normalization and systematics.
+FLAG FOR HUMAN: YES, because MVA downscope and missing normalization inputs
+affect the final analysis scope.
+
+# 2026-06-02T11:19:30Z - Phase 3 validation
+
+Ran `pixi run phase3-all` successfully. Ran `pixi run lint-plots`; it passed
+with no plotting violations. Wrote
+`phase3_selection/outputs/SELECTION.md` and all required machine-readable
+outputs.

@@ -1,0 +1,121 @@
+{
+  "samples": {
+    "DYJetsToLL": {
+      "counts": {
+        "events": 3045887,
+        "low_mt_signal_region": 5532,
+        "mu_tau_pair": 8309,
+        "muon_candidate": 624703,
+        "opposite_sign": 7263,
+        "tau_candidate": 8309,
+        "trigger": 686832
+      },
+      "role": "background"
+    },
+    "GluGluToHToTauTau": {
+      "counts": {
+        "events": 47696,
+        "low_mt_signal_region": 752,
+        "mu_tau_pair": 1023,
+        "muon_candidate": 3926,
+        "opposite_sign": 1011,
+        "tau_candidate": 1023,
+        "trigger": 4851
+      },
+      "role": "signal"
+    },
+    "Run2012B_TauPlusX": {
+      "counts": {
+        "events": 3564750,
+        "low_mt_signal_region": 4210,
+        "mu_tau_pair": 12359,
+        "muon_candidate": 698273,
+        "opposite_sign": 9214,
+        "tau_candidate": 12359,
+        "trigger": 1179403
+      },
+      "role": "data"
+    },
+    "Run2012C_TauPlusX": {
+      "counts": {
+        "events": 5130317,
+        "low_mt_signal_region": 6917,
+        "mu_tau_pair": 19615,
+        "muon_candidate": 1068966,
+        "opposite_sign": 14823,
+        "tau_candidate": 19615,
+        "trigger": 1703487
+      },
+      "role": "data"
+    },
+    "TTbar": {
+      "counts": {
+        "events": 642310,
+        "low_mt_signal_region": 1804,
+        "mu_tau_pair": 9878,
+        "muon_candidate": 85847,
+        "opposite_sign": 8971,
+        "tau_candidate": 9878,
+        "trigger": 97892
+      },
+      "role": "background"
+    },
+    "VBF_HToTauTau": {
+      "counts": {
+        "events": 49165,
+        "low_mt_signal_region": 988,
+        "mu_tau_pair": 1366,
+        "muon_candidate": 5114,
+        "opposite_sign": 1320,
+        "tau_candidate": 1366,
+        "trigger": 6167
+      },
+      "role": "signal"
+    },
+    "W1JetsToLNu": {
+      "counts": {
+        "events": 2978480,
+        "low_mt_signal_region": 423,
+        "mu_tau_pair": 2975,
+        "muon_candidate": 407425,
+        "opposite_sign": 2298,
+        "tau_candidate": 2975,
+        "trigger": 472795
+      },
+      "role": "background"
+    },
+    "W2JetsToLNu": {
+      "counts": {
+        "events": 3069385,
+        "low_mt_signal_region": 633,
+        "mu_tau_pair": 5191,
+        "muon_candidate": 440888,
+        "opposite_sign": 3876,
+        "tau_candidate": 5191,
+        "trigger": 519371
+      },
+      "role": "background"
+    },
+    "W3JetsToLNu": {
+      "counts": {
+        "events": 1524114,
+        "low_mt_signal_region": 384,
+        "mu_tau_pair": 2817,
+        "muon_candidate": 224302,
+        "opposite_sign": 2008,
+        "tau_candidate": 2817,
+        "trigger": 265376
+      },
+      "role": "background"
+    }
+  },
+  "steps": [
+    "events",
+    "trigger",
+    "muon_candidate",
+    "tau_candidate",
+    "mu_tau_pair",
+    "opposite_sign",
+    "low_mt_signal_region"
+  ]
+}

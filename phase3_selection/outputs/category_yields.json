@@ -1,0 +1,81 @@
+{
+  "categories": [
+    "vbf",
+    "boosted",
+    "zero_jet"
+  ],
+  "samples": {
+    "DYJetsToLL": {
+      "raw_counts": {
+        "boosted": 825,
+        "vbf": 34,
+        "zero_jet": 4673
+      },
+      "role": "background"
+    },
+    "GluGluToHToTauTau": {
+      "raw_counts": {
+        "boosted": 256,
+        "vbf": 23,
+        "zero_jet": 473
+      },
+      "role": "signal"
+    },
+    "Run2012B_TauPlusX": {
+      "raw_counts": {
+        "boosted": 875,
+        "vbf": 35,
+        "zero_jet": 3300
+      },
+      "role": "data"
+    },
+    "Run2012C_TauPlusX": {
+      "raw_counts": {
+        "boosted": 1386,
+        "vbf": 48,
+        "zero_jet": 5483
+      },
+      "role": "data"
+    },
+    "TTbar": {
+      "raw_counts": {
+        "boosted": 1541,
+        "vbf": 172,
+        "zero_jet": 91
+      },
+      "role": "background"
+    },
+    "VBF_HToTauTau": {
+      "raw_counts": {
+        "boosted": 516,
+        "vbf": 372,
+        "zero_jet": 100
+      },
+      "role": "signal"
+    },
+    "W1JetsToLNu": {
+      "raw_counts": {
+        "boosted": 44,
+        "vbf": 5,
+        "zero_jet": 374
+      },
+      "role": "background"
+    },
+    "W2JetsToLNu": {
+      "raw_counts": {
+        "boosted": 248,
+        "vbf": 17,
+        "zero_jet": 368
+      },
+      "role": "background"
+    },
+    "W3JetsToLNu": {
+      "raw_counts": {
+        "boosted": 238,
+        "vbf": 18,
+        "zero_jet": 128
+      },
+      "role": "background"
+    }
+  }
+}
