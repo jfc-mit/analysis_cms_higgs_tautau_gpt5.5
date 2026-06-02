@@ -250,3 +250,37 @@ outputs.
   selected-event consistency check showing `is_signal_region` agrees with
   `category_yields.json` and `region_yields.json` for data, signal, and
   background.
+
+# 2026-06-02T11:58:45Z - Phase 2/3 normalization provenance regression fixer
+
+- CORRECTION TO 2026-06-02T11:36:23Z LUMINOSITY CHECK: the local ROOT `Events`
+  entries are reduced/skimmed processing entries and must not be compared to
+  CERN Open Data `distribution.number_events` to declare samples incomplete.
+  The local files remain the Phase 2/3 analysis inputs.
+- Updated normalization provenance to the user-authoritative model: data
+  luminosity is `L_int = 11.467/fb = 11467/pb` from the CMS Open Data H to tau
+  tau tutorial `skim.cxx` for Run2012B+C TauPlusX; CERN Open Data record 1054
+  supplies the official 2012 luminosity source and the `pxl`-preferred,
+  HFOC-fallback rule; CMS PAS LUM-13-001 supplies the 2.6% luminosity
+  uncertainty.
+- Updated MC normalization denominators to CERN Open Data records 12351-12357
+  `distribution.number_events`, not local ROOT entries. Recorded the official
+  record id, DOI, file key, file size, `N_gen`, cross section, formula, and
+  per-entry absolute weight in `phase3_selection/outputs/normalization_inputs.json`.
+- Linked data records 12358 and 12359 in the Phase 2 manifest as official
+  parent reduced NanoAOD records for Run2012B/C TauPlusX event counts. The data
+  luminosity is not back-calculated from those event counts.
+- Updated `phase2_exploration/src/localize_samples.py` and regenerated
+  `phase2_exploration/outputs/local_sample_manifest.json` schema v2 so local
+  tree entries and official Open Data event counts are separate fields.
+- Updated `phase1_strategy/outputs/STRATEGY.md`,
+  `phase2_exploration/outputs/EXPLORATION.md`, and
+  `phase3_selection/outputs/SELECTION.md` to remove stale claims that reduced
+  local entries imply incomplete samples or unresolved luminosity.
+- Did not rerun full Phase 3 event selection: selected events, cutflows,
+  category yields, and region yields depend on reconstructed branch masks and
+  selection thresholds, none of which changed. This regression changed only
+  normalization provenance metadata and prose.
+- Verification passed: `pixi run py phase2_exploration/src/localize_samples.py`;
+  `pixi run py - <<'PY' ... JSON and normalization metadata checks ... PY`;
+  `pixi run lint-plots`; `git diff --check`.

@@ -24,19 +24,22 @@ reduced files are localized under `data/` and `mc/` in the analysis root, and
 `phase2_exploration/src/explore_samples.py` now prefers those local paths when
 present with the HTTPS mirror as fallback.
 
-The public mirror lists:
+The local mirror files used by this analysis contain reduced/skimmed `Events`
+tree entries. These entries are processing, shape, and cutflow entries only; the
+official parent reduced NanoAOD event counts used for normalization provenance
+come from CERN Open Data records 12351-12359.
 
-| Sample | Role | Events | Size [MB] | Status |
+| Sample | Role | Local entries | Official record events | Record |
 |---|---:|---:|---:|---|
-| `GluGluToHToTauTau.root` | signal | 47,696 | 20.5 | available |
-| `VBF_HToTauTau.root` | signal | 49,165 | 24.2 | available |
-| `DYJetsToLL.root` | background | 3,045,887 | 926.0 | available |
-| `TTbar.root` | background | 642,310 | 353.7 | available |
-| `W1JetsToLNu.root` | background | 2,978,480 | 1,073.5 | available |
-| `W2JetsToLNu.root` | background | 3,069,385 | 1,217.3 | available |
-| `W3JetsToLNu.root` | background | 1,524,114 | 655.0 | available |
-| `Run2012B_TauPlusX.root` | data | 3,564,750 | 1,088.1 | available |
-| `Run2012C_TauPlusX.root` | data | 5,130,317 | 1,549.0 | available |
+| `GluGluToHToTauTau.root` | signal | 47,696 | 476,963 | CERN Open Data 12351 |
+| `VBF_HToTauTau.root` | signal | 49,165 | 491,653 | CERN Open Data 12352 |
+| `DYJetsToLL.root` | background | 3,045,887 | 30,458,871 | CERN Open Data 12353 |
+| `TTbar.root` | background | 642,310 | 6,423,106 | CERN Open Data 12354 |
+| `W1JetsToLNu.root` | background | 2,978,480 | 29,784,800 | CERN Open Data 12355 |
+| `W2JetsToLNu.root` | background | 3,069,385 | 30,693,853 | CERN Open Data 12356 |
+| `W3JetsToLNu.root` | background | 1,524,114 | 15,241,144 | CERN Open Data 12357 |
+| `Run2012B_TauPlusX.root` | data | 3,564,750 | 35,647,508 | CERN Open Data 12358 |
+| `Run2012C_TauPlusX.root` | data | 5,130,317 | 51,303,171 | CERN Open Data 12359 |
 
 `Run2012B_SingleMu.root` and `Run2012C_SingleMu.root` return HTTP 404 at the
 same mirror. This resolves Phase 1 open issue [O1] in favor of the CERN reduced
@@ -47,9 +50,10 @@ SingleMu wording.
 
 The machine-readable local manifest is
 `phase2_exploration/outputs/local_sample_manifest.json`. It records source
-URLs, local paths, expected and observed file sizes, validation status, `Events`
-tree entry counts when available, and paper-level components that are not in
-the reduced mirror. The current local reduced sample policy is to use all
+URLs, local paths, expected and observed file sizes, validation status, local
+`Events` tree entry counts when available, official CERN Open Data record
+metadata, and paper-level components that are not in the reduced mirror. The
+current local reduced sample policy is to use all
 available 2012 CMS Open Data reduced files relevant to this mu tau_h H to tau
 tau analysis now, and to defer full AOD conversion until a later phase
 demonstrates the additional sample is needed.
@@ -127,18 +131,18 @@ Required Phase 1 feature availability:
 | Jet b-tag branch | yes | yes | Top CR/veto studies are feasible. |
 | Generator particles | yes | no | MC truth studies feasible; data application must use reco-only inputs. |
 | Direct GenMET branch | no | no | NN genMET regression cannot use direct GenMET. |
-| Event or generator weights | no | no | Production normalization needs external xsec/lumi and raw event counts. |
+| Event or generator weights | no | no | Production normalization needs external xsec/lumi and official record event counts. |
 | Pileup weights | no | no | Separate pileup reweighting is not supported by these ntuples. |
 | Primary vertex count `PV_npvs` | yes | yes | Pileup-sensitive validation can use vertex multiplicity only. |
 
 The full machine-readable inventory is in
 `phase2_exploration/outputs/sample_inventory.json`.
 
-![Sample event counts and file sizes. The plot summarizes full event counts and
-HTTP HEAD file sizes for the reduced H to tau tau files used in Phase 2. It
-shows why Phase 2 used bounded remote slices: several backgrounds and data
-files are around or above one GB, while the signal samples are small enough for
-rapid metadata checks.](figures/sample_event_count_file_size.pdf){#fig:p2-samples}
+![Sample local entries and file sizes. The plot summarizes local reduced ROOT
+`Events` tree entries and HTTP HEAD file sizes for the H to tau tau files used
+in Phase 2. These local entries are not official normalization denominators; MC
+normalization uses CERN Open Data `distribution.number_events`, and data
+normalization uses the official luminosity source.](figures/sample_event_count_file_size.pdf){#fig:p2-samples}
 
 ![Branch feature availability. The heatmap marks whether each sample contains
 the branch classes required by the Phase 1 strategy, including generator
@@ -304,16 +308,18 @@ important as the transparent baseline template observable from Phase 1.](figures
 ## Normalization Status
 
 The reduced ROOT files contain neither event weights nor embedded
-cross-section/luminosity metadata. Phase 2 therefore reports raw event counts
-and raw slice yields only. Phase 3 must retrieve citable cross sections,
-integrated luminosities for the TauPlusX periods, and any W+jets jet-bin
-stitching prescription before production-normalized templates are built.
+cross-section/luminosity metadata. Phase 2 therefore reports local tree entries
+and raw slice yields only, and it does not derive luminosity or MC denominators
+from local entries. The authoritative normalization provenance is external:
+`L_int = 11.467/fb` from the CMS Open Data H to tau tau tutorial `skim.cxx`,
+the 2012 luminosity source and `pxl`-preferred rule from CERN Open Data record
+1054, the 2.6% luminosity uncertainty from CMS PAS LUM-13-001, and MC
+`N_gen` denominators from CERN Open Data records 12351-12357.
 
-This is a blocking normalization item for Phase 3, not a reason to manually
-scale MC to data. The Phase 1 strategy requires W+jets normalization from the
-high-mT data region and DY/Z normalization uncertainty in the 10-15% range; the
-absence of file weights means those choices must be implemented using external
-normalization inputs plus data-driven CR constraints.
+This resolves the Phase 3 absolute-normalization provenance without manual
+data/MC scaling. Remaining Phase 4 work is to implement official object/trigger
+scale factors, W+jets control-region treatment or stitching, and data-driven QCD
+constraints.
 
 ## Data Quality Findings
 

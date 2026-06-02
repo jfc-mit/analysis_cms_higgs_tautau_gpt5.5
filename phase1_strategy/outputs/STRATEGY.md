@@ -529,8 +529,9 @@ Phase 1 produces no physics figures. These figures are Phase 2-5 obligations.
 
 Phase 2:
 
-- Resolve exact ROOT file paths, branch schemas, event counts, sum of weights,
-  parent datasets, and trigger/data stream provenance.
+- Resolve exact ROOT file paths, branch schemas, local tree entries, official
+  record event counts, sum of weights if present, parent datasets, and
+  trigger/data stream provenance.
 - Confirm whether SingleMu or TauPlusX open-data inputs are available and
   appropriate.
 - Inventory all weight/flag branches and truth labels.
@@ -571,8 +572,10 @@ Phase 4c/5:
 
 ## Open Issues
 
-- [O1] Exact open-data sample paths and whether prompt-listed SingleMu files
-  or CERN record 12350 TauPlusX files are the intended data source.
+- [O1] Resolved in Phase 2/3 regression: CERN record 12350 TauPlusX files are
+  the intended reduced data source; prompt-listed SingleMu files were not found
+  at the resolved reduced mirror. The local TauPlusX `Events` entries are
+  reduced/skimmed processing entries, not luminosity inputs.
 - [O2] Availability of official or citable CMS 2012 tau ID, tau trigger, and
   muon trigger scale factors for the reduced files.
 - [O3] Availability of QCD, diboson, single-top, and additional W+jets samples.

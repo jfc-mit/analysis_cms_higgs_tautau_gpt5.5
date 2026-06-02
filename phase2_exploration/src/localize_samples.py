@@ -26,6 +26,90 @@ CMS_2014 = "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041
 CMS_2018 = "CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373"
 AN_CONTEXT = "phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md"
 
+OFFICIAL_RECORDS = {
+    "Run2012B_TauPlusX": {
+        "record_id": 12358,
+        "doi": "10.7483/OPENDATA.CMS.H95X.G286",
+        "record_url": "https://opendata.cern.ch/record/12358",
+        "file_key": "Run2012B_TauPlusX.root",
+        "distribution_number_events": 35_647_508,
+        "distribution_file_size_bytes": 10_918_632_568,
+        "normalization_role": "parent reduced data event count; luminosity comes from tutorial/record 1054, not event counts",
+    },
+    "Run2012C_TauPlusX": {
+        "record_id": 12359,
+        "doi": "10.7483/OPENDATA.CMS.1O08.0PTD",
+        "record_url": "https://opendata.cern.ch/record/12359",
+        "file_key": "Run2012C_TauPlusX.root",
+        "distribution_number_events": 51_303_171,
+        "distribution_file_size_bytes": 15_886_107_547,
+        "normalization_role": "parent reduced data event count; luminosity comes from tutorial/record 1054, not event counts",
+    },
+    "GluGluToHToTauTau": {
+        "record_id": 12351,
+        "doi": "10.7483/OPENDATA.CMS.VLQO.U950",
+        "record_url": "https://opendata.cern.ch/record/12351",
+        "file_key": "GluGluToHToTauTau.root",
+        "distribution_number_events": 476_963,
+        "distribution_file_size_bytes": 196_517_149,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "VBF_HToTauTau": {
+        "record_id": 12352,
+        "doi": "10.7483/OPENDATA.CMS.EA1T.GVAF",
+        "record_url": "https://opendata.cern.ch/record/12352",
+        "file_key": "VBF_HToTauTau.root",
+        "distribution_number_events": 491_653,
+        "distribution_file_size_bytes": 231_849_713,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "DYJetsToLL": {
+        "record_id": 12353,
+        "doi": "10.7483/OPENDATA.CMS.SRRA.2GON",
+        "record_url": "https://opendata.cern.ch/record/12353",
+        "file_key": "DYJetsToLL.root",
+        "distribution_number_events": 30_458_871,
+        "distribution_file_size_bytes": 9_247_252_629,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "TTbar": {
+        "record_id": 12354,
+        "doi": "10.7483/OPENDATA.CMS.A6WH.U343",
+        "record_url": "https://opendata.cern.ch/record/12354",
+        "file_key": "TTbar.root",
+        "distribution_number_events": 6_423_106,
+        "distribution_file_size_bytes": 3_528_995_041,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "W1JetsToLNu": {
+        "record_id": 12355,
+        "doi": "10.7483/OPENDATA.CMS.QQZ2.FJZ3",
+        "record_url": "https://opendata.cern.ch/record/12355",
+        "file_key": "W1JetsToLNu.root",
+        "distribution_number_events": 29_784_800,
+        "distribution_file_size_bytes": 10_731_401_995,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "W2JetsToLNu": {
+        "record_id": 12356,
+        "doi": "10.7483/OPENDATA.CMS.3YJW.P203",
+        "record_url": "https://opendata.cern.ch/record/12356",
+        "file_key": "W2JetsToLNu.root",
+        "distribution_number_events": 30_693_853,
+        "distribution_file_size_bytes": 12_161_887_620,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+    "W3JetsToLNu": {
+        "record_id": 12357,
+        "doi": "10.7483/OPENDATA.CMS.3PB3.MNO2",
+        "record_url": "https://opendata.cern.ch/record/12357",
+        "file_key": "W3JetsToLNu.root",
+        "distribution_number_events": 15_241_144,
+        "distribution_file_size_bytes": 6_544_850_738,
+        "normalization_role": "MC generation/open-data denominator",
+    },
+}
+
 CONFIRMED = [
     ("Run2012B_TauPlusX", "2012 TauPlusX collision data", "data", "Run2012B_TauPlusX.root"),
     ("Run2012C_TauPlusX", "2012 TauPlusX collision data", "data", "Run2012C_TauPlusX.root"),
@@ -171,13 +255,13 @@ def confirmed_entry(name: str, process: str, role: str, file_name: str) -> dict[
     exists = path.exists()
     size = path.stat().st_size if exists else 0
     status = "missing-reduced"
-    events = None
+    local_entries = None
     validation = {"events_tree_open": False}
     if exists:
         if expected_size is None or size == expected_size:
             try:
                 tree = uproot.open(path)["Events"]
-                events = int(tree.num_entries)
+                local_entries = int(tree.num_entries)
                 validation["events_tree_open"] = True
                 status = "downloaded"
             except OSError as exc:
@@ -190,16 +274,21 @@ def confirmed_entry(name: str, process: str, role: str, file_name: str) -> dict[
         "sample": name,
         "process": process,
         "role": role,
-        "source_urls": [url, ROOT_INDEX, WORKSHOP_SOURCE],
+        "source_urls": [url, ROOT_INDEX, WORKSHOP_SOURCE, OFFICIAL_RECORDS[name]["record_url"]],
         "local_path": str(path.relative_to(ROOT)),
         "size_bytes": size,
         "expected_size_bytes": expected_size,
         "status": status,
-        "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+        "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
         "analysis_blocking": status == "failed",
-        "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use." if status == "downloaded" else "Reduced file is listed but local validation did not pass.",
+        "notes": (
+            "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators."
+            if status == "downloaded"
+            else "Reduced file is listed but local validation did not pass."
+        ),
         "validation": validation,
-        "events": events,
+        "local_events_tree_entries": local_entries,
+        "official_open_data_record": OFFICIAL_RECORDS[name],
     }
 
 
@@ -233,7 +322,7 @@ def paper_entry(
             "limitation or expected impact on the reduced-sample analysis."
         ),
         "validation": {"events_tree_open": False},
-        "events": None,
+        "local_events_tree_entries": None,
     }
 
 
@@ -241,7 +330,7 @@ def build_manifest() -> dict[str, object]:
     samples = [confirmed_entry(*item) for item in CONFIRMED]
     samples.extend(paper_entry(*item) for item in PAPER_LEVEL)
     return {
-        "schema_version": 1,
+        "schema_version": 2,
         "analysis": "higgs_tautau",
         "created_utc": "2026-06-02",
         "policy": "Use all currently available reduced 2012 CMS Open Data samples relevant to the mu tau_h H to tau tau analysis; defer full AOD conversion until a later phase explicitly needs it.",
@@ -250,6 +339,7 @@ def build_manifest() -> dict[str, object]:
             "cms_open_data_workshop": WORKSHOP_SOURCE,
             "cms_2014": CMS_2014,
             "cms_2018": CMS_2018,
+            "cern_record_12350": "https://opendata.cern.ch/record/12350",
         },
         "samples": samples,
     }
@@ -259,7 +349,7 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     manifest = build_manifest()
     path = OUT / "local_sample_manifest.json"
-    path.write_text(json.dumps(manifest, indent=2, sort_keys=True))
+    path.write_text(json.dumps(manifest, indent=2, sort_keys=True) + "\n")
     failed = [item["sample"] for item in manifest["samples"] if item["status"] == "failed"]
     downloaded = [item["sample"] for item in manifest["samples"] if item["status"] == "downloaded"]
     log.info("Wrote %s", path)

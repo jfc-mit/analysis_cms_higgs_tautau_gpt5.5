@@ -267,28 +267,44 @@ comparison plan.](figures/addmet_mass_zero_jet.pdf){#fig:p3-addmet-zero}
 
 ## Normalization Status
 
-Production-normalized templates remain blocked for Phase 4 until external
-citable inputs are resolved. The reduced ROOT files contain no event weights,
-generator weights, pileup weights, embedded cross sections, or embedded
-luminosity metadata. Phase 3 therefore writes raw counts and shape-normalized
-diagnostics only.
+Absolute-normalization provenance is resolved for the Phase 3 reduced inputs
+and recorded in `normalization_inputs.json`. The local ROOT `Events` entries are
+treated only as processing, shape, and cutflow entries; they are not data
+luminosity inputs and are not MC generation denominators. No luminosity was
+computed from local entries, selected counts, generated MC counts, or data/MC
+back-calculation.
 
-The exact missing inputs are recorded in `normalization_inputs.json`:
-TauPlusX Run2012B/C effective luminosity for the localized reduced files,
-ggH/VBF cross sections and branching fraction applicable to the signal files,
-DY/ttbar/W1/W2/W3 cross sections, W+jets jet-bin stitching without inclusive
-W or W4 samples, and official trigger/object/pileup scale-factor prescriptions
-for these reduced files. No MC sample was manually scaled to data.
+The data luminosity is `L_int = 11.467/fb = 11467/pb`, the value used in the CMS
+Open Data H to tau tau tutorial `skim.cxx` for Run2012B+C TauPlusX in CERN Open
+Data record 12350. CERN Open Data record 1054 supplies the official 2012
+luminosity source and the rule to use Pixel Luminosity Telescope (`pxl`) values
+when available, with HFOC only for lumi sections where `pxl` is missing. The
+Run2012B and Run2012C parent reduced data records are records 12358 and 12359,
+with 35,647,508 and 51,303,171 official reduced NanoAOD events respectively;
+their local mirror entries may be skimmed and are not interpreted as missing
+data. CMS PAS LUM-13-001 gives the 2.6% luminosity uncertainty applied to
+MC-based predictions.
 
-Integrated luminosity handling is a binding blocker. Phase 3 checked the
-CERN Open Data record for the reduced H to tau tau sample set and the localized
-Run2012B/C TauPlusX reduced files, but found no exact integrated luminosity
-metadata for the reduced files. No luminosity was computed from event counts,
-generated MC counts, or data/MC back-calculation. Phase 4 cannot quote
-luminosity-normalized yields, cross sections, or production-normalized MC
-expectations until an official CMS Open Data luminosity record, luminosity JSON
-with a citable evaluation, or another exact CMS source is provided for these
-Run2012B/C TauPlusX inputs.
+MC absolute weights use CERN Open Data records 12351-12357
+`distribution.number_events` as denominators. Signal files contain only
+H->tautau events selected by the generator decay filter, so signal
+normalization uses `sigma_prod * BR(H->tautau)`, not inclusive Higgs production
+cross section alone:
+
+| Sample | Record | `N_gen` | Cross section [pb] | Weight |
+|---|---:|---:|---:|---:|
+| GluGluToHToTauTau | 12351 | 476,963 | 1.338 | 0.03217 |
+| VBF_HToTauTau | 12352 | 491,653 | 0.1001 | 0.002335 |
+| DYJetsToLL | 12353 | 30,458,871 | 3503.7 | 1.319 |
+| TTbar | 12354 | 6,423,106 | 252.9 | 0.4515 |
+| W1JetsToLNu | 12355 | 29,784,800 | 6381.2 | 2.457 |
+| W2JetsToLNu | 12356 | 30,693,853 | 2039.8 | 0.7621 |
+| W3JetsToLNu | 12357 | 15,241,144 | 612.5 | 0.4608 |
+
+Phase 4 still must implement official trigger, muon, tau, b-tag, and pileup
+scale-factor prescriptions where available, W+jets control-region treatment or
+stitching for W1/W2/W3 without inclusive WJets or W4, and the data-driven QCD
+sideband estimate. No MC sample was manually scaled to data in Phase 3.
 
 ## Machine-Readable Outputs
 
@@ -318,7 +334,10 @@ Commands run successfully:
 | Command | Outcome |
 |---|---|
 | `pixi run phase3-all` | Passed; regenerated selection, MVA gate, approach comparison, and figures. |
+| `pixi run py phase2_exploration/src/localize_samples.py` | Passed; regenerated the Phase 2 local manifest with separate local-entry and official-record metadata. |
+| `pixi run py - <<'PY' ... JSON and normalization metadata checks ... PY` | Passed; touched JSON files parse and weights equal `sigma * 11467 / N_gen` using official record denominators. |
 | `pixi run lint-plots` | Passed with no plotting violations in seven files. |
+| `git diff --check` | Passed with no whitespace errors. |
 
 Pre-review checks:
 
@@ -330,27 +349,24 @@ Pre-review checks:
 - MVA input modelling: performed before training; majority failure triggered
   downscope.
 - W/QCD/Z/top handles: implemented as raw regions/handles for Phase 4.
-- Missing samples and normalization inputs: documented as limitations and
-  blockers, not patched by manual scaling.
+- Missing paper-level samples and remaining scale-factor/control-region inputs:
+  documented as limitations, not patched by manual scaling.
 - Region semantics: `is_signal_region` agrees with `category_yields.json` and
   `region_yields.json`; exclusive validation labels do not overwrite signal
   membership.
-- Luminosity: no circular luminosity derivation was performed; exact
-  Run2012B/C TauPlusX integrated luminosity remains a blocking normalization
-  input.
+- Luminosity: no circular luminosity derivation was performed; Phase 3 uses
+  `L_int = 11.467/fb` from the CMS Open Data H to tau tau tutorial context,
+  record 1054 luminosity handling, and the 2.6% CMS PAS LUM-13-001 uncertainty.
 
 ## Open Blockers for Phase 4
 
-1. Resolve exact citable integrated luminosity for the localized Run2012B/C
-   TauPlusX reduced files from CMS Open Data records, luminosity metadata, or
-   another official CMS source. Do not compute it from event counts or data/MC
-   agreement.
-2. Resolve citable external normalization inputs for MC cross sections,
-   branching fractions, and W jet-bin stitching.
-3. Implement systematic variations from cited sources, especially tau
+1. Implement systematic variations from cited sources, especially tau
    ID/trigger, muon trigger/ID, jet/MET, b-tag/top, DY/Z normalization, W
    transfer, QCD sideband, MC statistics, and luminosity.
-4. Convert the raw W high-mT, same-sign QCD, top handle, and Z-rich validation
+2. Resolve W+jets exclusive-bin treatment or control-region constraints for
+   W1/W2/W3 without inclusive WJets or W4, and verify theory citations for all
+   cross sections/branching fractions in the Phase 4 note.
+3. Convert the raw W high-mT, same-sign QCD, top handle, and Z-rich validation
    regions into a statistically consistent pyhf model or pre-fit constraints.
-5. Validate asymptotic assumptions or use toys if any final Phase 4 template
+4. Validate asymptotic assumptions or use toys if any final Phase 4 template
    bins have low expected counts after normalization.

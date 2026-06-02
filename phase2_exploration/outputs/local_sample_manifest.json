@@ -5,19 +5,29 @@
   "samples": [
     {
       "analysis_blocking": false,
-      "events": 3564750,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 1088113510,
+      "local_events_tree_entries": 3564750,
       "local_path": "data/Run2012B_TauPlusX.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 10918632568,
+        "distribution_number_events": 35647508,
+        "doi": "10.7483/OPENDATA.CMS.H95X.G286",
+        "file_key": "Run2012B_TauPlusX.root",
+        "normalization_role": "parent reduced data event count; luminosity comes from tutorial/record 1054, not event counts",
+        "record_id": 12358,
+        "record_url": "https://opendata.cern.ch/record/12358"
+      },
       "process": "2012 TauPlusX collision data",
       "role": "data",
       "sample": "Run2012B_TauPlusX",
       "size_bytes": 1088113510,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12358"
       ],
       "status": "downloaded",
       "validation": {
@@ -26,19 +36,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 5130317,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 1549014154,
+      "local_events_tree_entries": 5130317,
       "local_path": "data/Run2012C_TauPlusX.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 15886107547,
+        "distribution_number_events": 51303171,
+        "doi": "10.7483/OPENDATA.CMS.1O08.0PTD",
+        "file_key": "Run2012C_TauPlusX.root",
+        "normalization_role": "parent reduced data event count; luminosity comes from tutorial/record 1054, not event counts",
+        "record_id": 12359,
+        "record_url": "https://opendata.cern.ch/record/12359"
+      },
       "process": "2012 TauPlusX collision data",
       "role": "data",
       "sample": "Run2012C_TauPlusX",
       "size_bytes": 1549014154,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12359"
       ],
       "status": "downloaded",
       "validation": {
@@ -47,19 +67,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 47696,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 20460281,
+      "local_events_tree_entries": 47696,
       "local_path": "mc/GluGluToHToTauTau.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 196517149,
+        "distribution_number_events": 476963,
+        "doi": "10.7483/OPENDATA.CMS.VLQO.U950",
+        "file_key": "GluGluToHToTauTau.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12351,
+        "record_url": "https://opendata.cern.ch/record/12351"
+      },
       "process": "ggH H to tau tau signal",
       "role": "signal",
       "sample": "GluGluToHToTauTau",
       "size_bytes": 20460281,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/GluGluToHToTauTau.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12351"
       ],
       "status": "downloaded",
       "validation": {
@@ -68,19 +98,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 49165,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 24184554,
+      "local_events_tree_entries": 49165,
       "local_path": "mc/VBF_HToTauTau.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 231849713,
+        "distribution_number_events": 491653,
+        "doi": "10.7483/OPENDATA.CMS.EA1T.GVAF",
+        "file_key": "VBF_HToTauTau.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12352,
+        "record_url": "https://opendata.cern.ch/record/12352"
+      },
       "process": "VBF H to tau tau signal",
       "role": "signal",
       "sample": "VBF_HToTauTau",
       "size_bytes": 24184554,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/VBF_HToTauTau.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12352"
       ],
       "status": "downloaded",
       "validation": {
@@ -89,19 +129,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 3045887,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 925979447,
+      "local_events_tree_entries": 3045887,
       "local_path": "mc/DYJetsToLL.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 9247252629,
+        "distribution_number_events": 30458871,
+        "doi": "10.7483/OPENDATA.CMS.SRRA.2GON",
+        "file_key": "DYJetsToLL.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12353,
+        "record_url": "https://opendata.cern.ch/record/12353"
+      },
       "process": "Drell-Yan Z/gamma* to ll background",
       "role": "background",
       "sample": "DYJetsToLL",
       "size_bytes": 925979447,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/DYJetsToLL.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12353"
       ],
       "status": "downloaded",
       "validation": {
@@ -110,19 +160,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 642310,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 353710208,
+      "local_events_tree_entries": 642310,
       "local_path": "mc/TTbar.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 3528995041,
+        "distribution_number_events": 6423106,
+        "doi": "10.7483/OPENDATA.CMS.A6WH.U343",
+        "file_key": "TTbar.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12354,
+        "record_url": "https://opendata.cern.ch/record/12354"
+      },
       "process": "ttbar background",
       "role": "background",
       "sample": "TTbar",
       "size_bytes": 353710208,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/TTbar.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12354"
       ],
       "status": "downloaded",
       "validation": {
@@ -131,19 +191,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 2978480,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 1073460654,
+      "local_events_tree_entries": 2978480,
       "local_path": "mc/W1JetsToLNu.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 10731401995,
+        "distribution_number_events": 29784800,
+        "doi": "10.7483/OPENDATA.CMS.QQZ2.FJZ3",
+        "file_key": "W1JetsToLNu.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12355,
+        "record_url": "https://opendata.cern.ch/record/12355"
+      },
       "process": "W+1 jet background",
       "role": "background",
       "sample": "W1JetsToLNu",
       "size_bytes": 1073460654,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/W1JetsToLNu.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12355"
       ],
       "status": "downloaded",
       "validation": {
@@ -152,19 +222,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 3069385,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 1217271275,
+      "local_events_tree_entries": 3069385,
       "local_path": "mc/W2JetsToLNu.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 12161887620,
+        "distribution_number_events": 30693853,
+        "doi": "10.7483/OPENDATA.CMS.3YJW.P203",
+        "file_key": "W2JetsToLNu.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12356,
+        "record_url": "https://opendata.cern.ch/record/12356"
+      },
       "process": "W+2 jets background",
       "role": "background",
       "sample": "W2JetsToLNu",
       "size_bytes": 1217271275,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/W2JetsToLNu.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12356"
       ],
       "status": "downloaded",
       "validation": {
@@ -173,19 +253,29 @@
     },
     {
       "analysis_blocking": false,
-      "events": 1524114,
-      "expected_size_bytes": null,
+      "expected_size_bytes": 655005007,
+      "local_events_tree_entries": 1524114,
       "local_path": "mc/W3JetsToLNu.root",
-      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use. Local Events tree entries are reduced/skimmed processing entries and are not used as normalization denominators.",
+      "official_open_data_record": {
+        "distribution_file_size_bytes": 6544850738,
+        "distribution_number_events": 15241144,
+        "doi": "10.7483/OPENDATA.CMS.3PB3.MNO2",
+        "file_key": "W3JetsToLNu.root",
+        "normalization_role": "MC generation/open-data denominator",
+        "record_id": 12357,
+        "record_url": "https://opendata.cern.ch/record/12357"
+      },
       "process": "W+3 jets background",
       "role": "background",
       "sample": "W3JetsToLNu",
       "size_bytes": 655005007,
-      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data records 12350-12359.",
       "source_urls": [
         "https://root.cern.ch/files/HiggsTauTauReduced/W3JetsToLNu.root",
         "https://root.cern.ch/files/HiggsTauTauReduced/",
-        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+        "https://opendata.cern.ch/record/12357"
       ],
       "status": "downloaded",
       "validation": {
@@ -195,8 +285,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "Not listed in the reduced mirror. If the CMS Open Data portal has full AOD for additional TauPlusX eras, later phases should add them through an explicit AOD-to-reduced conversion rather than downloading AOD blindly.",
       "process": "2012 TauPlusX collision data, other eras",
@@ -217,8 +307,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "Not listed in the reduced mirror. Later phases can add full-open-data TauPlusX eras only after confirming trigger/luminosity compatibility and a maintained conversion path.",
       "process": "2012 TauPlusX collision data, other eras",
@@ -239,8 +329,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS JHEP 05 (2014) 104 models the dominant Z to tau tau contribution with embedded samples; no embedded reduced ROOT file is present in the ROOT mirror.",
       "process": "embedded Z to tau tau dominant irreducible background",
@@ -261,8 +351,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "The reduced DYJetsToLL file is present, but no separate reduced fake-component files are listed. Phase 3 can derive components from DYJetsToLL generator/object matching if supported.",
       "process": "Z to mumu/ee lepton-to-tau fake components",
@@ -283,8 +373,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers estimate QCD from data control regions. No reduced QCD ROOT sample is present in the mirror; this should remain a data-driven same-sign/anti-isolation estimate.",
       "process": "QCD multijet jet-to-tau fake background",
@@ -305,8 +395,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers include diboson backgrounds from simulation. No WW reduced file is present in the mirror; use AOD conversion only if needed.",
       "process": "diboson background",
@@ -327,8 +417,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers include diboson backgrounds from simulation. No WZ reduced file is present in the mirror; use AOD conversion only if needed.",
       "process": "diboson background",
@@ -349,8 +439,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers include diboson backgrounds from simulation. No ZZ reduced file is present in the mirror; use AOD conversion only if needed.",
       "process": "diboson background",
@@ -371,8 +461,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers include single-top-quark production from simulation. No reduced single-top file is present in the mirror; use AOD conversion only if needed.",
       "process": "single top background",
@@ -393,8 +483,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "The mirror provides W1/W2/W3 jet bins only. Later phases should determine whether W4/AOD is needed for jet-bin stitching or whether W3 is the available reduced endpoint.",
       "process": "W+4 jet background",
@@ -415,8 +505,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "The mirror provides exclusive W1/W2/W3 reduced files but no inclusive WJetsToLNu file.",
       "process": "inclusive W+jets background",
@@ -437,8 +527,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "The mirror provides only DYJetsToLL.root. Paper-level DY refinements must be derived from that file or deferred to AOD conversion.",
       "process": "additional DY categories",
@@ -459,8 +549,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS JHEP 05 (2014) 104 includes associated WH/ZH production in the broader analysis. The mirror has no WH reduced file; it is not required for the current mu tau_h baseline unless later categories target associated production.",
       "process": "associated-production H to tau tau signal",
@@ -481,8 +571,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS JHEP 05 (2014) 104 includes associated WH/ZH production in the broader analysis. The mirror has no ZH reduced file; it is not required for the current mu tau_h baseline unless later categories target associated production.",
       "process": "associated-production H to tau tau signal",
@@ -503,8 +593,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS JHEP 05 (2014) 104 names ttH signal generation in the full MC program. The mirror has no ttH reduced file; it is not required for the current baseline categories.",
       "process": "ttH H to tau tau signal",
@@ -525,8 +615,8 @@
     {
       "analysis_blocking": false,
       "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
-      "events": null,
       "expected_size_bytes": null,
+      "local_events_tree_entries": null,
       "local_path": null,
       "notes": "CMS papers discuss H to WW contributions in some channels and coupling scans. No reduced HToWW file is present, and this mu tau_h baseline treats it as deferred.",
       "process": "H to WW background or coupling-study signal component",
@@ -545,8 +635,9 @@
       }
     }
   ],
-  "schema_version": 1,
+  "schema_version": 2,
   "sources": {
+    "cern_record_12350": "https://opendata.cern.ch/record/12350",
     "cms_2014": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041",
     "cms_2018": "CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373",
     "cms_open_data_workshop": "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",

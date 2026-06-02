@@ -3,40 +3,188 @@
   "available_phase3_outputs": [
     "raw selected counts",
     "shape-normalized templates",
-    "control-region raw yields for W high-mT normalization preparation"
+    "control-region raw yields for W high-mT normalization preparation",
+    "official normalization metadata for Phase 4 absolute templates"
   ],
+  "background_formula": "w = sigma * L_int / N_gen",
   "integrated_luminosity": {
-    "checked_sources": [
-      {
-        "finding": "Identifies the CMS 2012 H to tau tau reduced outreach sample set and Run2012 TauPlusX inputs, but not an exact integrated luminosity for the localized Run2012B/C reduced ROOT files.",
-        "source": "CERN Open Data record 12350",
-        "url": "https://opendata.cern.ch/record/12350"
-      },
-      {
-        "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
-        "source": "Run2012B_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
-        "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root"
-      },
-      {
-        "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
-        "source": "Run2012C_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
-        "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root"
-      }
-    ],
-    "impact": "Phase 4 cannot quote luminosity-normalized yields, cross sections, or production-normalized MC expectations until this input is sourced.",
     "no_circular_derivation": true,
-    "phase3_action": "Checked analysis-local reduced-file metadata and public CMS/CERN Open Data provenance records; did not compute luminosity from selected event counts, generated MC counts, or data/MC back-calculation.",
-    "required_for_phase4": "An official CMS Open Data luminosity record, luminosity JSON plus brilcalc-equivalent evaluation, or another citable CMS source for the exact certified Run2012B/C TauPlusX data subset represented by these reduced files.",
-    "status": "unresolved_blocking_input"
+    "not_from": [
+      "local ROOT Events entries",
+      "selected event counts",
+      "generated MC counts",
+      "data/MC back-calculation"
+    ],
+    "record_1054_luminosity_source": {
+      "doi": "10.7483/OPENDATA.CMS.SJ1E.7GFW",
+      "record_id": 1054,
+      "rule": "Use Pixel Luminosity Telescope (pxl) values when available; use HFOC only for lumi sections with no pxl value.",
+      "url": "https://opendata.cern.ch/record/1054"
+    },
+    "record_12350_context": {
+      "doi": "10.7483/OPENDATA.CMS.GV20.PR5T",
+      "finding": "Defines the CMS 2012 H to tau tau reduced outreach analysis context and sample set.",
+      "record_id": 12350,
+      "url": "https://opendata.cern.ch/record/12350"
+    },
+    "run_periods": {
+      "Run2012B_TauPlusX": {
+        "approx_luminosity_fb_inv": 4.4,
+        "doi": "10.7483/OPENDATA.CMS.H95X.G286",
+        "file_key": "Run2012B_TauPlusX.root",
+        "official_run_level_pxl_luminosity_fb_inv": 4.411703591,
+        "official_run_level_pxl_recorded_per_ub": 4411703591.082,
+        "record_file_size_bytes": 10918632568,
+        "record_id": 12358,
+        "record_number_events": 35647508,
+        "run_period": "2012B"
+      },
+      "Run2012C_TauPlusX": {
+        "approx_luminosity_fb_inv": 7.1,
+        "doi": "10.7483/OPENDATA.CMS.1O08.0PTD",
+        "file_key": "Run2012C_TauPlusX.root",
+        "official_run_level_pxl_luminosity_fb_inv": 7.05516954,
+        "official_run_level_pxl_recorded_per_ub": 7055169539.878,
+        "record_file_size_bytes": 15886107547,
+        "record_id": 12359,
+        "record_number_events": 51303171,
+        "run_period": "2012C"
+      }
+    },
+    "source": "CMS Open Data H to tau tau tutorial skim.cxx",
+    "source_url": "https://github.com/cms-opendata-analyses/HiggsTauTauNanoAODOutreachAnalysis/blob/master/skim.cxx",
+    "status": "resolved_from_official_open_data_tutorial_and_luminosity_records",
+    "total_record_number_events": 86950679,
+    "value_fb_inv": 11.467,
+    "value_pb_inv": 11467.0
   },
-  "missing_citable_inputs": [
-    "TauPlusX Run2012B/Run2012C effective integrated luminosity for the localized reduced files",
-    "ggH and VBF 8 TeV production cross sections and branching fraction applicable to the reduced samples",
-    "DYJetsToLL, TTbar, and W1/W2/W3 jet-bin cross sections",
-    "W+jets exclusive jet-bin stitching prescription for W1/W2/W3 without inclusive WJets or W4",
-    "official trigger, muon, tau, b-tag, and pileup scale-factor prescriptions for these reduced files"
+  "luminosity_uncertainty": {
+    "application": "Irreducible normalization uncertainty on MC-based predictions using the 2012 data luminosity.",
+    "percent": 2.6,
+    "relative": 0.026,
+    "source": "CMS PAS LUM-13-001",
+    "source_url": "https://cds.cern.ch/record/1598864"
+  },
+  "mc_samples": {
+    "DYJetsToLL": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 1.319055059526008,
+      "cross_section_pb": 3503.7,
+      "doi": "10.7483/OPENDATA.CMS.SRRA.2GON",
+      "file_key": "DYJetsToLL.root",
+      "generator": "MadGraph+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "Z/gamma*->ll",
+      "record_file_size_bytes": 9247252629,
+      "record_id": 12353,
+      "record_number_events": 30458871
+    },
+    "GluGluToHToTauTau": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 0.032167790792996524,
+      "cross_section_note": "sigma_prod * BR(H->tautau); user normalization reference cites YR4 21.39 pb * 0.06256",
+      "cross_section_pb": 1.338,
+      "doi": "10.7483/OPENDATA.CMS.VLQO.U950",
+      "file_key": "GluGluToHToTauTau.root",
+      "generator": "Powheg+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "gg->H->tautau",
+      "record_file_size_bytes": 196517149,
+      "record_id": 12351,
+      "record_number_events": 476963
+    },
+    "TTbar": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 0.4514956315527099,
+      "cross_section_note": "user normalization reference identifies this as NNLO+NNLL",
+      "cross_section_pb": 252.9,
+      "doi": "10.7483/OPENDATA.CMS.A6WH.U343",
+      "file_key": "TTbar.root",
+      "generator": "MadGraph+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "ttbar",
+      "record_file_size_bytes": 3528995041,
+      "record_id": 12354,
+      "record_number_events": 6423106
+    },
+    "VBF_HToTauTau": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 0.0023346683534932154,
+      "cross_section_note": "sigma_prod * BR(H->tautau); user normalization reference cites YR4 1.600 pb * 0.06256",
+      "cross_section_pb": 0.1001,
+      "doi": "10.7483/OPENDATA.CMS.EA1T.GVAF",
+      "file_key": "VBF_HToTauTau.root",
+      "generator": "Powheg+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "qq->qqH->tautau",
+      "record_file_size_bytes": 231849713,
+      "record_id": 12352,
+      "record_number_events": 491653
+    },
+    "W1JetsToLNu": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 2.456730291961,
+      "cross_section_pb": 6381.2,
+      "doi": "10.7483/OPENDATA.CMS.QQZ2.FJZ3",
+      "file_key": "W1JetsToLNu.root",
+      "generator": "MadGraph+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "W(->lnu)+1j",
+      "record_file_size_bytes": 10731401995,
+      "record_id": 12355,
+      "record_number_events": 29784800
+    },
+    "W2JetsToLNu": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 0.7620544282922055,
+      "cross_section_pb": 2039.8,
+      "doi": "10.7483/OPENDATA.CMS.3YJW.P203",
+      "file_key": "W2JetsToLNu.root",
+      "generator": "MadGraph+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "W(->lnu)+2j",
+      "record_file_size_bytes": 12161887620,
+      "record_id": 12356,
+      "record_number_events": 30693853
+    },
+    "W3JetsToLNu": {
+      "absolute_weight_formula": "cross_section_pb * integrated_luminosity_pb_inv / record_number_events",
+      "absolute_weight_per_local_entry": 0.4608274483857642,
+      "cross_section_pb": 612.5,
+      "doi": "10.7483/OPENDATA.CMS.3PB3.MNO2",
+      "file_key": "W3JetsToLNu.root",
+      "generator": "MadGraph+Pythia6",
+      "local_root_entries_role": "processing_shape_cutflow_entries_only_not_normalization_denominator",
+      "normalization_denominator": "CERN Open Data distribution.number_events",
+      "process": "W(->lnu)+3j",
+      "record_file_size_bytes": 6544850738,
+      "record_id": 12357,
+      "record_number_events": 15241144
+    }
+  },
+  "reason": "Absolute normalization provenance uses official CMS/CERN Open Data luminosity and dataset records. Local ROOT Events entries are treated as reduced/skimmed processing entries only.",
+  "remaining_phase4_inputs": [
+    "official trigger, muon, tau, b-tag, and pileup scale-factor prescriptions for these reduced files",
+    "W+jets exclusive jet-bin stitching or control-region constraint for W1/W2/W3 without inclusive WJets or W4",
+    "data-driven QCD sideband estimate and uncertainty"
   ],
-  "reason": "Reduced ROOT files contain no event or generator weights, pileup weights, embedded luminosity, or cross-section metadata.",
-  "resolved_in_phase3": false,
-  "status": "blocking_for_phase4_absolute_templates"
+  "resolved_in_phase3": true,
+  "signal_content_rule": "GluGluToHToTauTau and VBF_HToTauTau contain H->tautau events selected by the generator decay filter, so signal normalization uses sigma_prod * BR(H->tautau), not inclusive sigma_prod alone.",
+  "signal_formula": "w = sigma_prod * BR(H->tautau) * L_int / N_gen",
+  "status": "normalization_provenance_resolved_for_phase3_inputs",
+  "trigger_stream": {
+    "alternative_trigger_note": "Single-muon triggers imply a different higher-pT muon phase space and are not interchangeable with the TauPlusX tutorial normalization without a separate selection definition.",
+    "available_alternatives": [
+      "HLT_IsoMu24",
+      "HLT_IsoMu24_eta2p1"
+    ],
+    "data_stream": "TauPlusX",
+    "primary_trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20"
+  }
 }
