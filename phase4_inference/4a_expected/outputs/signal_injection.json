@@ -4,32 +4,32 @@
   "real_data_signal_region_used": false,
   "rows": [
     {
-      "absolute_bias": 0.000696183376887347,
-      "fitted_mu": 0.000696183376887347,
+      "absolute_bias": 0.000323637881409408,
+      "fitted_mu": 0.000323637881409408,
       "injected_mu": 0.0,
       "passes_20_percent_gate": true,
       "relative_bias": 0.0
     },
     {
-      "absolute_bias": 0.0,
-      "fitted_mu": 1.0,
+      "absolute_bias": 1.7753390091357346e-08,
+      "fitted_mu": 1.00000001775339,
       "injected_mu": 1.0,
       "passes_20_percent_gate": true,
-      "relative_bias": 0.0
+      "relative_bias": 1.7753390091357346e-08
     },
     {
-      "absolute_bias": 0.0003983145194417226,
-      "fitted_mu": 2.0003983145194417,
+      "absolute_bias": -0.0023251359587361797,
+      "fitted_mu": 1.9976748640412638,
       "injected_mu": 2.0,
       "passes_20_percent_gate": true,
-      "relative_bias": 0.0001991572597208613
+      "relative_bias": -0.0011625679793680899
     },
     {
-      "absolute_bias": 0.0003562352256434309,
-      "fitted_mu": 5.000356235225643,
+      "absolute_bias": 0.00048158584792279413,
+      "fitted_mu": 5.000481585847923,
       "injected_mu": 5.0,
       "passes_20_percent_gate": true,
-      "relative_bias": 7.124704512868618e-05
+      "relative_bias": 9.631716958455883e-05
     }
   ]
 }

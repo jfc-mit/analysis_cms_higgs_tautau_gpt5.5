@@ -1,26 +1,42 @@
 {
   "background_asimov_fit": {
-    "mu_hat": 0.000696183376887347,
+    "mu_hat": 0.000323637881409408,
     "parameters": {
-      "dy_norm_open_data": 0.0007721474498036321,
-      "lumi_2012": -0.00029009431299072906,
-      "mc_stat_inclusive_sr[0]": 1.0000008198786028,
-      "mc_stat_inclusive_sr[1]": 0.999995429788732,
-      "mc_stat_inclusive_sr[2]": 0.9999898857607182,
-      "mc_stat_inclusive_sr[3]": 0.9999875371841077,
-      "mc_stat_inclusive_sr[4]": 0.9999212707391865,
-      "mu": 0.000696183376887347,
-      "tau_open_data_acceptance": -0.0005482364976900626
+      "dy_norm_open_data": -5.5360088374823225e-05,
+      "lumi_2012": -2.859147026490665e-05,
+      "mc_stat_boosted[0]": 0.9999991989650936,
+      "mc_stat_boosted[1]": 1.0000005871842437,
+      "mc_stat_boosted[2]": 0.9999967167040492,
+      "mc_stat_boosted[3]": 0.9999957149328268,
+      "mc_stat_vbf[0]": 0.9999988643269242,
+      "mc_stat_vbf[1]": 0.9999929307804674,
+      "mc_stat_vbf[2]": 0.9999884988785789,
+      "mc_stat_vbf[3]": 0.9999910134090335,
+      "mc_stat_zero_jet[0]": 1.0000011285010038,
+      "mc_stat_zero_jet[1]": 1.0000020884074001,
+      "mc_stat_zero_jet[2]": 0.9999972465686443,
+      "mc_stat_zero_jet[3]": 0.9999954860562147,
+      "mu": 0.000323637881409408,
+      "tau_open_data_acceptance": 4.32573531880676e-05,
+      "wjets_high_mt_control": -0.000199119968279554
     },
     "pulls_minus_nominal": {
-      "dy_norm_open_data": 0.0007721474498036321,
-      "lumi_2012": -0.00029009431299072906,
-      "mc_stat_inclusive_sr[0]": 8.198786027868721e-07,
-      "mc_stat_inclusive_sr[1]": -4.570211267984625e-06,
-      "mc_stat_inclusive_sr[2]": -1.011423928176658e-05,
-      "mc_stat_inclusive_sr[3]": -1.2462815892289036e-05,
-      "mc_stat_inclusive_sr[4]": -7.872926081353704e-05,
-      "tau_open_data_acceptance": -0.0005482364976900626
+      "dy_norm_open_data": -5.5360088374823225e-05,
+      "lumi_2012": -2.859147026490665e-05,
+      "mc_stat_boosted[0]": -8.010349064058175e-07,
+      "mc_stat_boosted[1]": 5.871842436722119e-07,
+      "mc_stat_boosted[2]": -3.2832959507844706e-06,
+      "mc_stat_boosted[3]": -4.2850671732042045e-06,
+      "mc_stat_vbf[0]": -1.1356730758027567e-06,
+      "mc_stat_vbf[1]": -7.069219532640503e-06,
+      "mc_stat_vbf[2]": -1.1501121421120253e-05,
+      "mc_stat_vbf[3]": -8.986590966486574e-06,
+      "mc_stat_zero_jet[0]": 1.1285010037553889e-06,
+      "mc_stat_zero_jet[1]": 2.0884074001248365e-06,
+      "mc_stat_zero_jet[2]": -2.7534313556953904e-06,
+      "mc_stat_zero_jet[3]": -4.513943785311447e-06,
+      "tau_open_data_acceptance": 4.32573531880676e-05,
+      "wjets_high_mt_control": -0.000199119968279554
     }
   },
   "blinding": {
@@ -30,20 +46,20 @@
   },
   "discovery_sensitivity": {
     "method": "pyhf asymptotic q0 test on signal-plus-background Asimov data",
-    "p_value": 0.2775170276378641,
+    "p_value": 0.29929918703661884,
     "status": "evaluated",
-    "z_value": 0.5902335901806391
+    "z_value": 0.5264171907925044
   },
   "expected_upper_limit": {
     "expected_band_minus2_minus1_median_plus1_plus2": [
-      1.9597879108699552,
-      2.7426354357668172,
-      3.988056352198724,
-      6.054971307318602,
-      9.066320524807212
+      2.143687842430168,
+      2.9202283397658175,
+      4.199448081748937,
+      6.145739528239424,
+      8.817265131700397
     ],
     "method": "pyhf asymptotic modified frequentist CLs",
-    "observed_on_background_asimov": 3.988056441440069,
+    "observed_on_background_asimov": 4.199448081748937,
     "poi": "mu",
     "result_count": 2,
     "scan": [
@@ -151,55 +167,156 @@
     ]
   },
   "low_background_bin_handling": {
-    "merged_bins": [
-      "0.86-0.94",
-      "0.94-1.00"
-    ],
+    "details": {
+      "all_pass": true,
+      "categories": {
+        "boosted": {
+          "background_bins": [
+            1580.55074494093,
+            309.9263029585545,
+            134.85026574634497,
+            93.00436760133518
+          ],
+          "min_background_bin": 93.00436760133518,
+          "passes_min_background": true
+        },
+        "vbf": {
+          "background_bins": [
+            90.43246797589676,
+            17.702236646398763,
+            13.616736714228995,
+            29.243719246011956
+          ],
+          "min_background_bin": 13.616736714228995,
+          "passes_min_background": true
+        },
+        "zero_jet": {
+          "background_bins": [
+            6524.3972729236275,
+            362.62954903253745,
+            149.55342765146167,
+            32.31819151692268
+          ],
+          "min_background_bin": 32.31819151692268,
+          "passes_min_background": true
+        }
+      },
+      "initial_edges": [
+        0.0,
+        0.2,
+        0.35,
+        0.5,
+        0.65,
+        0.78,
+        0.88,
+        0.94,
+        0.985,
+        1.0
+      ],
+      "merge_count": 5,
+      "merged_edges": [
+        0.0,
+        0.2,
+        0.35,
+        0.5,
+        1.0
+      ],
+      "merges": [
+        {
+          "category": "vbf",
+          "low_bin_background": 0.0,
+          "low_bin_index": 8,
+          "low_bin_range": [
+            0.985,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.985
+        },
+        {
+          "category": "boosted",
+          "low_bin_background": 0.0,
+          "low_bin_index": 7,
+          "low_bin_range": [
+            0.94,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.94
+        },
+        {
+          "category": "boosted",
+          "low_bin_background": 0.0,
+          "low_bin_index": 6,
+          "low_bin_range": [
+            0.88,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.88
+        },
+        {
+          "category": "zero_jet",
+          "low_bin_background": 0.0,
+          "low_bin_index": 5,
+          "low_bin_range": [
+            0.78,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.78
+        },
+        {
+          "category": "zero_jet",
+          "low_bin_background": 1.7705506910787179,
+          "low_bin_index": 4,
+          "low_bin_range": [
+            0.65,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.65
+        }
+      ],
+      "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+      "minimum_expected_background_per_fit_bin": 5.0
+    },
     "merged_edges": [
       0.0,
+      0.2,
       0.35,
-      0.55,
-      0.72,
-      0.86,
+      0.5,
       1.0
     ],
-    "reason": "Phase 3 recommendation had one expected-background bin below five events; the merged high-score tail keeps all nominal expected background bins at or above five without using observed data.",
-    "strategy": "merged adjacent high-score tail bins",
-    "unmerged_edges": [
-      0.0,
-      0.35,
-      0.55,
-      0.72,
-      0.86,
-      0.94,
-      1.0
-    ]
+    "reason": "Sparse-bin merging used expected MC background only and preserves the event-category channels requested by the user.",
+    "strategy": "Phase 3 common score-bin merging across fit categories"
   },
   "model": {
     "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
-    "description": "histogram-gradient-boosting classifier score templates in one inclusive signal-region channel",
+    "description": "classifier score templates in VBF, boosted, and zero-jet signal-region channels",
     "family": "expected_only_mva",
-    "name": "mva_hist_gradient_boosting_score_single_category",
+    "model_name": "hist_gradient_boosting",
+    "name": "mva_hist_gradient_boosting_score_baseline_categories",
+    "observable": "mva_score_hist_gradient_boosting",
     "phase3_recommendation_file": "phase3_selection/outputs/sensitivity_recommendation.json",
     "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
+    "selection_role": "primary_candidate",
     "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration"
   },
   "phase3_unmerged_recommendation": {
     "bin_edges": [
       0.0,
+      0.2,
       0.35,
-      0.55,
-      0.72,
-      0.86,
-      0.94,
+      0.5,
       1.0
     ],
-    "low_background_bins_lt5": 1,
-    "median_limit": 3.977300465753028,
-    "z_value": 0.5955085932694459
+    "low_background_bins_lt5": 0,
+    "median_limit": 4.24380622771541,
+    "z_value": 0.5264362537642254
   },
   "pyhf": {
-    "npars": 9,
+    "npars": 17,
     "poi": "mu",
     "version": "0.7.6"
   }

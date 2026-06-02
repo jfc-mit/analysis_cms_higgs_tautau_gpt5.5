@@ -32,14 +32,6 @@ JSON_FILES = [
     "limitations_downscope.json",
 ]
 
-FIGURES = [
-    "expected_mva_score_inclusive_sr",
-    "expected_s_over_b",
-    "expected_nuisance_summary",
-    "signal_injection_recovery",
-    "gof_toys",
-]
-
 
 def main() -> None:
     payloads = {}
@@ -53,11 +45,12 @@ def main() -> None:
     if not templates_path.exists():
         raise FileNotFoundError(templates_path)
     with np.load(templates_path, allow_pickle=False) as templates:
-        required = {"samples", "categories", "bin_edges", "yields", "variances"}
+        required = {"samples", "categories", "bin_edges", "observable", "yields", "variances"}
         if set(templates.files) != required:
             raise ValueError(f"Unexpected templates keys: {templates.files}")
         if np.any(templates["yields"] < 0) or np.any(templates["variances"] < 0):
             raise ValueError("Negative template yield or variance")
+        categories = [str(value) for value in templates["categories"]]
         log.info("Valid NPZ: %s", templates_path)
     ws = pyhf.Workspace(payloads["pyhf_workspace.json"])
     model = ws.model()
@@ -79,7 +72,14 @@ def main() -> None:
         raise ValueError("Signal injection gate failed")
     if not payloads["gof_validation.json"]["combined"]["passes"]:
         raise ValueError("GoF validation did not pass")
-    for stem in FIGURES:
+    figure_stems = [
+        *[f"expected_mva_score_{category}" for category in categories],
+        "expected_s_over_b",
+        "expected_nuisance_summary",
+        "signal_injection_recovery",
+        "gof_toys",
+    ]
+    for stem in figure_stems:
         for suffix in [".pdf", ".png"]:
             path = FIG / f"{stem}{suffix}"
             if not path.exists() or path.stat().st_size == 0:

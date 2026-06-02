@@ -89,6 +89,7 @@ def plot_templates() -> None:
     samples = [str(x) for x in payload["samples"]]
     categories = [str(x) for x in payload["categories"]]
     edges = payload["bin_edges"]
+    observable = str(payload["observable"][0]) if "observable" in payload.files else "classifier score"
     values = payload["yields"]
     variances = payload["variances"]
     for icat, category in enumerate(categories):
@@ -109,7 +110,7 @@ def plot_templates() -> None:
             label="H to tau tau x20",
             color="black",
         )
-        ax.set_xlabel("Histogram-gradient-boosting classifier score")
+        ax.set_xlabel(observable.replace(chr(95), " "))
         ax.set_ylabel("Expected events")
         ax.set_xlim(float(edges[0]), float(edges[-1]))
         ax.legend(fontsize="x-small", loc="upper right")

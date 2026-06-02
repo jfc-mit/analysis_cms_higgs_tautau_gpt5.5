@@ -2,10 +2,9 @@
   "binning": {
     "edges": [
       0.0,
+      0.2,
       0.35,
-      0.55,
-      0.72,
-      0.86,
+      0.5,
       1.0
     ],
     "observable": "mva_score_hist_gradient_boosting"
@@ -16,40 +15,145 @@
     "real_data_signal_region_used": false
   },
   "categories": [
-    "inclusive_sr"
+    "vbf",
+    "boosted",
+    "zero_jet"
   ],
   "low_background_bin_handling": {
-    "merged_bins": [
-      "0.86-0.94",
-      "0.94-1.00"
-    ],
+    "details": {
+      "all_pass": true,
+      "categories": {
+        "boosted": {
+          "background_bins": [
+            1580.55074494093,
+            309.9263029585545,
+            134.85026574634497,
+            93.00436760133518
+          ],
+          "min_background_bin": 93.00436760133518,
+          "passes_min_background": true
+        },
+        "vbf": {
+          "background_bins": [
+            90.43246797589676,
+            17.702236646398763,
+            13.616736714228995,
+            29.243719246011956
+          ],
+          "min_background_bin": 13.616736714228995,
+          "passes_min_background": true
+        },
+        "zero_jet": {
+          "background_bins": [
+            6524.3972729236275,
+            362.62954903253745,
+            149.55342765146167,
+            32.31819151692268
+          ],
+          "min_background_bin": 32.31819151692268,
+          "passes_min_background": true
+        }
+      },
+      "initial_edges": [
+        0.0,
+        0.2,
+        0.35,
+        0.5,
+        0.65,
+        0.78,
+        0.88,
+        0.94,
+        0.985,
+        1.0
+      ],
+      "merge_count": 5,
+      "merged_edges": [
+        0.0,
+        0.2,
+        0.35,
+        0.5,
+        1.0
+      ],
+      "merges": [
+        {
+          "category": "vbf",
+          "low_bin_background": 0.0,
+          "low_bin_index": 8,
+          "low_bin_range": [
+            0.985,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.985
+        },
+        {
+          "category": "boosted",
+          "low_bin_background": 0.0,
+          "low_bin_index": 7,
+          "low_bin_range": [
+            0.94,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.94
+        },
+        {
+          "category": "boosted",
+          "low_bin_background": 0.0,
+          "low_bin_index": 6,
+          "low_bin_range": [
+            0.88,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.88
+        },
+        {
+          "category": "zero_jet",
+          "low_bin_background": 0.0,
+          "low_bin_index": 5,
+          "low_bin_range": [
+            0.78,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.78
+        },
+        {
+          "category": "zero_jet",
+          "low_bin_background": 1.7705506910787179,
+          "low_bin_index": 4,
+          "low_bin_range": [
+            0.65,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.65
+        }
+      ],
+      "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+      "minimum_expected_background_per_fit_bin": 5.0
+    },
     "merged_edges": [
       0.0,
+      0.2,
       0.35,
-      0.55,
-      0.72,
-      0.86,
+      0.5,
       1.0
     ],
-    "reason": "Phase 3 recommendation had one expected-background bin below five events; the merged high-score tail keeps all nominal expected background bins at or above five without using observed data.",
-    "strategy": "merged adjacent high-score tail bins",
-    "unmerged_edges": [
-      0.0,
-      0.35,
-      0.55,
-      0.72,
-      0.86,
-      0.94,
-      1.0
-    ]
+    "reason": "Sparse-bin merging used expected MC background only and preserves the event-category channels requested by the user.",
+    "strategy": "Phase 3 common score-bin merging across fit categories"
   },
   "model": {
     "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
-    "description": "histogram-gradient-boosting classifier score templates in one inclusive signal-region channel",
+    "description": "classifier score templates in VBF, boosted, and zero-jet signal-region channels",
     "family": "expected_only_mva",
-    "name": "mva_hist_gradient_boosting_score_single_category",
+    "model_name": "hist_gradient_boosting",
+    "name": "mva_hist_gradient_boosting_score_baseline_categories",
+    "observable": "mva_score_hist_gradient_boosting",
     "phase3_recommendation_file": "phase3_selection/outputs/sensitivity_recommendation.json",
     "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
+    "selection_role": "primary_candidate",
     "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration"
   },
   "normalization": {
@@ -61,43 +165,103 @@
   "phase3_unmerged_recommendation": {
     "bin_edges": [
       0.0,
+      0.2,
       0.35,
-      0.55,
-      0.72,
-      0.86,
-      0.94,
+      0.5,
       1.0
     ],
-    "low_background_bins_lt5": 1,
-    "median_limit": 3.977300465753028,
-    "z_value": 0.5955085932694459
+    "low_background_bins_lt5": 0,
+    "median_limit": 4.24380622771541,
+    "z_value": 0.5264362537642254
   },
   "samples": {
     "DYJetsToLL": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            5018,
-            199,
-            37,
-            9,
-            5
+            501,
+            184,
+            73,
+            44
           ],
-          "raw_total": 5268,
+          "raw_total": 802,
           "sumw2": [
-            8730.849562806903,
-            346.2413437621709,
-            64.37653125226294,
-            15.659156250550444,
-            8.699531250305801
+            871.6930312806413,
+            320.1427500112535,
+            127.01315625446472,
+            76.55587500269105
           ],
-          "total_yield": 6948.78205358301,
+          "total_yield": 1057.8821577398583,
           "weighted_yields": [
-            6619.018288701508,
-            262.4919568456756,
-            48.805037202462294,
-            11.871495535734072,
-            6.59527529763004
+            660.84658482253,
+            242.70613095278546,
+            96.29101934539858,
+            58.03842261914435
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            6,
+            4,
+            7,
+            17
+          ],
+          "raw_total": 34,
+          "sumw2": [
+            10.439437500366964,
+            6.959625000244642,
+            12.179343750428124,
+            29.578406251039727
+          ],
+          "total_yield": 44.84787202388428,
+          "weighted_yields": [
+            7.914330357156048,
+            5.276220238104032,
+            9.233385416682056,
+            22.423936011942136
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            4116,
+            207,
+            89,
+            20
+          ],
+          "raw_total": 4432,
+          "sumw2": [
+            7161.4541252517365,
+            360.1605937626602,
+            154.8516562554433,
+            34.798125001223205
+          ],
+          "total_yield": 5846.052023819267,
+          "weighted_yields": [
+            5429.230625009049,
+            273.04439732188365,
+            117.3959002978147,
+            26.38110119052016
           ]
         }
       },
@@ -106,29 +270,91 @@
     },
     "GluGluToHToTauTau": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            349,
-            177,
-            109,
-            59,
-            17
+            25,
+            39,
+            44,
+            141
           ],
-          "raw_total": 711,
+          "raw_total": 249,
           "sumw2": [
-            0.3611336008111952,
-            0.18315371731685257,
-            0.11278957733071712,
-            0.06105123910561753,
-            0.01759103499653386
+            0.0258691691125498,
+            0.04035590381557769,
+            0.045529737638087646,
+            0.14590211379478085
           ],
-          "total_yield": 22.871299253820528,
+          "total_yield": 8.009779907456135,
           "weighted_yields": [
-            11.226558986755787,
-            5.693698970360384,
-            3.506289196436621,
-            1.897899656786795,
-            0.5468524434809409
+            0.8041947698249131,
+            1.2545438409268646,
+            1.4153827948918472,
+            4.5356585018125095
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            0,
+            0,
+            0,
+            23
+          ],
+          "raw_total": 23,
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.023799635583545815
+          ],
+          "total_yield": 0.73985918823892,
+          "weighted_yields": [
+            0.0,
+            0.0,
+            0.0,
+            0.73985918823892
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            171,
+            114,
+            86,
+            68
+          ],
+          "raw_total": 439,
+          "sumw2": [
+            0.17694511672984065,
+            0.11796341115322707,
+            0.0889899417471713,
+            0.07036413998613544
+          ],
+          "total_yield": 14.121660158125474,
+          "weighted_yields": [
+            5.500692225602406,
+            3.6671281504016036,
+            2.766430008197701,
+            2.1874097739237635
           ]
         }
       },
@@ -137,28 +363,90 @@
     },
     "TTbar": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            1681,
-            56,
-            20,
-            9,
+            1375,
+            72,
+            38,
+            28
+          ],
+          "raw_total": 1513,
+          "sumw2": [
+            280.291419802873,
+            14.677077982404986,
+            7.746235601824854,
+            5.707752548713049
+          ],
+          "total_yield": 683.11289053925,
+          "weighted_yields": [
+            620.8064933849761,
+            32.507685471795114,
+            17.156833999002977,
+            12.641877683475876
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            140,
+            15,
+            7,
+            8
+          ],
+          "raw_total": 170,
+          "sumw2": [
+            28.53876274356525,
+            3.0577245796677053,
+            1.4269381371782623,
+            1.630786442489443
+          ],
+          "total_yield": 76.75425736396068,
+          "weighted_yields": [
+            63.20938841737939,
+            6.772434473290648,
+            3.160469420868969,
+            3.611965052421679
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            67,
+            12,
+            4,
             5
           ],
-          "raw_total": 1771,
+          "raw_total": 88,
           "sumw2": [
-            342.6690012280942,
-            11.415505097426099,
-            4.076966106223607,
-            1.8346347478006233,
+            13.657836455849084,
+            2.4461796637341644,
+            0.8153932212447215,
             1.0192415265559018
           ],
-          "total_yield": 799.5987634798493,
+          "total_yield": 39.731615576638475,
           "weighted_yields": [
-            758.9641566401053,
-            25.283755366951752,
-            9.029912631054199,
-            4.063460683974389,
+            30.250207314031563,
+            5.417947578632519,
+            1.8059825262108395,
             2.2574781577635497
           ]
         }
@@ -168,29 +456,91 @@
     },
     "VBF_HToTauTau": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            169,
-            146,
-            160,
-            201,
-            281
+            46,
+            64,
+            95,
+            294
           ],
-          "raw_total": 957,
+          "raw_total": 499,
           "sumw2": [
-            0.0009211642982156599,
-            0.0007957987428371974,
-            0.0008721082113284355,
-            0.001095585940481347,
-            0.0015316400461455647
+            0.0002507311107569252,
+            0.00034884328453137415,
+            0.0005178142504762586,
+            0.0016024988383160001
           ],
-          "total_yield": 2.234277614293007,
+          "total_yield": 1.1649995083931146,
           "weighted_yields": [
-            0.3945589517403534,
-            0.34086157961000946,
-            0.37354693655891447,
-            0.4692683390521363,
-            0.6560418073315936
+            0.1073947442606879,
+            0.1494187746235658,
+            0.22179349358185546,
+            0.6863924959270054
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            1,
+            3,
+            3,
+            357
+          ],
+          "raw_total": 364,
+          "sumw2": [
+            5.450676320802721e-06,
+            1.6352028962408164e-05,
+            1.6352028962408164e-05,
+            0.0019458914465265715
+          ],
+          "total_yield": 0.8498192806715303,
+          "weighted_yields": [
+            0.0023346683534932154,
+            0.007004005060479646,
+            0.007004005060479646,
+            0.8334766021970779
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            35,
+            20,
+            16,
+            23
+          ],
+          "raw_total": 94,
+          "sumw2": [
+            0.00019077367122809525,
+            0.00010901352641605443,
+            8.721082113284354e-05,
+            0.0001253655553784626
+          ],
+          "total_yield": 0.21945882522836224,
+          "weighted_yields": [
+            0.08171339237226254,
+            0.04669336706986431,
+            0.03735469365589145,
+            0.05369737213034395
           ]
         }
       },
@@ -199,29 +549,91 @@
     },
     "W1JetsToLNu": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            379,
-            10,
-            2,
+            34,
+            1,
+            1,
+            1
+          ],
+          "raw_total": 37,
+          "sumw2": [
+            205.20780673291856,
+            6.035523727438781,
+            6.035523727438781,
+            6.035523727438781
+          ],
+          "total_yield": 90.89902080255699,
+          "weighted_yields": [
+            83.528829926674,
+            2.456730291961,
+            2.456730291961,
+            2.456730291961
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            4,
+            0,
             0,
             0
           ],
-          "raw_total": 391,
+          "raw_total": 4,
           "sumw2": [
-            2287.463492699298,
-            60.355237274387804,
-            12.071047454877561,
+            24.142094909755123,
+            0.0,
             0.0,
             0.0
           ],
-          "total_yield": 960.5815441567511,
+          "total_yield": 9.826921167844,
           "weighted_yields": [
-            931.1007806532191,
-            24.56730291961,
-            4.913460583922,
+            9.826921167844,
+            0.0,
             0.0,
             0.0
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            314,
+            26,
+            9,
+            1
+          ],
+          "raw_total": 350,
+          "sumw2": [
+            1895.154450415777,
+            156.9236169134083,
+            54.31971354694903,
+            6.035523727438781
+          ],
+          "total_yield": 859.8556021863501,
+          "weighted_yields": [
+            771.413311675754,
+            63.874987590986,
+            22.110572627649002,
+            2.456730291961
           ]
         }
       },
@@ -230,29 +642,91 @@
     },
     "W2JetsToLNu": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            554,
-            37,
-            8,
-            3,
-            0
+            178,
+            26,
+            17,
+            17
           ],
-          "raw_total": 602,
+          "raw_total": 238,
           "sumw2": [
-            321.7227312305871,
-            21.486897212151124,
-            4.6458156134380815,
-            1.7421808550392806,
-            0.0
+            103.36939739899731,
+            15.098900743673763,
+            9.872358178555924,
+            9.872358178555924
           ],
-          "total_yield": 458.75676583190767,
+          "total_yield": 181.36895393354493,
           "weighted_yields": [
-            422.17815327388183,
-            28.196013846811603,
-            6.096435426337644,
-            2.2861632848766167,
-            0.0
+            135.64568823601257,
+            19.813415135597342,
+            12.954925280967494,
+            12.954925280967494
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            7,
+            5,
+            1,
+            3
+          ],
+          "raw_total": 16,
+          "sumw2": [
+            4.065088661758321,
+            2.9036347583988005,
+            0.5807269516797602,
+            1.7421808550392806
+          ],
+          "total_yield": 12.19287085267529,
+          "weighted_yields": [
+            5.334380998045439,
+            3.810272141461027,
+            0.7620544282922055,
+            2.2861632848766167
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            315,
+            23,
+            9,
+            1
+          ],
+          "raw_total": 348,
+          "sumw2": [
+            182.92898977912444,
+            13.356719888634485,
+            5.226542565117842,
+            0.5807269516797602
+          ],
+          "total_yield": 265.19494104568753,
+          "weighted_yields": [
+            240.04714491204473,
+            17.527251850720727,
+            6.858489854629849,
+            0.7620544282922055
           ]
         }
       },
@@ -261,27 +735,89 @@
     },
     "W3JetsToLNu": {
       "categories": {
-        "inclusive_sr": {
+        "boosted": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
           "raw_counts": [
-            335,
-            20,
-            11,
+            173,
+            27,
+            13,
+            15
+          ],
+          "raw_total": 228,
+          "sumw2": [
+            36.738615133132015,
+            5.733772304014823,
+            2.7607051834145446,
+            3.185429057786013
+          ],
+          "total_yield": 105.06865823195426,
+          "weighted_yields": [
+            79.72314857073721,
+            12.442341106415634,
+            5.990756829014935,
+            6.9124117257864635
+          ]
+        },
+        "vbf": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            9,
+            4,
+            1,
+            2
+          ],
+          "raw_total": 16,
+          "sumw2": [
+            1.9112574346716078,
+            0.8494477487429367,
+            0.21236193718573418,
+            0.42472387437146836
+          ],
+          "total_yield": 7.373239174172228,
+          "weighted_yields": [
+            4.147447035471878,
+            1.843309793543057,
+            0.4608274483857642,
+            0.9216548967715285
+          ]
+        },
+        "zero_jet": {
+          "bin_edges": [
+            0.0,
+            0.2,
+            0.35,
+            0.5,
+            1.0
+          ],
+          "raw_counts": [
+            116,
+            6,
             3,
             1
           ],
-          "raw_total": 370,
+          "raw_total": 126,
           "sumw2": [
-            71.14124895722095,
-            4.247238743714684,
-            2.3359813090430763,
+            24.633984713545168,
+            1.2741716231144051,
             0.6370858115572026,
             0.21236193718573418
           ],
-          "total_yield": 170.50615590273276,
+          "total_yield": 58.06425849660629,
           "weighted_yields": [
-            154.37719520923102,
-            9.216548967715285,
-            5.069101932243407,
+            53.45598401274865,
+            2.7649646903145855,
             1.3824823451572927,
             0.4608274483857642
           ]
@@ -292,26 +828,89 @@
     }
   },
   "totals": {
-    "inclusive_sr": {
+    "boosted": {
       "background_bins": [
-        8885.638574477945,
-        349.7555779467643,
-        73.91394777601955,
-        19.60360184974237,
-        9.313580903779354
+        1580.55074494093,
+        309.9263029585545,
+        134.85026574634497,
+        93.00436760133518
       ],
-      "background_total": 9338.22528295425,
-      "min_background_bin": 9.313580903779354,
-      "s_over_b": 0.002688474105881831,
-      "s_over_sqrt_b": 0.25979933279966116,
+      "background_total": 2118.331681247165,
+      "min_background_bin": 93.00436760133518,
+      "s_over_b": 0.004331134494692357,
+      "s_over_sqrt_b": 0.1993419263706912,
       "signal_bins": [
-        11.621117938496141,
-        6.034560549970394,
-        3.8798361329955355,
-        2.367167995838931,
-        1.2028942508125344
+        0.911589514085601,
+        1.4039626155504303,
+        1.6371762884737027,
+        5.222050997739515
       ],
-      "signal_total": 25.105576868113534
+      "signal_total": 9.17477941584925
+    },
+    "vbf": {
+      "background_bins": [
+        90.43246797589676,
+        17.702236646398763,
+        13.616736714228995,
+        29.243719246011956
+      ],
+      "background_total": 150.99516058253647,
+      "min_background_bin": 13.616736714228995,
+      "s_over_b": 0.010528009392999756,
+      "s_over_sqrt_b": 0.12936827220203062,
+      "signal_bins": [
+        0.0023346683534932154,
+        0.007004005060479646,
+        0.007004005060479646,
+        1.573335790435998
+      ],
+      "signal_total": 1.5896784689104504
+    },
+    "zero_jet": {
+      "background_bins": [
+        6524.3972729236275,
+        362.62954903253745,
+        149.55342765146167,
+        32.31819151692268
+      ],
+      "background_total": 7068.898441124549,
+      "min_background_bin": 32.31819151692268,
+      "s_over_b": 0.0020287629116188563,
+      "s_over_sqrt_b": 0.17057177464205905,
+      "signal_bins": [
+        5.582405617974668,
+        3.7138215174714677,
+        2.8037847018535924,
+        2.2411071460541074
+      ],
+      "signal_total": 14.341118983353836
+    }
+  },
+  "wjets_high_mt_control": {
+    "control_region_flag": "is_w_high_mt",
+    "method": "expected-only high-mT W+jets control-region normalization scaffold",
+    "phase4a_central_scale_factor": 1.0,
+    "phase4b_update": "Replace the Asimov central value with the observed high-mT control-region transfer factor after 10% data validation.",
+    "real_data_control_region_used": false,
+    "rows": {
+      "background_total": {
+        "expected_yield": 4378.350275478123,
+        "raw_events": 6283,
+        "relative_stat_precision": 0.01629012857007224,
+        "sumw2": 5087.097129581219
+      },
+      "wjets": {
+        "expected_yield": 2414.78066060164,
+        "raw_events": 2178,
+        "relative_stat_precision": 0.026371178997795744,
+        "sumw2": 4055.220477295576
+      }
+    },
+    "wjets_normsys": {
+      "hi": 1.0263711789977958,
+      "lo": 0.9736288210022043,
+      "name": "wjets_high_mt_control",
+      "relative_uncertainty": 0.026371178997795744
     }
   }
 }

@@ -182,3 +182,28 @@ Commit after:
 1. Plan and reconstructed commitments/log setup.
 2. Model/script implementation and machine-readable outputs.
 3. Plots, artifact, verification, and final Phase 4a executor outputs.
+
+## 2026-06-02T15:18:31Z Continuation Plan
+
+This continuation replaces the checkpointed inclusive score-channel expected
+model with a recommendation-driven simultaneous model that keeps the Phase 3
+fit categories.
+
+1. Read `phase3_selection/outputs/sensitivity_recommendation.json` and
+   `phase3_selection/outputs/sensitivity_selected_events.npz` to obtain the
+   selected observable, per-event category labels, and category-specific
+   binning after sparse-bin merging.
+2. Build one pyhf channel for each selected category, including `vbf`,
+   `boosted`, and `zero_jet` for the final score-template model. Do not use
+   real data signal-region observations; use background-only Asimov data.
+3. Carry the official Open Data luminosity and MC `N_gen` denominators,
+   signal `sigma_prod * BR(H->tautau)` normalization, TauPlusX trigger scope,
+   tight tau anti-muon selection status, 15% DY/Z normalization nuisance, 15%
+   tau/open-data acceptance nuisance, luminosity nuisance, MC-stat terms, and
+   expected-only W high-mT control/nuisance status into JSON and markdown.
+4. Merge sparse bins within each category using expected MC background only
+   until every final expected-background fit bin is at least five where
+   possible; document any impossible category.
+5. Regenerate `templates.npz`, `nominal_yields.json`, `pyhf_workspace.json`,
+   `expected_results.json`, validation outputs, figures, and
+   `INFERENCE_EXPECTED.md`, then run the requested pixi verification commands.

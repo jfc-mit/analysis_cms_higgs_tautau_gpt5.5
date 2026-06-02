@@ -61,3 +61,11 @@ Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result
 - VERIFICATION: `pixi run phase4a-all`, `pixi run phase4a-validate`,
   `pixi run lint-plots`, JSON/NPZ/workspace validation, `git diff --check`,
   and the explicit background-only Asimov blinding scan passed.
+
+## 2026-06-02T15:37:43Z
+
+Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact. The score model is an expected-primary candidate pending Phase 4b score-modelling validation.
+
+## 2026-06-02T15:39:41Z
+
+Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact. The score model is an expected-primary candidate pending Phase 4b score-modelling validation.

@@ -61,8 +61,8 @@
       "cms_2018": "mT control region",
       "conventions": "background normalization",
       "source": "W+jets transfer/control",
-      "status": "downscoped",
-      "this": "W1/W2/W3 MC only in expected SR model; real-data CR deferred"
+      "status": "partial",
+      "this": "expected high-mT control-region normalization method prepared; real-data central value deferred to Phase 4b"
     },
     {
       "cms_2014": "included",
@@ -112,7 +112,8 @@
   ],
   "flat_systematic_justification": {
     "dy_norm_open_data": "Phase 1 and user prompt require 10-15% because the reduced analysis lacks official trigger turn-on and tau scale factors; Phase 4a uses the high end before data unblinding.",
-    "tau_open_data_acceptance": "Phase 1 records CMS Run 1 tau ID/trigger variations in the 6-19% range and the reduced-file missing-scale-factor limitation; Phase 4a uses 15% as a predeclared open-data acceptance nuisance."
+    "tau_open_data_acceptance": "Phase 1 records CMS Run 1 tau ID/trigger variations in the 6-19% range and the reduced-file missing-scale-factor limitation; Phase 4a uses 15% as a predeclared open-data acceptance nuisance.",
+    "wjets_high_mt_control": "The W nuisance size is not tuned from the signal region. It is the expected high-mT W control-region statistical precision from the same official MC weights; Phase 4b must replace the central scale with data."
   },
   "implemented": [
     {
@@ -130,6 +131,13 @@
       "type": "normsys"
     },
     {
+      "applies_to": "W1JetsToLNu, W2JetsToLNu, W3JetsToLNu",
+      "name": "wjets_high_mt_control",
+      "size": "2.64%",
+      "source": "Expected high-mT W+jets control-region statistical precision in Phase 4a Asimov setup; central data transfer factor deferred to Phase 4b.",
+      "type": "normsys"
+    },
+    {
       "applies_to": "all selected MC templates",
       "name": "tau_open_data_acceptance",
       "size": "15%",
@@ -143,5 +151,32 @@
       "source": "finite selected MC counts from phase3 sensitivity_selected_events.npz and official weights from normalization_inputs.json",
       "type": "staterror"
     }
-  ]
+  ],
+  "wjets_high_mt_control": {
+    "control_region_flag": "is_w_high_mt",
+    "method": "expected-only high-mT W+jets control-region normalization scaffold",
+    "phase4a_central_scale_factor": 1.0,
+    "phase4b_update": "Replace the Asimov central value with the observed high-mT control-region transfer factor after 10% data validation.",
+    "real_data_control_region_used": false,
+    "rows": {
+      "background_total": {
+        "expected_yield": 4378.350275478123,
+        "raw_events": 6283,
+        "relative_stat_precision": 0.01629012857007224,
+        "sumw2": 5087.097129581219
+      },
+      "wjets": {
+        "expected_yield": 2414.78066060164,
+        "raw_events": 2178,
+        "relative_stat_precision": 0.026371178997795744,
+        "sumw2": 4055.220477295576
+      }
+    },
+    "wjets_normsys": {
+      "hi": 1.0263711789977958,
+      "lo": 0.9736288210022043,
+      "name": "wjets_high_mt_control",
+      "relative_uncertainty": 0.026371178997795744
+    }
+  }
 }

@@ -21,6 +21,17 @@ score-template model. Plan:
 6. Verify with the relevant pixi tasks, lint plots, whitespace check, and commit
    with a conventional commit.
 
+## 2026-06-02T15:18:31Z
+
+Phase 3/4a executor resumed from checkpoint `7c15b68`. The checkpointed Phase
+4a model uses an inclusive MVA score channel; the current method request
+requires a category-preserving simultaneous fit including VBF. The continuation
+will inspect transformer feasibility in the existing pixi environment, compare
+baseline mass, transformer score, genMET-regression feasibility, and add-MET
+mass candidates with expected-only metrics, then rebuild Phase 4a from the
+selected category-preserving recommendation without using observed full-data
+signal-region optimization.
+
 # Experiment Log
 
 ## 2026-06-02 Orchestrator setup
@@ -368,3 +379,11 @@ Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mv
 ## 2026-06-02T14:57:41Z
 
 Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-02T15:37:43Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in simultaneous `vbf, boosted, zero_jet` channels, using official Open Data normalization and background-only Asimov pseudo-data. Score bins were merged using expected background only to keep each fit bin above five expected background events where possible. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-02T15:39:41Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in simultaneous `vbf, boosted, zero_jet` channels, using official Open Data normalization and background-only Asimov pseudo-data. Score bins were merged using expected background only to keep each fit bin above five expected background events where possible. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.

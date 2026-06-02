@@ -30,10 +30,9 @@ FIX_LOG = PHASE / "logs" / "fixer_phase4a_sensitivity_rerun_20260602T145148Z.md"
 EXPERIMENT_LOG = ROOT / "experiment_log.md"
 COMMITMENTS = ROOT / "COMMITMENTS.md"
 
-CATEGORIES = ["inclusive_sr"]
-RECOMMENDED_OBSERVABLE = "mva_score_hist_gradient_boosting"
-BIN_EDGES = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 1.0])
-UNMERGED_BIN_EDGES = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 0.94, 1.0])
+DEFAULT_CATEGORIES = ["vbf", "boosted", "zero_jet"]
+DEFAULT_OBSERVABLE = "mva_score_xgboost"
+DEFAULT_BIN_EDGES = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 1.0])
 SIGNALS = ["GluGluToHToTauTau", "VBF_HToTauTau"]
 BACKGROUNDS = ["DYJetsToLL", "TTbar", "W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
 SAMPLES = SIGNALS + BACKGROUNDS
@@ -110,8 +109,8 @@ REFERENCE_ROWS = [
         "conventions": "background normalization",
         "cms_2014": "high-mT control region",
         "cms_2018": "mT control region",
-        "this": "W1/W2/W3 MC only in expected SR model; real-data CR deferred",
-        "status": "downscoped",
+        "this": "expected high-mT control-region normalization method prepared; real-data central value deferred to Phase 4b",
+        "status": "partial",
     },
     {
         "source": "Diboson and single top",
@@ -148,40 +147,114 @@ def load_norm() -> dict[str, Any]:
     return json.loads((ROOT / "phase3_selection" / "outputs" / "normalization_inputs.json").read_text())
 
 
-def weighted_hist(values: np.ndarray, weight: float) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def sanitize_category(name: str) -> str:
+    return name.replace("-", "_").replace("/", "_")
+
+
+def weighted_hist(values: np.ndarray, weight: float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     values = values[np.isfinite(values)]
-    counts, _ = np.histogram(values, bins=BIN_EDGES)
+    counts, _ = np.histogram(values, bins=bins)
     yields = counts.astype(float) * weight
     variances = counts.astype(float) * weight * weight
     return counts.astype(int), yields, variances
+
+
+def recommended_model(recommendation: dict[str, Any]) -> dict[str, Any]:
+    best = recommendation["best"]
+    return {
+        "name": best["name"],
+        "family": best["family"],
+        "observable": best.get("observable", DEFAULT_OBSERVABLE),
+        "categories": best.get("categories", DEFAULT_CATEGORIES),
+        "bin_edges": np.asarray(best.get("bin_edges", DEFAULT_BIN_EDGES.tolist()), dtype=float),
+        "model_name": best.get("model_name"),
+        "selection_role": best.get("selection_role"),
+        "caveat": best.get("caveat"),
+        "sparse_bin_handling": best.get("sparse_bin_handling"),
+        "z_value_phase3": best.get("z_value"),
+        "median_limit_phase3": best.get("median_limit"),
+    }
+
+
+def w_high_mt_control(
+    selected: dict[str, np.ndarray],
+    norm_payload: dict[str, Any],
+) -> dict[str, Any]:
+    weights = {
+        sample: float(payload["absolute_weight_per_local_entry"])
+        for sample, payload in norm_payload["mc_samples"].items()
+    }
+    w_samples = ["W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
+    background_samples = ["DYJetsToLL", "TTbar", *w_samples]
+    mask = selected["is_w_high_mt"].astype(bool) if "is_w_high_mt" in selected else np.zeros(len(selected["sample"]), dtype=bool)
+    rows: dict[str, Any] = {}
+    for group, samples in {"wjets": w_samples, "background_total": background_samples}.items():
+        raw = 0
+        yld = 0.0
+        var = 0.0
+        for sample in samples:
+            sample_mask = mask & (selected["sample"] == sample)
+            count = int(np.sum(sample_mask))
+            weight = weights[sample]
+            raw += count
+            yld += count * weight
+            var += count * weight * weight
+        rows[group] = {
+            "raw_events": raw,
+            "expected_yield": yld,
+            "sumw2": var,
+            "relative_stat_precision": float(np.sqrt(var) / yld) if yld > 0 else None,
+        }
+    rel = rows["wjets"]["relative_stat_precision"]
+    rel = float(rel) if rel is not None else 0.20
+    return {
+        "method": "expected-only high-mT W+jets control-region normalization scaffold",
+        "phase4a_central_scale_factor": 1.0,
+        "real_data_control_region_used": False,
+        "phase4b_update": "Replace the Asimov central value with the observed high-mT control-region transfer factor after 10% data validation.",
+        "control_region_flag": "is_w_high_mt",
+        "rows": rows,
+        "wjets_normsys": {
+            "name": "wjets_high_mt_control",
+            "relative_uncertainty": rel,
+            "hi": 1.0 + rel,
+            "lo": max(0.001, 1.0 - rel),
+        },
+    }
 
 
 def build_templates(
     selected: dict[str, np.ndarray],
     norm_payload: dict[str, Any],
     recommendation: dict[str, Any],
-) -> tuple[dict[str, Any], np.ndarray, np.ndarray]:
+) -> tuple[dict[str, Any], np.ndarray, np.ndarray, list[str], np.ndarray, str, dict[str, Any]]:
+    model_info = recommended_model(recommendation)
+    categories = [str(category) for category in model_info["categories"]]
+    bin_edges = np.asarray(model_info["bin_edges"], dtype=float)
+    observable = str(model_info["observable"])
+    w_control = w_high_mt_control(selected, norm_payload)
     weights = {
         sample: float(payload["absolute_weight_per_local_entry"])
         for sample, payload in norm_payload["mc_samples"].items()
     }
-    raw = np.zeros((len(SAMPLES), len(CATEGORIES), len(BIN_EDGES) - 1), dtype=int)
+    raw = np.zeros((len(SAMPLES), len(categories), len(bin_edges) - 1), dtype=int)
     values = np.zeros_like(raw, dtype=float)
     variances = np.zeros_like(raw, dtype=float)
     per_sample: dict[str, Any] = {}
     for isample, sample in enumerate(SAMPLES):
         per_sample[sample] = {"label": SAMPLE_LABELS[sample], "categories": {}, "weight": weights[sample]}
-        for icat, category in enumerate(CATEGORIES):
+        for icat, category in enumerate(categories):
             mask = (
                 selected["is_signal_region"].astype(bool)
                 & (selected["sensitivity_best_category"] == category)
                 & (selected["sample"] == sample)
             )
-            counts, yld, var = weighted_hist(selected[RECOMMENDED_OBSERVABLE][mask], weights[sample])
+            counts, yld, var = weighted_hist(selected[observable][mask], weights[sample], bin_edges)
             raw[isample, icat, :] = counts
             values[isample, icat, :] = yld
             variances[isample, icat, :] = var
             per_sample[sample]["categories"][category] = {
+                "bin_edges": bin_edges.tolist(),
                 "raw_counts": counts.tolist(),
                 "weighted_yields": yld.tolist(),
                 "sumw2": var.tolist(),
@@ -191,7 +264,7 @@ def build_templates(
     totals = {}
     signal_idx = [SAMPLES.index(sample) for sample in SIGNALS]
     background_idx = [SAMPLES.index(sample) for sample in BACKGROUNDS]
-    for icat, category in enumerate(CATEGORIES):
+    for icat, category in enumerate(categories):
         signal_bins = np.sum(values[signal_idx, icat, :], axis=0)
         background_bins = np.sum(values[background_idx, icat, :], axis=0)
         totals[category] = {
@@ -211,31 +284,34 @@ def build_templates(
             "observation_source": "background-only Asimov pseudo-data from nominal MC templates",
         },
         "model": {
-            "name": best["name"],
-            "family": best["family"],
-            "description": "histogram-gradient-boosting classifier score templates in one inclusive signal-region channel",
+            "name": model_info["name"],
+            "family": model_info["family"],
+            "description": "classifier score templates in VBF, boosted, and zero-jet signal-region channels",
+            "observable": observable,
+            "model_name": model_info["model_name"],
+            "selection_role": model_info["selection_role"],
             "phase3_recommendation_file": "phase3_selection/outputs/sensitivity_recommendation.json",
             "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
             "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration",
-            "caveat": best["caveat"],
+            "caveat": model_info["caveat"],
         },
         "phase3_unmerged_recommendation": {
             "bin_edges": recommendation["best_full_result"]["spec"]["bin_edges"],
-            "z_value": best["z_value"],
-            "median_limit": best["median_limit"],
-            "low_background_bins_lt5": best["low_background_bins_lt5"],
+            "z_value": model_info["z_value_phase3"],
+            "median_limit": model_info["median_limit_phase3"],
+            "low_background_bins_lt5": recommendation["best"].get("low_background_bins_lt5"),
         },
         "low_background_bin_handling": {
-            "strategy": "merged adjacent high-score tail bins",
-            "unmerged_edges": UNMERGED_BIN_EDGES.tolist(),
-            "merged_edges": BIN_EDGES.tolist(),
-            "merged_bins": ["0.86-0.94", "0.94-1.00"],
-            "reason": "Phase 3 recommendation had one expected-background bin below five events; the merged high-score tail keeps all nominal expected background bins at or above five without using observed data.",
+            "strategy": "Phase 3 common score-bin merging across fit categories",
+            "details": model_info["sparse_bin_handling"],
+            "merged_edges": bin_edges.tolist(),
+            "reason": "Sparse-bin merging used expected MC background only and preserves the event-category channels requested by the user.",
         },
-        "binning": {"observable": RECOMMENDED_OBSERVABLE, "edges": BIN_EDGES.tolist()},
-        "categories": CATEGORIES,
+        "binning": {"observable": observable, "edges": bin_edges.tolist()},
+        "categories": categories,
         "samples": per_sample,
         "totals": totals,
+        "wjets_high_mt_control": w_control,
         "normalization": {
             "integrated_luminosity_pb_inv": norm_payload["integrated_luminosity"]["value_pb_inv"],
             "formula_signal": norm_payload["signal_formula"],
@@ -243,7 +319,7 @@ def build_templates(
             "no_circular_derivation": norm_payload["integrated_luminosity"]["no_circular_derivation"],
         },
     }
-    return yields, values, variances
+    return yields, values, variances, categories, bin_edges, observable, w_control
 
 
 def stat_errors(values: np.ndarray, variances: np.ndarray, isample: int, icat: int) -> list[float]:
@@ -252,12 +328,20 @@ def stat_errors(values: np.ndarray, variances: np.ndarray, isample: int, icat: i
     return [float(err) if val > 0 else 0.0 for err, val in zip(errs, vals, strict=True)]
 
 
-def sample_modifiers(sample: str, values: np.ndarray, variances: np.ndarray, isample: int, icat: int) -> list[dict[str, Any]]:
+def sample_modifiers(
+    sample: str,
+    category: str,
+    values: np.ndarray,
+    variances: np.ndarray,
+    isample: int,
+    icat: int,
+    w_control: dict[str, Any],
+) -> list[dict[str, Any]]:
     modifiers: list[dict[str, Any]] = [
         {"name": "lumi_2012", "type": "normsys", "data": {"hi": 1.026, "lo": 0.974}},
         {"name": "tau_open_data_acceptance", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}},
         {
-            "name": f"mc_stat_{CATEGORIES[icat]}",
+            "name": f"mc_stat_{sanitize_category(category)}",
             "type": "staterror",
             "data": stat_errors(values, variances, isample, icat),
         },
@@ -266,25 +350,37 @@ def sample_modifiers(sample: str, values: np.ndarray, variances: np.ndarray, isa
         modifiers.insert(0, {"name": "mu", "type": "normfactor", "data": None})
     if sample == "DYJetsToLL":
         modifiers.append({"name": "dy_norm_open_data", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}})
+    if sample.startswith("W"):
+        modifiers.append(
+            {
+                "name": "wjets_high_mt_control",
+                "type": "normsys",
+                "data": {
+                    "hi": w_control["wjets_normsys"]["hi"],
+                    "lo": w_control["wjets_normsys"]["lo"],
+                },
+            }
+        )
     return modifiers
 
 
-def build_workspace(values: np.ndarray, variances: np.ndarray) -> dict[str, Any]:
+def build_workspace(categories: list[str], values: np.ndarray, variances: np.ndarray, w_control: dict[str, Any]) -> dict[str, Any]:
     channels = []
     observations = []
-    for icat, category in enumerate(CATEGORIES):
+    for icat, category in enumerate(categories):
         samples = []
         for isample, sample in enumerate(SAMPLES):
             samples.append(
                 {
                     "name": sample,
                     "data": values[isample, icat, :].tolist(),
-                    "modifiers": sample_modifiers(sample, values, variances, isample, icat),
+                    "modifiers": sample_modifiers(sample, category, values, variances, isample, icat, w_control),
                 }
             )
         background = np.sum(values[[SAMPLES.index(sample) for sample in BACKGROUNDS], icat, :], axis=0)
-        channels.append({"name": category, "samples": samples})
-        observations.append({"name": category, "data": background.tolist()})
+        channel_name = sanitize_category(category)
+        channels.append({"name": channel_name, "samples": samples})
+        observations.append({"name": channel_name, "data": background.tolist()})
     return {
         "channels": channels,
         "measurements": [
@@ -401,12 +497,12 @@ def saturated_stat(obs: np.ndarray, exp: np.ndarray) -> float:
     return float(2.0 * np.sum(safe_exp - obs + term))
 
 
-def gof_toys(yields: dict[str, Any], ntoys: int = 500) -> dict[str, Any]:
+def gof_toys(yields: dict[str, Any], categories: list[str], ntoys: int = 500) -> dict[str, Any]:
     rng = np.random.default_rng(42)
     rows = {}
     combined_obs = []
     combined_exp = []
-    for category in CATEGORIES:
+    for category in categories:
         exp = np.asarray(yields["totals"][category]["background_bins"], dtype=float)
         obs = exp.copy()
         toy_stats = []
@@ -456,7 +552,7 @@ def gof_toys(yields: dict[str, Any], ntoys: int = 500) -> dict[str, Any]:
     }
 
 
-def systematics_payload() -> dict[str, Any]:
+def systematics_payload(w_control: dict[str, Any]) -> dict[str, Any]:
     implemented = [
         {
             "name": "lumi_2012",
@@ -471,6 +567,13 @@ def systematics_payload() -> dict[str, Any]:
             "size": "15%",
             "source": "Phase 1 [D6] and user-provided 10-15% requirement for missing trigger turn-on and tau efficiency scale factors",
             "applies_to": "DYJetsToLL",
+        },
+        {
+            "name": "wjets_high_mt_control",
+            "type": "normsys",
+            "size": f"{100.0 * w_control['wjets_normsys']['relative_uncertainty']:.2f}%",
+            "source": "Expected high-mT W+jets control-region statistical precision in Phase 4a Asimov setup; central data transfer factor deferred to Phase 4b.",
+            "applies_to": "W1JetsToLNu, W2JetsToLNu, W3JetsToLNu",
         },
         {
             "name": "tau_open_data_acceptance",
@@ -528,9 +631,11 @@ def systematics_payload() -> dict[str, Any]:
         "implemented": implemented,
         "downscoped": downscoped,
         "completeness_table": REFERENCE_ROWS,
+        "wjets_high_mt_control": w_control,
         "flat_systematic_justification": {
             "dy_norm_open_data": "Phase 1 and user prompt require 10-15% because the reduced analysis lacks official trigger turn-on and tau scale factors; Phase 4a uses the high end before data unblinding.",
             "tau_open_data_acceptance": "Phase 1 records CMS Run 1 tau ID/trigger variations in the 6-19% range and the reduced-file missing-scale-factor limitation; Phase 4a uses 15% as a predeclared open-data acceptance nuisance.",
+            "wjets_high_mt_control": "The W nuisance size is not tuned from the signal region. It is the expected high-mT W control-region statistical precision from the same official MC weights; Phase 4b must replace the central scale with data.",
         },
     }
 
@@ -581,9 +686,19 @@ def markdown_table(rows: list[list[Any]], headers: list[str]) -> str:
     return "\n".join(lines)
 
 
-def write_artifact(yields: dict[str, Any], expected: dict[str, Any], injections: dict[str, Any], gof: dict[str, Any], systematics: dict[str, Any], limitations: dict[str, Any]) -> None:
+def write_artifact(
+    yields: dict[str, Any],
+    expected: dict[str, Any],
+    injections: dict[str, Any],
+    gof: dict[str, Any],
+    systematics: dict[str, Any],
+    limitations: dict[str, Any],
+    categories: list[str],
+    bin_edges: np.ndarray,
+    observable: str,
+) -> None:
     yield_rows = []
-    for category in CATEGORIES:
+    for category in categories:
         total = yields["totals"][category]
         yield_rows.append(
             [
@@ -613,6 +728,8 @@ def write_artifact(yields: dict[str, Any], expected: dict[str, Any], injections:
     z_value = expected["discovery_sensitivity"]["z_value"]
     phase3 = yields["phase3_unmerged_recommendation"]
     low_bkg = yields["low_background_bin_handling"]
+    min_background = min(yields["totals"][category]["min_background_bin"] for category in categories)
+    category_text = ", ".join(categories)
     content = f"""# Phase 4a Expected Inference: CMS 2012 Open Data H to Tau Tau Search
 
 ## Summary
@@ -620,9 +737,9 @@ def write_artifact(yields: dict[str, Any], expected: dict[str, Any], injections:
 Phase 4a builds an expected-only binned pyhf model for the reduced CMS 2012
 Open Data H to tau tau search in the mu tau_h final state. This rerun uses the
 Phase 3 sensitivity-regression recommendation as the Phase 4a expected-primary
-candidate: the histogram-gradient-boosting MVA score in one inclusive
-signal-region channel. The observation is background-only Asimov pseudo-data
-from the nominal model, so no real data signal-region distribution or
+candidate: `{observable}` in the `{category_text}` signal-region channels.
+The channels are fitted simultaneously with a common signal-strength parameter.
+The observation is background-only Asimov pseudo-data from the nominal model, so no real data signal-region distribution or
 full-data observed fit result enters this phase.
 
 The MVA score is an expected-primary candidate, not a final data-validated
@@ -645,21 +762,24 @@ listed below.
 ## Method
 
 The expected-primary candidate observable is
-`mva_score_hist_gradient_boosting`, with merged bin edges
-`{BIN_EDGES.tolist()}`. The Phase 4a executor uses
+`{observable}`, with merged bin edges
+`{bin_edges.tolist()}`. The Phase 4a executor uses
 `phase3_selection/outputs/sensitivity_recommendation.json` and
 `phase3_selection/outputs/sensitivity_selected_events.npz`, requiring
-`is_signal_region` and the Phase 3 sensitivity category `inclusive_sr`. The
-Phase 3 `region_exclusive` diagnostic labels are not used to form the fit
+`is_signal_region` and the Phase 3 sensitivity categories `{category_text}`.
+The Phase 3 `region_exclusive` diagnostic labels are not used to form the fit
 templates.
 
-The Phase 3 recommendation used score edges `{UNMERGED_BIN_EDGES.tolist()}`
-and had `{phase3['low_background_bins_lt5']}` expected-background bin below
-five events. Phase 4a merges the adjacent high-score tail bins
-`{', '.join(low_bkg['merged_bins'])}`, producing edges `{BIN_EDGES.tolist()}`.
+The Phase 3 recommendation records sparse-bin handling as `{low_bkg['strategy']}`.
 The merged model has a minimum nominal expected-background bin of
-`{min(yields['totals'][category]['min_background_bin'] for category in CATEGORIES):.3f}`,
-so no score bin remains below five expected background events.
+`{min_background:.3f}`, so no score bin remains below five expected background
+events in the promoted category-preserving fit.
+
+The W+jets normalization method is prepared through the high-`mT` control flag
+`{yields['wjets_high_mt_control']['control_region_flag']}`. Phase 4a keeps the
+central W scale factor at the background-only Asimov value of 1.0 and propagates
+the expected control-region statistical precision as a nuisance; Phase 4b must
+replace this with the observed high-`mT` transfer factor before full unblinding.
 
 MC normalization follows `phase3_selection/outputs/normalization_inputs.json`.
 Signal weights use `sigma_prod * BR(H->tautau) * L_int / N_gen`, and
@@ -669,20 +789,21 @@ values, not local reduced ROOT entries or selected counts.
 
 The workspace is written to `outputs/pyhf_workspace.json`. It includes a common
 signal-strength POI `mu`, luminosity and tau/open-data acceptance normsys
-modifiers, a DY normalization normsys, and per-category Barlow-Beeston-lite
-staterror modifiers. The observation in the workspace is the background-only
-Asimov expectation in the inclusive score-template channel.
+modifiers, a DY normalization normsys, a W+jets high-`mT` control nuisance, and
+per-category Barlow-Beeston-lite staterror modifiers. The observation in the
+workspace is the background-only Asimov expectation in the score-template
+channels.
 
 ## Expected Yields
 
 {markdown_table(yield_rows, ['Category', 'Signal yield', 'Background yield', 'S/sqrt(B)', 'Minimum background bin'])}
 
-![Expected MVA score templates in the inclusive signal region. This figure
+![Expected MVA score templates in the promoted signal-region categories. This figure
 shows the Phase 4a background-only expected stack and nominal Higgs signal
 overlay after official Open Data normalization. The fit observation is the
 Asimov background expectation rather than real collision data, and the score
 model remains pending Phase 4b data-validation of score modelling and
-calibration.](figures/expected_mva_score_inclusive_sr.pdf){{#fig:p4a-mva-score}}
+calibration.](figures/expected_mva_score_{sanitize_category(categories[0])}.pdf){{#fig:p4a-mva-score}}
 
 ![Expected signal-to-background ratio by score channel. This figure summarizes
 the category-integrated nominal Higgs signal divided by the nominal background.
@@ -786,17 +907,18 @@ def main() -> None:
     selected = load_selected()
     recommendation = load_recommendation()
     norm_payload = load_norm()
-    yields, values, variances = build_templates(selected, norm_payload, recommendation)
+    yields, values, variances, categories, bin_edges, observable, w_control = build_templates(selected, norm_payload, recommendation)
     np.savez(
         OUT / "templates.npz",
         samples=np.asarray(SAMPLES),
-        categories=np.asarray(CATEGORIES),
-        bin_edges=BIN_EDGES,
+        categories=np.asarray(categories),
+        bin_edges=bin_edges,
+        observable=np.asarray([observable]),
         yields=values,
         variances=variances,
     )
     write_json(OUT / "nominal_yields.json", yields)
-    workspace = build_workspace(values, variances)
+    workspace = build_workspace(categories, values, variances, w_control)
     write_json(OUT / "pyhf_workspace.json", workspace)
     ws = pyhf.Workspace(workspace)
     model = ws.model()
@@ -813,15 +935,15 @@ def main() -> None:
         "pyhf": {"version": pyhf.__version__, "poi": model.config.poi_name, "npars": model.config.npars},
     }
     injections = signal_injections(model)
-    gof = gof_toys(yields)
-    systematics = systematics_payload()
+    gof = gof_toys(yields, categories)
+    systematics = systematics_payload(w_control)
     limitations = limitations_payload()
     write_json(OUT / "expected_results.json", expected)
     write_json(OUT / "signal_injection.json", injections)
     write_json(OUT / "gof_validation.json", gof)
     write_json(OUT / "systematics.json", systematics)
     write_json(OUT / "limitations_downscope.json", limitations)
-    write_artifact(yields, expected, injections, gof, systematics, limitations)
+    write_artifact(yields, expected, injections, gof, systematics, limitations, categories, bin_edges, observable)
     update_commitments()
     message = (
         "Built Phase 4a MVA-score weighted templates, pyhf workspace, expected "
@@ -831,7 +953,7 @@ def main() -> None:
     )
     append_log(LOG, message)
     append_log(FIX_LOG, message)
-    append_log(EXPERIMENT_LOG, "Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.")
+    append_log(EXPERIMENT_LOG, f"Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `{observable}` in simultaneous `{', '.join(categories)}` channels, using official Open Data normalization and background-only Asimov pseudo-data. Score bins were merged using expected background only to keep each fit bin above five expected background events where possible. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.")
 
 
 if __name__ == "__main__":

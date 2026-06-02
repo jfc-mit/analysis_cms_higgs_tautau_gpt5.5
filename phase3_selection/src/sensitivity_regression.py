@@ -80,6 +80,7 @@ MODEL_DISPLAY_LABELS = {
     "hist_gradient_boosting": "Gradient-boosted classifier",
     "xgboost": "XGBoost classifier",
     "mlp": "Neural-network classifier",
+    "transformer": "Transformer discriminator",
 }
 
 NUISANCE_DISPLAY_LABELS = {
@@ -179,6 +180,37 @@ def transformer_feasibility() -> dict[str, Any]:
             "entry point was configured for this analysis; fast tree and neural-network candidates were "
             "kept as the maintainable quick comparison."
         ),
+    }
+
+
+def genmet_regression_feasibility(selected: dict[str, np.ndarray]) -> dict[str, Any]:
+    keys = sorted(selected.keys())
+    target_keys = [key for key in keys if "gen" in key.lower() and "met" in key.lower()]
+    return {
+        "requested_approach": "transformer regression of genMET direction / genMET phi followed by combined-mass construction",
+        "target_branches_found": target_keys,
+        "reco_met_branches_found": [key for key in keys if key in {"met_pt", "met_phi"}],
+        "feasible": bool(target_keys),
+        "decision": "not_implemented_missing_genmet_targets" if not target_keys else "target_available_not_primary_quick_pass",
+        "reason": (
+            "The reduced selected-event artifact has reconstructed MET variables but no genMET/genMET_phi target. "
+            "Training a genMET-direction regressor without a real target would fabricate labels, so this branch is documented as infeasible."
+        )
+        if not target_keys
+        else (
+            "A genMET-like target appears to exist, but the quick pass prioritizes the discriminator candidate; "
+            "the target should be validated before a regressed-mass observable is promoted."
+        ),
+    }
+
+
+def tau_antimuon_status() -> dict[str, Any]:
+    return {
+        "requested": "tight anti-muon veto on hadronic tau ID",
+        "status": "implemented_in_phase3_selection",
+        "branch": "Tau_idAntiMuTight",
+        "selection": "Tau_idAntiMuTight > 0 in phase3_selection/src/build_selection.py",
+        "note": "The per-event selected_events.npz keeps the selected tau kinematics and isolation, not a separate anti-muon flag, so the veto is documented from the selection code path.",
     }
 
 
@@ -748,6 +780,20 @@ def train_mva_models(selected: dict[str, np.ndarray]) -> tuple[dict[str, Any], d
             ),
         ),
     }
+    if XGBClassifier is not None:
+        models["xgboost"] = XGBClassifier(
+            n_estimators=160,
+            max_depth=3,
+            learning_rate=0.045,
+            subsample=0.85,
+            colsample_bytree=0.85,
+            min_child_weight=2.0,
+            reg_lambda=2.0,
+            objective="binary:logistic",
+            eval_metric="logloss",
+            n_jobs=2,
+            random_state=57721,
+        )
     full_x = np.column_stack(
         [
             np.nan_to_num(selected[name].astype(float), nan=-999.0, posinf=999.0, neginf=-999.0)
@@ -762,6 +808,9 @@ def train_mva_models(selected: dict[str, np.ndarray]) -> tuple[dict[str, Any], d
         "split": {"test_size": 0.35, "random_state": 31415, "stratified": True},
         "class_counts": {"background": int(np.sum(y == 0)), "signal": int(np.sum(y == 1))},
         "models": {},
+        "transformer_feasibility": transformer_feasibility(),
+        "genmet_regression_feasibility": genmet_regression_feasibility(selected),
+        "tau_antimuon_veto": tau_antimuon_status(),
     }
     for name, model in models.items():
         log.info("Training expected-only %s", name)
@@ -783,7 +832,7 @@ def train_mva_models(selected: dict[str, np.ndarray]) -> tuple[dict[str, Any], d
     return metadata, scores
 
 
-def baseline_specs(selected: dict[str, np.ndarray], scores: dict[str, np.ndarray]) -> list[ModelSpec]:
+def baseline_specs(selected: dict[str, np.ndarray], scores: dict[str, np.ndarray], weights: dict[str, float]) -> list[ModelSpec]:
     baseline = assign_baseline(selected)
     specs = [
         ModelSpec(
@@ -828,29 +877,56 @@ def baseline_specs(selected: dict[str, np.ndarray], scores: dict[str, np.ndarray
         )
     )
     for name, score in scores.items():
-        selected[f"mva_score_{name}"] = score
+        observable = f"mva_score_{name}"
+        selected[observable] = score
+        score_edges, score_sparse = merge_common_edges_for_background(
+            selected,
+            baseline,
+            BASELINE_CATEGORIES,
+            observable,
+            MVA_SCORE_BINS,
+            weights,
+        )
         specs.append(
             ModelSpec(
                 name=f"mva_{name}_score_baseline_categories",
                 family="expected_only_mva",
                 category_labels=baseline,
                 categories=BASELINE_CATEGORIES,
-                observable=f"mva_score_{name}",
-                bins=MVA_SCORE_BINS,
+                observable=observable,
+                bins=score_edges,
                 description=f"{name} classifier score templates with baseline categories.",
                 caveat="Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+                model_name=name,
+                selection_role="primary_candidate",
+                sparse_bin_handling=score_sparse,
             )
+        )
+        inclusive_labels = np.where(selected["is_signal_region"].astype(bool), "inclusive_sr", "none")
+        inclusive_edges, inclusive_sparse = merge_common_edges_for_background(
+            selected,
+            inclusive_labels,
+            ["inclusive_sr"],
+            observable,
+            MVA_COARSE_BINS,
+            weights,
         )
         specs.append(
             ModelSpec(
                 name=f"mva_{name}_score_single_category",
                 family="expected_only_mva",
-                category_labels=np.where(selected["is_signal_region"].astype(bool), "inclusive_sr", "none"),
+                category_labels=inclusive_labels,
                 categories=["inclusive_sr"],
-                observable=f"mva_score_{name}",
-                bins=MVA_COARSE_BINS,
+                observable=observable,
+                bins=inclusive_edges,
                 description=f"{name} classifier score templates in a single inclusive signal-region channel.",
-                caveat="Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+                caveat=(
+                    "Expected-only MC comparison retained for continuity. The user-requested primary method "
+                    "must preserve event categories and is therefore not selected from this inclusive candidate."
+                ),
+                model_name=name,
+                selection_role="comparison_only_not_selected",
+                sparse_bin_handling=inclusive_sparse,
             )
         )
     return specs
@@ -912,6 +988,17 @@ def rank_key(result: dict[str, Any]) -> float:
     return float(value) if value is not None and np.isfinite(value) else -1.0
 
 
+def is_primary_eligible(result: dict[str, Any]) -> bool:
+    spec = result.get("spec", {})
+    categories = spec.get("categories", [])
+    return (
+        spec.get("selection_role") != "comparison_only_not_selected"
+        and "vbf" in categories
+        and len(categories) >= 3
+        and rank_key(result) >= 0.0
+    )
+
+
 def evaluate_all(
     selected: dict[str, np.ndarray],
     specs: list[ModelSpec],
@@ -928,7 +1015,8 @@ def evaluate_all(
             "z_improvement_factor": z_value / phase4a_baseline["expected_z"] if z_value >= 0 and phase4a_baseline["expected_z"] > 0 else None,
         }
         results.append(result)
-    provisional_best = max(results, key=rank_key)
+    eligible = [result for result in results if is_primary_eligible(result)]
+    provisional_best = max(eligible if eligible else results, key=rank_key)
     enrich_names = {"baseline_phase4a_mvis", provisional_best["spec"]["name"]}
     enriched_results: list[dict[str, Any]] = []
     for result in results:
@@ -952,7 +1040,8 @@ def evaluate_all(
             enriched_results.append(enriched)
         else:
             enriched_results.append(result)
-    best = max(enriched_results, key=rank_key)
+    enriched_eligible = [result for result in enriched_results if is_primary_eligible(result)]
+    best = max(enriched_eligible if enriched_eligible else enriched_results, key=rank_key)
     return enriched_results, best
 
 
@@ -1132,6 +1221,10 @@ def compact_result(row: dict[str, Any]) -> dict[str, Any]:
         "family": row["spec"]["family"],
         "observable": row["spec"]["observable"],
         "categories": row["spec"]["categories"],
+        "bin_edges": row["spec"]["bin_edges"],
+        "model_name": row["spec"].get("model_name"),
+        "selection_role": row["spec"].get("selection_role"),
+        "sparse_bin_handling": row["spec"].get("sparse_bin_handling"),
         "z_value": row.get("discovery_sensitivity", {}).get("z_value"),
         "median_limit": median_limit,
         "signal_total": row.get("templates", {}).get("combined", {}).get("signal_total"),
@@ -1237,7 +1330,7 @@ def main() -> None:
     for name, score in mva_scores.items():
         selected[f"mva_score_{name}"] = score
 
-    specs = baseline_specs(selected, mva_scores) + grid_specs(selected)
+    specs = baseline_specs(selected, mva_scores, weights) + grid_specs(selected)
     results, best = evaluate_all(selected, specs, weights, phase4a_baseline)
     audit = nuisance_audit(selected, specs, best, weights)
     missing = missing_component_feasibility()
@@ -1250,6 +1343,17 @@ def main() -> None:
             "data_use": "Only existing control/validation caveats are referenced; no observed SR shape tuning.",
         },
         "phase4a_baseline": phase4a_baseline,
+        "method_requirements": {
+            "primary_must_preserve_event_categories": True,
+            "required_categories": BASELINE_CATEGORIES,
+            "simultaneous_fit": True,
+            "inclusive_score_candidates_are_comparison_only": True,
+        },
+        "modern_model_feasibility": {
+            "transformer_discriminator": transformer_feasibility(),
+            "genmet_direction_regression": genmet_regression_feasibility(selected),
+            "tau_antimuon_veto": tau_antimuon_status(),
+        },
         "promotion_gate": {
             "z_or_limit_improvement_required": ">=30%",
             "signal_injection_required": "bias <20% for nonzero injected mu",
@@ -1257,6 +1361,7 @@ def main() -> None:
         },
         "best": compact_result(best),
         "best_full_result": best,
+        "candidate_comparison_ranked": compact,
         "passes_30_percent_z_improvement": bool((compact_result(best)["z_improvement_factor"] or 0.0) >= 1.30),
         "residual_blockers": [
             "MVA input and output modelling must be validated in Phase 4b before unqualified use.",

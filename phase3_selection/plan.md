@@ -175,3 +175,28 @@ Final checks:
 - Run `pixi run lint-plots`.
 - Append `experiment_log.md` and
   `phase3_selection/logs/executor_phase3_selection_20260602T110516Z.md`.
+
+## 2026-06-02T15:18:31Z Continuation Plan
+
+This continuation resumes from checkpoint commit `7c15b68` and addresses the
+user-requested modern-method update without using observed full-data
+signal-region performance.
+
+1. Inspect the current dependency stack for transformer feasibility. If a
+   suitable stack is present, train a compact tabular/event transformer with a
+   short epoch budget and validation split; otherwise document the missing
+   stack and keep the strongest fast available model as fallback.
+2. Preserve the Phase 3 `vbf`, `boosted`, and `zero_jet` categories in every
+   fit-candidate recommendation. Inclusive-score variants may remain in the
+   comparison table as diagnostics, but cannot be selected as the final method
+   for this request.
+3. Compare the baseline categorized visible-mass model, category-preserving
+   transformer score fit, genMET direction regression if target branches exist,
+   and add-MET mass comparator using expected-only pyhf sensitivity metrics.
+4. Write updated candidate-comparison JSON/artifact content with feature
+   lists, channel/category definitions, binning, sparse-bin handling, expected
+   discovery Z, expected median CLs limit where evaluated, feasibility notes,
+   W high-mT normalization status, anti-muon veto status, and Z/tau nuisance
+   treatment.
+5. Regenerate Phase 3 sensitivity outputs and figures, then hand the selected
+   category-preserving recommendation to Phase 4a.
