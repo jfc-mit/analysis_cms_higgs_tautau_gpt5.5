@@ -19,7 +19,10 @@ Remote access works through uproot over HTTPS when the pixi environment is run
 with `SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt`. Without that variable,
 fsspec raises a certificate verification error even though system `curl` can
 reach the ROOT mirror. No local EOS mount was available in this execution
-environment, and no full ROOT files were downloaded.
+environment. After the user-requested Phase 2 scope change, the confirmed
+reduced files are localized under `data/` and `mc/` in the analysis root, and
+`phase2_exploration/src/explore_samples.py` now prefers those local paths when
+present with the HTTPS mirror as fallback.
 
 The public mirror lists:
 
@@ -39,6 +42,70 @@ The public mirror lists:
 same mirror. This resolves Phase 1 open issue [O1] in favor of the CERN reduced
 TauPlusX outreach inputs and is a strategy-revision input for the prompt's
 SingleMu wording.
+
+## Local Sample Manifest and Paper-Level Coverage
+
+The machine-readable local manifest is
+`phase2_exploration/outputs/local_sample_manifest.json`. It records source
+URLs, local paths, expected and observed file sizes, validation status, `Events`
+tree entry counts when available, and paper-level components that are not in
+the reduced mirror. The current local reduced sample policy is to use all
+available 2012 CMS Open Data reduced files relevant to this mu tau_h H to tau
+tau analysis now, and to defer full AOD conversion until a later phase
+demonstrates the additional sample is needed.
+
+Confirmed reduced files are:
+
+| Directory | Samples |
+|---|---|
+| `data/` | `Run2012B_TauPlusX.root`, `Run2012C_TauPlusX.root` |
+| `mc/` | `GluGluToHToTauTau.root`, `VBF_HToTauTau.root`, `DYJetsToLL.root`, `TTbar.root`, `W1JetsToLNu.root`, `W2JetsToLNu.root`, `W3JetsToLNu.root` |
+
+The broader CMS H to tau tau MC programs in CMS JHEP 05 (2014) 104
+(DOI:10.1007/JHEP05(2014)104) and CMS Phys. Lett. B 779 (2018) 283
+(DOI:10.1016/j.physletb.2018.02.004) include or discuss components beyond the
+reduced mirror. CMS JHEP 05 (2014) 104 describes ggH and VBF signal samples,
+associated WH/ZH and ttH Higgs production, Z+jets, W+jets, ttbar+jets,
+diboson, and single-top simulation, plus embedded Z to tau tau samples and
+data-driven QCD estimates. CMS Phys. Lett. B 779 (2018) 283 documents
+Drell-Yan, W+jets, QCD multijet, ttbar, diboson, single-top, and H to WW
+background treatment in the later 13 TeV analysis context. The reduced mirror
+does not list separate files for embedded Z to tau tau, Z to mumu/ee fake
+components, QCD/multijet, WW/WZ/ZZ, single top, WH/ZH/ttH, H to WW, inclusive
+WJets, W4Jets, or additional DY jet/mass categories; these are marked
+`missing-reduced` or `deferred-AOD-conversion` in the manifest rather than
+downloaded as full AOD blindly.
+
+These missing paper-level components are not blockers for the current reduced
+sample analysis if their status remains documented. They are binding downstream
+documentation obligations: the final analysis note and final summary must name
+each unavailable paper-level component used in the CMS reference analyses,
+state that no corresponding reduced 2012 CMS Open Data sample or suitable
+substitute was available here, and discuss the limitation or impact on this
+open-data result. This applies in particular to embedded Z to tau tau, separate
+Z to mumu/ee fake components, QCD/multijet simulation, diboson WW/WZ/ZZ, single
+top, WH/ZH/ttH, H to WW, W4/inclusive W+jets, and additional DY categories as
+recorded in `local_sample_manifest.json`.
+
+## Downstream Category Obligations
+
+The Phase 3 selection must implement mutually exclusive sensitivity categories
+inspired by CMS JHEP 05 (2014) 104 and CMS Phys. Lett. B 779 (2018) 283, then
+fit all retained categories simultaneously. At minimum, Phase 3 must evaluate:
+
+| Category obligation | Required variables or handles | Phase 2 availability |
+|---|---|---|
+| VBF-enriched category | Jet multiplicity, leading-dijet invariant mass `m_jj`, leading-dijet `|Delta eta_jj|`, central-jet/top rejection where feasible | `nJet`, `Jet_pt`, `Jet_eta`, `Jet_phi`, `Jet_mass`, and `Jet_btag` are present. |
+| Boosted or 1-jet category | Jet multiplicity and Higgs-candidate transverse momentum, using `pT_tautau` when reconstructible or a documented visible/add-MET proxy if not | Muon, tau, MET, and jet four-vector branches are present for visible/add-MET proxies. |
+| 0-jet or non-VBF baseline | Orthogonal catch-all category after assigning VBF and boosted/1-jet candidates, with no event double counting | Jet multiplicity is present in data and MC. |
+| Top-control handle | b-tag requirement or veto and high-jet-multiplicity checks | `Jet_btag` is present but includes sentinel values, so Phase 3 must define a validity mask. |
+| W+jets/QCD handles | Muon-MET transverse mass, same-sign, and anti-isolation control or validation regions | Muon, tau, charge, isolation, and MET branches are present; isolation sentinels must be masked. |
+
+If the reduced statistics do not support all categories with stable templates,
+Phase 3 may merge or downscope categories only after documenting the yield and
+stability checks. The simultaneity requirement remains binding: retained VBF,
+boosted/1-jet, and 0-jet/non-VBF categories must be fit together rather than
+reported as independent standalone fits.
 
 ## Schema Inventory
 

@@ -1,17 +1,5 @@
 {
-  "base_url": "https://root.cern/files/HiggsTauTauReduced",
-  "prompt_only_files": {
-    "Run2012B_SingleMu.root": {
-      "checked_url": "https://root.cern/files/HiggsTauTauReduced/Run2012B_SingleMu.root",
-      "size_bytes": null,
-      "status": "not_listed_in_root_cern_index"
-    },
-    "Run2012C_SingleMu.root": {
-      "checked_url": "https://root.cern/files/HiggsTauTauReduced/Run2012C_SingleMu.root",
-      "size_bytes": null,
-      "status": "not_listed_in_root_cern_index"
-    }
-  },
+  "base_url": "https://root.cern.ch/files/HiggsTauTauReduced",
   "samples": {
     "DYJetsToLL": {
       "branch_count": 69,
@@ -538,14 +526,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "DYJetsToLL.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/DYJetsToLL.root",
       "role": "background",
       "size_bytes": 925979447,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/DYJetsToLL.root",
       "trees": {
         "Events": {
           "entries": 3045887
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/DYJetsToLL.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/DYJetsToLL.root"
     },
     "GluGluToHToTauTau": {
       "branch_count": 69,
@@ -1072,14 +1063,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "GluGluToHToTauTau.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/GluGluToHToTauTau.root",
       "role": "signal",
       "size_bytes": 20460281,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/GluGluToHToTauTau.root",
       "trees": {
         "Events": {
           "entries": 47696
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/GluGluToHToTauTau.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/GluGluToHToTauTau.root"
     },
     "Run2012B_TauPlusX": {
       "branch_count": 62,
@@ -1549,14 +1543,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "Run2012B_TauPlusX.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/data/Run2012B_TauPlusX.root",
       "role": "data",
       "size_bytes": 1088113510,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/data/Run2012B_TauPlusX.root",
       "trees": {
         "Events": {
           "entries": 3564750
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/Run2012B_TauPlusX.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root"
     },
     "Run2012C_TauPlusX": {
       "branch_count": 62,
@@ -2026,14 +2023,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "Run2012C_TauPlusX.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/data/Run2012C_TauPlusX.root",
       "role": "data",
       "size_bytes": 1549014154,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/data/Run2012C_TauPlusX.root",
       "trees": {
         "Events": {
           "entries": 5130317
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/Run2012C_TauPlusX.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root"
     },
     "TTbar": {
       "branch_count": 69,
@@ -2560,14 +2560,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "TTbar.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/TTbar.root",
       "role": "background",
       "size_bytes": 353710208,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/TTbar.root",
       "trees": {
         "Events": {
           "entries": 642310
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/TTbar.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/TTbar.root"
     },
     "VBF_HToTauTau": {
       "branch_count": 69,
@@ -3094,14 +3097,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "VBF_HToTauTau.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/VBF_HToTauTau.root",
       "role": "signal",
       "size_bytes": 24184554,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/VBF_HToTauTau.root",
       "trees": {
         "Events": {
           "entries": 49165
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/VBF_HToTauTau.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/VBF_HToTauTau.root"
     },
     "W1JetsToLNu": {
       "branch_count": 69,
@@ -3628,14 +3634,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "W1JetsToLNu.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W1JetsToLNu.root",
       "role": "background",
       "size_bytes": 1073460654,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W1JetsToLNu.root",
       "trees": {
         "Events": {
           "entries": 2978480
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/W1JetsToLNu.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/W1JetsToLNu.root"
     },
     "W2JetsToLNu": {
       "branch_count": 69,
@@ -4162,14 +4171,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "W2JetsToLNu.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W2JetsToLNu.root",
       "role": "background",
       "size_bytes": 1217271275,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W2JetsToLNu.root",
       "trees": {
         "Events": {
           "entries": 3069385
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/W2JetsToLNu.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/W2JetsToLNu.root"
     },
     "W3JetsToLNu": {
       "branch_count": 69,
@@ -4696,14 +4708,17 @@
         "has_tau_antimu_tight": true
       },
       "file": "W3JetsToLNu.root",
+      "local_exists": true,
+      "local_path": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W3JetsToLNu.root",
       "role": "background",
       "size_bytes": 655005007,
+      "source_used": "/sandbox/work/jfc/analyses/higgs_tautau/mc/W3JetsToLNu.root",
       "trees": {
         "Events": {
           "entries": 1524114
         }
       },
-      "url": "https://root.cern/files/HiggsTauTauReduced/W3JetsToLNu.root"
+      "url": "https://root.cern.ch/files/HiggsTauTauReduced/W3JetsToLNu.root"
     }
   }
 }

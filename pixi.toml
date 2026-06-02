@@ -53,4 +53,5 @@ lint-plots = "python conventions/lint_plots.py ."
 # The "all" task chains the full sequence — this is the reproducibility contract.
 phase2-explore = "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt python phase2_exploration/src/explore_samples.py"
 phase2-plots = "python phase2_exploration/src/plot_exploration.py"
-all = "pixi run phase2-explore && pixi run phase2-plots"
+phase2-local-manifest = "python phase2_exploration/src/localize_samples.py"
+all = "pixi run phase2-local-manifest && pixi run phase2-explore && pixi run phase2-plots"

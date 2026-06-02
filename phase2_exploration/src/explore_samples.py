@@ -27,9 +27,10 @@ logging.basicConfig(
 log = logging.getLogger(__name__)
 
 HERE = Path(__file__).resolve().parent
+ANALYSIS_ROOT = HERE.parent.parent
 OUT = HERE.parent / "outputs"
 FIG = OUT / "figures"
-BASE_URL = "https://root.cern/files/HiggsTauTauReduced"
+BASE_URL = "https://root.cern.ch/files/HiggsTauTauReduced"
 ENTRY_STOP = 5_000
 
 SAMPLES = [
@@ -43,8 +44,6 @@ SAMPLES = [
     {"name": "Run2012B_TauPlusX", "file": "Run2012B_TauPlusX.root", "role": "data"},
     {"name": "Run2012C_TauPlusX", "file": "Run2012C_TauPlusX.root", "role": "data"},
 ]
-
-PROMPT_ONLY_FILES = ["Run2012B_SingleMu.root", "Run2012C_SingleMu.root"]
 
 SURVEY_BRANCHES = [
     "HLT_IsoMu24_eta2p1",
@@ -103,8 +102,22 @@ def head_size(url: str) -> int | None:
     return int(value) if value is not None else None
 
 
+def local_sample_path(sample: dict[str, str]) -> Path:
+    directory = "data" if sample["role"] == "data" else "mc"
+    return ANALYSIS_ROOT / directory / sample["file"]
+
+
+def sample_source(sample: dict[str, str]) -> str:
+    local_path = local_sample_path(sample)
+    if local_path.exists():
+        return str(local_path)
+    return f"{BASE_URL}/{sample['file']}"
+
+
 def open_tree(file_name: str) -> uproot.TTree:
-    root_file = uproot.open(f"{BASE_URL}/{file_name}")
+    sample = next((item for item in SAMPLES if item["file"] == file_name), None)
+    source = sample_source(sample) if sample is not None else f"{BASE_URL}/{file_name}"
+    root_file = uproot.open(source)
     return root_file["Events"]
 
 
@@ -326,13 +339,7 @@ def histogram(values: np.ndarray, bins: np.ndarray) -> dict[str, list[float]]:
 
 
 def build_inventory() -> dict[str, object]:
-    inventory: dict[str, object] = {"base_url": BASE_URL, "samples": {}, "prompt_only_files": {}}
-    for missing in PROMPT_ONLY_FILES:
-        inventory["prompt_only_files"][missing] = {
-            "status": "not_listed_in_root_cern_index",
-            "checked_url": f"{BASE_URL}/{missing}",
-            "size_bytes": head_size(f"{BASE_URL}/{missing}"),
-        }
+    inventory: dict[str, object] = {"base_url": BASE_URL, "samples": {}}
     for sample in SAMPLES:
         log.info("Inventory %s", sample["file"])
         url = f"{BASE_URL}/{sample['file']}"
@@ -342,6 +349,9 @@ def build_inventory() -> dict[str, object]:
             "file": sample["file"],
             "role": sample["role"],
             "url": url,
+            "source_used": sample_source(sample),
+            "local_path": str(local_sample_path(sample)),
+            "local_exists": local_sample_path(sample).exists(),
             "size_bytes": head_size(url),
             "trees": {"Events": {"entries": int(tree.num_entries)}},
             "branch_count": len(branches),

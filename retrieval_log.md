@@ -33,3 +33,20 @@
   performed through SciTreeRAG. Phase 3 should retrieve official object
   definitions, luminosity, cross sections, and scale-factor documentation from
   authoritative CMS/CERN sources before production selection and normalization.
+
+## 2026-06-02 Phase 2 data-localization fixer
+
+- Re-read the ROOT reduced sample index:
+  https://root.cern.ch/files/HiggsTauTauReduced/. The index lists exactly the
+  currently confirmed reduced files used here: Run2012B/C TauPlusX,
+  GluGluToHToTauTau, VBF_HToTauTau, DYJetsToLL, TTbar, and W1/W2/W3JetsToLNu.
+- Used the CMS Open Data workshop/object-ID context named by the user for the
+  same reduced sample coverage.
+- Used CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041,
+  and CMS Phys. Lett. B 779 (2018) 283,
+  DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373, to identify
+  paper-level MC/background components beyond the reduced mirror.
+- Retrieval decision: absent paper-level MC samples are non-blocking for the
+  current reduced-sample chain when explicitly listed in
+  `local_sample_manifest.json`, Phase 2 documentation, and final-AN
+  obligations.

@@ -105,3 +105,35 @@
   `phase2_exploration/outputs/EXPLORATION.md`, wrote executor self-review under
   `phase2_exploration/review/self/`, and preserved machine-readable inventory,
   diagnostics, preselection, separation, and figure outputs.
+
+## 2026-06-02 Phase 2 data-localization fixer
+
+- Read `agents/fixer.md` and `agents/executor.md` as the governing role
+  definitions for a targeted Phase 2 localization fix.
+- Created analysis-local `data/` and `mc/` directories for reduced ROOT files
+  and updated `.gitignore` so local ROOT data are not committed.
+- Started resumable downloads from
+  `https://root.cern.ch/files/HiggsTauTauReduced/` for all currently confirmed
+  reduced data and MC samples: Run2012B/C TauPlusX data; ggH and VBF H to tau
+  tau signal; DYJetsToLL, TTbar, and W1/W2/W3JetsToLNu backgrounds.
+- Added `phase2_exploration/src/localize_samples.py` and pixi task
+  `phase2-local-manifest` to validate local file sizes and `Events` tree
+  accessibility with uproot and to write
+  `phase2_exploration/outputs/local_sample_manifest.json`.
+- Updated `phase2_exploration/src/explore_samples.py` so Phase 2 exploration
+  prefers local `data/` and `mc/` files when present and falls back to the ROOT
+  HTTPS mirror otherwise.
+- DECISION: Paper-level MC components named or implied by CMS JHEP 05 (2014)
+  104 and CMS Phys. Lett. B 779 (2018) 283 but absent from the reduced mirror
+  do not block the current reduced-sample analysis. They are recorded as
+  `missing-reduced` or `deferred-AOD-conversion` and must be discussed as
+  limitations in the final analysis note and final summary. CONFIDENCE: HIGH.
+  FLAG FOR HUMAN: NO.
+- DECISION: Phase 3 must implement mutually exclusive sensitivity categories
+  inspired by CMS JHEP 05 (2014) 104 and CMS Phys. Lett. B 779 (2018) 283,
+  including VBF, boosted/1-jet, and 0-jet or non-VBF baseline categories where
+  reduced statistics support them, and must fit all retained categories
+  simultaneously. Required handles include jet multiplicity, `m_jj`,
+  `|Delta eta_jj|`, `pT_tautau` or a documented available proxy, b-tag/top
+  controls, and W/QCD control-region variables. CONFIDENCE: HIGH. FLAG FOR
+  HUMAN: NO.

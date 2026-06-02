@@ -8,3 +8,10 @@ __pycache__/
 
 # SLURM logs
 .slurm_*.out
+
+# Local Open Data copies
+data/*
+mc/*
+!data/.gitkeep
+!mc/.gitkeep
+*.root

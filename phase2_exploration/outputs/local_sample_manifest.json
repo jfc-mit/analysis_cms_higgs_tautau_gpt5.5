@@ -1,0 +1,555 @@
+{
+  "analysis": "higgs_tautau",
+  "created_utc": "2026-06-02",
+  "policy": "Use all currently available reduced 2012 CMS Open Data samples relevant to the mu tau_h H to tau tau analysis; defer full AOD conversion until a later phase explicitly needs it.",
+  "samples": [
+    {
+      "analysis_blocking": false,
+      "events": 3564750,
+      "expected_size_bytes": null,
+      "local_path": "data/Run2012B_TauPlusX.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "2012 TauPlusX collision data",
+      "role": "data",
+      "sample": "Run2012B_TauPlusX",
+      "size_bytes": 1088113510,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 5130317,
+      "expected_size_bytes": null,
+      "local_path": "data/Run2012C_TauPlusX.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "2012 TauPlusX collision data",
+      "role": "data",
+      "sample": "Run2012C_TauPlusX",
+      "size_bytes": 1549014154,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 47696,
+      "expected_size_bytes": null,
+      "local_path": "mc/GluGluToHToTauTau.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "ggH H to tau tau signal",
+      "role": "signal",
+      "sample": "GluGluToHToTauTau",
+      "size_bytes": 20460281,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/GluGluToHToTauTau.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 49165,
+      "expected_size_bytes": null,
+      "local_path": "mc/VBF_HToTauTau.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "VBF H to tau tau signal",
+      "role": "signal",
+      "sample": "VBF_HToTauTau",
+      "size_bytes": 24184554,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/VBF_HToTauTau.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 3045887,
+      "expected_size_bytes": null,
+      "local_path": "mc/DYJetsToLL.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "Drell-Yan Z/gamma* to ll background",
+      "role": "background",
+      "sample": "DYJetsToLL",
+      "size_bytes": 925979447,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/DYJetsToLL.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 642310,
+      "expected_size_bytes": null,
+      "local_path": "mc/TTbar.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "ttbar background",
+      "role": "background",
+      "sample": "TTbar",
+      "size_bytes": 353710208,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/TTbar.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 2978480,
+      "expected_size_bytes": null,
+      "local_path": "mc/W1JetsToLNu.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "W+1 jet background",
+      "role": "background",
+      "sample": "W1JetsToLNu",
+      "size_bytes": 1073460654,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/W1JetsToLNu.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 3069385,
+      "expected_size_bytes": null,
+      "local_path": "mc/W2JetsToLNu.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "W+2 jets background",
+      "role": "background",
+      "sample": "W2JetsToLNu",
+      "size_bytes": 1217271275,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/W2JetsToLNu.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "events": 1524114,
+      "expected_size_bytes": null,
+      "local_path": "mc/W3JetsToLNu.root",
+      "notes": "Downloaded reduced ROOT sample for current Phase 2/3 use.",
+      "process": "W+3 jets background",
+      "role": "background",
+      "sample": "W3JetsToLNu",
+      "size_bytes": 655005007,
+      "source_citation": "ROOT reduced sample index; CMS Open Data workshop object ID page; CERN Open Data reduced H to tau tau context.",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/W3JetsToLNu.root",
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/"
+      ],
+      "status": "downloaded",
+      "validation": {
+        "events_tree_open": true
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "Not listed in the reduced mirror. If the CMS Open Data portal has full AOD for additional TauPlusX eras, later phases should add them through an explicit AOD-to-reduced conversion rather than downloading AOD blindly.",
+      "process": "2012 TauPlusX collision data, other eras",
+      "role": "data",
+      "sample": "Run2012A_TauPlusX",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "Not listed in the reduced mirror. Later phases can add full-open-data TauPlusX eras only after confirming trigger/luminosity compatibility and a maintained conversion path.",
+      "process": "2012 TauPlusX collision data, other eras",
+      "role": "data",
+      "sample": "Run2012D_TauPlusX",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS JHEP 05 (2014) 104 models the dominant Z to tau tau contribution with embedded samples; no embedded reduced ROOT file is present in the ROOT mirror.",
+      "process": "embedded Z to tau tau dominant irreducible background",
+      "role": "background",
+      "sample": "DYJetsToTauTau_embedded",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "The reduced DYJetsToLL file is present, but no separate reduced fake-component files are listed. Phase 3 can derive components from DYJetsToLL generator/object matching if supported.",
+      "process": "Z to mumu/ee lepton-to-tau fake components",
+      "role": "background",
+      "sample": "DYJets_ZToMuMu_EE_fakes",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers estimate QCD from data control regions. No reduced QCD ROOT sample is present in the mirror; this should remain a data-driven same-sign/anti-isolation estimate.",
+      "process": "QCD multijet jet-to-tau fake background",
+      "role": "background",
+      "sample": "QCD_Multijet",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers include diboson backgrounds from simulation. No WW reduced file is present in the mirror; use AOD conversion only if needed.",
+      "process": "diboson background",
+      "role": "background",
+      "sample": "WW",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers include diboson backgrounds from simulation. No WZ reduced file is present in the mirror; use AOD conversion only if needed.",
+      "process": "diboson background",
+      "role": "background",
+      "sample": "WZ",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers include diboson backgrounds from simulation. No ZZ reduced file is present in the mirror; use AOD conversion only if needed.",
+      "process": "diboson background",
+      "role": "background",
+      "sample": "ZZ",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers include single-top-quark production from simulation. No reduced single-top file is present in the mirror; use AOD conversion only if needed.",
+      "process": "single top background",
+      "role": "background",
+      "sample": "SingleTop",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "The mirror provides W1/W2/W3 jet bins only. Later phases should determine whether W4/AOD is needed for jet-bin stitching or whether W3 is the available reduced endpoint.",
+      "process": "W+4 jet background",
+      "role": "background",
+      "sample": "W4JetsToLNu",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "The mirror provides exclusive W1/W2/W3 reduced files but no inclusive WJetsToLNu file.",
+      "process": "inclusive W+jets background",
+      "role": "background",
+      "sample": "WJetsToLNu_inclusive",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "The mirror provides only DYJetsToLL.root. Paper-level DY refinements must be derived from that file or deferred to AOD conversion.",
+      "process": "additional DY categories",
+      "role": "background",
+      "sample": "DYJets_jet_binned_or_mass_binned",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "missing-reduced",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS JHEP 05 (2014) 104 includes associated WH/ZH production in the broader analysis. The mirror has no WH reduced file; it is not required for the current mu tau_h baseline unless later categories target associated production.",
+      "process": "associated-production H to tau tau signal",
+      "role": "signal",
+      "sample": "WH_HToTauTau",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS JHEP 05 (2014) 104 includes associated WH/ZH production in the broader analysis. The mirror has no ZH reduced file; it is not required for the current mu tau_h baseline unless later categories target associated production.",
+      "process": "associated-production H to tau tau signal",
+      "role": "signal",
+      "sample": "ZH_HToTauTau",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS JHEP 05 (2014) 104 names ttH signal generation in the full MC program. The mirror has no ttH reduced file; it is not required for the current baseline categories.",
+      "process": "ttH H to tau tau signal",
+      "role": "signal",
+      "sample": "ttH_HToTauTau",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    },
+    {
+      "analysis_blocking": false,
+      "downstream_final_an_obligation": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "events": null,
+      "expected_size_bytes": null,
+      "local_path": null,
+      "notes": "CMS papers discuss H to WW contributions in some channels and coupling scans. No reduced HToWW file is present, and this mu tau_h baseline treats it as deferred.",
+      "process": "H to WW background or coupling-study signal component",
+      "role": "background",
+      "sample": "HToWW",
+      "size_bytes": null,
+      "source_citation": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041; CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373; phase1_strategy/outputs/STRATEGY.md and phase2_exploration/outputs/EXPLORATION.md",
+      "source_urls": [
+        "https://root.cern.ch/files/HiggsTauTauReduced/",
+        "https://doi.org/10.1007/JHEP05(2014)104",
+        "https://doi.org/10.1016/j.physletb.2018.02.004"
+      ],
+      "status": "deferred-AOD-conversion",
+      "validation": {
+        "events_tree_open": false
+      }
+    }
+  ],
+  "schema_version": 1,
+  "sources": {
+    "cms_2014": "CMS JHEP 05 (2014) 104, DOI:10.1007/JHEP05(2014)104, arXiv:1401.5041",
+    "cms_2018": "CMS Phys. Lett. B 779 (2018) 283, DOI:10.1016/j.physletb.2018.02.004, arXiv:1708.00373",
+    "cms_open_data_workshop": "https://cms-opendata-workshop.github.io/workshop-lesson-id-selection/",
+    "root_reduced_index": "https://root.cern.ch/files/HiggsTauTauReduced/"
+  }
+}
