@@ -312,3 +312,11 @@ outputs.
   selected-event/category/region consistency check with 108 comparisons using
   the independent region flags; trigger implementation assertion confirming the
   production mask uses only the primary TauPlusX trigger.
+
+## 2026-06-02T12:57:43Z
+
+Phase 4a expected-only model built from Phase 3 selected MC using official Open Data normalization. No real data signal-region observed result was used; the observation is background-only Asimov pseudo-data.
+
+## 2026-06-02T12:59:29Z
+
+Phase 4a expected-only model built from Phase 3 selected MC using official Open Data normalization. No real data signal-region observed result was used; the observation is background-only Asimov pseudo-data.

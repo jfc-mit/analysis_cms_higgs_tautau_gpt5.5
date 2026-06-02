@@ -30,7 +30,8 @@ Status key:
 - [x] [D6] DY/Z normalization uncertainty 10-15% for missing trigger/tau scale
   factors. Phase 4a implements a 15% DY/Z constrained normalization nuisance.
 - [x] [D7] pyhf-compatible HistFactory workspace with MC-stat bin terms.
-  Phase 4a creates `pyhf_workspace.json` with staterror modifiers.
+  Phase 4a creates `pyhf_workspace.json` with Barlow-Beeston-lite staterror
+  modifiers.
 - [x] [D8] Blinding. Phase 4a uses Asimov/pseudo-data only and does not use
   real signal-region observed results.
 - [D] [D9] Alternative observables and NN gates. Phase 3 downscoped the NN
@@ -77,8 +78,8 @@ Status key:
 - [D] Background shape: no real-data SR shape tuning or sideband-derived QCD
   shape in Phase 4a; shape systematics requiring unavailable variations are
   documented as limitations.
-- [x] MC statistics: Phase 4a includes per-sample, per-category staterror
-  modifiers.
+- [x] MC statistics: Phase 4a includes per-category Barlow-Beeston-lite
+  staterror modifiers.
 - [D] Detector/object calibration: tau efficiency/open-data acceptance is
   implemented as a sourced rate nuisance; full TES, muon, JES/JER, MET, b-tag,
   and pileup variations are downscoped pending citable reduced-sample inputs.
@@ -87,10 +88,10 @@ Status key:
 
 ## Phase 4a Validation Commitments
 
-- [ ] Expected CLs upper limit.
-- [ ] Signal injection at 0x, 1x, 2x, 5x.
-- [ ] Nuisance pull/constraint checks on Asimov.
-- [ ] Chi2/ndf and limited toy GoF.
-- [ ] Systematic completeness table versus conventions and reference analyses.
-- [ ] Machine-readable nominal templates/yields, workspace, expected summary,
-  systematics, injections, GoF, and limitations.
+- [x] Expected CLs upper limit. Phase 4a wrote `expected_results.json`.
+- [x] Signal injection at 0x, 1x, 2x, 5x. Phase 4a wrote `signal_injection.json`.
+- [x] Nuisance pull/constraint checks on Asimov. Phase 4a records fitted nuisance deltas in `expected_results.json`.
+- [x] Chi2/ndf and limited toy GoF. Phase 4a wrote `gof_validation.json`.
+- [x] Systematic completeness table versus conventions and reference analyses. Phase 4a wrote it in `systematics.json` and `INFERENCE_EXPECTED.md`.
+- [x] Machine-readable nominal templates/yields, workspace, expected summary,
+  systematics, injections, GoF, and limitations. Phase 4a populated `outputs/`.

@@ -1,0 +1,35 @@
+{
+  "all_pass": true,
+  "method": "Asimov pseudo-data injection generated from the nominal pyhf model",
+  "real_data_signal_region_used": false,
+  "rows": [
+    {
+      "absolute_bias": 0.0,
+      "fitted_mu": 0.0,
+      "injected_mu": 0.0,
+      "passes_20_percent_gate": true,
+      "relative_bias": 0.0
+    },
+    {
+      "absolute_bias": 0.0,
+      "fitted_mu": 1.0,
+      "injected_mu": 1.0,
+      "passes_20_percent_gate": true,
+      "relative_bias": 0.0
+    },
+    {
+      "absolute_bias": -0.001128623090238312,
+      "fitted_mu": 1.9988713769097617,
+      "injected_mu": 2.0,
+      "passes_20_percent_gate": true,
+      "relative_bias": -0.000564311545119156
+    },
+    {
+      "absolute_bias": -0.0007692210024705659,
+      "fitted_mu": 4.999230778997529,
+      "injected_mu": 5.0,
+      "passes_20_percent_gate": true,
+      "relative_bias": -0.0001538442004941132
+    }
+  ]
+}

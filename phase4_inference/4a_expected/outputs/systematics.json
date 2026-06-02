@@ -1,0 +1,147 @@
+{
+  "completeness_table": [
+    {
+      "cms_2014": "scale/PDF/UE/PS",
+      "cms_2018": "signal theory and acceptance",
+      "conventions": "required",
+      "source": "Signal cross-section theory",
+      "status": "downscoped",
+      "this": "normalization source recorded; dedicated theory NP downscoped"
+    },
+    {
+      "cms_2014": "tau/JES/MET/generator shape",
+      "cms_2018": "shape uncertainties in categories",
+      "conventions": "required",
+      "source": "Signal acceptance/shape",
+      "status": "partial",
+      "this": "tau/open-data acceptance rate NP only"
+    },
+    {
+      "cms_2014": "2.6% at 8 TeV",
+      "cms_2018": "luminosity NP",
+      "conventions": "pp normalization source",
+      "source": "Luminosity",
+      "status": "implemented",
+      "this": "2.6% normsys on MC-normalized samples"
+    },
+    {
+      "cms_2014": "inclusive Z plus category extrapolation",
+      "cms_2018": "DY control constraints",
+      "conventions": "background normalization",
+      "source": "DY/Z normalization",
+      "status": "implemented",
+      "this": "15% normsys on DYJetsToLL"
+    },
+    {
+      "cms_2014": "tau ID/trigger range in reference table",
+      "cms_2018": "tau ID/trigger effects",
+      "conventions": "object calibration",
+      "source": "Tau ID/trigger/open-data acceptance",
+      "status": "implemented",
+      "this": "15% correlated rate NP"
+    },
+    {
+      "cms_2014": "limited event counts",
+      "cms_2018": "bin-by-bin MC stat",
+      "conventions": "required",
+      "source": "MC statistics",
+      "status": "implemented",
+      "this": "per-category Barlow-Beeston-lite staterror modifiers"
+    },
+    {
+      "cms_2014": "data-driven estimate",
+      "cms_2018": "data-driven estimate",
+      "conventions": "background normalization and shape",
+      "source": "QCD multijet",
+      "status": "downscoped",
+      "this": "missing reduced sample; sideband deferred to data-validation phases"
+    },
+    {
+      "cms_2014": "high-mT control region",
+      "cms_2018": "mT control region",
+      "conventions": "background normalization",
+      "source": "W+jets transfer/control",
+      "status": "downscoped",
+      "this": "W1/W2/W3 MC only in expected SR model; real-data CR deferred"
+    },
+    {
+      "cms_2014": "included",
+      "cms_2018": "included",
+      "conventions": "analogous pp electroweak backgrounds",
+      "source": "Diboson and single top",
+      "status": "downscoped",
+      "this": "no reduced samples; omitted with explicit limitation"
+    }
+  ],
+  "downscoped": [
+    {
+      "impact": "Could shift m_vis templates; carried to AN limitations and Phase 4b/5 obligations.",
+      "name": "tau_energy_scale",
+      "reason": "No reduced-sample tau energy scale variation or citable scale-factor prescription was available in Phase 4a."
+    },
+    {
+      "impact": "Rate uncertainty partly covered by tau/open-data acceptance, but not separately measured.",
+      "name": "muon_efficiency_scale",
+      "reason": "No official reduced-file muon trigger/ID scale factors were available."
+    },
+    {
+      "impact": "VBF and boosted category acceptances may be understated.",
+      "name": "JES_JER_MET",
+      "reason": "No correction variation machinery or systematic-shifted reduced inputs exist in the localized files."
+    },
+    {
+      "impact": "Pileup remains a qualitative validation limitation.",
+      "name": "pileup",
+      "reason": "Phase 2 found PV_npvs but no pileup weights or pileup profile weights."
+    },
+    {
+      "impact": "Signal acceptance and theory-shape uncertainties are not separated.",
+      "name": "PDF_scale_UE_PS",
+      "reason": "No event-level PDF/scale weights or alternative generator samples exist in the reduced mirror."
+    },
+    {
+      "impact": "Instrumental fake component is omitted from expected-only workspace and carried as a major limitation.",
+      "name": "QCD_multijet",
+      "reason": "No reduced QCD MC exists and Phase 4a cannot use real-data sidebands to tune signal-region expectations."
+    },
+    {
+      "impact": "Expected sensitivity and background composition are incomplete relative to CMS paper-level analyses.",
+      "name": "diboson_single_top_W4_inclusive_W_associated_H_HWW_extra_DY",
+      "reason": "No corresponding reduced files are present in the localized Phase 2 manifest."
+    }
+  ],
+  "flat_systematic_justification": {
+    "dy_norm_open_data": "Phase 1 and user prompt require 10-15% because the reduced analysis lacks official trigger turn-on and tau scale factors; Phase 4a uses the high end before data unblinding.",
+    "tau_open_data_acceptance": "Phase 1 records CMS Run 1 tau ID/trigger variations in the 6-19% range and the reduced-file missing-scale-factor limitation; Phase 4a uses 15% as a predeclared open-data acceptance nuisance."
+  },
+  "implemented": [
+    {
+      "applies_to": "all MC-normalized samples",
+      "name": "lumi_2012",
+      "size": "2.6%",
+      "source": "CMS PAS LUM-13-001, recorded in phase3 normalization_inputs.json",
+      "type": "normsys"
+    },
+    {
+      "applies_to": "DYJetsToLL",
+      "name": "dy_norm_open_data",
+      "size": "15%",
+      "source": "Phase 1 [D6] and user-provided 10-15% requirement for missing trigger turn-on and tau efficiency scale factors",
+      "type": "normsys"
+    },
+    {
+      "applies_to": "all selected MC templates",
+      "name": "tau_open_data_acceptance",
+      "size": "15%",
+      "source": "Phase 1 [D5]/[L2], with CMS Run 1 tau ID/trigger reference range cited in STRATEGY.md",
+      "type": "normsys"
+    },
+    {
+      "applies_to": "all samples sharing one MC-stat modifier per category",
+      "name": "per-category staterror",
+      "size": "sqrt(sum of weights squared) per bin",
+      "source": "finite selected MC counts from phase3 selected_events.npz and official weights from normalization_inputs.json",
+      "type": "staterror"
+    }
+  ]
+}

@@ -16,3 +16,22 @@ fit using `conventions/search.md`.
 Wrote `phase4_inference/4a_expected/plan.md`. The plan defines the pyhf
 expected-only visible-mass model, machine-readable outputs, figures,
 validation checks, pixi tasks, and verification commands.
+
+## 2026-06-02T12:57:43Z
+
+Built Phase 4a weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact.
+
+## 2026-06-02T12:59:29Z
+
+Built Phase 4a weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact.
+
+## Phase 4a expected figures generated as PDF and PNG from machine-readable outputs.
+
+## 2026-06-02T13:00:00Z
+
+Verification completed. `pixi run phase4a-all` passed, including model
+generation, plotting, and validation. `pixi run lint-plots` passed with no
+violations in 10 scripts. A standalone `pixi run phase4a-validate` passed JSON,
+NPZ, pyhf workspace, figure, artifact, and blinding checks. `git diff --check`
+passed, and a source scan found no Phase 4a use of real Run2012/data
+signal-region observed results.

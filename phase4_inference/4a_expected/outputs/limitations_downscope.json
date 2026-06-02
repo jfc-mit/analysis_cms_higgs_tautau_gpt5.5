@@ -1,0 +1,103 @@
+{
+  "expected_only_blinding": "No real data signal-region observed result is used in Phase 4a.",
+  "missing_components": [
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "data",
+      "sample": "Run2012A_TauPlusX",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "data",
+      "sample": "Run2012D_TauPlusX",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "DYJetsToTauTau_embedded",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "DYJets_ZToMuMu_EE_fakes",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "QCD_Multijet",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "WW",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "WZ",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "ZZ",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "SingleTop",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "W4JetsToLNu",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "WJetsToLNu_inclusive",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "DYJets_jet_binned_or_mass_binned",
+      "status": "missing-reduced"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "signal",
+      "sample": "WH_HToTauTau",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "signal",
+      "sample": "ZH_HToTauTau",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "signal",
+      "sample": "ttH_HToTauTau",
+      "status": "deferred-AOD-conversion"
+    },
+    {
+      "expected_impact": "The final analysis note and final summary must name this unavailable paper-level component, state that no corresponding reduced 2012 CMS Open Data sample or suitable substitute was used, and discuss the limitation or expected impact on the reduced-sample analysis.",
+      "role": "background",
+      "sample": "HToWW",
+      "status": "deferred-AOD-conversion"
+    }
+  ],
+  "phase": "4a_expected",
+  "raw_phase3_validation_caveat": "Broad raw background-only templates were not final closure-validated predictions until normalization, missing-background treatment, QCD/control-region constraints, and nuisance modelling are implemented."
+}
