@@ -1,0 +1,19 @@
+{
+  "categories": {
+    "boosted": {
+      "expected_mu_sm": 1.0,
+      "n_parameters": 12.0,
+      "observed_mu_hat": 0.0
+    },
+    "vbf": {
+      "expected_mu_sm": 1.0,
+      "n_parameters": 13.0,
+      "observed_mu_hat": 1.4173492505791616
+    },
+    "zero_jet": {
+      "expected_mu_sm": 1.0,
+      "n_parameters": 12.0,
+      "observed_mu_hat": 7.9775704994093966
+    }
+  }
+}

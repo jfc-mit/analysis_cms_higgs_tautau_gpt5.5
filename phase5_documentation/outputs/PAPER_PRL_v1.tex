@@ -12,16 +12,12 @@
 
 \begin{abstract}
 A diagnostic search for Higgs boson decays to tau pairs is performed with
-CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  A Phase 5
-audit found that an initially selected BDT-score observed fit was not a valid
-evidence result because the score shape failed data validation.  The primary
-result is therefore a conservative visible-mass fit in VBF, boosted, and
-zero-jet categories with a same-sign data-driven QCD/fake template.  The fit
-gives $\hat\mu=0.438$, an observed 95\% CLs upper limit
-$\mu<10.764$, and a discovery diagnostic
-$Z=0.095$.  The BDT-score fit gives
-$\hat\mu=9.352$ and $\mu<14.837$ but
-is retained only as a flagged diagnostic, not as CMS-quality evidence.
+CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  The result
+uses a conservative visible-mass fit in VBF, boosted, and zero-jet categories
+with a same-sign data-driven QCD/fake template.  The fit gives
+$\mu=0.438^{+4.944}_{-0.438}$
+from the profile likelihood and an observed 95\% CLs upper limit
+$\mu<10.764$.
 \end{abstract}
 
 \maketitle
@@ -58,56 +54,70 @@ zero\_jet & 8451 & 8456.8 & 1569.6 & 14.34 \\
 \end{ruledtabular}
 \end{table}
 
+\begin{table*}[t]
+\caption{Comparison of the reduced open-data results with published and world
+reference context.  The open-data rows use only the localized 2012
+$\mu\tau_h$ reduced samples and are not direct reproductions of the
+multi-channel CMS or ATLAS+CMS analyses.}
+\begin{ruledtabular}
+\begin{tabular}{llll}
+Result & Scope & Significance & Signal-strength information \\
+This analysis & 8 TeV $\mu\tau_h$ reduced, visible mass & 0.095 & $\mu=0.438^{+4.944}_{-0.438}$, 95\% CLs $\mu<10.764$ \\
+CMS Run 1 & 7+8 TeV multi-channel & obs. 3.2, exp. 3.7 & $\mu=0.78\pm0.27$ \\
+CMS 2018 & 13 TeV multi-channel & obs. 4.9, exp. 4.7 & $\mu\simeq1.09$ \\
+CMS 2018 combined & CMS 7+8+13 TeV & obs. 5.9, exp. 5.9 & CMS combination context \\
+ATLAS+CMS Run 1 & 7+8 TeV global Higgs rates & global context & $\mu=1.09\pm0.11$ \\
+PDG/HXSWG SM & $H\to\tau\tau$ branching fraction & not a search & BR about 6.3\%, $\mu=1$ convention \\
+\end{tabular}
+\end{ruledtabular}
+\end{table*}
+
 \paragraph{Results.}
 The primary corrected workspace has median expected 95\% CLs limit
 $\mu<10.738$ and observed limit
 $\mu<10.764$.  The best fit is
-$\hat\mu=0.438$ with $Z=0.095$.
-This is the conservative final observed result.  The categorized BDT-score fit
-is shown only as a diagnostic because high-score residuals remain after the
-QCD/fake correction.
+$\mu=0.438^{+4.944}_{-0.438}$
+from the profile likelihood.  This is the conservative final observed result.
 
 \begin{figure}[t]
 \includegraphics[width=\linewidth]{figures/phase5_mu_limit_comparison.pdf}
 \caption{Signal-strength and limit comparison.  The primary open-data result
 is shown with expected bands and an observed marker following CMS-style limit
-plot conventions.  The BDT score row is flagged and the CMS publication rows
-are context, not direct validation targets.}
+plot conventions.  The CMS/ATLAS+CMS publication rows are context, and the
+narrow band at $\mu=1$ shows the PDG/Higgs-summary SM $H\to\tau\tau$
+normalization uncertainty.}
+\end{figure}
+
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figures/phase5_category_mu_comparison.pdf}
+\caption{Category signal-strength comparison for the primary visible-mass
+model.  The expected marker is the Standard Model value $\mu=1$ and the
+observed marker is the single-category profile-fit value; the quoted result
+remains the simultaneous three-category fit.}
 \end{figure}
 
 \begin{figure}[t]
 \includegraphics[width=\linewidth]{figures/observed_mvis_zero_jet.pdf}
 \caption{Primary visible-mass validation in the zero-jet category.  The
 same-sign QCD/fake estimate stabilizes the dominant zero-jet normalization,
-which was the main pathology in the original score-only observed result.}
-\end{figure}
-
-\paragraph{MVA diagnostics.}
-Histogram gradient boosting, an MLP neural network, and XGBoost were trained
-on selected simulation.  Their ROC curves and feature-importance diagnostics
-are retained to document the sensitivity study.  A transformer and the
-requested GenMET regression are downscoped because the fast attention stack and
-GenMET target are absent from the current reduced workflow.
-
-\begin{figure}[t]
-\includegraphics[width=\linewidth]{figures/phase5_mva_roc.pdf}
-\caption{Classifier ROC curves for the HGB, MLP neural-network, and XGBoost
-score columns on selected signal and background simulation.  These curves show
-MC separation power but do not validate observed score shapes.}
+which was the main pathology before the QCD/fake correction.}
 \end{figure}
 
 \paragraph{Comparison and interpretation.}
 CMS Run 1 reported evidence for $H\to\tau\tau$ with a best-fit signal strength
-of $0.78\pm0.27$, and CMS later observed the decay at 13 TeV with observed and
-expected significances of 4.9 and 4.7.  The present reduced open-data result is
-not a reproduction of those analyses: it uses fewer channels, a reduced public
-sample, limited calibrations, and a simplified background program.  Its value
-is methodological reproducibility, not an independent CMS-quality evidence
-claim.
+of $0.78\pm0.27$ and observed and expected significances of 3.2 and 3.7.  CMS
+later observed the decay at 13 TeV with observed and expected significances of
+4.9 and 4.7, and reported 5.9 standard deviations in the CMS combination.  The
+ATLAS+CMS Run 1 combination and PDG/Higgs-summary branching fraction provide
+global context but are not direct validation targets for this reduced
+single-channel analysis.  The present result is methodological reproducibility,
+not an independent CMS-quality evidence claim.
 
 \begin{thebibliography}{9}
 \bibitem{cms2014} CMS Collaboration, Evidence for the 125 GeV Higgs boson decaying to a pair of tau leptons, JHEP 05 (2014) 104.
 \bibitem{cms2018} CMS Collaboration, Observation of the SM scalar boson decaying to a pair of tau leptons, Phys. Lett. B 779 (2018) 283.
+\bibitem{atlascms2016} ATLAS and CMS Collaborations, Measurements of the Higgs boson production and decay rates and constraints on its couplings from a combined ATLAS and CMS analysis, JHEP 08 (2016) 045.
+\bibitem{pdg2024} Particle Data Group, Review of Particle Physics, Phys. Rev. D 110 (2024) 030001.
 \bibitem{opendata} CERN Open Data Portal, CMS Higgs to tau tau reduced samples for education and outreach.
 \bibitem{pyhf} L. Heinrich et al., pyhf: pure-Python implementation of HistFactory statistical models.
 \bibitem{cls} A. L. Read, Presentation of search results: the CLs technique.

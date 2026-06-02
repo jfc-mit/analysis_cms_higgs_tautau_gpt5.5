@@ -44,6 +44,8 @@ bin. For the primary visible-mass model this factor is
 `0.9958 ± 0.1201`.
 For the score diagnostic it is
 `0.8173 ± 0.0853`.
+For the add-MET mass cross-check it is
+`1.1612 ± 0.2466`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
@@ -77,6 +79,35 @@ template. This category is used in the final conservative observed fit.](figures
 normalization is stabilized by the same-sign QCD/fake estimate, making this
 model more defensible than the unvalidated score template for final observed
 reporting.](figures/observed_mvis_zero_jet.pdf){#fig:p4c-mvis-zero}
+
+## Add-MET Mass Cross-Check
+
+| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+| vbf | 77 | 99.03 | 21.47 | 0.778 | 0.632 | 1.34 |
+| boosted | 2177 | 2403.36 | 379.33 | 0.906 | 0.584 | 1.02 |
+| zero_jet | 8448 | 8722.42 | 1835.70 | 0.969 | 0.120 | 0.44 |
+
+The simultaneous add-MET mass fit gives `mu_hat = 0.0000`,
+an observed 95% CLs limit `mu < 13.2940`,
+and `Z = 0.0006`.
+This fit uses the same categories and nuisance model as the visible-mass
+primary fit, but it is kept as a separate cross-check rather than replacing
+the pre-existing primary result.
+
+![Add-MET mass validation in the VBF category. The plot compares full data to
+the QCD-corrected add-MET mass model in the VBF category. It uses the same W
+control scale, VBF background control scale, and same-sign QCD/fake transfer
+machinery as the visible-mass primary model.](figures/observed_addmet_vbf.pdf){#fig:p4c-addmet-vbf}
+
+![Add-MET mass validation in the boosted category. The plot compares full data
+to the add-MET mass model in the boosted category. The add-MET result is stored
+as an explicit Phase 4c cross-check output for downstream documentation.](figures/observed_addmet_boosted.pdf){#fig:p4c-addmet-boosted}
+
+![Add-MET mass validation in the zero-jet category. The plot compares full data
+to the add-MET mass model in the zero-jet category. This validates the
+alternative reconstructed-MET observable without modifying the primary
+visible-mass fit.](figures/observed_addmet_zero_jet.pdf){#fig:p4c-addmet-zero}
 
 ## Score-Template Diagnostic
 

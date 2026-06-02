@@ -208,3 +208,227 @@ Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
 ## milestone
 
 Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated MVA/NN ROC, AUC, permutation-importance, and transformer-feasibility figures.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated MVA/NN ROC, AUC, permutation-importance, and transformer-feasibility figures.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated MVA/NN ROC, AUC, permutation-importance, and transformer-feasibility figures.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated MVA/NN ROC, AUC, permutation-importance, and transformer-feasibility figures.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated per-category expected-vs-observed mu comparison for the primary visible-mass model.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated per-category expected-vs-observed mu comparison for the primary visible-mass model.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.
+
+## milestone
+
+Copied 126 upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Merged Phase 4c references into the Phase 5 bibliography.
+
+## milestone
+
+Generated CMS-style expected/observed signal-strength and significance comparison figures.
+
+## milestone
+
+Generated per-category expected-vs-observed mu comparison for the primary visible-mass model.
+
+## milestone
+
+Wrote Phase 5 final analysis note and PRL summary markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 audit-corrected summary to experiment_log.md.

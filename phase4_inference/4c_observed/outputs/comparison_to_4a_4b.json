@@ -1,4 +1,13 @@
 {
+  "addmet_comparison": {
+    "model": "addmet_mass_qcd_crosscheck",
+    "observable": "m_addmet",
+    "phase3_status": "retained as reconstructed-MET alternative observable after visible mass won the raw MC-only metric",
+    "phase4c_expected_median_limit": 13.842359360878032,
+    "phase4c_mu_hat": 0.0,
+    "phase4c_observed_limit": 13.29395673008472,
+    "validation_status": "flagged"
+  },
   "phase4a_expected": {
     "expected_discovery_z": 0.5264171907925044,
     "median_expected_limit": 4.199448081748937,

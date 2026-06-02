@@ -194,7 +194,8 @@ boosted/zero-jet categories. The same-sign QCD/fake estimate uses data
 minus non-QCD MC in the same-sign low-mT region and a transfer factor
 measured in the lowest fitted-observable bin. For the primary
 visible-mass model this factor is \texttt{0.9958\ ±\ 0.1201}. For the
-score diagnostic it is \texttt{0.8173\ ±\ 0.0853}.
+score diagnostic it is \texttt{0.8173\ ±\ 0.0853}. For the add-MET mass
+cross-check it is \texttt{1.1612\ ±\ 0.2466}.
 
 \needspace{0.4\textheight}
 \begin{figure}[htbp]
@@ -281,6 +282,83 @@ conservative observed fit.}\label{fig:p4c-mvis-boosted}
 zero-jet normalization is stabilized by the same-sign QCD/fake estimate,
 making this model more defensible than the unvalidated score template
 for final observed reporting.}\label{fig:p4c-mvis-zero}
+\end{figure}
+
+\needspace{4\baselineskip}
+\subsection{Add-MET Mass Cross-Check}\label{add-met-mass-cross-check}
+
+{\def\LTcaptype{none} % do not increment counter
+\vspace{1em}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}
+>{\raggedright\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1111}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 12\tabcolsep) * \real{0.1481}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Category
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Data
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Background
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+QCD/fake
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Data/background
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Chi2/ndf
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Max abs pull
+\end{minipage} \\
+\midrule\noalign{}
+vbf & 77 & 99.03 & 21.47 & 0.778 & 0.632 & 1.34 \\
+boosted & 2177 & 2403.36 & 379.33 & 0.906 & 0.584 & 1.02 \\
+zero\_jet & 8448 & 8722.42 & 1835.70 & 0.969 & 0.120 & 0.44 \\
+\end{tabular}
+\end{table}
+}
+
+The simultaneous add-MET mass fit gives \texttt{mu\_hat\ =\ 0.0000}, an
+observed 95\% CLs limit \texttt{mu\ \textless{}\ 13.2940}, and
+\texttt{Z\ =\ 0.0006}. This fit uses the same categories and nuisance
+model as the visible-mass primary fit, but it is kept as a separate
+cross-check rather than replacing the pre-existing primary result.
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Add-MET mass validation in the VBF category. The plot compares full data to the QCD-corrected add-MET mass model in the VBF category. It uses the same W control scale, VBF background control scale, and same-sign QCD/fake transfer machinery as the visible-mass primary model.}]{figures/observed_addmet_vbf.pdf}}
+\caption{Add-MET mass validation in the VBF category. The plot compares
+full data to the QCD-corrected add-MET mass model in the VBF category.
+It uses the same W control scale, VBF background control scale, and
+same-sign QCD/fake transfer machinery as the visible-mass primary
+model.}\label{fig:p4c-addmet-vbf}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Add-MET mass validation in the boosted category. The plot compares full data to the add-MET mass model in the boosted category. The add-MET result is stored as an explicit Phase 4c cross-check output for downstream documentation.}]{figures/observed_addmet_boosted.pdf}}
+\caption{Add-MET mass validation in the boosted category. The plot
+compares full data to the add-MET mass model in the boosted category.
+The add-MET result is stored as an explicit Phase 4c cross-check output
+for downstream documentation.}\label{fig:p4c-addmet-boosted}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Add-MET mass validation in the zero-jet category. The plot compares full data to the add-MET mass model in the zero-jet category. This validates the alternative reconstructed-MET observable without modifying the primary visible-mass fit.}]{figures/observed_addmet_zero_jet.pdf}}
+\caption{Add-MET mass validation in the zero-jet category. The plot
+compares full data to the add-MET mass model in the zero-jet category.
+This validates the alternative reconstructed-MET observable without
+modifying the primary visible-mass fit.}\label{fig:p4c-addmet-zero}
 \end{figure}
 
 \needspace{4\baselineskip}

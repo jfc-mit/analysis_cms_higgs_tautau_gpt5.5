@@ -459,3 +459,66 @@ Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-ma
 - Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
 - Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
 - Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+## 2026-06-02 Phase 4c add-MET objective item (c)
+
+PLAN: Implement a separate `m_addmet` simultaneous VBF/boosted/zero-jet pyhf fit using the current Phase 4c correction stack rather than replacing the visible-mass primary model or score diagnostic. Outputs will be add-MET-specific workspace/yield/template files, an `addmet` section in `observed_results.json`, validation plots, and validator coverage. Verified before coding that `m_addmet` exists in `phase3_selection/outputs/sensitivity_selected_events.npz`.
+
+RESULT: `pixi run phase4c-all` passed after adding the add-MET cross-check. The fit gives `mu_hat = 0.0000`, observed 95% CLs limit `13.2940`, median expected limit `13.8424`, and diagnostic `Z = 0.0006`; the add-MET validation status is `flagged` by the existing Phase 4c criteria.
+
+## 2026-06-02T17:44:17Z
+
+Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result mu=0.4382, observed limit=10.7645; score diagnostic mu=9.3518 remains flagged; add-MET cross-check mu=0.0000, observed limit=13.2940.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added the simultaneous add-MET mass fit to the final AN and PRL comparison narrative.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added the simultaneous add-MET mass fit to the final AN and PRL comparison narrative.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added the simultaneous add-MET mass fit to the final AN and PRL comparison narrative.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary visible-mass model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary visible-mass model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary visible-mass model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.

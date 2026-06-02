@@ -45,6 +45,7 @@ WJETS = ["W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
 QCD_SAMPLE = "QCDSameSignDataDriven"
 ALL_SAMPLES = SIGNALS + BACKGROUNDS + [QCD_SAMPLE]
 PRIMARY_VISIBLE_BINS = np.asarray([0.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0], dtype=float)
+ADDMET_BINS = np.asarray([0.0, 60.0, 80.0, 100.0, 120.0, 160.0, 220.0, 300.0], dtype=float)
 OBSERVED_DATA_SCOPE = (
     "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; "
     "11.467/fb is retained as the Open Data normalization reference"
@@ -67,6 +68,11 @@ def load_json(path: Path) -> dict[str, Any]:
 
 def load_selected() -> dict[str, np.ndarray]:
     with np.load(ROOT / "phase3_selection" / "outputs" / "sensitivity_selected_events.npz", allow_pickle=False) as payload:
+        if "m_addmet" not in payload.files:
+            raise KeyError(
+                "m_addmet is unavailable in phase3_selection/outputs/sensitivity_selected_events.npz; "
+                f"available columns are {sorted(payload.files)}"
+            )
         return {key: payload[key] for key in payload.files}
 
 
@@ -603,7 +609,7 @@ def build_model(
     }
 
 
-def compare_to_prior(primary: dict[str, Any], score: dict[str, Any], w_scale: dict[str, Any]) -> dict[str, Any]:
+def compare_to_prior(primary: dict[str, Any], score: dict[str, Any], addmet: dict[str, Any], w_scale: dict[str, Any]) -> dict[str, Any]:
     p4a = load_json(P4A / "expected_results.json")
     p4b_results = load_json(P4B / "partial_results.json")
     p4b_validation = load_json(P4B / "data_validation.json")
@@ -647,6 +653,15 @@ def compare_to_prior(primary: dict[str, Any], score: dict[str, Any], w_scale: di
             "phase4c_expected_median_limit": score_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])[2],
             "validation_status": score["validation"]["score_modeling_status"],
         },
+        "addmet_comparison": {
+            "model": addmet["key"],
+            "observable": addmet["observable"],
+            "phase3_status": "retained as reconstructed-MET alternative observable after visible mass won the raw MC-only metric",
+            "phase4c_mu_hat": addmet["fit"].get("mu_hat"),
+            "phase4c_observed_limit": addmet["fit"].get("observed_upper_limit", {}).get("observed_limit"),
+            "phase4c_expected_median_limit": addmet["fit"].get("observed_upper_limit", {}).get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])[2],
+            "validation_status": addmet["validation"]["score_modeling_status"],
+        },
     }
 
 
@@ -664,7 +679,7 @@ def save_npz(path: Path, model: dict[str, Any]) -> None:
     )
 
 
-def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
+def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], addmet: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
     primary_fit = primary["fit"]
     score_fit = score["fit"]
     primary_limit = primary_fit.get("observed_upper_limit", {})
@@ -677,6 +692,12 @@ def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], res
     for category in score["categories"]:
         val = score["validation"]["score_template_validation"][category]
         score_rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
+    addmet_fit = addmet["fit"]
+    addmet_limit = addmet_fit.get("observed_upper_limit", {})
+    addmet_rows = []
+    for category in addmet["categories"]:
+        val = addmet["validation"]["score_template_validation"][category]
+        addmet_rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
     content = f"""# Phase 4c Observed Inference: Audit-Corrected Full Data
 
 ## Summary
@@ -707,6 +728,8 @@ bin. For the primary visible-mass model this factor is
 `{primary['qcd']['transfer_sideband']['scale_factor']:.4f} ± {primary['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 For the score diagnostic it is
 `{score['qcd']['transfer_sideband']['scale_factor']:.4f} ± {score['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
+For the add-MET mass cross-check it is
+`{addmet['qcd']['transfer_sideband']['scale_factor']:.4f} ± {addmet['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
@@ -738,6 +761,33 @@ template. This category is used in the final conservative observed fit.](figures
 normalization is stabilized by the same-sign QCD/fake estimate, making this
 model more defensible than the unvalidated score template for final observed
 reporting.](figures/observed_mvis_zero_jet.pdf){{#fig:p4c-mvis-zero}}
+
+## Add-MET Mass Cross-Check
+
+| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(addmet_rows)}
+
+The simultaneous add-MET mass fit gives `mu_hat = {addmet_fit.get('mu_hat', float('nan')):.4f}`,
+an observed 95% CLs limit `mu < {addmet_limit.get('observed_limit', float('nan')):.4f}`,
+and `Z = {addmet_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
+This fit uses the same categories and nuisance model as the visible-mass
+primary fit, but it is kept as a separate cross-check rather than replacing
+the pre-existing primary result.
+
+![Add-MET mass validation in the VBF category. The plot compares full data to
+the QCD-corrected add-MET mass model in the VBF category. It uses the same W
+control scale, VBF background control scale, and same-sign QCD/fake transfer
+machinery as the visible-mass primary model.](figures/observed_addmet_vbf.pdf){{#fig:p4c-addmet-vbf}}
+
+![Add-MET mass validation in the boosted category. The plot compares full data
+to the add-MET mass model in the boosted category. The add-MET result is stored
+as an explicit Phase 4c cross-check output for downstream documentation.](figures/observed_addmet_boosted.pdf){{#fig:p4c-addmet-boosted}}
+
+![Add-MET mass validation in the zero-jet category. The plot compares full data
+to the add-MET mass model in the zero-jet category. This validates the
+alternative reconstructed-MET observable without modifying the primary
+visible-mass fit.](figures/observed_addmet_zero_jet.pdf){{#fig:p4c-addmet-zero}}
 
 ## Score-Template Diagnostic
 
@@ -833,11 +883,22 @@ def main() -> None:
         "hgb_score_qcd_diagnostic",
         "Categorized BDT-score diagnostic; not promoted because score-shape validation remains flagged.",
     )
+    addmet = build_model(
+        selected,
+        weights,
+        categories,
+        ADDMET_BINS,
+        "m_addmet",
+        w_scale,
+        vbf_scale,
+        "addmet_mass_qcd_crosscheck",
+        "Separate add-MET mass cross-check fit with the same Phase 4c correction and nuisance model.",
+    )
 
     results = {
         "phase": "4c_observed",
         "primary_model": "visible_mass_qcd_primary",
-        "diagnostic_models": ["hgb_score_qcd_diagnostic"],
+        "diagnostic_models": ["hgb_score_qcd_diagnostic", "addmet_mass_qcd_crosscheck"],
         "model": load_json(P4A / "expected_results.json")["model"],
         "audit_correction": {
             "reason": "Large expected/observed discrepancy traced to missing reducible QCD/fake background and unvalidated BDT score-shape modelling.",
@@ -859,17 +920,32 @@ def main() -> None:
             "vbf_background_control": f"{vbf_scale['relative_uncertainty']:.6g} relative from VBF-like top-btag non-signal CR",
             "qcd_ss_transfer_primary": f"{primary['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
             "qcd_ss_transfer_score": f"{score['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
+            "qcd_ss_transfer_addmet": f"{addmet['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
         },
         "wjets_high_mt_scale": w_scale,
         "vbf_background_scale": vbf_scale,
         "qcd_sideband_estimates": {
             "visible_mass_qcd_primary": primary["qcd"],
             "hgb_score_qcd_diagnostic": score["qcd"],
+            "addmet_mass_qcd_crosscheck": addmet["qcd"],
         },
         "validation_summary": primary["validation"],
         "score_diagnostic_validation_summary": score["validation"],
+        "addmet_validation_summary": addmet["validation"],
         "observed_fit": primary["fit"],
         "score_diagnostic_fit": score["fit"],
+        "addmet_observed_fit": addmet["fit"],
+        "addmet": {
+            "model": "addmet_mass_qcd_crosscheck",
+            "role": "separate cross-check fit; does not replace visible-mass primary or score diagnostic",
+            "observable": addmet["observable"],
+            "binning": addmet["edges"],
+            "workspace": "pyhf_workspace_addmet.json",
+            "yields": "addmet_observed_yields.json",
+            "templates": "addmet_observed_templates.npz",
+            "validation_summary": addmet["validation"],
+            "observed_fit": addmet["fit"],
+        },
         "models": {
             "visible_mass_qcd_primary": {
                 "observable": primary["observable"],
@@ -883,34 +959,48 @@ def main() -> None:
                 "validation_summary": score["validation"],
                 "observed_fit": score["fit"],
             },
+            "addmet_mass_qcd_crosscheck": {
+                "observable": addmet["observable"],
+                "binning": addmet["edges"],
+                "validation_summary": addmet["validation"],
+                "observed_fit": addmet["fit"],
+            },
         },
     }
-    comparison = compare_to_prior(primary, score, w_scale)
+    comparison = compare_to_prior(primary, score, addmet, w_scale)
 
     save_npz(OUT / "observed_templates.npz", primary)
     save_npz(OUT / "score_observed_templates.npz", score)
+    save_npz(OUT / "addmet_observed_templates.npz", addmet)
     write_json(OUT / "observed_yields.json", primary["yields"])
     write_json(OUT / "score_observed_yields.json", score["yields"])
+    write_json(OUT / "addmet_observed_yields.json", addmet["yields"])
     write_json(OUT / "wjets_highmt_scale_full.json", w_scale)
     write_json(OUT / "vbf_background_scale.json", vbf_scale)
     write_json(OUT / "qcd_sideband_estimates.json", results["qcd_sideband_estimates"])
     write_json(OUT / "comparison_to_4a_4b.json", comparison)
     write_json(OUT / "pyhf_workspace_observed.json", primary["workspace"])
     write_json(OUT / "pyhf_workspace_score_diagnostic.json", score["workspace"])
+    write_json(OUT / "pyhf_workspace_addmet.json", addmet["workspace"])
     write_json(OUT / "observed_results.json", results)
-    write_markdown_artifacts(primary, score, results, comparison, w_scale)
-    append_log(LOG, "Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.")
+    write_markdown_artifacts(primary, score, addmet, results, comparison, w_scale)
+    append_log(LOG, "Built Phase 4c audit-corrected primary visible-mass/QCD result, flagged categorized-score diagnostic, and separate add-MET mass cross-check fit.")
     primary_mu = primary["fit"].get("mu_hat")
     primary_limit = primary["fit"].get("observed_upper_limit", {}).get("observed_limit")
     score_mu = score["fit"].get("mu_hat")
+    addmet_mu = addmet["fit"].get("mu_hat")
+    addmet_limit = addmet["fit"].get("observed_upper_limit", {}).get("observed_limit")
     primary_mu_text = f"{primary_mu:.4f}" if primary_mu is not None else "not_evaluated"
     primary_limit_text = f"{primary_limit:.4f}" if primary_limit is not None else "not_evaluated"
     score_mu_text = f"{score_mu:.4f}" if score_mu is not None else "not_evaluated"
+    addmet_mu_text = f"{addmet_mu:.4f}" if addmet_mu is not None else "not_evaluated"
+    addmet_limit_text = f"{addmet_limit:.4f}" if addmet_limit is not None else "not_evaluated"
     append_log(
         EXPERIMENT_LOG,
         "Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result "
         f"mu={primary_mu_text}, observed limit={primary_limit_text}; "
-        f"score diagnostic mu={score_mu_text} remains flagged.",
+        f"score diagnostic mu={score_mu_text} remains flagged; "
+        f"add-MET cross-check mu={addmet_mu_text}, observed limit={addmet_limit_text}.",
     )
 
 
