@@ -61,3 +61,18 @@
   CMS 2014 global/channel/category/control comparators, CMS 2018 caveated
   comparisons, ATLAS+CMS/PDG/world-average rows, VBF/non-VBF sensitivity, and
   alternative-observable comparisons.
+
+## 2026-06-02 Phase 2 executor
+
+- Started Phase 2 exploration execution using `agents/executor.md` as the
+  governing role definition and `agents/README.md` for review/activation
+  context.
+- Read Phase 2 instructions, upstream Phase 1 strategy, Open Data access
+  instructions, experiment/retrieval logs, and the required methodology,
+  coding, tooling, and plotting references.
+- DECISION: Treat Phase 1 [D1] as binding and perform Phase 2 as a
+  search/template-fit exploration for CMS H to tau tau in mu tau_h, despite
+  `phase2_exploration/CLAUDE.md` still saying measurement. CONFIDENCE: HIGH.
+  FLAG FOR HUMAN: NO.
+- Produced `phase2_exploration/plan.md` before ROOT file access or script
+  writing.
