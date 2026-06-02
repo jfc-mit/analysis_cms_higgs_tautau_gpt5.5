@@ -332,16 +332,17 @@ triggers. The quality caveats are:
 
 ## PDF Build Test
 
-The independent Phase 2 PDF stub test did not pass. The exact command was
-`pixi run build-pdf`. Pandoc and `postprocess_tex.py` ran, but the task failed
-with `tectonic: command not found`; a direct check also found no `pdflatex` in
-the pixi environment. The build task additionally emitted a citeproc warning
-because it does not pass `--bibliography=references.bib`.
+The independent Phase 2 PDF stub test now passes. The exact command was
+`pixi run build-pdf`. The pixi environment includes `tectonic`, and the
+`build-pdf` task passes `--bibliography=references.bib` together with
+`--citeproc` before running `postprocess_tex.py` and `tectonic`.
 
-Phase 3 or Phase 5 must add a TeX engine to `pixi.toml` and repair the build
-task bibliography argument before the analysis-note PDF gates. The temporary
-stub markdown, generated TeX, and temporary BibTeX entry were removed after the
-test.
+No real `phase5_documentation/outputs/ANALYSIS_NOTE_5_v1.md` existed during
+the test, so a temporary pandoc-compatible stub markdown file with inline math
+was created, compiled, and removed along with its generated `.tex` and `.pdf`.
+The repository `references.bib` currently contains no citation entries, so the
+stub could not cite a real key from that file; the build-task bibliography
+wiring was nevertheless exercised against the existing bibliography file.
 
 ## Strategy Revision Inputs
 
@@ -360,8 +361,8 @@ test.
 4. Phase 1 expected production normalization in later phases. Phase 2 found no
    embedded event weights or xsec/lumi metadata. Phase 3 must resolve external
    normalization inputs before production templates or pyhf workspaces.
-5. The PDF toolchain is incomplete because no TeX engine is installed in pixi
-   and the build task does not pass the bibliography file.
+5. The PDF toolchain has been repaired for the Phase 2 stub test: `tectonic`
+   is installed through pixi and `build-pdf` passes `references.bib`.
 
 ## Code Reference
 
@@ -372,7 +373,7 @@ Commands run:
 | `pixi run phase2-explore` | Completed after reducing the prototype to 5k events per sample. |
 | `pixi run phase2-plots` | Completed after replacing unavailable `mplhep.plot.mpl_magic` with a local helper. |
 | `pixi run lint-plots` | Passed with no violations in two scripts. |
-| `pixi run build-pdf` | Failed: `tectonic: command not found`; `pdflatex` also absent. |
+| `pixi run build-pdf` | Passed on a temporary Phase 5 stub note after adding `tectonic` and `--bibliography=references.bib`; stub outputs were removed. |
 
 Machine-readable outputs:
 
@@ -400,6 +401,6 @@ Scripts:
   single-variable separation ranking.
 - Baseline yields: raw 5k-slice preselection yields produced; normalized yields
   blocked by missing external xsec/lumi/weight inputs.
-- PDF build: attempted and failed due missing TeX engine; blocker documented.
+- PDF build: passed on a temporary stub with the repaired pixi TeX toolchain.
 - Experiment log and session log: updated throughout.
 - Plot lint: `pixi run lint-plots` passed.

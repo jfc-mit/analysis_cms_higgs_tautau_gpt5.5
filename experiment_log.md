@@ -164,3 +164,19 @@
 - Verification: `pixi run phase2-plots` completed; `pixi run lint-plots`
   passed with "No plotting violations found in 3 file(s)." No ROOT files were
   touched and no new data processing was run.
+
+## 2026-06-02 Phase 2 PDF toolchain fixer
+
+- Read `agents/fixer.md`, the Phase 2 artifact, Phase 2 self-review,
+  `pixi.toml`, `phase5_documentation/outputs/references.bib`, and this
+  experiment log before making scoped PDF toolchain changes.
+- RESOLVED: Added `tectonic` to the pixi conda-forge dependencies because the
+  existing `build-pdf` task invokes `tectonic`.
+- RESOLVED: Updated `build-pdf` to pass `--bibliography=references.bib` with
+  `--citeproc` when compiling `ANALYSIS_NOTE_5_v1.md`.
+- Ran `pixi install`; the default environment installed successfully.
+- Verified `pixi run build-pdf` on a temporary Phase 5 stub note. The command
+  exited successfully and wrote `ANALYSIS_NOTE_5_v1.pdf`; the temporary stub
+  markdown, generated TeX, and generated PDF were then removed. The existing
+  `references.bib` file contains no citation entries, so the stub used inline
+  math but no real citation key.

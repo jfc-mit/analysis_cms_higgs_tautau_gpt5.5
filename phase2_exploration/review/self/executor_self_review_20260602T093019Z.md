@@ -4,9 +4,8 @@
 
 PASS WITH DOCUMENTED LIMITATIONS for Phase 2 exploration. The primary artifact
 exists, the sample inventory and data archaeology are machine-readable, figures
-were produced as PDF and PNG, and plot lint passes. The PDF build test failed
-for an environment/toolchain reason that is explicitly documented as a
-downstream blocker.
+were produced as PDF and PNG, plot lint passes, and the PDF build stub now
+passes after the pixi PDF toolchain was repaired.
 
 ## Checks
 
@@ -20,7 +19,7 @@ downstream blocker.
 | Baseline preselection | Pass | Raw 5k-slice yields produced for loose, OS low-mT, high-mT, VBF-like, and same-sign regions. |
 | Variable survey | Pass | First-candidate diagnostics and MC AUC ranking produced. |
 | Figures | Pass with caveat | 13 PDF/PNG pairs produced and linted. Visible mass has a low-mass spike that is flagged as a candidate-cleaning warning. |
-| PDF build stub | Fail documented | `pixi run build-pdf` failed because `tectonic` and `pdflatex` are absent; task also lacks bibliography argument. |
+| PDF build stub | Pass | `pixi run build-pdf` passed on a temporary stub after adding `tectonic` to pixi and `--bibliography=references.bib` to the task. `references.bib` currently has no citation keys, so the stub used math but no citation. |
 | Experiment/session logs | Pass | Logs updated with access path, stalled run, fallback, command outcomes, and blockers. |
 
 ## Required Follow-Up Before Phase 3 Production
@@ -32,5 +31,5 @@ downstream blocker.
 - Mask isolation and b-tag sentinel values before MVA or selection use.
 - Rebuild visible-mass and variable-input comparisons after final Phase 3
   candidate arbitration.
-- Install or configure a TeX engine and add `--bibliography=references.bib` to
-  the build task before any PDF gate.
+- Populate `references.bib` with real citation entries before analysis-note
+  citation checks; the PDF toolchain itself now compiles a stub successfully.
