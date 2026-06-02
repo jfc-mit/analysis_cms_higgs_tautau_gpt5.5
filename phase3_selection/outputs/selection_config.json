@@ -37,5 +37,14 @@
     "idAntiMuTight_required": true,
     "idIsoTight_required": true,
     "pt_min_gev": 20.0
+  },
+  "trigger": {
+    "available_alternatives_not_used": [
+      "HLT_IsoMu24",
+      "HLT_IsoMu24_eta2p1"
+    ],
+    "data_stream": "TauPlusX",
+    "policy": "Require only the TauPlusX primary muon+tau trigger for all Phase 3 analysis regions. The single-muon triggers are present in the reduced files but intentionally excluded because they define a different higher-pT muon phase space.",
+    "required": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20"
   }
 }

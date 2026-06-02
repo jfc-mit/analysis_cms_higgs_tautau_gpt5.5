@@ -179,12 +179,13 @@
   "signal_formula": "w = sigma_prod * BR(H->tautau) * L_int / N_gen",
   "status": "normalization_provenance_resolved_for_phase3_inputs",
   "trigger_stream": {
-    "alternative_trigger_note": "Single-muon triggers imply a different higher-pT muon phase space and are not interchangeable with the TauPlusX tutorial normalization without a separate selection definition.",
-    "available_alternatives": [
+    "alternative_trigger_note": "Single-muon triggers imply a different higher-pT muon phase space and are intentionally excluded from this TauPlusX selection definition.",
+    "available_alternatives_not_used": [
       "HLT_IsoMu24",
       "HLT_IsoMu24_eta2p1"
     ],
     "data_stream": "TauPlusX",
-    "primary_trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20"
+    "primary_trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
+    "selection_policy": "Phase 3 requires the primary TauPlusX trigger only."
   }
 }

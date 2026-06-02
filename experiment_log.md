@@ -284,3 +284,31 @@ outputs.
 - Verification passed: `pixi run py phase2_exploration/src/localize_samples.py`;
   `pixi run py - <<'PY' ... JSON and normalization metadata checks ... PY`;
   `pixi run lint-plots`; `git diff --check`.
+
+# 2026-06-02T12:18:28Z - Phase 3 TauPlusX trigger fixer
+
+- Addressed the Category A trigger finding from
+  `phase3_critical_rereview_20260602T121544Z.md`: Phase 3 no longer ORs
+  `HLT_IsoMu24_eta2p1` or `HLT_IsoMu24` into the analysis trigger selection.
+- Before policy: selected events passed `HLT_IsoMu24_eta2p1` OR `HLT_IsoMu24`
+  OR `HLT_IsoMu17_eta2p1_LooseIsoPFTau20`. After policy: all Phase 3 analysis
+  regions require only the TauPlusX primary trigger
+  `HLT_IsoMu17_eta2p1_LooseIsoPFTau20`.
+- Kept trigger provenance metadata in `selection_config.json` and
+  `normalization_inputs.json`: the single-muon triggers are available in the
+  reduced files but intentionally not used because they define a different
+  higher-pT muon phase space.
+- Reran `pixi run phase3-all`, regenerating `selected_events.npz`, cutflow,
+  category/region yields, variable modelling, approach comparison, and all
+  Phase 3 figures. New low-mT signal-region totals are data 10,758, signal MC
+  1,668, and background MC 8,402.
+- Updated `phase3_selection/outputs/SELECTION.md` with the primary-trigger
+  policy and regenerated yield/modeling numbers.
+- Corrected `region_yields.json` category bookkeeping so category counts are
+  defined on the same compact selected-event summary surface used by
+  `selected_events.npz`.
+- Verification passed: `pixi run phase3-all`; `pixi run lint-plots`;
+  `git diff --check`; JSON validity checks for 14 Phase 2/3 output JSON files;
+  selected-event/category/region consistency check with 108 comparisons using
+  the independent region flags; trigger implementation assertion confirming the
+  production mask uses only the primary TauPlusX trigger.

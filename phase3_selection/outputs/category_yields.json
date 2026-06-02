@@ -7,73 +7,73 @@
   "samples": {
     "DYJetsToLL": {
       "raw_counts": {
-        "boosted": 825,
+        "boosted": 802,
         "vbf": 34,
-        "zero_jet": 4673
+        "zero_jet": 4432
       },
       "role": "background"
     },
     "GluGluToHToTauTau": {
       "raw_counts": {
-        "boosted": 256,
+        "boosted": 249,
         "vbf": 23,
-        "zero_jet": 473
+        "zero_jet": 439
       },
       "role": "signal"
     },
     "Run2012B_TauPlusX": {
       "raw_counts": {
-        "boosted": 875,
-        "vbf": 35,
-        "zero_jet": 3300
+        "boosted": 858,
+        "vbf": 34,
+        "zero_jet": 3183
       },
       "role": "data"
     },
     "Run2012C_TauPlusX": {
       "raw_counts": {
-        "boosted": 1386,
-        "vbf": 48,
-        "zero_jet": 5483
+        "boosted": 1355,
+        "vbf": 45,
+        "zero_jet": 5283
       },
       "role": "data"
     },
     "TTbar": {
       "raw_counts": {
-        "boosted": 1541,
-        "vbf": 172,
-        "zero_jet": 91
+        "boosted": 1513,
+        "vbf": 170,
+        "zero_jet": 88
       },
       "role": "background"
     },
     "VBF_HToTauTau": {
       "raw_counts": {
-        "boosted": 516,
-        "vbf": 372,
-        "zero_jet": 100
+        "boosted": 499,
+        "vbf": 364,
+        "zero_jet": 94
       },
       "role": "signal"
     },
     "W1JetsToLNu": {
       "raw_counts": {
-        "boosted": 44,
-        "vbf": 5,
-        "zero_jet": 374
+        "boosted": 37,
+        "vbf": 4,
+        "zero_jet": 350
       },
       "role": "background"
     },
     "W2JetsToLNu": {
       "raw_counts": {
-        "boosted": 248,
-        "vbf": 17,
-        "zero_jet": 368
+        "boosted": 238,
+        "vbf": 16,
+        "zero_jet": 348
       },
       "role": "background"
     },
     "W3JetsToLNu": {
       "raw_counts": {
-        "boosted": 238,
-        "vbf": 18,
-        "zero_jet": 128
+        "boosted": 228,
+        "vbf": 16,
+        "zero_jet": 126
       },
       "role": "background"
     }

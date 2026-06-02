@@ -28,6 +28,8 @@ CHUNK_SIZE = 200_000
 LUMINOSITY_PB_INV = 11_467.0
 LUMINOSITY_FB_INV = 11.467
 LUMINOSITY_UNCERTAINTY_RELATIVE = 0.026
+PRIMARY_TRIGGER = "HLT_IsoMu17_eta2p1_LooseIsoPFTau20"
+AVAILABLE_ALTERNATIVE_TRIGGERS = ["HLT_IsoMu24", "HLT_IsoMu24_eta2p1"]
 
 SAMPLES = [
     {"name": "GluGluToHToTauTau", "path": ROOT / "mc" / "GluGluToHToTauTau.root", "role": "signal"},
@@ -86,6 +88,17 @@ CUTFLOW_STEPS = [
 ]
 
 CONFIG = {
+    "trigger": {
+        "data_stream": "TauPlusX",
+        "required": PRIMARY_TRIGGER,
+        "available_alternatives_not_used": AVAILABLE_ALTERNATIVE_TRIGGERS,
+        "policy": (
+            "Require only the TauPlusX primary muon+tau trigger for all Phase 3 "
+            "analysis regions. The single-muon triggers are present in the "
+            "reduced files but intentionally excluded because they define a "
+            "different higher-pT muon phase space."
+        ),
+    },
     "muon": {
         "pt_min_gev": 20.0,
         "eta_abs_max": 2.1,
@@ -291,9 +304,10 @@ def normalization_metadata() -> dict[str, object]:
         },
         "trigger_stream": {
             "data_stream": "TauPlusX",
-            "primary_trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
-            "available_alternatives": ["HLT_IsoMu24", "HLT_IsoMu24_eta2p1"],
-            "alternative_trigger_note": "Single-muon triggers imply a different higher-pT muon phase space and are not interchangeable with the TauPlusX tutorial normalization without a separate selection definition.",
+            "primary_trigger": PRIMARY_TRIGGER,
+            "selection_policy": "Phase 3 requires the primary TauPlusX trigger only.",
+            "available_alternatives_not_used": AVAILABLE_ALTERNATIVE_TRIGGERS,
+            "alternative_trigger_note": "Single-muon triggers imply a different higher-pT muon phase space and are intentionally excluded from this TauPlusX selection definition.",
         },
         "mc_samples": mc_records,
         "signal_content_rule": (
@@ -443,11 +457,7 @@ def clean_jet_variables(arrays: ak.Array, mu: dict[str, np.ndarray], tau: dict[s
 
 
 def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
-    trigger = (
-        (scalar(arrays, "HLT_IsoMu24_eta2p1", 0.0) > 0)
-        | (scalar(arrays, "HLT_IsoMu24", 0.0) > 0)
-        | (scalar(arrays, "HLT_IsoMu17_eta2p1_LooseIsoPFTau20", 0.0) > 0)
-    )
+    trigger = scalar(arrays, PRIMARY_TRIGGER, 0.0) > 0
     mu_iso = arrays["Muon_pfRelIso04_all"]
     mu_mask = (
         (arrays["Muon_pt"] > CONFIG["muon"]["pt_min_gev"])
@@ -597,7 +607,7 @@ def process_sample(sample: dict[str, object]) -> tuple[dict[str, int], dict[str,
         for region in ("signal", "w_high_mt", "qcd_same_sign", "z_rich", "top_btag_handle"):
             increment(counts, region, np.sum(derived[region] if region != "signal" else derived["low_mt"]))
         for category in ("vbf", "boosted", "zero_jet", "none"):
-            increment(counts, f"category_{category}", np.sum(derived["category"] == category))
+            increment(counts, f"category_{category}", np.sum(derived["keep_summary"] & (derived["category"] == category)))
         keep = derived["keep_summary"]
         summary = {key: value[keep] for key, value in derived.items() if key != "keep_summary"}
         n_keep = int(np.sum(keep))

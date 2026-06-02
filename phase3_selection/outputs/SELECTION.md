@@ -15,6 +15,12 @@ limitations: QCD/multijet MC, diboson, single top, embedded Z to tau tau,
 W4/inclusive W+jets, additional DY categories, associated Higgs production,
 and H to WW are not included or silently substituted.
 
+All analysis regions require the TauPlusX primary trigger
+`HLT_IsoMu17_eta2p1_LooseIsoPFTau20`. The reduced files also contain
+`HLT_IsoMu24` and `HLT_IsoMu24_eta2p1`, but those single-muon triggers define
+a different higher-pT muon phase space and are intentionally not ORed into the
+Phase 3 signal or control selections.
+
 ## Binding Decisions Addressed
 
 | Decision | Phase 3 implementation |
@@ -47,11 +53,12 @@ selected leptons. `Jet_btag < 0` is treated as an invalid sentinel, and the
 maximum valid b-tag score is retained as a top handle rather than as a
 calibrated b-tag decision.
 
-The signal-region candidate set requires a triggered muon-tau pair,
-opposite-sign charges, and `mT(mu,MET) < 40 GeV`. The W control region requires
-opposite-sign pairs with `mT(mu,MET) > 80 GeV`, the QCD sideband uses same-sign
-low-mT pairs, the Z-rich validation region uses opposite-sign low-mT events
-with `60 < m_vis < 120 GeV`, and the top handle requires a selected pair with a
+The signal-region candidate set requires a muon-tau pair passing
+`HLT_IsoMu17_eta2p1_LooseIsoPFTau20`, opposite-sign charges, and
+`mT(mu,MET) < 40 GeV`. The W control region requires opposite-sign pairs with
+`mT(mu,MET) > 80 GeV`, the QCD sideband uses same-sign low-mT pairs, the
+Z-rich validation region uses opposite-sign low-mT events with
+`60 < m_vis < 120 GeV`, and the top handle requires a selected pair with a
 positive valid b-tag score.
 
 The machine-readable event summary keeps overlapping region semantics
@@ -81,9 +88,9 @@ The raw selected yields are:
 
 | Role | VBF | Boosted/1-jet | Zero-jet |
 |---|---:|---:|---:|
-| Data | 83 | 2261 | 8783 |
-| Signal MC | 395 | 772 | 573 |
-| Background MC | 246 | 2896 | 5634 |
+| Data | 79 | 2213 | 8466 |
+| Signal MC | 387 | 748 | 533 |
+| Background MC | 240 | 2818 | 5344 |
 
 These categories are mutually exclusive by construction and are retained for a
 simultaneous Phase 4 fit. Inclusive plots are diagnostics only and are not an
@@ -96,16 +103,16 @@ data, so it is retained rather than merged at Phase 3.](figures/category_yields.
 
 ## Control and Validation Regions
 
-The W high-mT control region contains 4211 data events across Run2012B/C and
-6552 raw background MC events before any production normalization. This region
+The W high-mT control region contains 4023 data events across Run2012B/C and
+6283 raw background MC events before any production normalization. This region
 is prepared for Phase 4 W normalization but is not used to hand-scale W+jets in
 Phase 3.
 
-The same-sign QCD sideband contains 3227 data events and 1240 raw background
+The same-sign QCD sideband contains 3138 data events and 1200 raw background
 MC events. No reduced QCD MC exists, so this region is the available data
 handle for the instrumental QCD/fake contribution.
 
-The Z-rich validation region contains 5763 data events and 4617 raw background
+The Z-rich validation region contains 5514 data events and 4396 raw background
 MC events. It is retained to validate the DY/Z shape and category
 extrapolation under the documented missing scale-factor limitation.
 
@@ -176,8 +183,8 @@ selection variable.](figures/vbf_delta_eta_jj.pdf){#fig:p3-detajj}
 
 Two template-observable approaches were fully implemented and compared with a
 common diagnostic MC-only binned separation metric over the same exclusive
-categories. Visible mass gives a combined raw metric of 61.67, while add-MET
-mass gives 59.23. This comparison is not the Phase 1 [D9] expected-sensitivity
+categories. Visible mass gives a combined raw metric of 60.63, while add-MET
+mass gives 58.37. This comparison is not the Phase 1 [D9] expected-sensitivity
 gate: it uses raw unweighted MC counts and no nuisance-constrained likelihood.
 Visible mass remains the Phase 4 primary observable, and add-MET mass is
 retained as a cross-check/alternative template candidate whose formal expected
@@ -211,18 +218,18 @@ downscoped rather than used as a primary Phase 4 observable.](figures/mva_input_
 
 The pre-review validation mixed W high-mT, same-sign, Z-rich, and top-enriched
 handles into a single data-vs-background-MC shape test. That mixed union still
-fails for the primary visible mass with `chi2/ndf = 17.30` and for add-MET mass
-with `chi2/ndf = 43.38`, so the broad raw background model is not a final
+fails for the primary visible mass with `chi2/ndf = 17.98` and for add-MET mass
+with `chi2/ndf = 43.32`, so the broad raw background model is not a final
 closure test for Phase 4.
 
 Three concrete remediation attempts were run and written to
 `variable_modeling.json`. First, the validation/control handles were evaluated
 separately instead of mixing incompatible shapes: visible-mass `chi2/ndf` is
-3.28 in same-sign, 5.44 in the top b-tag handle, 2.24 in W high-mT, and 1.17 in
+3.27 in same-sign, 5.76 in the top b-tag handle, 2.40 in W high-mT, and 1.41 in
 Z-rich. Second, the mixed primary-observable union was rebinned coarsely; this
-did not improve closure (`chi2/ndf = 37.76` for visible mass). Third, the
+did not improve closure (`chi2/ndf = 38.92` for visible mass). Third, the
 Z-rich visible-mass window was evaluated as the DY shape handle and gives
-`chi2/ndf = 1.17` with 5763 data and 4617 raw background-MC events.
+`chi2/ndf = 1.41` with 5514 data and 4396 raw background-MC events.
 
 The Phase 3 conclusion is therefore scoped: the category definitions,
 selected-event flags, and Z-rich/W-handle shape diagnostics are usable inputs,

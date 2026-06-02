@@ -40,8 +40,8 @@
         151.25,
         160.0
       ],
-      "chi2": 964.0332863988413,
-      "chi2_ndf": 64.26888575992275,
+      "chi2": 957.9754166301823,
+      "chi2_ndf": 63.86502777534549,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -74,8 +74,8 @@
         1.9249999999999998,
         2.2
       ],
-      "chi2": 118.88321022500676,
-      "chi2_ndf": 7.925547348333784,
+      "chi2": 124.03016493308941,
+      "chi2_ndf": 8.268677662205961,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -107,8 +107,8 @@
         0.23333333333333334,
         0.25
       ],
-      "chi2": 514.2853939613392,
-      "chi2_ndf": 46.753217632849015,
+      "chi2": 503.98846024037573,
+      "chi2_ndf": 45.817132749125065,
       "decision": "remove_from_mva",
       "ndf": 11,
       "status": "evaluated",
@@ -141,8 +141,8 @@
         170.0,
         180.0
       ],
-      "chi2": 863.9367904270204,
-      "chi2_ndf": 57.59578602846803,
+      "chi2": 879.6623559062493,
+      "chi2_ndf": 58.644157060416624,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -175,8 +175,8 @@
         2.1875,
         2.5
       ],
-      "chi2": 165.5926869533748,
-      "chi2_ndf": 11.039512463558319,
+      "chi2": 167.1929412134501,
+      "chi2_ndf": 11.146196080896674,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -208,8 +208,8 @@
         4.666666666666666,
         5.0
       ],
-      "chi2": 10.987468474489441,
-      "chi2_ndf": 2.1974936948978883,
+      "chi2": 12.15323639642553,
+      "chi2_ndf": 2.430647279285106,
       "decision": "pass",
       "ndf": 5,
       "status": "evaluated",
@@ -246,8 +246,8 @@
         190.0,
         200.0
       ],
-      "chi2": 1532.8803065267193,
-      "chi2_ndf": 80.67791086982733,
+      "chi2": 1524.3872589381904,
+      "chi2_ndf": 80.23090836516792,
       "decision": "remove_from_mva",
       "ndf": 19,
       "status": "evaluated",
@@ -280,8 +280,8 @@
         150.0,
         160.0
       ],
-      "chi2": 1653.8741474989138,
-      "chi2_ndf": 110.25827649992759,
+      "chi2": 1631.2309772742087,
+      "chi2_ndf": 108.74873181828058,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -323,8 +323,8 @@
         240.0,
         250.0
       ],
-      "chi2": 397.9957079574415,
-      "chi2_ndf": 17.304161215540933,
+      "chi2": 413.4959827328584,
+      "chi2_ndf": 17.978086205776453,
       "decision": "remove_from_mva",
       "ndf": 23,
       "status": "evaluated",
@@ -371,8 +371,8 @@
         290.0,
         300.0
       ],
-      "chi2": 1171.3771465131797,
-      "chi2_ndf": 43.38433875974739,
+      "chi2": 1169.6572519088131,
+      "chi2_ndf": 43.32063895958567,
       "decision": "remove_from_mva",
       "ndf": 27,
       "status": "evaluated",
@@ -414,8 +414,8 @@
         240.0,
         250.0
       ],
-      "chi2": 1796.1155540889151,
-      "chi2_ndf": 74.83814808703814,
+      "chi2": 1804.8878303925112,
+      "chi2_ndf": 75.20365959968797,
       "decision": "remove_from_mva",
       "ndf": 24,
       "status": "evaluated",
@@ -440,8 +440,8 @@
         6.5,
         7.5
       ],
-      "chi2": 3590.829380994519,
-      "chi2_ndf": 512.9756258563599,
+      "chi2": 3557.3475639042263,
+      "chi2_ndf": 508.19250912917516,
       "decision": "remove_from_mva",
       "ndf": 7,
       "status": "evaluated",
@@ -482,8 +482,8 @@
         1150.0,
         1200.0
       ],
-      "chi2": 60.11927885786854,
-      "chi2_ndf": 2.613881689472545,
+      "chi2": 68.35617986315916,
+      "chi2_ndf": 2.9720078201373545,
       "decision": "pass",
       "ndf": 23,
       "status": "evaluated",
@@ -516,8 +516,8 @@
         7.5,
         8.0
       ],
-      "chi2": 27.63497023086057,
-      "chi2_ndf": 1.9739264450614693,
+      "chi2": 28.44291983576399,
+      "chi2_ndf": 2.0316371311259993,
       "decision": "pass",
       "ndf": 14,
       "status": "evaluated",
@@ -559,8 +559,8 @@
         240.0,
         250.0
       ],
-      "chi2": 308.43541495993486,
-      "chi2_ndf": 14.687400712377851,
+      "chi2": 323.12948025049064,
+      "chi2_ndf": 15.387118107166222,
       "decision": "remove_from_mva",
       "ndf": 21,
       "status": "evaluated",
@@ -597,8 +597,8 @@
         0.9000000000000001,
         1.0
       ],
-      "chi2": 3386.228300364724,
-      "chi2_ndf": 338.6228300364724,
+      "chi2": 3387.8205300718137,
+      "chi2_ndf": 338.7820530071814,
       "decision": "remove_from_mva",
       "ndf": 10,
       "status": "evaluated",
@@ -623,19 +623,19 @@
         "results": {
           "m_addmet": {
             "background_role": "background",
-            "chi2": 1171.3771465131797,
-            "chi2_ndf": 43.38433875974739,
-            "data_events": 17218,
-            "mc_events": 19267,
+            "chi2": 1169.6572519088131,
+            "chi2_ndf": 43.32063895958567,
+            "data_events": 16600,
+            "mc_events": 18592,
             "ndf": 27,
             "status": "evaluated"
           },
           "m_vis": {
             "background_role": "background",
-            "chi2": 397.9957079574415,
-            "chi2_ndf": 17.304161215540933,
-            "data_events": 17218,
-            "mc_events": 19267,
+            "chi2": 413.4959827328584,
+            "chi2_ndf": 17.978086205776453,
+            "data_events": 16600,
+            "mc_events": 18592,
             "ndf": 23,
             "status": "evaluated"
           }
@@ -649,19 +649,19 @@
           "qcd_same_sign": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 71.72959401671591,
-              "chi2_ndf": 2.6566516302487373,
-              "data_events": 3227,
-              "mc_events": 1240,
+              "chi2": 70.34272640326482,
+              "chi2_ndf": 2.6052861630838824,
+              "data_events": 3138,
+              "mc_events": 1200,
               "ndf": 27,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 75.45406008385022,
-              "chi2_ndf": 3.280611307993488,
-              "data_events": 3227,
-              "mc_events": 1240,
+              "chi2": 75.0965970096735,
+              "chi2_ndf": 3.2650694352031957,
+              "data_events": 3138,
+              "mc_events": 1200,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -669,19 +669,19 @@
           "top_btag_handle": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 333.59418156612196,
-              "chi2_ndf": 12.355340058004517,
-              "data_events": 6851,
-              "mc_events": 12776,
+              "chi2": 329.4112470975078,
+              "chi2_ndf": 12.200416559166955,
+              "data_events": 6689,
+              "mc_events": 12508,
               "ndf": 27,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 125.17781614759818,
-              "chi2_ndf": 5.442513745547747,
-              "data_events": 6851,
-              "mc_events": 12776,
+              "chi2": 132.57476499895887,
+              "chi2_ndf": 5.764120217346038,
+              "data_events": 6689,
+              "mc_events": 12508,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -689,19 +689,19 @@
           "w_high_mt": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 155.5144322047911,
-              "chi2_ndf": 7.775721610239555,
-              "data_events": 4211,
-              "mc_events": 6552,
+              "chi2": 170.9444770431192,
+              "chi2_ndf": 8.54722385215596,
+              "data_events": 4023,
+              "mc_events": 6283,
               "ndf": 20,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 51.456967618866315,
-              "chi2_ndf": 2.2372594616898396,
-              "data_events": 4211,
-              "mc_events": 6552,
+              "chi2": 55.30775692889263,
+              "chi2_ndf": 2.404685083864897,
+              "data_events": 4023,
+              "mc_events": 6283,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -709,19 +709,19 @@
           "z_rich": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 78.58754032304932,
-              "chi2_ndf": 3.416849579263014,
-              "data_events": 5763,
-              "mc_events": 4617,
+              "chi2": 77.40535341086016,
+              "chi2_ndf": 3.365450148298268,
+              "data_events": 5514,
+              "mc_events": 4396,
               "ndf": 23,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 5.829087442204911,
-              "chi2_ndf": 1.1658174884409822,
-              "data_events": 5763,
-              "mc_events": 4617,
+              "chi2": 7.047417530937078,
+              "chi2_ndf": 1.4094835061874156,
+              "data_events": 5514,
+              "mc_events": 4396,
               "ndf": 5,
               "status": "evaluated"
             }
@@ -735,19 +735,19 @@
         "results": {
           "m_addmet": {
             "background_role": "background",
-            "chi2": 1111.2050148817627,
-            "chi2_ndf": 123.46722387575142,
-            "data_events": 17218,
-            "mc_events": 19267,
+            "chi2": 1109.7159253179886,
+            "chi2_ndf": 123.30176947977651,
+            "data_events": 16600,
+            "mc_events": 18592,
             "ndf": 9,
             "status": "evaluated"
           },
           "m_vis": {
             "background_role": "background",
-            "chi2": 339.85090242462286,
-            "chi2_ndf": 37.76121138051365,
-            "data_events": 17218,
-            "mc_events": 19267,
+            "chi2": 350.2935954871888,
+            "chi2_ndf": 38.921510609687644,
+            "data_events": 16600,
+            "mc_events": 18592,
             "ndf": 9,
             "status": "evaluated"
           }
@@ -760,17 +760,17 @@
         "results": {
           "m_vis": {
             "background_role": "background",
-            "chi2": 5.829087442204911,
-            "chi2_ndf": 1.1658174884409822,
-            "data_events": 5763,
-            "mc_events": 4617,
+            "chi2": 7.047417530937078,
+            "chi2_ndf": 1.4094835061874156,
+            "data_events": 5514,
+            "mc_events": 4396,
             "ndf": 5,
             "status": "evaluated"
           }
         }
       }
     ],
-    "best_primary_m_vis_chi2_ndf": 1.1658174884409822,
+    "best_primary_m_vis_chi2_ndf": 1.4094835061874156,
     "phase4_blocker": null,
     "primary_m_vis_closure_validated_for_phase4": true
   }
