@@ -6,6 +6,7 @@ import json
 import logging
 import time
 from dataclasses import dataclass
+from importlib.util import find_spec
 from pathlib import Path
 from typing import Any
 
@@ -21,6 +22,11 @@ from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
 from sklearn.pipeline import make_pipeline
 from sklearn.preprocessing import StandardScaler
+
+try:
+    from xgboost import XGBClassifier
+except ImportError:  # pragma: no cover - environment-dependent optional model
+    XGBClassifier = None
 
 logging.basicConfig(
     level=logging.INFO,
@@ -48,6 +54,8 @@ ADDMET_BINS = np.asarray([0.0, 50.0, 70.0, 90.0, 110.0, 130.0, 160.0, 220.0, 320
 PT_TAUTAU_BINS = np.asarray([0.0, 25.0, 50.0, 75.0, 100.0, 130.0, 170.0, 250.0])
 MVA_SCORE_BINS = np.asarray([0.0, 0.20, 0.35, 0.50, 0.65, 0.78, 0.88, 0.94, 0.985, 1.0])
 MVA_COARSE_BINS = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 0.94, 1.0])
+MIN_EXPECTED_BACKGROUND_PER_BIN = 5.0
+MAX_STABLE_AUC_GAP = 0.20
 
 MVA_INPUTS = [
     "m_vis",
@@ -70,6 +78,7 @@ MVA_INPUTS = [
 
 MODEL_DISPLAY_LABELS = {
     "hist_gradient_boosting": "Gradient-boosted classifier",
+    "xgboost": "XGBoost classifier",
     "mlp": "Neural-network classifier",
 }
 
@@ -92,6 +101,10 @@ class ModelSpec:
     bins: np.ndarray
     description: str
     caveat: str | None = None
+    category_bins: dict[str, np.ndarray] | None = None
+    model_name: str | None = None
+    selection_role: str = "comparison"
+    sparse_bin_handling: dict[str, Any] | None = None
 
 
 def append_markdown(path: Path, message: str) -> None:
@@ -147,6 +160,28 @@ def model_display_label(name: str) -> str:
     return MODEL_DISPLAY_LABELS.get(name, name.replace("_", " ").title())
 
 
+def transformer_feasibility() -> dict[str, Any]:
+    stacks = {name: find_spec(name) is not None for name in ["torch", "tabpfn", "pytorch_tabular"]}
+    feasible = any(stacks.values())
+    return {
+        "tried": False,
+        "selected": False,
+        "available_stacks": stacks,
+        "decision": "not_attempted_missing_fast_stack",
+        "reason": (
+            "No lightweight transformer/attention stack is available in the current pixi environment. "
+            "Adding PyTorch or a tabular-transformer package would dominate this quick method update, "
+            "so the comparison uses already-available xgboost and sklearn tree/neural-network models."
+        )
+        if not feasible
+        else (
+            "A transformer-capable stack is present, but no maintained lightweight tabular-transformer "
+            "entry point was configured for this analysis; fast tree and neural-network candidates were "
+            "kept as the maintainable quick comparison."
+        ),
+    }
+
+
 def spec_display_label(name: str) -> str:
     if name == "baseline_phase4a_mvis":
         return "Visible mass baseline"
@@ -177,6 +212,146 @@ def spec_display_label(name: str) -> str:
         threshold = name.removeprefix("taupt_split_")
         return f"Tau pT scan, threshold {threshold} GeV"
     return name.replace("_", " ").title()
+
+
+def bins_for_category(spec: ModelSpec, category: str) -> np.ndarray:
+    if spec.category_bins is not None and category in spec.category_bins:
+        return spec.category_bins[category]
+    return spec.bins
+
+
+def weighted_background_bins(
+    selected: dict[str, np.ndarray],
+    labels: np.ndarray,
+    category: str,
+    observable: str,
+    bins: np.ndarray,
+    weights: dict[str, float],
+) -> np.ndarray:
+    total = np.zeros(len(bins) - 1, dtype=float)
+    for sample in BACKGROUNDS:
+        mask = (labels == category) & (selected["sample"] == sample)
+        counts, _ = np.histogram(selected[observable][mask].astype(float), bins=bins)
+        total += counts.astype(float) * weights[sample]
+    return total
+
+
+def merge_edges_for_background(
+    selected: dict[str, np.ndarray],
+    labels: np.ndarray,
+    categories: list[str],
+    observable: str,
+    initial_edges: np.ndarray,
+    weights: dict[str, float],
+) -> tuple[dict[str, np.ndarray], dict[str, Any]]:
+    category_edges: dict[str, np.ndarray] = {}
+    rows: dict[str, Any] = {}
+    for category in categories:
+        edges = [float(value) for value in initial_edges]
+        merges: list[dict[str, Any]] = []
+        while len(edges) > 2:
+            bins = np.asarray(edges, dtype=float)
+            background = weighted_background_bins(selected, labels, category, observable, bins, weights)
+            low = np.flatnonzero(background < MIN_EXPECTED_BACKGROUND_PER_BIN)
+            if low.size == 0:
+                break
+            idx = int(low[-1])
+            if idx == 0:
+                removed_edge_index = 1
+                merge_with = "next"
+            else:
+                removed_edge_index = idx
+                merge_with = "previous"
+            merges.append(
+                {
+                    "low_bin_index": idx,
+                    "low_bin_range": [float(edges[idx]), float(edges[idx + 1])],
+                    "low_bin_background": float(background[idx]),
+                    "removed_edge": float(edges[removed_edge_index]),
+                    "merged_with": merge_with,
+                }
+            )
+            del edges[removed_edge_index]
+        final_edges = np.asarray(edges, dtype=float)
+        final_background = weighted_background_bins(selected, labels, category, observable, final_edges, weights)
+        impossible = bool(len(final_edges) == 2 and np.any(final_background < MIN_EXPECTED_BACKGROUND_PER_BIN))
+        category_edges[category] = final_edges
+        rows[category] = {
+            "initial_edges": initial_edges.tolist(),
+            "merged_edges": final_edges.tolist(),
+            "merges": merges,
+            "merge_count": len(merges),
+            "background_bins": final_background.tolist(),
+            "min_background_bin": float(np.min(final_background)) if final_background.size else 0.0,
+            "passes_min_background": bool(np.all(final_background >= MIN_EXPECTED_BACKGROUND_PER_BIN)),
+            "impossible_to_satisfy": impossible,
+        }
+    return category_edges, {
+        "minimum_expected_background_per_fit_bin": MIN_EXPECTED_BACKGROUND_PER_BIN,
+        "method": "Iteratively merge the sparsest high-score bin with its adjacent lower-score bin, using expected MC background only.",
+        "categories": rows,
+        "all_pass": all(row["passes_min_background"] for row in rows.values()),
+    }
+
+
+def merge_common_edges_for_background(
+    selected: dict[str, np.ndarray],
+    labels: np.ndarray,
+    categories: list[str],
+    observable: str,
+    initial_edges: np.ndarray,
+    weights: dict[str, float],
+) -> tuple[np.ndarray, dict[str, Any]]:
+    edges = [float(value) for value in initial_edges]
+    merges: list[dict[str, Any]] = []
+    while len(edges) > 2:
+        bins = np.asarray(edges, dtype=float)
+        low_rows = []
+        for category in categories:
+            background = weighted_background_bins(selected, labels, category, observable, bins, weights)
+            for ibin, value in enumerate(background):
+                if value < MIN_EXPECTED_BACKGROUND_PER_BIN:
+                    low_rows.append((float(value), category, ibin))
+        if not low_rows:
+            break
+        value, category, idx = min(low_rows, key=lambda row: (row[0], -row[2]))
+        if idx == 0:
+            removed_edge_index = 1
+            merge_with = "next"
+        else:
+            removed_edge_index = idx
+            merge_with = "previous"
+        merges.append(
+            {
+                "category": category,
+                "low_bin_index": idx,
+                "low_bin_range": [float(edges[idx]), float(edges[idx + 1])],
+                "low_bin_background": value,
+                "removed_edge": float(edges[removed_edge_index]),
+                "merged_with": merge_with,
+            }
+        )
+        del edges[removed_edge_index]
+
+    final_edges = np.asarray(edges, dtype=float)
+    category_rows = {}
+    for category in categories:
+        background = weighted_background_bins(selected, labels, category, observable, final_edges, weights)
+        category_rows[category] = {
+            "background_bins": background.tolist(),
+            "min_background_bin": float(np.min(background)) if background.size else 0.0,
+            "passes_min_background": bool(np.all(background >= MIN_EXPECTED_BACKGROUND_PER_BIN)),
+        }
+    return final_edges, {
+        "minimum_expected_background_per_fit_bin": MIN_EXPECTED_BACKGROUND_PER_BIN,
+        "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+        "initial_edges": initial_edges.tolist(),
+        "merged_edges": final_edges.tolist(),
+        "merges": merges,
+        "merge_count": len(merges),
+        "categories": category_rows,
+        "all_pass": all(row["passes_min_background"] for row in category_rows.values()),
+    }
 
 
 def assign_baseline(selected: dict[str, np.ndarray]) -> np.ndarray:
@@ -272,6 +447,7 @@ def build_templates(
             values[isample, icat, :] = yld
             variances[isample, icat, :] = var
             per_sample[sample]["categories"][category] = {
+                "bin_edges": bins.tolist(),
                 "raw_counts": counts.tolist(),
                 "weighted_yields": yld.tolist(),
                 "sumw2": var.tolist(),
@@ -283,13 +459,17 @@ def build_templates(
     bkg_idx = [SAMPLES.index(sample) for sample in BACKGROUNDS]
     low_background_bins = 0
     populated_bins = 0
+    min_background_bins = []
     for icat, category in enumerate(categories):
         sig = np.sum(values[sig_idx, icat, :], axis=0)
         bkg = np.sum(values[bkg_idx, icat, :], axis=0)
         active = (sig + bkg) > 0
         low_background_bins += int(np.sum(active & (bkg < 5.0)))
         populated_bins += int(np.sum(active))
+        if np.any(active):
+            min_background_bins.append(float(np.min(bkg[active])))
         totals[category] = {
+            "bin_edges": bins.tolist(),
             "signal_bins": sig.tolist(),
             "background_bins": bkg.tolist(),
             "signal_total": float(np.sum(sig)),
@@ -309,6 +489,9 @@ def build_templates(
         "observable": spec.observable,
         "bin_edges": bins.tolist(),
         "categories": categories,
+        "model_name": spec.model_name,
+        "selection_role": spec.selection_role,
+        "sparse_bin_handling": getattr(spec, "sparse_bin_handling", None),
         "samples": per_sample,
         "totals": totals,
         "combined": {
@@ -319,6 +502,7 @@ def build_templates(
             "low_background_bins_lt5": low_background_bins,
             "populated_bins": populated_bins,
             "low_background_fraction": low_background_bins / populated_bins if populated_bins else None,
+            "min_background_bin": min(min_background_bins) if min_background_bins else 0.0,
         },
     }
     return summary, values, variances
@@ -495,6 +679,9 @@ def evaluate_spec(
                 "bin_edges": spec.bins.tolist(),
                 "description": spec.description,
                 "caveat": spec.caveat,
+                "model_name": spec.model_name,
+                "selection_role": spec.selection_role,
+                "sparse_bin_handling": spec.sparse_bin_handling,
             },
             "nuisance_mode": nuisance_mode,
             "templates": templates,
@@ -516,6 +703,9 @@ def evaluate_spec(
                 "bin_edges": spec.bins.tolist(),
                 "description": spec.description,
                 "caveat": spec.caveat,
+                "model_name": spec.model_name,
+                "selection_role": spec.selection_role,
+                "sparse_bin_handling": spec.sparse_bin_handling,
             },
             "nuisance_mode": nuisance_mode,
             "templates": templates,

@@ -1,3 +1,26 @@
+# 2026-06-02 Method update plan: category-preserving stronger score model
+
+User changed direction: do not update the Phase 4a note yet; directly replace
+the inclusive-score expected-primary model with a category-preserving
+score-template model. Plan:
+
+1. Inspect available fast model stacks and compare MC-only candidates without
+   using observed full-data signal-region distributions.
+2. Keep the Phase 3 VBF, boosted, and zero-jet categories as final pyhf
+   channels; within each channel use score-binned templates.
+3. Try a lightweight transformer/attention candidate only if the current pixi
+   environment supports it quickly. Otherwise document why it was not attempted
+   and compare the strongest fast available models, including xgboost and
+   sklearn tree ensembles.
+4. Merge adjacent score bins within each category until every expected
+   background fit bin has at least five events, unless impossible.
+5. Regenerate Phase 3 recommendation artifacts and Phase 4a expected-only
+   pyhf outputs, keeping the official Open Data luminosity, official MC N_gen
+   denominators, signal sigma_prod * BR normalization, TauPlusX trigger scope,
+   and background-only Asimov observations unchanged.
+6. Verify with the relevant pixi tasks, lint plots, whitespace check, and commit
+   with a conventional commit.
+
 # Experiment Log
 
 ## 2026-06-02 Orchestrator setup
