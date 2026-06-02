@@ -1,0 +1,37 @@
+{
+  "fit_comparison": {
+    "observed_limit_over_phase4a_median_expected": 3.1724627114213044,
+    "phase4a_median_expected_limit": 4.199448081748937,
+    "phase4b_diagnostic_mu_hat": 2.6207997991774064,
+    "phase4c_mu_hat": 7.6642019977187354,
+    "phase4c_observed_limit": 13.322592447898227
+  },
+  "phase4a_expected": {
+    "expected_discovery_z": 0.5264171907925044,
+    "median_expected_limit": 4.199448081748937
+  },
+  "phase4b_warning_carried": {
+    "combined_chi2_per_ndf": 1.732476743083468,
+    "combined_data_over_background": 1.2322415773867215,
+    "flags": {
+      "category_chi2_failure": false,
+      "combined_chi2_failure": false,
+      "combined_ratio_failure": true
+    },
+    "score_modeling_status": "flagged"
+  },
+  "score_validation_comparison": {
+    "phase4b_combined_chi2_per_ndf": 1.732476743083468,
+    "phase4b_combined_data_over_background": 1.2322415773867215,
+    "phase4c_combined_chi2_per_ndf": 3.217610280087735,
+    "phase4c_combined_data_over_background": 1.181643391253855,
+    "phase4c_score_modeling_status": "flagged"
+  },
+  "w_scale_comparison": {
+    "full_minus_10pct": 0.009524674590639659,
+    "phase4b_10pct_scale": 0.8433189889040035,
+    "phase4b_10pct_uncertainty": 0.08678270580662092,
+    "phase4c_full_scale": 0.8528436634946431,
+    "phase4c_full_uncertainty": 0.037049894579940935
+  }
+}

@@ -1,0 +1,338 @@
+% Options for packages loaded elsewhere
+\PassOptionsToPackage{unicode}{hyperref}
+\PassOptionsToPackage{hyphens}{url}
+\documentclass[
+]{article}
+\usepackage[margin=0.75in]{geometry}
+\usepackage{xcolor}
+\usepackage{amsmath,amssymb}
+\setcounter{secnumdepth}{5}
+\usepackage{iftex}
+\ifPDFTeX
+  \usepackage[T1]{fontenc}
+  \usepackage[utf8]{inputenc}
+  \usepackage{textcomp} % provide euro and other symbols
+\else % if luatex or xetex
+  \usepackage{unicode-math} % this also loads fontspec
+  \defaultfontfeatures{Scale=MatchLowercase}
+  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
+\fi
+\usepackage{lmodern}
+\ifPDFTeX\else
+  % xetex/luatex font selection
+\fi
+% Use upquote if available, for straight quotes in verbatim environments
+\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
+\IfFileExists{microtype.sty}{% use microtype if available
+  \usepackage[]{microtype}
+  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
+}{}
+\makeatletter
+\@ifundefined{KOMAClassName}{% if non-KOMA class
+  \IfFileExists{parskip.sty}{%
+    \usepackage{parskip}
+  }{% else
+    \setlength{\parindent}{0pt}
+    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
+}{% if KOMA class
+  \KOMAoptions{parskip=half}}
+\makeatother
+\usepackage{longtable,booktabs,array}
+\newcounter{none} % for unnumbered tables
+\usepackage{calc} % for calculating minipage widths
+% Correct order of tables after \paragraph or \subparagraph
+\usepackage{etoolbox}
+\makeatletter
+\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
+\makeatother
+% Allow footnotes in longtable head/foot
+\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
+\makesavenoteenv{longtable}
+\usepackage{graphicx}
+\makeatletter
+\newsavebox\pandoc@box
+\newcommand*\pandocbounded[1]{#1}%
+% Set default figure placement to htbp
+\def\fps@figure{htbp}
+\makeatother
+\setlength{\emergencystretch}{3em} % prevent overfull lines
+\providecommand{\tightlist}{%
+  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
+% Standard preamble for reslop analysis notes.
+% Included via pandoc: --include-in-header=preamble.tex
+% Do not edit per-analysis unless you have a specific reason.
+
+% --- Graphics and floats ---
+\usepackage{graphicx}
+\usepackage{placeins}
+\usepackage{float}
+\usepackage{needspace}
+
+% Default figure sizing: HEIGHT-based, not width-based.
+%
+% All figures are produced at figsize=(10,10) — square. But figures
+% with colorbars (2D plots, correlation matrices) have extended width
+% (e.g., 12x10 effective) due to the colorbar axes. Setting size by
+% width makes these figures smaller than 1D plots at the same nominal
+% width fraction, because the extra colorbar width eats into the budget.
+%
+% Setting size by HEIGHT avoids this: a 0.45\linewidth height gives
+% consistent visual sizing regardless of colorbars, because the plot
+% area height is always 10 inches. Two figures side-by-side at
+% height=0.45\linewidth will have matching plot areas even if one has
+% a colorbar and the other doesn't.
+%
+% We unset the default width and set height instead.
+\setkeys{Gin}{height=0.45\linewidth,keepaspectratio}
+
+% --- Caption formatting ---
+% font=small keeps captions visually distinct from body text.
+% Full column width for both figure and table captions.
+\usepackage[font=small]{caption}
+
+% --- Tables: prevent page splits ---
+% Pandoc generates longtable by default, which splits across pages.
+% We strongly discourage this by penalizing breaks inside floats.
+% The typesetting agent should also convert longtables to regular
+% table floats where the table fits on a single page.
+\usepackage{longtable}
+\setlength{\LTpre}{0pt}
+\setlength{\LTpost}{0pt}
+
+% --- Float placement (relaxed) ---
+% LaTeX defaults are too conservative for figure-heavy technical docs.
+% These settings allow up to 90% of a page to be floats, preventing
+% overfull vbox warnings and figure cutoffs.
+\renewcommand{\topfraction}{0.9}
+\renewcommand{\bottomfraction}{0.9}
+\renewcommand{\textfraction}{0.05}
+\renewcommand{\floatpagefraction}{0.6}
+\setcounter{topnumber}{3}
+\setcounter{bottomnumber}{3}
+\setcounter{totalnumber}{6}
+
+% --- Paragraph and page breaking ---
+% Prevent widows and orphans (single lines at top/bottom of page).
+\widowpenalty=10000
+\clubpenalty=10000
+% Allow ragged page bottoms rather than stretching vertical glue
+% (which creates ugly spacing between paragraphs).
+\raggedbottom
+\usepackage{bookmark}
+\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
+\urlstyle{same}
+\hypersetup{
+  pdftitle={CMS Open Data H to tau tau Search: Phase 4c Full Observed Results},
+  pdfauthor={Analysis my\_analysis},
+  hidelinks,
+  pdfcreator={LaTeX via pandoc}}
+
+\title{CMS Open Data H to tau tau Search: Phase 4c Full Observed
+Results}
+\author{Analysis my\_analysis}
+\date{2026-06-02}
+
+\begin{document}
+\maketitle
+
+{
+\setcounter{tocdepth}{3}
+\tableofcontents
+}
+\needspace{4\baselineskip}
+\section*{Change Log}\label{change-log}
+\addcontentsline{toc}{section}{Change Log}
+
+\textbf{Phase 4c v1}
+
+\begin{itemize}
+\tightlist
+\item
+  Applied the frozen Phase 4a/4b score-template method to full
+  Run2012B/C TauPlusX data.
+\item
+  Derived the full high-mT W+jets scale \texttt{0.8528\ ±\ 0.0370}.
+\item
+  Preserved the Phase 4b score-modeling warning in the observed result.
+\item
+  Recorded that the 4b human gate was auto-passed by explicit user
+  instruction.
+\end{itemize}
+
+\needspace{4\baselineskip}
+\FloatBarrier
+\section{Phase 4c Observed Inference: Full
+Data}\label{phase-4c-observed-inference-full-data}
+
+\needspace{4\baselineskip}
+\subsection{Summary}\label{summary}
+
+Phase 4c applies the frozen Phase 4a/4b score-template model to all
+available Run2012B/C TauPlusX data in
+\texttt{phase3\_selection/outputs/sensitivity\_selected\_events.npz}. No
+full-data retuning of the selection, classifier, categories, score bins,
+or statistical model was performed. The Phase 4b human gate is recorded
+as auto-passed by explicit user instruction.
+
+The fitted observable remains
+\texttt{mva\_score\_hist\_gradient\_boosting} in the \texttt{vbf},
+\texttt{boosted}, and \texttt{zero\_jet} channels with bin edges
+\texttt{{[}0.0,\ 0.2,\ 0.35,\ 0.5,\ 1.0{]}}. The Phase 4b score-template
+warning is not removed: the 10\% combined data/MC ratio was
+\texttt{1.232}, chi2/ndf was \texttt{1.732}, and the status was
+\texttt{flagged} with flags
+\texttt{\{\textquotesingle{}category\_chi2\_failure\textquotesingle{}:\ False,\ \textquotesingle{}combined\_chi2\_failure\textquotesingle{}:\ False,\ \textquotesingle{}combined\_ratio\_failure\textquotesingle{}:\ True\}}.
+
+\needspace{4\baselineskip}
+\subsection{W High-mT Control Scale}\label{w-high-mt-control-scale}
+
+The full-data W+jets scale is derived only from the high-\texttt{mT}
+control region using
+\texttt{(N\_data\_CR\ -\ nonW\_MC\_CR)\ /\ W\_MC\_CR}. The full control
+region contains \texttt{4023} data events, \texttt{W\_MC\ =\ 2414.781},
+and \texttt{nonW\_MC\ =\ 1963.570}. The applied full-data scale is
+\texttt{0.8528\ ±\ 0.0370} with status \texttt{valid}. The 10\% Phase 4b
+scale was \texttt{0.8433\ ±\ 0.0868}.
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Full high-mT W control comparison. The figure shows non-W MC, nominal W MC, the scaled control-region prediction, and full data in the control region. The scale is derived outside the signal region and then propagated into the observed workspace.}]{figures/w_highmt_scale_full.pdf}}
+\caption{Full high-mT W control comparison. The figure shows non-W MC,
+nominal W MC, the scaled control-region prediction, and full data in the
+control region. The scale is derived outside the signal region and then
+propagated into the observed workspace.}\label{fig:p4c-wcr}
+\end{figure}
+
+\needspace{4\baselineskip}
+\subsection{Full-Data Score-Template
+Validation}\label{full-data-score-template-validation}
+
+{\def\LTcaptype{none} % do not increment counter
+\vspace{1em}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}
+>{\raggedright\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1304}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}
+  >{\raggedleft\arraybackslash}p{(\linewidth - 10\tabcolsep) * \real{0.1739}}@{}}
+\toprule\noalign{}
+\begin{minipage}[b]{\linewidth}\raggedright
+Category
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Data
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Background
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Data/background
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Chi2/ndf
+\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
+Max abs pull
+\end{minipage} \\
+\midrule\noalign{}
+vbf & 79 & 146.67 & 0.539 & 4.310 & 3.34 \\
+boosted & 2213 & 2062.80 & 1.073 & 1.687 & 2.14 \\
+zero\_jet & 8466 & 6894.80 & 1.228 & 3.656 & 2.47 \\
+\end{tabular}
+\end{table}
+}
+
+Combined over all score-template bins, data/background is \texttt{1.182}
+with chi2/ndf \texttt{3.218}. The full-data score-modelling status is
+\texttt{flagged} under the same diagnostic criteria as Phase 4b.
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Full-data score-template validation in the VBF category. The plot compares all available Run2012B/C TauPlusX data to the frozen MC template model with the full high-mT W scale applied. The ratio panel is a diagnostic and does not drive any post-unblinding retuning.}]{figures/observed_score_vbf.pdf}}
+\caption{Full-data score-template validation in the VBF category. The
+plot compares all available Run2012B/C TauPlusX data to the frozen MC
+template model with the full high-mT W scale applied. The ratio panel is
+a diagnostic and does not drive any post-unblinding
+retuning.}\label{fig:p4c-score-vbf}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Full-data score-template validation in the boosted category. The plot compares full data to the frozen Phase 4a/4b score-template model. This is an observed-result diagnostic with the Phase 4b score-modeling warning still carried forward.}]{figures/observed_score_boosted.pdf}}
+\caption{Full-data score-template validation in the boosted category.
+The plot compares full data to the frozen Phase 4a/4b score-template
+model. This is an observed-result diagnostic with the Phase 4b
+score-modeling warning still carried
+forward.}\label{fig:p4c-score-boosted}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Full-data score-template validation in the zero-jet category. The zero-jet channel dominates the full observed event count and therefore the combined data/MC ratio. The model was not retuned after unblinding.}]{figures/observed_score_zero_jet.pdf}}
+\caption{Full-data score-template validation in the zero-jet category.
+The zero-jet channel dominates the full observed event count and
+therefore the combined data/MC ratio. The model was not retuned after
+unblinding.}\label{fig:p4c-score-zero}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Observed pull and ratio summary. The figure summarizes per-category data/background ratios and maximum score-bin pulls for full data. It compares the observed validation behavior to the Phase 4b 10\% validation and Phase 4a expected reference.}]{figures/observed_pull_ratio_summary.pdf}}
+\caption{Observed pull and ratio summary. The figure summarizes
+per-category data/background ratios and maximum score-bin pulls for full
+data. It compares the observed validation behavior to the Phase 4b 10\%
+validation and Phase 4a expected reference.}\label{fig:p4c-pulls}
+\end{figure}
+
+\needspace{4\baselineskip}
+\subsection{Observed Fit Result}\label{observed-fit-result}
+
+The observed pyhf workspace is written to
+\texttt{pyhf\_workspace\_observed.json}. Fit status is
+\texttt{evaluated}. The fitted signal strength is \texttt{7.6642}. The
+observed 95\% CLs upper limit status is \texttt{evaluated} and the
+observed limit is \texttt{13.3226} if evaluated. The observed discovery
+diagnostic status is \texttt{evaluated}; its \texttt{q0} significance is
+\texttt{Z\ =\ 2.9776} if evaluated.
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Observed limit and significance summary. The figure shows the full-data fitted signal strength, observed upper limit, Phase 4a expected median limit, and observed discovery diagnostic where available. These numbers are a simplified open-data result and must be interpreted with the documented score-modeling caveat.}]{figures/observed_limit_significance_summary.pdf}}
+\caption{Observed limit and significance summary. The figure shows the
+full-data fitted signal strength, observed upper limit, Phase 4a
+expected median limit, and observed discovery diagnostic where
+available. These numbers are a simplified open-data result and must be
+interpreted with the documented score-modeling
+caveat.}\label{fig:p4c-result-summary}
+\end{figure}
+
+\needspace{0.4\textheight}
+\begin{figure}[htbp]
+\centering
+\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Comparison to Phase 4a expected and Phase 4b validation. The figure compares the Phase 4a expected limit, Phase 4b diagnostic fit, full-data observed fit, and the 10\% versus full W high-mT scale factors. It is intended to make the unblinding evolution explicit for Phase 5.}]{figures/comparison_to_4a_4b.pdf}}
+\caption{Comparison to Phase 4a expected and Phase 4b validation. The
+figure compares the Phase 4a expected limit, Phase 4b diagnostic fit,
+full-data observed fit, and the 10\% versus full W high-mT scale
+factors. It is intended to make the unblinding evolution explicit for
+Phase 5.}\label{fig:p4c-comparison}
+\end{figure}
+
+\needspace{4\baselineskip}
+\subsection{Phase 5 Obligation}\label{phase-5-obligation}
+
+The Phase 5 paper must state that the score-modeling validation was
+flagged in Phase 4b and remains a limitation of the simplified open-data
+result. The result should not claim a clean CMS-quality score-template
+model, nor should it describe the W+jets scale as signal-region tuned.
+\clearpage
+
+\needspace{4\baselineskip}
+\section*{References}\label{references}
+\addcontentsline{toc}{section}{References}
+
+\end{document}

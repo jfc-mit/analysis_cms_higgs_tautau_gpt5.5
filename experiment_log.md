@@ -403,3 +403,7 @@ Phase 4b executor built deterministic 10% data validation using `(run * 1000003 
 ## 2026-06-02T16:15:34Z
 
 Phase 4b executor built deterministic 10% data validation using `(run * 1000003 + luminosityBlock * 9176 + event) % 10 == 0` on data rows only. W high-mT scale = 0.8433 ± 0.0868; score modelling status = flagged.
+
+## 2026-06-02T16:25:20Z
+
+Phase 4c executor used all available Run2012B/C TauPlusX data from `sensitivity_selected_events.npz` with no post-unblinding retuning. Full high-mT W scale = 0.8528 ± 0.0370; full score modelling status = flagged. Phase 4b warning remains carried to Phase 5.

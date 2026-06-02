@@ -1,0 +1,19 @@
+{
+  "absolute_uncertainty": 0.037049894579940935,
+  "applied_scale_factor": 0.8528436634946431,
+  "control_region": "is_w_high_mt",
+  "data_events_full": 4023,
+  "data_scope": "all Run2012B/C TauPlusX rows in phase3 sensitivity_selected_events.npz",
+  "formula": "(N_data_CR - nonW_MC_CR) / W_MC_CR",
+  "nonw_background_mc_sumw2_full_lumi": 1031.8766522856429,
+  "nonw_background_mc_yield_full_lumi": 1963.569614876483,
+  "nuisance": {
+    "hi": 1.0434427740579368,
+    "lo": 0.9565572259420632
+  },
+  "raw_scale_factor": 0.8528436634946431,
+  "relative_uncertainty": 0.04344277405793688,
+  "status": "valid",
+  "wjets_mc_sumw2_full_lumi": 4055.220477295576,
+  "wjets_mc_yield_full_lumi": 2414.78066060164
+}
