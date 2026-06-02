@@ -51,6 +51,25 @@ VARIABLE_LABELS = {
     "delta_eta_jj": r"Leading dijet $|\Delta\eta|$",
 }
 
+MODELING_LABELS = {
+    "mu_pt": r"Muon $p_T$",
+    "mu_eta": r"Muon $\eta$",
+    "mu_reliso": "Muon relative isolation",
+    "tau_pt": r"$\tau_h$ $p_T$",
+    "tau_eta": r"$\tau_h$ $\eta$",
+    "tau_reliso": r"$\tau_h$ relative isolation",
+    "met_pt": r"$p_T^\mathrm{miss}$",
+    "mt_mu_met": r"$m_T(\mu,p_T^\mathrm{miss})$",
+    "m_vis": "Visible mass",
+    "m_addmet": "Add-MET mass",
+    "pt_tautau_proxy": r"Visible+MET $p_T$ proxy",
+    "n_clean_jets": "Clean jet multiplicity",
+    "mjj": "Leading dijet mass",
+    "delta_eta_jj": r"Leading dijet $|\Delta\eta|$",
+    "jet1_pt": r"Leading jet $p_T$",
+    "btag_max": "Maximum b-tag score",
+}
+
 BINS = {
     "mu_pt": np.linspace(20, 160, 33),
     "tau_pt": np.linspace(20, 180, 33),
@@ -90,6 +109,12 @@ def make_hist(edges: np.ndarray, counts: np.ndarray) -> hist.Hist:
     return h
 
 
+def mpl_magic(ax: plt.Axes, scale: float = 1.35) -> None:
+    ymin, ymax = ax.get_ylim()
+    if ymax > ymin:
+        ax.set_ylim(ymin, ymax * scale)
+
+
 def normal_hist(values: np.ndarray, bins: np.ndarray) -> tuple[hist.Hist, np.ndarray]:
     values = values[np.isfinite(values)]
     counts, edges = np.histogram(values, bins=bins)
@@ -105,7 +130,7 @@ def normal_hist(values: np.ndarray, bins: np.ndarray) -> tuple[hist.Hist, np.nda
     return h, yerr
 
 
-def label(ax: plt.Axes, llabel: str = "Open Data + Open Sim.") -> None:
+def label(ax: plt.Axes, llabel: str = "Open Data + Open Simulation") -> None:
     mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel=llabel, rlabel=r"$8$ TeV", ax=ax)
 
 
@@ -129,6 +154,7 @@ def overlay_by_role(selected: dict[str, np.ndarray], variable: str, output: str,
     if positive:
         ymax = max(positive)
         ax.set_ylim(0.0, ymax * 1.35)
+    mpl_magic(ax)
     label(ax)
     save(fig, output)
 
@@ -150,6 +176,7 @@ def plot_cutflow() -> None:
     ax.set_xticks(np.arange(len(steps)))
     ax.set_xticklabels([step.replace("_", " ") for step in steps], rotation=90)
     ax.legend(fontsize="x-small", loc="upper right")
+    mpl_magic(ax)
     label(ax)
     save(fig, "cutflow_summary")
 
@@ -171,6 +198,7 @@ def plot_category_yields() -> None:
     ax.set_xticks(np.arange(len(categories)))
     ax.set_xticklabels([category.replace("_", "-") for category in categories])
     ax.legend(fontsize="x-small", loc="upper right")
+    mpl_magic(ax)
     label(ax)
     save(fig, "category_yields")
 
@@ -190,11 +218,12 @@ def plot_modelling() -> None:
     ax.plot(x, values, marker="o", linestyle="", label=r"Shape $\chi^2/\mathrm{ndf}$")
     ax.axhline(5.0, color="tab:red", linestyle="--", label="MVA gate")
     ax.set_xticks(x)
-    ax.set_xticklabels([name.replace("_", " ") for name in names], rotation=90)
+    ax.set_xticklabels([MODELING_LABELS[name] for name in names], rotation=90)
     ax.set_xlabel("Candidate input")
     ax.set_ylabel(r"Validation shape $\chi^2/\mathrm{ndf}$")
     ax.set_ylim(0, np.nanmax(values) * 1.15 if np.any(np.isfinite(values)) else 6)
     ax.legend(fontsize="x-small", loc="upper right")
+    mpl_magic(ax)
     label(ax)
     save(fig, "mva_input_modeling_chi2")
 
@@ -203,14 +232,17 @@ def plot_approach_comparison() -> None:
     payload = json.loads((OUT / "approach_comparison.json").read_text())
     names = ["visible_mass", "addmet_mass"]
     values = [payload["approaches"][name]["combined_metric_sum_over_categories"] for name in names]
-    edges = np.arange(len(names) + 1) - 0.5
     fig, ax = plt.subplots(figsize=(10, 10))
-    mh.histplot(make_hist(edges, np.asarray(values)), yerr=np.zeros(len(values)), histtype="errorbar", ax=ax, label="MC-only metric")
+    x = np.arange(len(names), dtype=float)
+    ax.errorbar(x, values, yerr=np.zeros(len(values)), marker="o", linestyle="", label="Diagnostic MC-only metric")
     ax.set_xlabel("Approach")
     ax.set_ylabel(r"Combined $\sqrt{\sum S^2/(B+1)}$")
-    ax.set_xticks(np.arange(len(names)))
+    ax.set_xticks(x)
     ax.set_xticklabels(["Visible mass", "Add-MET mass"])
+    ax.set_xlim(-0.6, len(names) - 0.4)
+    ax.set_ylim(0.0, max(values) * 1.25 if values else 1.0)
     ax.legend(fontsize="x-small", loc="upper right")
+    mpl_magic(ax)
     label(ax, llabel="Open Simulation")
     save(fig, "approach_comparison")
 
@@ -218,14 +250,14 @@ def plot_approach_comparison() -> None:
 def main() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
     selected = load_selected()
-    signal_region = selected["region"] == "signal"
+    signal_region = selected["is_signal_region"].astype(bool)
     plot_cutflow()
     plot_category_yields()
     for variable in ["mu_pt", "tau_pt", "met_pt", "mt_mu_met", "pt_tautau_proxy"]:
         overlay_by_role(selected, variable, variable, signal_region)
-    overlay_by_role(selected, "mt_mu_met", "w_high_mt_control_mt", selected["region"] == "w_high_mt")
-    overlay_by_role(selected, "m_vis", "qcd_same_sign_mvis", selected["region"] == "qcd_same_sign")
-    overlay_by_role(selected, "m_vis", "z_rich_validation_mvis", selected["region"] == "z_rich")
+    overlay_by_role(selected, "mt_mu_met", "w_high_mt_control_mt", selected["is_w_high_mt"].astype(bool))
+    overlay_by_role(selected, "m_vis", "qcd_same_sign_mvis", selected["is_same_sign_low_mt"].astype(bool))
+    overlay_by_role(selected, "m_vis", "z_rich_validation_mvis", selected["is_z_rich"].astype(bool))
     plot_mass_by_category(selected, "m_vis", "visible_mass")
     plot_mass_by_category(selected, "m_addmet", "addmet_mass")
     overlay_by_role(selected, "n_clean_jets", "clean_jet_multiplicity", signal_region)

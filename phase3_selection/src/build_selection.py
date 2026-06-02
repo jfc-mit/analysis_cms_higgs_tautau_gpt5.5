@@ -319,11 +319,16 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
     category[zero_jet] = "zero_jet"
 
     region = np.full(len(arrays), "other", dtype="<U16")
-    region[low_mt] = "signal"
+    region[low_mt] = "signal_region"
     region[high_mt] = "w_high_mt"
     region[qcd_ss] = "qcd_same_sign"
-    region[top_handle] = "top_btag_handle"
-    region[z_rich] = "z_rich"
+
+    region_exclusive = np.full(len(arrays), "other", dtype="<U20")
+    region_exclusive[low_mt] = "signal_other"
+    region_exclusive[high_mt] = "w_high_mt"
+    region_exclusive[qcd_ss] = "qcd_same_sign"
+    region_exclusive[top_handle] = "top_btag_handle"
+    region_exclusive[z_rich] = "z_rich"
 
     keep_summary = pair | low_mt | high_mt | qcd_ss | z_rich | top_handle
     return {
@@ -336,12 +341,19 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
         "pair": pair,
         "opposite_sign": os,
         "low_mt": low_mt,
+        "is_signal_region": low_mt,
         "w_high_mt": high_mt,
+        "is_w_high_mt": high_mt,
         "qcd_same_sign": qcd_ss,
+        "is_same_sign": ss,
+        "is_same_sign_low_mt": qcd_ss,
         "z_rich": z_rich,
+        "is_z_rich": z_rich,
         "top_btag_handle": top_handle,
+        "is_top_btag_handle": top_handle,
         "category": category,
         "region": region,
+        "region_exclusive": region_exclusive,
         "mu_pt": mu["pt"],
         "mu_eta": mu["eta"],
         "mu_phi": mu["phi"],
@@ -440,6 +452,36 @@ def main() -> None:
             "shape-normalized templates",
             "control-region raw yields for W high-mT normalization preparation",
         ],
+        "integrated_luminosity": {
+            "status": "unresolved_blocking_input",
+            "no_circular_derivation": True,
+            "phase3_action": (
+                "Checked analysis-local reduced-file metadata and public CMS/CERN Open Data provenance records; "
+                "did not compute luminosity from selected event counts, generated MC counts, or data/MC back-calculation."
+            ),
+            "checked_sources": [
+                {
+                    "source": "CERN Open Data record 12350",
+                    "url": "https://opendata.cern.ch/record/12350",
+                    "finding": "Identifies the CMS 2012 H to tau tau reduced outreach sample set and Run2012 TauPlusX inputs, but not an exact integrated luminosity for the localized Run2012B/C reduced ROOT files.",
+                },
+                {
+                    "source": "Run2012B_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
+                    "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root",
+                    "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
+                },
+                {
+                    "source": "Run2012C_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
+                    "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root",
+                    "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
+                },
+            ],
+            "required_for_phase4": (
+                "An official CMS Open Data luminosity record, luminosity JSON plus brilcalc-equivalent evaluation, "
+                "or another citable CMS source for the exact certified Run2012B/C TauPlusX data subset represented by these reduced files."
+            ),
+            "impact": "Phase 4 cannot quote luminosity-normalized yields, cross sections, or production-normalized MC expectations until this input is sourced.",
+        },
         "missing_citable_inputs": [
             "TauPlusX Run2012B/Run2012C effective integrated luminosity for the localized reduced files",
             "ggH and VBF 8 TeV production cross sections and branching fraction applicable to the reduced samples",

@@ -5,6 +5,30 @@
     "shape-normalized templates",
     "control-region raw yields for W high-mT normalization preparation"
   ],
+  "integrated_luminosity": {
+    "checked_sources": [
+      {
+        "finding": "Identifies the CMS 2012 H to tau tau reduced outreach sample set and Run2012 TauPlusX inputs, but not an exact integrated luminosity for the localized Run2012B/C reduced ROOT files.",
+        "source": "CERN Open Data record 12350",
+        "url": "https://opendata.cern.ch/record/12350"
+      },
+      {
+        "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
+        "source": "Run2012B_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
+        "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012B_TauPlusX.root"
+      },
+      {
+        "finding": "The reduced Events tree has run and luminosityBlock identifiers but no embedded integrated-luminosity metadata.",
+        "source": "Run2012C_TauPlusX reduced ROOT file from the HiggsTauTauReduced mirror",
+        "url": "https://root.cern.ch/files/HiggsTauTauReduced/Run2012C_TauPlusX.root"
+      }
+    ],
+    "impact": "Phase 4 cannot quote luminosity-normalized yields, cross sections, or production-normalized MC expectations until this input is sourced.",
+    "no_circular_derivation": true,
+    "phase3_action": "Checked analysis-local reduced-file metadata and public CMS/CERN Open Data provenance records; did not compute luminosity from selected event counts, generated MC counts, or data/MC back-calculation.",
+    "required_for_phase4": "An official CMS Open Data luminosity record, luminosity JSON plus brilcalc-equivalent evaluation, or another citable CMS source for the exact certified Run2012B/C TauPlusX data subset represented by these reduced files.",
+    "status": "unresolved_blocking_input"
+  },
   "missing_citable_inputs": [
     "TauPlusX Run2012B/Run2012C effective integrated luminosity for the localized reduced files",
     "ggH and VBF 8 TeV production cross sections and branching fraction applicable to the reduced samples",

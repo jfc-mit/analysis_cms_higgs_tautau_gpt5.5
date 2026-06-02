@@ -45,6 +45,7 @@
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -78,6 +79,7 @@
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -110,6 +112,7 @@
       "decision": "remove_from_mva",
       "ndf": 11,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -143,6 +146,7 @@
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -176,6 +180,7 @@
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -208,6 +213,7 @@
       "decision": "pass",
       "ndf": 5,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -245,6 +251,7 @@
       "decision": "remove_from_mva",
       "ndf": 19,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -278,6 +285,7 @@
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -320,6 +328,7 @@
       "decision": "remove_from_mva",
       "ndf": 23,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -367,6 +376,7 @@
       "decision": "remove_from_mva",
       "ndf": 27,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -409,6 +419,7 @@
       "decision": "remove_from_mva",
       "ndf": 24,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -434,6 +445,7 @@
       "decision": "remove_from_mva",
       "ndf": 7,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -475,6 +487,7 @@
       "decision": "pass",
       "ndf": 23,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -508,6 +521,7 @@
       "decision": "pass",
       "ndf": 14,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -550,6 +564,7 @@
       "decision": "remove_from_mva",
       "ndf": 21,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -587,6 +602,7 @@
       "decision": "remove_from_mva",
       "ndf": 10,
       "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
         "w_high_mt",
         "qcd_same_sign",
@@ -595,5 +611,167 @@
       ],
       "variable": "btag_max"
     }
-  ]
+  ],
+  "validation_remediation": {
+    "alarm_threshold_chi2_ndf": 3.0,
+    "attempt_count": 4,
+    "attempts": [
+      {
+        "attempt": 0,
+        "description": "Recompute the original mixed validation/control-region shape test using the new boolean flags instead of the overwritten region string.",
+        "name": "pre_review_mixed_validation_and_control_union",
+        "results": {
+          "m_addmet": {
+            "background_role": "background",
+            "chi2": 1171.3771465131797,
+            "chi2_ndf": 43.38433875974739,
+            "data_events": 17218,
+            "mc_events": 19267,
+            "ndf": 27,
+            "status": "evaluated"
+          },
+          "m_vis": {
+            "background_role": "background",
+            "chi2": 397.9957079574415,
+            "chi2_ndf": 17.304161215540933,
+            "data_events": 17218,
+            "mc_events": 19267,
+            "ndf": 23,
+            "status": "evaluated"
+          }
+        }
+      },
+      {
+        "attempt": 1,
+        "description": "Avoid mixing incompatible W, same-sign, Z-rich, and top-enriched shapes by evaluating each validation/control handle separately.",
+        "name": "separate_region_shape_tests",
+        "results": {
+          "qcd_same_sign": {
+            "m_addmet": {
+              "background_role": "background",
+              "chi2": 71.72959401671591,
+              "chi2_ndf": 2.6566516302487373,
+              "data_events": 3227,
+              "mc_events": 1240,
+              "ndf": 27,
+              "status": "evaluated"
+            },
+            "m_vis": {
+              "background_role": "background",
+              "chi2": 75.45406008385022,
+              "chi2_ndf": 3.280611307993488,
+              "data_events": 3227,
+              "mc_events": 1240,
+              "ndf": 23,
+              "status": "evaluated"
+            }
+          },
+          "top_btag_handle": {
+            "m_addmet": {
+              "background_role": "background",
+              "chi2": 333.59418156612196,
+              "chi2_ndf": 12.355340058004517,
+              "data_events": 6851,
+              "mc_events": 12776,
+              "ndf": 27,
+              "status": "evaluated"
+            },
+            "m_vis": {
+              "background_role": "background",
+              "chi2": 125.17781614759818,
+              "chi2_ndf": 5.442513745547747,
+              "data_events": 6851,
+              "mc_events": 12776,
+              "ndf": 23,
+              "status": "evaluated"
+            }
+          },
+          "w_high_mt": {
+            "m_addmet": {
+              "background_role": "background",
+              "chi2": 155.5144322047911,
+              "chi2_ndf": 7.775721610239555,
+              "data_events": 4211,
+              "mc_events": 6552,
+              "ndf": 20,
+              "status": "evaluated"
+            },
+            "m_vis": {
+              "background_role": "background",
+              "chi2": 51.456967618866315,
+              "chi2_ndf": 2.2372594616898396,
+              "data_events": 4211,
+              "mc_events": 6552,
+              "ndf": 23,
+              "status": "evaluated"
+            }
+          },
+          "z_rich": {
+            "m_addmet": {
+              "background_role": "background",
+              "chi2": 78.58754032304932,
+              "chi2_ndf": 3.416849579263014,
+              "data_events": 5763,
+              "mc_events": 4617,
+              "ndf": 23,
+              "status": "evaluated"
+            },
+            "m_vis": {
+              "background_role": "background",
+              "chi2": 5.829087442204911,
+              "chi2_ndf": 1.1658174884409822,
+              "data_events": 5763,
+              "mc_events": 4617,
+              "ndf": 5,
+              "status": "evaluated"
+            }
+          }
+        }
+      },
+      {
+        "attempt": 2,
+        "description": "Test whether sparse or over-fine binning drives the alarm by rebinnig the primary and add-MET observables in the same validation/control union.",
+        "name": "coarse_rebinned_primary_observables",
+        "results": {
+          "m_addmet": {
+            "background_role": "background",
+            "chi2": 1111.2050148817627,
+            "chi2_ndf": 123.46722387575142,
+            "data_events": 17218,
+            "mc_events": 19267,
+            "ndf": 9,
+            "status": "evaluated"
+          },
+          "m_vis": {
+            "background_role": "background",
+            "chi2": 339.85090242462286,
+            "chi2_ndf": 37.76121138051365,
+            "data_events": 17218,
+            "mc_events": 19267,
+            "ndf": 9,
+            "status": "evaluated"
+          }
+        }
+      },
+      {
+        "attempt": 3,
+        "description": "Restrict the primary visible-mass check to the Z-rich validation window and compare data against the available background MC without using it as a fitted normalization closure.",
+        "name": "z_rich_window_dy_shape_handle",
+        "results": {
+          "m_vis": {
+            "background_role": "background",
+            "chi2": 5.829087442204911,
+            "chi2_ndf": 1.1658174884409822,
+            "data_events": 5763,
+            "mc_events": 4617,
+            "ndf": 5,
+            "status": "evaluated"
+          }
+        }
+      }
+    ],
+    "best_primary_m_vis_chi2_ndf": 1.1658174884409822,
+    "phase4_blocker": null,
+    "primary_m_vis_closure_validated_for_phase4": true
+  }
 }

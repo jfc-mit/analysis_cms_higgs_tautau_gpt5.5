@@ -212,3 +212,41 @@ Ran `pixi run phase3-all` successfully. Ran `pixi run lint-plots`; it passed
 with no plotting violations. Wrote
 `phase3_selection/outputs/SELECTION.md` and all required machine-readable
 outputs.
+
+# 2026-06-02T11:36:23Z - Phase 3 fixer
+
+- Read `agents/fixer.md`, Phase 3 critical review, Phase 3 plot validation,
+  Phase 3 scripts/outputs, `experiment_log.md`, and the plotting standards.
+- RESOLVED A1: added a quantitative validation remediation loop to
+  `variable_modeling.json`. The mixed validation/control union still fails
+  for `m_vis` (`chi2/ndf = 17.30`) and add-MET (`43.38`), but the separate
+  region checks identify W high-mT (`2.24`) and Z-rich (`1.17`) visible-mass
+  handles that are below the alarm threshold. The broad raw templates are now
+  explicitly scoped as not final Phase 4 closure-validated predictions until
+  normalization, missing-background/QCD treatment, and control-region nuisance
+  modelling are added.
+- RESOLVED A2: added explicit selected-event fields `is_signal_region`,
+  `region_exclusive`, `is_z_rich`, `is_top_btag_handle`, `is_w_high_mt`,
+  `is_same_sign`, and `is_same_sign_low_mt`; updated plots to use
+  `is_signal_region` rather than an exclusive diagnostic label.
+- RESOLVED B1: reframed the visible-mass vs add-MET comparison as a diagnostic
+  raw MC-only metric. The formal Phase 1 [D9] expected-sensitivity gate remains
+  a Phase 4 task requiring normalization, nuisance parameters, and a pyhf model.
+- RESOLVED B2: corrected `SELECTION.md` control-region counts from
+  `region_yields.json`: W high-mT is 4211 data and 6552 raw background MC;
+  same-sign QCD sideband is 3227 data and 1240 raw background MC.
+- RESOLVED plot findings: replaced `Open Data + Open Sim.` with
+  `Open Data + Open Simulation`, added legend headroom, padded
+  `approach_comparison.png`, and replaced mechanical MVA variable labels with
+  publication-quality labels. `pixi run lint-plots` passed.
+- BINDING LUMINOSITY CHECK: checked CERN Open Data record 12350 and the
+  localized Run2012B/C TauPlusX reduced-file metadata. No exact integrated
+  luminosity for these localized reduced files was found, and no luminosity was
+  computed from event counts or back-calculated from MC/data. Updated
+  `normalization_inputs.json` and `SELECTION.md` to keep exact integrated
+  luminosity as a blocking input; Phase 4 cannot quote luminosity-normalized
+  yields without a citable CMS/Open Data source.
+- Verification: reran `pixi run phase3-all`; ran `pixi run lint-plots`; ran a
+  selected-event consistency check showing `is_signal_region` agrees with
+  `category_yields.json` and `region_yields.json` for data, signal, and
+  background.

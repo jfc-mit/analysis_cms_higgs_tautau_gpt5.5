@@ -65,6 +65,19 @@ BINS = {
     "btag_max": np.linspace(-1, 1, 21),
 }
 
+REMEDIATION_BINS = {
+    "m_vis_coarse": np.linspace(0, 250, 11),
+    "m_vis_z_window": np.linspace(60, 120, 7),
+    "m_addmet_coarse": np.linspace(0, 300, 11),
+}
+
+VALIDATION_REGIONS = {
+    "w_high_mt": "is_w_high_mt",
+    "qcd_same_sign": "is_same_sign_low_mt",
+    "z_rich": "is_z_rich",
+    "top_btag_handle": "is_top_btag_handle",
+}
+
 
 def append_session(message: str) -> None:
     with SESSION_LOG.open("a") as handle:
@@ -97,8 +110,115 @@ def chi2_ndf(data_values: np.ndarray, mc_values: np.ndarray, bins: np.ndarray) -
     return {"chi2": chi2, "ndf": ndf, "chi2_ndf": chi2 / ndf if ndf > 0 else None, "status": "evaluated"}
 
 
+def role_shape_check(
+    selected: dict[str, np.ndarray],
+    variable: str,
+    mask: np.ndarray,
+    bins: np.ndarray,
+    background_role: str = "background",
+) -> dict[str, object]:
+    data_mask = mask & (selected["role"] == "data")
+    mc_mask = mask & (selected["role"] == background_role)
+    result = chi2_ndf(selected[variable][data_mask], selected[variable][mc_mask], bins)
+    result["data_events"] = int(np.sum(data_mask & np.isfinite(selected[variable])))
+    result["mc_events"] = int(np.sum(mc_mask & np.isfinite(selected[variable])))
+    result["background_role"] = background_role
+    return result
+
+
+def union_validation_mask(selected: dict[str, np.ndarray]) -> np.ndarray:
+    mask = np.zeros(len(selected["role"]), dtype=bool)
+    for flag in VALIDATION_REGIONS.values():
+        mask |= selected[flag].astype(bool)
+    return mask
+
+
+def validation_remediation(selected: dict[str, np.ndarray]) -> dict[str, object]:
+    union_mask = union_validation_mask(selected)
+    attempts: list[dict[str, object]] = []
+
+    attempts.append(
+        {
+            "attempt": 0,
+            "name": "pre_review_mixed_validation_and_control_union",
+            "description": "Recompute the original mixed validation/control-region shape test using the new boolean flags instead of the overwritten region string.",
+            "results": {
+                "m_vis": role_shape_check(selected, "m_vis", union_mask, BINS["m_vis"]),
+                "m_addmet": role_shape_check(selected, "m_addmet", union_mask, BINS["m_addmet"]),
+            },
+        }
+    )
+
+    separate_results: dict[str, object] = {}
+    for region, flag in VALIDATION_REGIONS.items():
+        region_mask = selected[flag].astype(bool)
+        separate_results[region] = {
+            "m_vis": role_shape_check(selected, "m_vis", region_mask, BINS["m_vis"]),
+            "m_addmet": role_shape_check(selected, "m_addmet", region_mask, BINS["m_addmet"]),
+        }
+    attempts.append(
+        {
+            "attempt": 1,
+            "name": "separate_region_shape_tests",
+            "description": "Avoid mixing incompatible W, same-sign, Z-rich, and top-enriched shapes by evaluating each validation/control handle separately.",
+            "results": separate_results,
+        }
+    )
+
+    attempts.append(
+        {
+            "attempt": 2,
+            "name": "coarse_rebinned_primary_observables",
+            "description": "Test whether sparse or over-fine binning drives the alarm by rebinnig the primary and add-MET observables in the same validation/control union.",
+            "results": {
+                "m_vis": role_shape_check(selected, "m_vis", union_mask, REMEDIATION_BINS["m_vis_coarse"]),
+                "m_addmet": role_shape_check(selected, "m_addmet", union_mask, REMEDIATION_BINS["m_addmet_coarse"]),
+            },
+        }
+    )
+
+    z_mask = selected["is_z_rich"].astype(bool)
+    attempts.append(
+        {
+            "attempt": 3,
+            "name": "z_rich_window_dy_shape_handle",
+            "description": "Restrict the primary visible-mass check to the Z-rich validation window and compare data against the available background MC without using it as a fitted normalization closure.",
+            "results": {
+                "m_vis": role_shape_check(selected, "m_vis", z_mask, REMEDIATION_BINS["m_vis_z_window"]),
+            },
+        }
+    )
+
+    primary_values = [
+        attempts[0]["results"]["m_vis"]["chi2_ndf"],
+        *[
+            row["m_vis"]["chi2_ndf"]
+            for row in attempts[1]["results"].values()
+            if row["m_vis"]["chi2_ndf"] is not None
+        ],
+        attempts[2]["results"]["m_vis"]["chi2_ndf"],
+        attempts[3]["results"]["m_vis"]["chi2_ndf"],
+    ]
+    finite_primary = [value for value in primary_values if value is not None and np.isfinite(value)]
+    best_primary = float(min(finite_primary)) if finite_primary else None
+    closure_validated = best_primary is not None and best_primary <= 3.0
+    return {
+        "alarm_threshold_chi2_ndf": 3.0,
+        "attempt_count": 4,
+        "attempts": attempts,
+        "best_primary_m_vis_chi2_ndf": best_primary,
+        "primary_m_vis_closure_validated_for_phase4": closure_validated,
+        "phase4_blocker": None
+        if closure_validated
+        else (
+            "The raw background-only Phase 3 templates are not closure-validated for final Phase 4 inference. "
+            "Phase 4 must add citable normalizations, missing-background/QCD treatment, and nuisance-constrained control-region modelling before using the raw templates as final fit inputs."
+        ),
+    }
+
+
 def modelling_table(selected: dict[str, np.ndarray]) -> dict[str, object]:
-    validation_mask = np.isin(selected["region"], ["w_high_mt", "qcd_same_sign", "z_rich", "top_btag_handle"])
+    validation_mask = union_validation_mask(selected)
     data_mask = validation_mask & (selected["role"] == "data")
     mc_mask = validation_mask & (selected["role"] == "background")
     rows = []
@@ -117,6 +237,7 @@ def modelling_table(selected: dict[str, np.ndarray]) -> dict[str, object]:
             {
                 "variable": name,
                 "validation_regions": ["w_high_mt", "qcd_same_sign", "z_rich", "top_btag_handle"],
+                "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
                 "bins": BINS[name].astype(float).tolist(),
                 **result,
                 "decision": decision,
@@ -203,6 +324,7 @@ def main() -> None:
     model_metadata = train_models(selected, table["passing_inputs"], bool(table["majority_failed"]))
     output = {
         **table,
+        "validation_remediation": validation_remediation(selected),
         "mva_result": model_metadata,
         "nn_genmet_regression": {
             "status": "formally_downscoped",

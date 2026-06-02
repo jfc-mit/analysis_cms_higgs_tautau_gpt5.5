@@ -50,8 +50,13 @@ def binned_metric(signal: np.ndarray, background: np.ndarray, bins: np.ndarray) 
 def main() -> None:
     selected = load_selected()
     comparison: dict[str, object] = {
-        "normalization": "raw unweighted MC counts; Phase 3 ranking only",
+        "normalization": "raw unweighted MC counts; diagnostic only",
         "metric": "MC-only binned separation over mutually exclusive categories",
+        "expected_sensitivity_gate_status": "not_evaluated_in_phase3",
+        "expected_sensitivity_gate_reason": (
+            "Phase 1 [D9] requires expected mu uncertainty, expected CLs limit, or expected discovery significance. "
+            "Those require Phase 4 normalization, nuisance parameters, and pyhf model construction; this raw MC-only metric is not a replacement gate."
+        ),
         "approaches": {},
     }
     for approach, spec in OBSERVABLES.items():
@@ -93,12 +98,15 @@ def main() -> None:
     visible = comparison["approaches"]["visible_mass"]["combined_metric_sum_over_categories"]
     addmet = comparison["approaches"]["addmet_mass"]["combined_metric_sum_over_categories"]
     if addmet >= 1.10 * visible:
-        recommended = "addmet_mass_for_phase4_crosscheck_with_visible_mass_retained_as_baseline"
+        recommended = "visible_mass_primary_with_addmet_phase4_crosscheck_candidate"
     else:
         recommended = "visible_mass_primary"
     comparison["phase3_decision"] = {
         "recommended_primary": recommended,
-        "reason": "Phase 1 [D9] requires a >=10% improvement and validation gates before replacing visible mass.",
+        "reason": (
+            "Visible mass remains the Phase 4 primary because the raw diagnostic does not motivate replacing it, "
+            "and the formal Phase 1 [D9] expected-sensitivity gate remains a Phase 4 task."
+        ),
         "genmet_regression": modelling["nn_genmet_regression"],
     }
     (OUT / "approach_comparison.json").write_text(json.dumps(comparison, indent=2, sort_keys=True))

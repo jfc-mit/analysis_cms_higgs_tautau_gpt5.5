@@ -25,9 +25,9 @@ and H to WW are not included or silently substituted.
 | [D4] W high-mT normalization | Built a high-mT W control region and raw yield inputs; no manual tuning to data was performed. |
 | [D5] Tight tau anti-muon veto | Required `Tau_idAntiMuTight > 0` in the tau_h candidate definition. |
 | [D6] DY/Z uncertainty scope | Kept DY as MC shape with Z-rich validation diagnostics; enlarged 10-15% normalization remains a Phase 4 nuisance choice requiring citable implementation. |
-| [D7] pyhf-compatible future fit | Produced category and region yields plus selected-event summaries suitable for Phase 4 template building. |
+| [D7] pyhf-compatible future fit | Produced category and region yields plus selected-event summaries with unambiguous signal-region and validation/control flags suitable for Phase 4 template building. |
 | [D8] Blinding | Did not optimize category thresholds on full-data SR agreement. Full-data selected SR shapes are produced as Phase 3 processing diagnostics, not fitted results. |
-| [D9] Alternative gate | Compared visible mass and add-MET mass with a common MC-only metric; downscoped NN classifier and NN genMET regression where gates failed. |
+| [D9] Alternative gate | Compared visible mass and add-MET mass with a diagnostic common MC-only metric; the formal expected-sensitivity gate remains a Phase 4 task because it requires normalization, nuisance parameters, and a statistical model. |
 
 ## Object and Event Selection
 
@@ -53,6 +53,15 @@ opposite-sign pairs with `mT(mu,MET) > 80 GeV`, the QCD sideband uses same-sign
 low-mT pairs, the Z-rich validation region uses opposite-sign low-mT events
 with `60 < m_vis < 120 GeV`, and the top handle requires a selected pair with a
 positive valid b-tag score.
+
+The machine-readable event summary keeps overlapping region semantics
+explicit. `is_signal_region` is the low-mT opposite-sign signal-candidate
+membership used for category and template counts. `region_exclusive` is a
+single diagnostic label for mutually exclusive validation/control displays,
+while `is_z_rich`, `is_top_btag_handle`, `is_w_high_mt`, `is_same_sign`, and
+`is_same_sign_low_mt` are boolean handles that can overlap where the physics
+definitions overlap. Phase 4 should not use `region_exclusive` as a substitute
+for signal-region membership.
 
 ![Cutflow summary. This plot shows raw event counts after each selection step,
 summed by role across the localized data, signal MC, and background MC files.
@@ -88,11 +97,11 @@ data, so it is retained rather than merged at Phase 3.](figures/category_yields.
 ## Control and Validation Regions
 
 The W high-mT control region contains 4211 data events across Run2012B/C and
-6520 raw background MC events before any production normalization. This region
+6552 raw background MC events before any production normalization. This region
 is prepared for Phase 4 W normalization but is not used to hand-scale W+jets in
 Phase 3.
 
-The same-sign QCD sideband contains 3227 data events and 1711 raw background
+The same-sign QCD sideband contains 3227 data events and 1240 raw background
 MC events. No reduced QCD MC exists, so this region is the available data
 handle for the instrumental QCD/fake contribution.
 
@@ -166,11 +175,14 @@ selection variable.](figures/vbf_delta_eta_jj.pdf){#fig:p3-detajj}
 ## Approach Comparison
 
 Two template-observable approaches were fully implemented and compared with a
-common MC-only binned separation metric over the same exclusive categories.
-Visible mass gives a combined raw metric of 61.67, while add-MET mass gives
-59.23. Since add-MET does not improve the metric by the Phase 1 [D9] threshold
-of at least 10%, visible mass remains the Phase 4 primary observable and
-add-MET mass is retained as a cross-check/alternative template.
+common diagnostic MC-only binned separation metric over the same exclusive
+categories. Visible mass gives a combined raw metric of 61.67, while add-MET
+mass gives 59.23. This comparison is not the Phase 1 [D9] expected-sensitivity
+gate: it uses raw unweighted MC counts and no nuisance-constrained likelihood.
+Visible mass remains the Phase 4 primary observable, and add-MET mass is
+retained as a cross-check/alternative template candidate whose formal expected
+sensitivity can only be evaluated after Phase 4 normalization and systematics
+are implemented.
 
 The NN classifier approach was evaluated through the required input-modelling
 gate before training. Thirteen of 16 candidate inputs had data/background-MC
@@ -185,14 +197,39 @@ the reduced MC files, so the requested truth target is absent. The add-MET
 mass observable is the retained reconstructed-MET alternative.
 
 ![Approach comparison. The figure compares the visible-mass and add-MET-mass
-approaches with the same raw MC-only binned separation metric across the
-exclusive categories. It supports retaining visible mass as primary because
-add-MET does not clear the predeclared 10% improvement gate.](figures/approach_comparison.pdf){#fig:p3-approach}
+approaches with the same diagnostic raw MC-only binned separation metric across
+the exclusive categories. It supports keeping visible mass as the Phase 4
+baseline, but it does not execute the predeclared expected-sensitivity gate
+because no normalized pyhf model exists yet.](figures/approach_comparison.pdf){#fig:p3-approach}
 
 ![MVA input modelling gate. The figure shows validation/control-region
 data-vs-background-MC shape `chi2/ndf` for each candidate classifier input.
 Most candidate inputs exceed the predeclared threshold of 5, so the MVA is
 downscoped rather than used as a primary Phase 4 observable.](figures/mva_input_modeling_chi2.pdf){#fig:p3-mva-gate}
+
+## Validation Remediation
+
+The pre-review validation mixed W high-mT, same-sign, Z-rich, and top-enriched
+handles into a single data-vs-background-MC shape test. That mixed union still
+fails for the primary visible mass with `chi2/ndf = 17.30` and for add-MET mass
+with `chi2/ndf = 43.38`, so the broad raw background model is not a final
+closure test for Phase 4.
+
+Three concrete remediation attempts were run and written to
+`variable_modeling.json`. First, the validation/control handles were evaluated
+separately instead of mixing incompatible shapes: visible-mass `chi2/ndf` is
+3.28 in same-sign, 5.44 in the top b-tag handle, 2.24 in W high-mT, and 1.17 in
+Z-rich. Second, the mixed primary-observable union was rebinned coarsely; this
+did not improve closure (`chi2/ndf = 37.76` for visible mass). Third, the
+Z-rich visible-mass window was evaluated as the DY shape handle and gives
+`chi2/ndf = 1.17` with 5763 data and 4617 raw background-MC events.
+
+The Phase 3 conclusion is therefore scoped: the category definitions,
+selected-event flags, and Z-rich/W-handle shape diagnostics are usable inputs,
+but the raw background-only templates are not closure-validated final Phase 4
+fit predictions. Phase 4 must add citable normalizations, QCD/missing-background
+treatment, and nuisance-constrained control-region modelling before quoting
+expected or observed fit results.
 
 ## Template Figures
 
@@ -243,6 +280,16 @@ DY/ttbar/W1/W2/W3 cross sections, W+jets jet-bin stitching without inclusive
 W or W4 samples, and official trigger/object/pileup scale-factor prescriptions
 for these reduced files. No MC sample was manually scaled to data.
 
+Integrated luminosity handling is a binding blocker. Phase 3 checked the
+CERN Open Data record for the reduced H to tau tau sample set and the localized
+Run2012B/C TauPlusX reduced files, but found no exact integrated luminosity
+metadata for the reduced files. No luminosity was computed from event counts,
+generated MC counts, or data/MC back-calculation. Phase 4 cannot quote
+luminosity-normalized yields, cross sections, or production-normalized MC
+expectations until an official CMS Open Data luminosity record, luminosity JSON
+with a citable evaluation, or another exact CMS source is provided for these
+Run2012B/C TauPlusX inputs.
+
 ## Machine-Readable Outputs
 
 Phase 3 produced:
@@ -259,7 +306,10 @@ Phase 3 produced:
 
 The selected-event summary is compact and stores only candidate/region
 variables, not full event arrays. Phase 4 should treat these files as the
-source of Phase 3 category definitions and raw selected counts.
+source of Phase 3 category definitions and raw selected counts. For signal
+templates, use `is_signal_region` and the mutually exclusive `category` field;
+use `region_exclusive` only for diagnostic displays and the explicit boolean
+region flags for validation/control handles.
 
 ## Commands and Validation
 
@@ -282,15 +332,25 @@ Pre-review checks:
 - W/QCD/Z/top handles: implemented as raw regions/handles for Phase 4.
 - Missing samples and normalization inputs: documented as limitations and
   blockers, not patched by manual scaling.
+- Region semantics: `is_signal_region` agrees with `category_yields.json` and
+  `region_yields.json`; exclusive validation labels do not overwrite signal
+  membership.
+- Luminosity: no circular luminosity derivation was performed; exact
+  Run2012B/C TauPlusX integrated luminosity remains a blocking normalization
+  input.
 
 ## Open Blockers for Phase 4
 
-1. Resolve citable external normalization inputs for luminosity, MC cross
-   sections, branching fractions, and W jet-bin stitching.
-2. Implement systematic variations from cited sources, especially tau
+1. Resolve exact citable integrated luminosity for the localized Run2012B/C
+   TauPlusX reduced files from CMS Open Data records, luminosity metadata, or
+   another official CMS source. Do not compute it from event counts or data/MC
+   agreement.
+2. Resolve citable external normalization inputs for MC cross sections,
+   branching fractions, and W jet-bin stitching.
+3. Implement systematic variations from cited sources, especially tau
    ID/trigger, muon trigger/ID, jet/MET, b-tag/top, DY/Z normalization, W
    transfer, QCD sideband, MC statistics, and luminosity.
-3. Convert the raw W high-mT, same-sign QCD, top handle, and Z-rich validation
+4. Convert the raw W high-mT, same-sign QCD, top handle, and Z-rich validation
    regions into a statistically consistent pyhf model or pre-fit constraints.
-4. Validate asymptotic assumptions or use toys if any final Phase 4 template
+5. Validate asymptotic assumptions or use toys if any final Phase 4 template
    bins have low expected counts after normalization.
