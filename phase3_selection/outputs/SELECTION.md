@@ -377,3 +377,50 @@ Pre-review checks:
    regions into a statistically consistent pyhf model or pre-fit constraints.
 4. Validate asymptotic assumptions or use toys if any final Phase 4 template
    bins have low expected counts after normalization.
+
+## Sensitivity Regression Remediation
+
+A Phase 3 sensitivity regression pass was added after the Phase 4a expected
+model returned `Z = 0.191` and a median expected
+limit of `mu = 11.374`. The remediation uses
+only MC and Asimov expectations for selection, category, binning, and
+classifier choices. It does not tune on observed full-data signal-region
+discriminant distributions.
+
+The scan covers JHEP-inspired loose/tight VBF and boosted/tau-pT splits,
+top/b-veto exploratory handling, `m_vis`, `m_addmet`, `pt_tautau_proxy`, and
+two expected-only classifiers. Machine-readable results are written to
+`sensitivity_scan.json`, `mva_sensitivity.json`,
+`sensitivity_recommendation.json`, `sensitivity_selected_events.npz`, and
+`missing_component_feasibility.json`.
+
+The best expected-only variant is `mva_hist_gradient_boosting_score_single_category` with Asimov
+discovery `Z = 0.596`. Its median expected CLs limit is
+`3.977` where evaluated. Relative to the Phase 4a
+baseline this is a `Z` improvement factor of
+`3.12`. The expected signal and
+background totals are `25.106` and
+`9338.225`, with integrated `S/B =
+0.0027` and `S/sqrt(B) =
+0.260`.
+
+The MVA improvement remains gated. The classifier is trained only on MC, but
+Phase 3 already found severe data/background-MC input-shape disagreements for
+most candidate variables. Therefore a classifier score can be carried to
+Phase 4a as an expected-only candidate, but Phase 4b must validate score
+modelling in control/validation regions or assign an explicit calibration
+uncertainty before using it as an unqualified primary result.
+
+The missing-component feasibility check found no current reduced ROOT files
+for QCD multijet, diboson, single top, W4/inclusive W, associated H, H to WW,
+extra DY jet categories, or embedded Z to tau tau. These components remain
+limitations and were not approximated with paper-level yields or fabricated
+templates.
+
+Phase 4a rerun instruction: update the expected-model executor to read
+`phase3_selection/outputs/sensitivity_recommendation.json` and
+`phase3_selection/outputs/sensitivity_selected_events.npz`. Rebuild templates
+using the recommended observable/category labels and the same official
+normalization, then regenerate `expected_results.json`, `INFERENCE_EXPECTED.md`,
+the analysis-note markdown, TeX, and PDF before restarting the full Phase 4a
+review.

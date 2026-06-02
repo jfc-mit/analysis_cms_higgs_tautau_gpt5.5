@@ -1,0 +1,420 @@
+{
+  "best": {
+    "background_total": 9338.22528295425,
+    "categories": [
+      "inclusive_sr"
+    ],
+    "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+    "family": "expected_only_mva",
+    "low_background_bins_lt5": 1,
+    "low_background_fraction": 0.16666666666666666,
+    "median_limit": 3.977300465753028,
+    "median_limit_improvement_factor": 2.859759507926921,
+    "name": "mva_hist_gradient_boosting_score_single_category",
+    "observable": "mva_score_hist_gradient_boosting",
+    "s_over_b": 0.002688474105881831,
+    "s_over_sqrt_b": 0.25979933279966116,
+    "signal_total": 25.105576868113534,
+    "z_improvement_factor": 3.1242294359123015,
+    "z_value": 0.5955085932694459
+  },
+  "best_full_result": {
+    "comparison_to_phase4a": {
+      "baseline_median_limit": 11.374122822819393,
+      "baseline_z": 0.1906097504953417,
+      "limit_evaluation": "evaluated",
+      "median_limit_improvement_factor": 2.859759507926921,
+      "z_improvement_factor": 3.1242294359123015
+    },
+    "discovery_sensitivity": {
+      "p_value": 0.2757517783603449,
+      "status": "evaluated",
+      "z_value": 0.5955085932694459
+    },
+    "expected_upper_limit": {
+      "expected_band_minus2_minus1_median_plus1_plus2": [
+        1.968598873984191,
+        2.803636935689023,
+        3.977300465753028,
+        6.032969001155281,
+        9.04523198152609
+      ],
+      "observed_on_background_asimov": 3.9773003153084376,
+      "scan_max": 50.0,
+      "scan_min": 0.0,
+      "scan_points": 51
+    },
+    "nuisance_mode": "nominal",
+    "pyhf": {
+      "nchannels": 1,
+      "npars": 10
+    },
+    "signal_injection": {
+      "all_pass": true,
+      "rows": [
+        {
+          "absolute_bias": 1.624563032286359e-20,
+          "fitted_mu": 1.624563032286359e-20,
+          "injected_mu": 0.0,
+          "passes_20_percent_gate": true,
+          "relative_bias": 0.0
+        },
+        {
+          "absolute_bias": 0.0,
+          "fitted_mu": 1.0,
+          "injected_mu": 1.0,
+          "passes_20_percent_gate": true,
+          "relative_bias": 0.0
+        },
+        {
+          "absolute_bias": -0.0008638250299655148,
+          "fitted_mu": 1.9991361749700345,
+          "injected_mu": 2.0,
+          "passes_20_percent_gate": true,
+          "relative_bias": -0.0004319125149827574
+        },
+        {
+          "absolute_bias": 8.84965489333922e-07,
+          "fitted_mu": 5.000000884965489,
+          "injected_mu": 5.0,
+          "passes_20_percent_gate": true,
+          "relative_bias": 1.7699309786678442e-07
+        }
+      ]
+    },
+    "spec": {
+      "bin_edges": [
+        0.0,
+        0.35,
+        0.55,
+        0.72,
+        0.86,
+        0.94,
+        1.0
+      ],
+      "categories": [
+        "inclusive_sr"
+      ],
+      "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+      "description": "hist_gradient_boosting classifier score templates in a single inclusive signal-region channel.",
+      "family": "expected_only_mva",
+      "name": "mva_hist_gradient_boosting_score_single_category",
+      "observable": "mva_score_hist_gradient_boosting"
+    },
+    "templates": {
+      "bin_edges": [
+        0.0,
+        0.35,
+        0.55,
+        0.72,
+        0.86,
+        0.94,
+        1.0
+      ],
+      "categories": [
+        "inclusive_sr"
+      ],
+      "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+      "combined": {
+        "background_total": 9338.22528295425,
+        "low_background_bins_lt5": 1,
+        "low_background_fraction": 0.16666666666666666,
+        "populated_bins": 6,
+        "s_over_b": 0.002688474105881831,
+        "s_over_sqrt_b": 0.25979933279966116,
+        "signal_total": 25.105576868113534
+      },
+      "description": "hist_gradient_boosting classifier score templates in a single inclusive signal-region channel.",
+      "family": "expected_only_mva",
+      "name": "mva_hist_gradient_boosting_score_single_category",
+      "observable": "mva_score_hist_gradient_boosting",
+      "samples": {
+        "DYJetsToLL": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                5018,
+                199,
+                37,
+                9,
+                4,
+                1
+              ],
+              "raw_total": 5268,
+              "sumw2": [
+                8730.849562806903,
+                346.2413437621709,
+                64.37653125226294,
+                15.659156250550444,
+                6.959625000244642,
+                1.7399062500611604
+              ],
+              "total_yield": 6948.78205358301,
+              "weighted_yields": [
+                6619.018288701508,
+                262.4919568456756,
+                48.805037202462294,
+                11.871495535734072,
+                5.276220238104032,
+                1.319055059526008
+              ]
+            }
+          },
+          "weight": 1.319055059526008
+        },
+        "GluGluToHToTauTau": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                349,
+                177,
+                109,
+                59,
+                13,
+                4
+              ],
+              "raw_total": 711,
+              "sumw2": [
+                0.3611336008111952,
+                0.18315371731685257,
+                0.11278957733071712,
+                0.06105123910561753,
+                0.013451967938525895,
+                0.004139067058007968
+              ],
+              "total_yield": 22.871299253820528,
+              "weighted_yields": [
+                11.226558986755787,
+                5.693698970360384,
+                3.506289196436621,
+                1.897899656786795,
+                0.4181812803089548,
+                0.1286711631719861
+              ]
+            }
+          },
+          "weight": 0.032167790792996524
+        },
+        "TTbar": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                1681,
+                56,
+                20,
+                9,
+                3,
+                2
+              ],
+              "raw_total": 1771,
+              "sumw2": [
+                342.6690012280942,
+                11.415505097426099,
+                4.076966106223607,
+                1.8346347478006233,
+                0.6115449159335411,
+                0.40769661062236073
+              ],
+              "total_yield": 799.5987634798493,
+              "weighted_yields": [
+                758.9641566401053,
+                25.283755366951752,
+                9.029912631054199,
+                4.063460683974389,
+                1.3544868946581297,
+                0.9029912631054198
+              ]
+            }
+          },
+          "weight": 0.4514956315527099
+        },
+        "VBF_HToTauTau": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                169,
+                146,
+                160,
+                201,
+                160,
+                121
+              ],
+              "raw_total": 957,
+              "sumw2": [
+                0.0009211642982156599,
+                0.0007957987428371974,
+                0.0008721082113284355,
+                0.001095585940481347,
+                0.0008721082113284355,
+                0.0006595318348171293
+              ],
+              "total_yield": 2.234277614293007,
+              "weighted_yields": [
+                0.3945589517403534,
+                0.34086157961000946,
+                0.37354693655891447,
+                0.4692683390521363,
+                0.37354693655891447,
+                0.28249487077267904
+              ]
+            }
+          },
+          "weight": 0.0023346683534932154
+        },
+        "W1JetsToLNu": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                379,
+                10,
+                2,
+                0,
+                0,
+                0
+              ],
+              "raw_total": 391,
+              "sumw2": [
+                2287.463492699298,
+                60.355237274387804,
+                12.071047454877561,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "total_yield": 960.5815441567511,
+              "weighted_yields": [
+                931.1007806532191,
+                24.56730291961,
+                4.913460583922,
+                0.0,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "weight": 2.456730291961
+        },
+        "W2JetsToLNu": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                554,
+                37,
+                8,
+                3,
+                0,
+                0
+              ],
+              "raw_total": 602,
+              "sumw2": [
+                321.7227312305871,
+                21.486897212151124,
+                4.6458156134380815,
+                1.7421808550392806,
+                0.0,
+                0.0
+              ],
+              "total_yield": 458.75676583190767,
+              "weighted_yields": [
+                422.17815327388183,
+                28.196013846811603,
+                6.096435426337644,
+                2.2861632848766167,
+                0.0,
+                0.0
+              ]
+            }
+          },
+          "weight": 0.7620544282922055
+        },
+        "W3JetsToLNu": {
+          "categories": {
+            "inclusive_sr": {
+              "raw_counts": [
+                335,
+                20,
+                11,
+                3,
+                1,
+                0
+              ],
+              "raw_total": 370,
+              "sumw2": [
+                71.14124895722095,
+                4.247238743714684,
+                2.3359813090430763,
+                0.6370858115572026,
+                0.21236193718573418,
+                0.0
+              ],
+              "total_yield": 170.50615590273276,
+              "weighted_yields": [
+                154.37719520923102,
+                9.216548967715285,
+                5.069101932243407,
+                1.3824823451572927,
+                0.4608274483857642,
+                0.0
+              ]
+            }
+          },
+          "weight": 0.4608274483857642
+        }
+      },
+      "totals": {
+        "inclusive_sr": {
+          "background_bins": [
+            8885.638574477945,
+            349.7555779467643,
+            73.91394777601955,
+            19.60360184974237,
+            7.091534581147926,
+            2.222046322631428
+          ],
+          "background_total": 9338.22528295425,
+          "best_bin_s_over_b": 0.1850393620317273,
+          "min_background_bin": 2.222046322631428,
+          "s_over_b": 0.002688474105881831,
+          "s_over_sqrt_b": 0.25979933279966116,
+          "signal_bins": [
+            11.621117938496141,
+            6.034560549970394,
+            3.8798361329955355,
+            2.367167995838931,
+            0.7917282168678692,
+            0.4111660339446651
+          ],
+          "signal_total": 25.105576868113534
+        }
+      }
+    }
+  },
+  "blinding": {
+    "data_use": "Only existing control/validation caveats are referenced; no observed SR shape tuning.",
+    "expected_only": true,
+    "observed_full_data_signal_region_used_for_optimization": false
+  },
+  "passes_30_percent_z_improvement": true,
+  "phase4a_baseline": {
+    "expected_z": 0.1906097504953417,
+    "median_limit": 11.374122822819393,
+    "observed_on_background_asimov_limit": 11.374122346421771
+  },
+  "phase4a_rerun_instructions": [
+    "Read sensitivity_recommendation.json and sensitivity_selected_events.npz.",
+    "Use best.spec.observable and best.spec.categories/category labels for templates.",
+    "Keep official L_int and N_gen weights from normalization_inputs.json.",
+    "Recompute pyhf workspace, expected_results.json, signal injection, GoF, systematics, plots, AN markdown, TeX, and PDF.",
+    "Restart Phase 4a 4-bot+bib review on the compiled PDF."
+  ],
+  "promotion_gate": {
+    "minimum_expected_background_per_bin": ">=5 or toy-validation/bin-merging required",
+    "signal_injection_required": "bias <20% for nonzero injected mu",
+    "z_or_limit_improvement_required": ">=30%"
+  },
+  "residual_blockers": [
+    "MVA input and output modelling must be validated in Phase 4b before unqualified use.",
+    "No SVFIT mass, embedding, QCD estimate, or additional tau channels are available in this reduced pass.",
+    "Low-background bins require bin merging or toy validation if a refined low-yield category is promoted."
+  ]
+}

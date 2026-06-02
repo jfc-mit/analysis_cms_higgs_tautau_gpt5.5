@@ -320,3 +320,7 @@ Phase 4a expected-only model built from Phase 3 selected MC using official Open 
 ## 2026-06-02T12:59:29Z
 
 Phase 4a expected-only model built from Phase 3 selected MC using official Open Data normalization. No real data signal-region observed result was used; the observation is background-only Asimov pseudo-data.
+
+## 2026-06-02T14:15:07Z
+
+Phase 3 sensitivity regression fixer ran expected-only category, observable, MVA, nuisance, and missing-component scans. Best variant `mva_hist_gradient_boosting_score_single_category` reached Z=0.596 versus Phase 4a baseline Z=0.191; see `phase3_selection/outputs/sensitivity_recommendation.json`.

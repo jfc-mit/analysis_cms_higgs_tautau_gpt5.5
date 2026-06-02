@@ -1,0 +1,91 @@
+{
+  "available_mc_root_files": [
+    "DYJetsToLL.root",
+    "GluGluToHToTauTau.root",
+    "TTbar.root",
+    "VBF_HToTauTau.root",
+    "W1JetsToLNu.root",
+    "W2JetsToLNu.root",
+    "W3JetsToLNu.root"
+  ],
+  "manifest_path": "phase2_exploration/outputs/local_sample_manifest.json",
+  "policy": "Unavailable components are carried as limitations; no paper-level yields or fabricated pseudo-events are introduced.",
+  "rows": [
+    {
+      "component": "QCD_multijet",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "QCD"
+      ]
+    },
+    {
+      "component": "diboson_WW_WZ_ZZ",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "WW",
+        "WZ",
+        "ZZ",
+        "diboson"
+      ]
+    },
+    {
+      "component": "single_top",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "SingleTop",
+        "SingleT"
+      ]
+    },
+    {
+      "component": "W4_or_inclusive_W",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "W4Jets",
+        "WJetsToLNu",
+        "WJets"
+      ]
+    },
+    {
+      "component": "associated_H",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "WH",
+        "ZH",
+        "ttH"
+      ]
+    },
+    {
+      "component": "H_to_WW",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": [
+        "HToWW"
+      ]
+    },
+    {
+      "component": "extra_DY_categories",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": []
+    },
+    {
+      "component": "embedded_Ztautau",
+      "decision": "unavailable_do_not_approximate",
+      "feasible_in_current_reduced_file_set": false,
+      "local_file_matches": [],
+      "manifest_pattern_mentions": []
+    }
+  ]
+}
