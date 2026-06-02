@@ -387,3 +387,7 @@ Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mv
 ## 2026-06-02T15:39:41Z
 
 Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in simultaneous `vbf, boosted, zero_jet` channels, using official Open Data normalization and background-only Asimov pseudo-data. Score bins were merged using expected background only to keep each fit bin above five expected background events where possible. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-02T16:06:00Z
+
+User added final documentation requirement: after Phase 4c full results, Phase 5 must produce both the full AN and a PRL-style paper draft (`phase5_documentation/outputs/PAPER_PRL_v1.{md,tex,pdf}`). The paper must include CMS-publication-style figures and tables for the main result and comparisons to meaningfully comparable CMS published H to tau tau results and available PDG/world-average context.

@@ -11,6 +11,26 @@ You are producing the final analysis note for a **measurement** analysis.
 
 These should be handled by **separate subagents** in sequence:
 
+## Additional final-paper deliverable
+
+In addition to the full analysis note, Phase 5 must produce a PRL-style
+paper draft from the final Phase 4c results. Write the paper to
+`phase5_documentation/outputs/PAPER_PRL_v1.md`, and typeset it to
+`PAPER_PRL_v1.tex` and `PAPER_PRL_v1.pdf`. The paper should follow the
+concise CMS publication style as closely as this open-data analysis allows:
+compact introduction, data and simulation summary, event categorization,
+statistical method, main result, and comparison to published CMS/PDG or
+world-average references where meaningful.
+
+The paper must include publication-style figures and tables for the main
+results and comparisons with existing results. At minimum, include a
+flagship result figure, a table comparing the final open-data result with
+the meaningfully comparable CMS Run 1/Run 2 H to tau tau results and any
+available PDG/world-average context, and a compact signal/background or
+limit/significance summary table. These figures should be generated or
+curated in `phase5_documentation/outputs/figures/`, use CMS-style plotting
+labels, and avoid analysis-internal phase language in the paper body.
+
 ### Sub-task 1: Figures (code-writing subagent)
 
 Produce any AN-specific figures not already generated in Phases 2-4.
