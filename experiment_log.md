@@ -137,3 +137,30 @@
   `|Delta eta_jj|`, `pT_tautau` or a documented available proxy, b-tag/top
   controls, and W/QCD control-region variables. CONFIDENCE: HIGH. FLAG FOR
   HUMAN: NO.
+
+## 2026-06-02 Phase 2 plot fixer
+
+- Read `agents/fixer.md`, the Phase 2 plot-validation report,
+  `phase2_exploration/src/plot_exploration.py`, `EXPLORATION.md`,
+  `methodology/appendix-plotting.md`, and this experiment log before making
+  targeted plotting fixes.
+- RESOLVED: Replaced rendered sample, feature, and variable identifiers with
+  publication-quality display labels in `plot_exploration.py`; verified
+  regenerated PNGs no longer show sample-name underscores or code-style
+  variable labels in the failed diagnostics.
+- RESOLVED: Replaced raw event-count and preselection-yield `ax.plot` calls
+  with `mh.histplot(..., histtype="errorbar")` using explicit Poisson
+  uncertainties. File size remains a metadata point diagnostic with an inline
+  code justification.
+- RESOLVED: Moved the preselection-yield legend outside the data region and
+  confirmed no marker/legend overlap remains in `preselection_yield_summary.png`.
+- RESOLVED: Changed the visible-mass diagnostic to log-y rendering so the
+  low-mass spike no longer compresses the rest of the distribution.
+- RESOLVED: Replaced the cramped mixed open-data/open-simulation label with
+  `Open Data + Open Sim.` and an `8 TeV` right label; visually checked
+  `branch_feature_availability.png`, `sample_event_count_file_size.png`,
+  `preselection_yield_summary.png`, `visible_mass_slice.png`,
+  `variable_separation_ranking.png`, and `muon_pt_slice.png`.
+- Verification: `pixi run phase2-plots` completed; `pixi run lint-plots`
+  passed with "No plotting violations found in 3 file(s)." No ROOT files were
+  touched and no new data processing was run.

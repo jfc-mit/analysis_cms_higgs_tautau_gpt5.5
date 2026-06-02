@@ -25,6 +25,47 @@ FIG = OUT / "figures"
 
 mh.style.use("CMS")
 
+MIXED_OPEN_LABEL = "Open Data + Open Sim."
+ENERGY_LABEL = r"$8$ TeV"
+
+SAMPLE_LABELS = {
+    "GluGluToHToTauTau": "ggH H to tau tau",
+    "VBF_HToTauTau": "VBF H to tau tau",
+    "DYJetsToLL": "DY+jets",
+    "TTbar": "ttbar",
+    "W1JetsToLNu": "W+1 jet",
+    "W2JetsToLNu": "W+2 jets",
+    "W3JetsToLNu": "W+3 jets",
+    "Run2012B_TauPlusX": "Run 2012B TauPlusX",
+    "Run2012C_TauPlusX": "Run 2012C TauPlusX",
+}
+
+FEATURE_LABELS = {
+    "has_genpart": "Generator particles",
+    "has_direct_genmet": "Direct generator MET",
+    "has_pileup_weight": "Pileup weight",
+    "has_pv_npvs": "Primary vertices",
+    "has_tau_antimu_tight": "Tight tau anti-muon ID",
+    "has_btag": "Jet b-tag",
+    "has_met_covariance": "MET covariance",
+    "has_event_weight": "Event weight",
+}
+
+VARIABLE_LABELS = {
+    "delta_eta_jj": r"Dijet $|\Delta\eta|$",
+    "mt_mu_met": r"$m_T(\mu, MET)$",
+    "njet": "Jet multiplicity",
+    "m_addmet": "Add-MET mass",
+    "delta_r_mutau": r"$\Delta R(\mu, tau)$",
+    "dijet_mass": "Dijet mass",
+    "met_pt": "MET pt",
+    "tau_pt": "Tau pt",
+    "tau_eta": "Tau eta",
+    "m_vis": "Visible mass",
+    "mu_pt": "Muon pt",
+    "mu_eta": "Muon eta",
+}
+
 
 def mpl_magic(ax: plt.Axes) -> None:
     """Add simple y-axis headroom for legends when mplhep lacks mpl_magic."""
@@ -55,24 +96,32 @@ def make_hist(edges: list[float], counts: list[float]) -> hist.Hist:
     return h
 
 
+def sample_label(name: str) -> str:
+    return SAMPLE_LABELS.get(name, name.replace("_", " "))
+
+
 def plot_counts(inventory: dict) -> None:
     names = list(inventory["samples"])
     events = [inventory["samples"][name]["trees"]["Events"]["entries"] for name in names]
     sizes = [inventory["samples"][name]["size_bytes"] / 1e6 for name in names]
-    x = np.arange(len(names))
+    edges = np.arange(len(names) + 1) - 0.5
+    x = np.arange(len(names), dtype=float)
     fig, ax = plt.subplots(figsize=(10, 10))
-    ax.plot(x, events, marker="o", linestyle="", label="Events")
+    h_events = make_hist(edges.tolist(), events)
+    mh.histplot(h_events, yerr=np.sqrt(events), histtype="errorbar", ax=ax, label="Events")
     ax.set_yscale("log")
     ax.set_ylabel("Events")
     ax.set_xlabel("Sample")
     ax.set_xticks(x)
-    ax.set_xticklabels(names, rotation=90)
+    ax.set_xticklabels([sample_label(name) for name in names], rotation=90)
+    ax.set_xlim(-0.75, len(names) - 0.25)
     ax2 = ax.twinx()
-    ax2.plot(x, sizes, marker="s", linestyle="", color="tab:red", label="File size")
+    # File size is metadata, not an event-count histogram; draw it as a point diagnostic.
+    ax2.scatter(x, sizes, marker="s", color="tab:red", label="File size")
     ax2.set_ylabel("File size [MB]")
     ax.legend(fontsize="x-small", loc="upper left")
     ax2.legend(fontsize="x-small", loc="upper right")
-    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Data / Open Simulation", rlabel=r"$\sqrt{s} = 8$ TeV", ax=ax)
+    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel=MIXED_OPEN_LABEL, rlabel=ENERGY_LABEL, ax=ax)
     save(fig, "sample_event_count_file_size")
 
 
@@ -94,12 +143,12 @@ def plot_availability(inventory: dict) -> None:
     cax = mh.utils.make_square_add_cbar(ax)
     fig.colorbar(im, cax=cax)
     ax.set_xticks(np.arange(len(flags)))
-    ax.set_xticklabels([flag.replace("has_", "").replace("_", " ") for flag in flags], rotation=90)
+    ax.set_xticklabels([FEATURE_LABELS[flag] for flag in flags], rotation=90)
     ax.set_yticks(np.arange(len(names)))
-    ax.set_yticklabels(names)
+    ax.set_yticklabels([sample_label(name) for name in names])
     ax.set_xlabel("Feature")
     ax.set_ylabel("Sample")
-    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Data / Open Simulation", rlabel=r"$\sqrt{s} = 8$ TeV", ax=ax)
+    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel=MIXED_OPEN_LABEL, rlabel=ENERGY_LABEL, ax=ax)
     save(fig, "branch_feature_availability")
 
 
@@ -118,8 +167,9 @@ def combined_counts(histograms: dict, variable: str, roles: set[str]) -> tuple[l
     return edges, total.tolist()
 
 
-def plot_overlay(histograms: dict, variable: str, xlabel: str, output: str, density: bool = True) -> None:
+def plot_overlay(histograms: dict, variable: str, xlabel: str, output: str, density: bool = True, log_y: bool = False) -> None:
     fig, ax = plt.subplots(figsize=(10, 10))
+    positive_values = []
     specs = [
         ("Data slice", {"data"}, "black"),
         ("Signal MC slice", {"signal"}, "tab:green"),
@@ -139,11 +189,15 @@ def plot_overlay(histograms: dict, variable: str, xlabel: str, output: str, dens
         h = hist.Hist(hist.axis.Variable(edges, name="x"))
         h.view()[:] = counts_array
         mh.histplot(h, yerr=yerr, histtype="errorbar", ax=ax, label=label, color=color)
+        positive_values.extend(counts_array[counts_array > 0].tolist())
     ax.set_xlabel(xlabel)
     ax.set_ylabel("Normalized events" if density else "Events")
     ax.legend(fontsize="x-small", loc="upper right")
+    if log_y and positive_values:
+        ax.set_yscale("log")
+        ax.set_ylim(min(positive_values) * 0.5, max(positive_values) * 6.0)
     mpl_magic(ax)
-    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Data / Open Simulation", rlabel=r"$\sqrt{s} = 8$ TeV", ax=ax)
+    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel=MIXED_OPEN_LABEL, rlabel=ENERGY_LABEL, ax=ax)
     save(fig, output)
 
 
@@ -157,36 +211,39 @@ def plot_yields(yields: dict) -> None:
         "vbf_like": "VBF-like",
     }
     names = list(yields["samples"])
-    x = np.arange(len(names))
+    edges = np.arange(len(names) + 1) - 0.5
+    x = np.arange(len(names), dtype=float)
     fig, ax = plt.subplots(figsize=(10, 10))
     for region in regions:
         vals = [yields["samples"][name][region] for name in names]
-        ax.plot(x, vals, marker="o", linestyle="", label=labels[region])
+        h_vals = make_hist(edges.tolist(), vals)
+        mh.histplot(h_vals, yerr=np.sqrt(vals), histtype="errorbar", ax=ax, label=labels[region])
     ax.set_yscale("log")
     ax.set_ylabel("Events in 5k-event slice")
     ax.set_xlabel("Sample")
     ax.set_xticks(x)
-    ax.set_xticklabels(names, rotation=90)
-    ax.legend(fontsize="x-small", loc="upper right")
+    ax.set_xticklabels([sample_label(name) for name in names], rotation=90)
+    ax.set_xlim(-0.75, len(names) - 0.25)
+    ax.legend(fontsize="x-small", loc="upper left", bbox_to_anchor=(1.02, 1.0), borderaxespad=0.0)
     mpl_magic(ax)
-    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Data / Open Simulation", rlabel=r"$\sqrt{s} = 8$ TeV", ax=ax)
+    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel=MIXED_OPEN_LABEL, rlabel=ENERGY_LABEL, ax=ax)
     save(fig, "preselection_yield_summary")
 
 
 def plot_separation(separation: dict) -> None:
     rows = separation["ranking"][:12]
-    names = [row["variable"].replace("_", " ") for row in rows]
+    names = [VARIABLE_LABELS.get(row["variable"], row["variable"].replace("_", " ")) for row in rows]
     values = [row["separation_from_random"] for row in rows]
     y = np.arange(len(names))
     fig, ax = plt.subplots(figsize=(10, 10))
     ax.plot(values, y, marker="o", linestyle="", label="Single-variable separation")
     ax.set_yticks(y)
     ax.set_yticklabels(names)
-    ax.set_xlabel("abs(AUC - 0.5)")
+    ax.set_xlabel(r"$|\mathrm{AUC} - 0.5|$")
     ax.set_ylabel("Variable")
     ax.legend(fontsize="x-small", loc="upper right")
     mpl_magic(ax)
-    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Simulation", rlabel=r"$\sqrt{s} = 8$ TeV", ax=ax)
+    mh.label.exp_label(exp="CMS", text="", loc=0, data=True, llabel="Open Simulation", rlabel=ENERGY_LABEL, ax=ax)
     save(fig, "variable_separation_ranking")
 
 
@@ -201,7 +258,7 @@ def main() -> None:
     plot_overlay(histograms, "mu_pt", r"Leading muon $p_T$ [GeV]", "muon_pt_slice")
     plot_overlay(histograms, "tau_pt", r"Leading $\tau_h$ $p_T$ [GeV]", "tau_pt_slice")
     plot_overlay(histograms, "met_pt", r"$p_T^\mathrm{miss}$ [GeV]", "met_pt_slice")
-    plot_overlay(histograms, "m_vis", r"Visible mass [GeV]", "visible_mass_slice")
+    plot_overlay(histograms, "m_vis", r"Visible mass [GeV]", "visible_mass_slice", log_y=True)
     plot_overlay(histograms, "m_addmet", r"Add-MET mass [GeV]", "addmet_mass_slice")
     plot_overlay(histograms, "mt_mu_met", r"$m_T(\mu, p_T^\mathrm{miss})$ [GeV]", "mt_mu_met_slice")
     plot_overlay(histograms, "njet", "Jet multiplicity", "jet_multiplicity_slice", density=False)
