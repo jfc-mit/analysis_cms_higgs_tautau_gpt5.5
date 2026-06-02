@@ -1,5 +1,3 @@
-/goal Complete the following task:
-
 # Analysis Title: H→ττ Analysis with CMS Open Data
 
 You are performing a Higgs boson search in the τ +τ − decay channel using CMS Open Data from 2012 at √s = 8 TeV. The final state is one muon and one hadronically decaying tau lepton (μτh). Your goal is to produce distributions of key observables — particularly the visible di-tau mass — showing the Higgs signal contribution on top of Standard Model backgrounds. This loosely follows the official CMS publication (Phys. Lett. B 779 (2018) 283 and JHEP 05 (2014) 104).
@@ -17,3 +15,6 @@ Data source: NanoAOD files hosted on the CERN Open Data portal. These are ROOT f
 File Process Role GluGluToHToTauTau.root gg→H→ττ (mH=125 GeV) Signal VBF_HToTauTau.root VBF H→ττ Signal (subdominant) DYJetsToLL.root Z/gamma*→ll (Drell-Yan) Dominant irreducible background TTbar.root tt̄Background W1JetsToLNu.root, W2JetsToLNu.root, W3JetsToLNu.rootW+jets (1,2,3 jet bins) Background (fake τ_h) Run2012B_SingleMu.root, Run2012C_SingleMu.rootData (SingleMu trigger) Collision data
 
 Any additional CMS Open Data you need is available. All files are available from the CERN Open Data record or the GitHub repo's file listing. Instructions for CMS opendata access: cern-opendata-access.md
+
+- In the final analysis note, compare the final results with publisded results as comprehensively as the available ntuples and this analysis scope allow. Cover every result from that paper that is meaningfully comparable.
+- In those comparison tables and figures, include previous-study results and PDG/world-average (if aviable) results where the paper or public references provide them.
