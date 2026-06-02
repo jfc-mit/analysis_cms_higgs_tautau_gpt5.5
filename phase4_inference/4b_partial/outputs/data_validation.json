@@ -1,0 +1,186 @@
+{
+  "combined": {
+    "background_total": 908.9126844553014,
+    "chi2": 20.789720917001617,
+    "chi2_per_ndf": 1.732476743083468,
+    "data_over_background": 1.2322415773867215,
+    "data_total": 1120.0,
+    "ndf": 12,
+    "ratio_stat_uncertainty": 0.03682025967259877
+  },
+  "flags": {
+    "category_chi2_failure": false,
+    "combined_chi2_failure": false,
+    "combined_ratio_failure": true
+  },
+  "pass_criteria": {
+    "category_chi2_per_ndf_max": 5.0,
+    "combined_chi2_per_ndf_max": 3.0,
+    "combined_ratio_within_3_stat_uncertainties": true
+  },
+  "score_modeling_status": "flagged",
+  "score_template_validation": {
+    "boosted": {
+      "background_total": 205.9210196070171,
+      "chi2": 1.546783037403018,
+      "chi2_per_ndf": 0.3866957593507545,
+      "covariance_note": "Diagonal validation covariance: data Poisson + MC stat + 15% background normalization proxy.",
+      "data_over_background": 1.1072206248547078,
+      "data_total": 228.0,
+      "max_abs_pull": 0.9559336796541075,
+      "ndf": 4,
+      "pulls": [
+        0.39964187781825605,
+        0.9559336796541075,
+        0.4099573441128155,
+        0.5524447329895009
+      ]
+    },
+    "vbf": {
+      "background_total": 14.638983073577606,
+      "chi2": 10.759495325387652,
+      "chi2_per_ndf": 2.689873831346913,
+      "covariance_note": "Diagonal validation covariance: data Poisson + MC stat + 15% background normalization proxy.",
+      "data_over_background": 0.6147968034913849,
+      "data_total": 9.0,
+      "max_abs_pull": 3.2420091487263383,
+      "ndf": 4,
+      "pulls": [
+        -3.2420091487263383,
+        0.21510166037028647,
+        0.44507586903935825,
+        0.06716212822103777
+      ]
+    },
+    "zero_jet": {
+      "background_total": 688.3526817747066,
+      "chi2": 8.483442554210944,
+      "chi2_per_ndf": 2.120860638552736,
+      "covariance_note": "Diagonal validation covariance: data Poisson + MC stat + 15% background normalization proxy.",
+      "data_over_background": 1.2827726591018065,
+      "data_total": 883.0,
+      "max_abs_pull": 2.0145232301681038,
+      "ndf": 4,
+      "pulls": [
+        1.7234167803969842,
+        1.1435829922070566,
+        2.0145232301681038,
+        0.3836551189608447
+      ]
+    }
+  },
+  "visible_mass_validation": {
+    "categories": {
+      "boosted": {
+        "background_bins": [
+          17.404981205710264,
+          68.50849416963334,
+          63.4035444629205,
+          22.948342377718475,
+          12.121954278893462,
+          14.848353690363602,
+          10.133327142196666
+        ],
+        "background_sumw2": [
+          1.5138035034770603,
+          7.958791405996486,
+          7.183926748399674,
+          1.896912605390256,
+          0.7489074248654961,
+          1.0199217999818155,
+          0.6602861240749113
+        ],
+        "chi2": 6.581636218855007,
+        "chi2_per_ndf": 0.9402337455507153,
+        "data_counts": [
+          30.0,
+          79.0,
+          57.0,
+          22.0,
+          17.0,
+          14.0,
+          8.0
+        ],
+        "data_over_background": 1.084210188220896,
+        "ndf": 7
+      },
+      "vbf": {
+        "background_bins": [
+          2.015127066414312,
+          4.202763786994147,
+          2.6661285607188723,
+          2.019761532753884,
+          1.0668858304152755,
+          1.5078309619998764,
+          1.0141487845190122
+        ],
+        "background_sumw2": [
+          0.21023723331454403,
+          0.4762820165667164,
+          0.20104120861532934,
+          0.11223045638295179,
+          0.06202264634527902,
+          0.07285416694569487,
+          0.09509458549603403
+        ],
+        "chi2": 8.255035699232785,
+        "chi2_per_ndf": 1.179290814176112,
+        "data_counts": [
+          1.0,
+          4.0,
+          1.0,
+          0.0,
+          1.0,
+          0.0,
+          1.0
+        ],
+        "data_over_background": 0.5520040792310646,
+        "ndf": 7
+      },
+      "zero_jet": {
+        "background_bins": [
+          7.413028459095884,
+          279.3707817962977,
+          317.19544743520584,
+          58.353794518405316,
+          20.11853508942166,
+          15.672208076391659,
+          7.910706628952687
+        ],
+        "background_sumw2": [
+          1.077542339590508,
+          38.65572914618556,
+          44.290941102419175,
+          9.01698760258629,
+          3.6540923191017805,
+          2.571456869186001,
+          1.3008472631205843
+        ],
+        "chi2": 19.819324247808595,
+        "chi2_per_ndf": 2.831332035401228,
+        "data_counts": [
+          18.0,
+          349.0,
+          362.0,
+          84.0,
+          29.0,
+          22.0,
+          17.0
+        ],
+        "data_over_background": 1.2478143738013738,
+        "ndf": 7
+      }
+    },
+    "edges": [
+      0.0,
+      40.0,
+      60.0,
+      80.0,
+      100.0,
+      120.0,
+      160.0,
+      250.0
+    ],
+    "observable": "m_vis"
+  }
+}

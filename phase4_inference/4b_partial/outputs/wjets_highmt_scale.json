@@ -1,0 +1,20 @@
+{
+  "absolute_uncertainty": 0.08678270580662092,
+  "applied_scale_factor": 0.8433189889040035,
+  "control_region": "is_w_high_mt",
+  "data_events_10pct": 400,
+  "data_mask": "(run * 1000003 + luminosityBlock * 9176 + event) % 10 == 0",
+  "formula": "(N_data_CR - nonW_MC_CR) / W_MC_CR",
+  "nonw_background_mc_sumw2_10pct_lumi": 10.318766522856432,
+  "nonw_background_mc_yield_10pct_lumi": 196.35696148764833,
+  "nuisance": {
+    "hi": 1.1029061445887822,
+    "lo": 0.8970938554112179,
+    "name": "wjets_high_mt_control"
+  },
+  "raw_scale_factor": 0.8433189889040035,
+  "relative_uncertainty": 0.10290614458878213,
+  "status": "valid",
+  "wjets_mc_sumw2_10pct_lumi": 40.55220477295576,
+  "wjets_mc_yield_10pct_lumi": 241.478066060164
+}

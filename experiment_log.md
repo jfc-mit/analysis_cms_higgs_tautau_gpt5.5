@@ -391,3 +391,15 @@ Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mv
 ## 2026-06-02T16:06:00Z
 
 User added final documentation requirement: after Phase 4c full results, Phase 5 must produce both the full AN and a PRL-style paper draft (`phase5_documentation/outputs/PAPER_PRL_v1.{md,tex,pdf}`). The paper must include CMS-publication-style figures and tables for the main result and comparisons to meaningfully comparable CMS published H to tau tau results and available PDG/world-average context.
+
+## 2026-06-02T16:14:28Z
+
+Phase 4b executor built deterministic 10% data validation using `(run * 1000003 + luminosityBlock * 9176 + event) % 10 == 0` on data rows only. W high-mT scale = 0.8433 ± 0.0868; score modelling status = flagged.
+
+## 2026-06-02T16:15:22Z
+
+Phase 4b executor built deterministic 10% data validation using `(run * 1000003 + luminosityBlock * 9176 + event) % 10 == 0` on data rows only. W high-mT scale = 0.8433 ± 0.0868; score modelling status = flagged.
+
+## 2026-06-02T16:15:34Z
+
+Phase 4b executor built deterministic 10% data validation using `(run * 1000003 + luminosityBlock * 9176 + event) % 10 == 0` on data rows only. W high-mT scale = 0.8433 ± 0.0868; score modelling status = flagged.
