@@ -407,3 +407,21 @@ Phase 4b executor built deterministic 10% data validation using `(run * 1000003 
 ## 2026-06-02T16:25:20Z
 
 Phase 4c executor used all available Run2012B/C TauPlusX data from `sensitivity_selected_events.npz` with no post-unblinding retuning. Full high-mT W scale = 0.8528 ± 0.0370; full score modelling status = flagged. Phase 4b warning remains carried to Phase 5.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Generated final Phase 5 AN and PRL-style paper from Phase 4 JSON outputs.
+- Copied upstream figures into Phase 5 outputs and added CMS-style comparison figures.
+- Explicitly labelled observed Z and mu_hat as simplified open-data diagnostics because score-template validation is flagged.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Generated final Phase 5 AN and PRL-style paper from Phase 4 JSON outputs.
+- Copied upstream figures into Phase 5 outputs and added CMS-style comparison figures.
+- Explicitly labelled observed Z and mu_hat as simplified open-data diagnostics because score-template validation is flagged.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Generated final Phase 5 AN and PRL-style paper from Phase 4 JSON outputs.
+- Copied upstream figures into Phase 5 outputs and added CMS-style comparison figures.
+- Explicitly labelled observed Z and mu_hat as simplified open-data diagnostics because score-template validation is flagged.

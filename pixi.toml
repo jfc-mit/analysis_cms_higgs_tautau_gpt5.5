@@ -73,4 +73,6 @@ phase4c-results = "python phase4_inference/4c_observed/src/build_observed_result
 phase4c-plots = "python phase4_inference/4c_observed/src/plot_observed_results.py"
 phase4c-validate = "python phase4_inference/4c_observed/src/validate_observed_outputs.py"
 phase4c-all = "pixi run phase4c-results && pixi run phase4c-plots && pixi run phase4c-validate"
-all = "pixi run phase2-local-manifest && pixi run phase2-explore && pixi run phase2-plots && pixi run phase3-all && pixi run phase4a-all && pixi run phase4b-all && pixi run phase4c-all"
+phase5-docs = "python phase5_documentation/src/build_phase5_docs.py"
+phase5-all = "pixi run phase5-docs"
+all = "pixi run phase2-local-manifest && pixi run phase2-explore && pixi run phase2-plots && pixi run phase3-all && pixi run phase4a-all && pixi run phase4b-all && pixi run phase4c-all && pixi run phase5-all"
