@@ -120,8 +120,9 @@ much sensitivity can be recovered with the reduced information.
 - [D2] Primary fit observable: $m_\mathrm{vis}$ by category; alternatives
   are required cross-checks and may replace the baseline only after Phase 3
   evidence.
-- [D3] Categories: at minimum inclusive/baseline and VBF-enriched categories;
-  add 0-jet and boosted categories if Phase 2 confirms sufficient statistics.
+- [D3] Categories: at minimum mutually exclusive VBF-enriched and non-VBF
+  baseline categories; add 0-jet and boosted categories if Phase 2 confirms
+  sufficient statistics.
 - [D4] W+jets normalization: derive from data using a high-$m_T$ control
   region and include that control region in or alongside the likelihood.
 - [D5] Tau ID: apply tight tau_h anti-muon veto. Tau ID/trigger efficiency
@@ -136,6 +137,12 @@ much sensitivity can be recovered with the reduced information.
 - [D8] Blinding: do not inspect full-data signal-region discriminant
   distributions before Phase 4b/4c gates. Phase 3 optimization uses MC,
   control regions, and allowed validation regions only.
+- [D9] MVA/alternative-observable gate: an NN or add-MET observable may become
+  primary only if it passes the predeclared modelling and injection gates and
+  improves the expected sensitivity relative to $m_\mathrm{vis}$ by at least
+  10% in expected $\mu$ uncertainty, expected CLs limit, or expected discovery
+  significance. If no alternative clears both conditions, $m_\mathrm{vis}$
+  remains primary and the alternatives are documented as downscoped studies.
 
 ## Observables and Fit Outputs
 
@@ -150,9 +157,24 @@ Primary event-level observables:
   system. This is required alternative (c) and will be treated as an
   empirical discriminant, not a fully reconstructed tau-pair mass.
 - $m_\mathrm{NNMET}$: combined mass built from visible objects and an NN
-  regression of genMET direction/phi. This is required alternative (b).
-  Training must use simulation only, validate on independent MC, and test
-  robustness to MET and generator systematics.
+  regression target derived from simulation truth. The preferred target is the
+  missing transverse momentum vector carried by tau-neutrino truth from the
+  Higgs decay: both magnitude and direction are predicted as $(p_x, p_y)$ or
+  equivalently $(p_T, \phi)$. The reconstructed mass uses the visible
+  muon/tau_h four-vectors plus one massless missing-momentum four-vector with
+  transverse components from the NN prediction and longitudinal component set
+  to zero, matching the approximation used for $m_\mathrm{addMET}$. Allowed
+  inputs are reconstructed quantities that also exist in data: visible tau
+  and muon kinematics, reconstructed MET, jets, VBF variables, $m_T$, object
+  quality/isolation variables, and event weights. Gen-level quantities,
+  sample labels that encode the target, and truth matching flags are forbidden
+  as inference-time inputs. Training must use simulation only with train/test
+  splits, validation on an independent MC sample or held-out production mode,
+  data control-region checks of the input and output distributions, and MET,
+  jet, tau, and generator systematic stress tests. If genMET or generator
+  neutrino truth targets are absent, or if truth leakage cannot be excluded,
+  this observable is formally downscoped and cannot replace
+  $m_\mathrm{vis}$.
 - $D_\mathrm{NN}$: NN classifier score trained to separate H to tau tau from
   backgrounds with systematics propagated through the templates. This is
   required alternative (a).
@@ -169,6 +191,23 @@ Fit outputs:
 - Comparisons to CMS JHEP 05 (2014) 104, CMS Phys. Lett. B 779 (2018) 283,
   and ATLAS+CMS JHEP 08 (2016) 045 targets, with single-channel limitations
   clearly labelled.
+
+## Statistical Configuration
+
+[D7] The final workspace will use a binned profile-likelihood HistFactory
+model implemented with pyhf/cabinetry-compatible inputs. Upper limits will use
+the modified frequentist CLs method, $CL_s = CL_{s+b}/CL_b$, not simple
+$CL_{s+b}$. Discovery significance will use the one-sided $q_0$ statistic,
+with $q_0 = 0$ when the best-fit signal strength $\hat{\mu} < 0$. Limit tests
+will enforce $\mu \ge 0$.
+
+Asymptotic formulae are allowed for expected studies and observed limits only
+when every final signal-region bin has more than about five expected events,
+matching `conventions/search.md`. If any final SR bin falls below that
+threshold, Phase 4 must validate the asymptotic result against toy-based
+limits/significances or use direct toys for the final quoted result in that
+configuration. Low-stat VBF bins must not be rescued by silently dropping bins;
+bin merging or direct toys are the allowed remedies and must be documented.
 
 ## Dataset and Sample Inventory Plan
 
@@ -208,15 +247,15 @@ Additional samples to request/search in Phase 2:
 
 [D3] The minimum category structure is:
 
-- Baseline inclusive $\mu\tau_h$: opposite-sign muon and tau_h candidates,
-  low transverse mass signal region, standard object selections, and tight
-  tau_h anti-muon veto.
 - VBF-enriched: at least two jets, high dijet mass, large rapidity separation,
   and/or high visible-plus-MET transverse momentum. CMS 2018 used VBF
   selections with at least two jets, $m_{jj}>300$ GeV in $\mu\tau_h$, and
   $p_T^{\tau\tau}>50$ GeV; these values are reference starting points, not
   final cut values until Phase 2 confirms branch availability and Phase 3
   optimizes on expected sensitivity.
+- Non-VBF baseline $\mu\tau_h$: opposite-sign muon and tau_h candidates,
+  low transverse mass signal region, standard object selections, tight
+  tau_h anti-muon veto, and failure of the VBF-enriched assignment.
 
 Additional categories if statistics permit:
 
@@ -225,10 +264,20 @@ Additional categories if statistics permit:
 - Boosted/1-jet: one or more jets but not VBF; useful for ggH sensitivity and
   W/top validation.
 
-The statistical model will fit all categories simultaneously. Control regions
-for W+jets high-$m_T$, QCD same-sign/anti-isolation, and top-enriched b-tagged
-events should either be included in the pyhf workspace or used to derive
-pre-fit constraints with uncertainties propagated into the workspace.
+The statistical model will fit mutually exclusive categories simultaneously.
+Assignment order is binding: first assign VBF-enriched events; among the
+remaining events, assign boosted/1-jet and 0-jet categories if Phase 3 keeps
+them; all other selected low-$m_T$ opposite-sign events enter the non-VBF
+baseline. No event may enter two simultaneous-fit categories. A truly
+inclusive baseline distribution may be produced for diagnostics and AN
+illustration, but it is not an additional fit category if it duplicates events
+already assigned to VBF, boosted, or 0-jet categories.
+
+Control regions for W+jets high-$m_T$, QCD same-sign/anti-isolation, and
+top-enriched b-tagged events should either be included in the pyhf workspace
+or used to derive pre-fit constraints with uncertainties propagated into the
+workspace. CR and VR assignments must also be orthogonal to the SR and to each
+other by construction.
 
 ## Selection and Fit Approaches to Compare
 
@@ -239,13 +288,18 @@ expected CLs limit, or expected discovery significance from Asimov/pseudo-data.
 | Approach | Final observable | Strength | Cost/risk | Phase 3 comparison criterion |
 |---|---|---|---|---|
 | Baseline visible mass | $m_\mathrm{vis}$ in each category | Robust, transparent, prompt-requested, low dependence on missing MET covariance. | Lower separation than svfit or MVA; larger overlap with DY. | Expected sensitivity and data/MC quality in validation regions. |
-| NN discriminator | $D_\mathrm{NN}$ classifier score | Uses correlations among visible kinematics, jets, MET, $m_T$, and VBF variables. | Sensitive to mismodelled inputs; must propagate systematics through score templates. | Input-variable data/MC quality gate, MC closure, signal injection, and expected fit sensitivity. |
-| NN MET-direction regression | $m_\mathrm{NNMET}$ | Attempts to recover mass information lost to tau neutrinos using simulation truth. | Risk of truth leakage, generator dependence, and unphysical regression on unavailable gen-level features. | Independent MC validation, mass resolution comparison, closure under MET/jet/tau variations. |
-| Add-MET mass | $m_\mathrm{addMET}$ | Simple approximation to a combined mass using available missing energy. | Not a physically complete tau-pair mass; may sculpt W/top backgrounds. | Expected sensitivity, robustness to MET scale/resolution, and comparison to visible mass. |
+| NN discriminator | $D_\mathrm{NN}$ classifier score | Uses correlations among visible kinematics, jets, MET, $m_T$, and VBF variables. | Sensitive to mismodelled inputs; must propagate systematics through score templates. | Every input must have CR/VR data/MC $\chi^2/\mathrm{ndf} \le 5$ or be calibrated, removed, or explicitly justified; signal-injection bias must be below the `search.md` 20% threshold; closure and GoF must pass before it can be primary; expected sensitivity must improve by at least 10% over $m_\mathrm{vis}$. |
+| NN MET-direction regression | $m_\mathrm{NNMET}$ | Attempts to recover mass information lost to tau neutrinos using simulation truth. | Risk of truth leakage, generator dependence, and unphysical regression on unavailable gen-level features. | Same MVA input gate as the NN discriminator, independent-MC validation, data-control validation of output shape, closure under MET/jet/tau variations, injection bias below 20%, GoF p > 0.05, and at least 10% expected-sensitivity improvement over $m_\mathrm{vis}$. |
+| Add-MET mass | $m_\mathrm{addMET}$ | Simple approximation to a combined mass using available missing energy. | Not a physically complete tau-pair mass; may sculpt W/top backgrounds. | Expected sensitivity, robustness to MET scale/resolution, closure and GoF p > 0.05, injection bias below 20%, and at least 10% expected-sensitivity improvement before replacing $m_\mathrm{vis}$. |
 
 [D9] If an NN approach wins expected sensitivity but fails the MVA input
 modelling gate, it will not become primary until the problematic inputs are
 calibrated or removed. A high MC-only AUC is insufficient.
+
+Rejected alternatives remain in the artifact trail with the failed gate named:
+input modelling, closure/GoF, injection recovery, sensitivity gain, target
+availability, or truth-leakage prevention. A rejected observable may be shown
+as a diagnostic figure but cannot set the primary Phase 4/5 result.
 
 ## Core Selection Commitments
 
@@ -265,19 +319,52 @@ calibrated or removed. A high MC-only AUC is insufficient.
 
 [D4] W+jets will be normalized from data using a high-$m_T$ control region.
 The control selection will match the signal selection except for the transverse
-mass inversion. CMS Phys. Lett. B 779 (2018) 283 defines W-enriched control
-regions with $m_T>80$ GeV and states that they control W+jets yields in
-$\mu\tau_h$ and $e\tau_h$. This analysis will:
+mass inversion; "high-$m_T$" means a region above the low-$m_T$ signal
+selection chosen before unblinding, using the transverse mass between the
+selected muon and reconstructed missing transverse momentum. CMS Phys. Lett.
+B 779 (2018) 283 defines W-enriched control regions with $m_T>80$ GeV and
+states that they control W+jets yields in $\mu\tau_h$ and $e\tau_h$. This
+analysis will:
 
 1. Define the low-$m_T$ signal region and high-$m_T$ W control region before
    inspecting full signal-region data.
 2. Subtract non-W backgrounds using MC or sideband estimates.
-3. Derive a W normalization factor and uncertainty from the control region.
-4. Propagate the high-to-low-$m_T$ transfer uncertainty to the fit. CMS 2018
+3. Report the post-subtraction W purity in the CR, including top and VBF
+   signal contamination estimates. If top contamination is material, use a
+   b-tag veto or top-enriched subtraction/constraint; if VBF signal
+   contamination is material, exclude the CR from signal-sensitive bins or
+   model the contamination explicitly in the likelihood.
+4. Derive a W normalization factor and uncertainty from the control region.
+5. Validate the high-to-low-$m_T$ transfer factor separately in each fit
+   category where statistics allow. If VBF or another low-stat category lacks
+   a category-wise validation, assign and document a larger
+   category-extrapolation uncertainty rather than reusing the inclusive factor
+   as exact.
+6. Propagate the high-to-low-$m_T$ transfer uncertainty to the fit. CMS 2018
    quotes a 5-10% uncertainty for this transfer in its 13 TeV analysis, derived
    from a Z to mu mu based method; this analysis will not copy that value
    blindly but will use it as a reference target while deriving an open-data
    uncertainty from available validation.
+
+## Control and Validation Region Plan
+
+Region thresholds below are Phase 3 optimization targets, not new numerical
+claims. When a cited reference threshold is used, Phase 3 must carry the
+source citation and verify branch availability. Every CR/VR must be
+orthogonal to the SR through charge, isolation, $m_T$, b-tag, or category
+assignment changes, and every transfer factor must be defined before looking
+at full SR data.
+
+| Region | Selection difference from SR | Dominant process | Subtraction and likelihood use | Transfer or validation metric | Pass/fail and fallback |
+|---|---|---|---|---|---|
+| Signal region | Opposite-sign $\mu\tau_h$, low $m_T$, nominal isolation, category hierarchy applied. | DY, W, top, QCD, and H signal. | Included in likelihood only after the applicable blind phase. | Final discriminant templates and per-category yields. | No full-data SR inspection before Phase 4b/4c gates. |
+| W high-$m_T$ CR | Invert the low-$m_T$ requirement while keeping object, charge, and category selections otherwise matched. | W+jets with jet to tau_h fake. | Subtract DY/top/QCD/signal using MC or sidebands; include CR in likelihood or derive a constrained W normalization nuisance. | High-to-low-$m_T$ transfer factor, checked per category where possible; report CR purity after subtraction. | Closure p > 0.05 and GoF p > 0.05. If category statistics are insufficient, use an inclusive transfer plus larger category-extrapolation uncertainty. |
+| W VR | Intermediate or alternate $m_T$ sideband not used to derive the W normalization, or a category held out from the transfer fit. | W+jets. | Not used to fit the W normalization being tested. | Predicted vs observed yield and discriminant shape after applying CR transfer. | Closure p > 0.05; failure triggers transfer-factor revision before Phase 4b. |
+| QCD same-sign CR | Same object selections but same-sign $\mu$ and tau_h. | QCD/instrumental fakes. | Subtract non-QCD with MC/control estimates; derive QCD normalization or shape if statistics permit. | Same-sign to opposite-sign transfer and shape comparison. | Closure p > 0.05 in QCD VR. If unavailable, QCD becomes a documented limitation with conservative sideband-derived uncertainty. |
+| QCD anti-isolation CR/VR | Loosen or invert muon or tau_h isolation while keeping charge/category definitions explicit. | QCD/instrumental fakes. | Use as shape source or validation of same-sign method; avoid using the same events for both derivation and validation. | Isolation-transfer stability versus $m_\mathrm{vis}$, jets, and category. | Closure p > 0.05; unstable transfers require larger uncertainty or downscope of QCD-sensitive categories. |
+| Top CR | Require b-tagged jets or invert the b-veto if b-tag branches exist. | ttbar. | Include as likelihood CR or use to constrain top normalization; subtract W/DY/QCD. | Top normalization and shape transfer into b-vetoed SR categories. | Closure p > 0.05. If b-tag branches are absent, use MC with sourced uncertainty and label top validation as limited. |
+| Top VR | Same as SR but with top-enhancing jet/MET conditions not used in the top CR fit. | ttbar and W+jets. | Validation only. | Predicted top-rich yield and discriminant shape. | GoF p > 0.05 or top modelling/category uncertainty must be enlarged. |
+| Z-rich VR | Low-$m_T$, opposite-sign events in the visible-mass Z-dominated sideband or a control-like 0-jet region. | DY/Z to tau tau and Z to mu mu fakes. | Validate DY shape/normalization and tau anti-muon veto; do not tune DY after SR inspection. | Z peak/sideband yield, category extrapolation, and $m_\mathrm{vis}$ shape. | Closure p > 0.05. If all validation pulls are below 0.5 sigma, investigate whether the 10-15% DY/tau uncertainties are over-inflated. |
 
 ## Systematic Uncertainty Plan
 
@@ -295,6 +382,8 @@ not tuned to improve agreement.
 | Signal acceptance | Will implement | Vary object selections/scales and compare ggH/VBF acceptance; include generator/model limitation if only one generator is available. |
 | Signal shape | Will implement | Propagate tau energy scale, MET, jet energy scale, and NN-score variations to signal templates. Alternative observables are cross-checks, not a substitute for shape systematics. |
 | ISR modeling | Not applicable as LEP-specific dominant beam systematic; pp equivalent will implement | For pp, replace with parton shower/underlying-event, jet modelling, and production-mode acceptance uncertainties, following CMS reference analyses. |
+| Pileup profile and weights | Will implement if NanoAOD supports it; otherwise limitation | Phase 2 must inventory pileup-related branches such as pileup event counts and pileup weights. If present, Phase 4 will vary pileup reweighting/profile weights using a citable CMS 2012 pileup prescription or a data-derived profile uncertainty and propagate rate/shape effects. If the reduced NanoAOD files lack pileup information or weights, pileup is marked as an explicit reduced-open-data limitation, covered only indirectly by object/MET/data-MC validation and not double-counted as a separate nuisance. |
+| PDF uncertainty | Will implement | Use citable signal/background PDF uncertainties or reference-analysis values for pp production and acceptance where simulation-normalized components require them. |
 | 4-fermion backgrounds | Not applicable as LEP-specific category | For pp, diboson and single-top are the analogous electroweak backgrounds; include if samples exist or assign sourced normalization uncertainty. |
 | Background normalization | Will implement | DY 10-15% [D6, L2], W from high-$m_T$ data [D4], top from MC/control region, QCD from sidebands, diboson/single-top from MC with sourced uncertainties. |
 | Background shape | Will implement | Shape variations for DY, W, QCD sidebands, top, and NN-score templates. Use sideband/template comparisons where possible. |
@@ -335,6 +424,20 @@ analysis lacks those inputs, so the enlarged uncertainty is a documented
 limitation [L2]. Phase 4 must validate that it covers the Z peak and category
 extrapolation without making all validation pulls trivially small.
 
+## Alternative Observable Acceptance Gates
+
+Phase 3 must apply the same pass/fail gates to $D_\mathrm{NN}$,
+$m_\mathrm{NNMET}$, and $m_\mathrm{addMET}$ before any alternative can replace
+$m_\mathrm{vis}$:
+
+| Gate | Requirement | Failure handling |
+|---|---|---|
+| MVA/reconstruction input modelling | Each input distribution in allowed CR/VR data must satisfy $\chi^2/\mathrm{ndf} \le 5$ where statistics permit. Inputs above that threshold require calibration, removal, or a documented physics justification before training/fitting. | If unresolved, the observable is rejected as primary and retained only as a diagnostic. |
+| Closure and GoF | CR/VR closure and model GoF must satisfy p > 0.05 for any candidate primary observable. | Failure is Category A for that observable; revise modelling or keep $m_\mathrm{vis}$. |
+| Signal injection | Pseudo-data signal injection at 0x, 1x, 2x, and 5x expected signal must recover $\mu$ with less than 20% bias at every injection point, following `conventions/search.md`. | Bias above 20% requires investigation and prevents primary use until resolved. |
+| Expected sensitivity | The alternative must improve expected $\mu$ uncertainty, expected CLs limit, or expected discovery significance by at least 10% relative to $m_\mathrm{vis}$ using the same categories and systematics. | If the gain is smaller, keep $m_\mathrm{vis}$ primary even if the alternative is valid. |
+| Leakage and availability | Any NN target must be constructible from simulation truth for training and from reconstructed-only inputs for data application. | Missing truth targets or unavoidable gen-level leakage formally downscope the NN observable. |
+
 ## Required Validation Plan
 
 Search-convention validation requirements:
@@ -368,6 +471,27 @@ These targets are not pass/fail expectations for a single-channel reduced
 open-data analysis. They are comparison anchors. Phase 4/5 must quantify why
 the open-data sensitivity differs, including channel coverage, sample size,
 missing scale factors, and simpler mass reconstruction.
+
+### Binding Final-AN Comparison Target Matrix
+
+The final analysis note must include the following comparisons, with numerical
+values filled only from the named sources or from this analysis's own fit
+artifacts. Where the exact single-channel number is not yet in this Phase 1
+artifact, Phase 2/5 must extract it from the named source and cite the table,
+figure, or text location used.
+
+| Target | Quantity to compare | Source for number | Comparability status |
+|---|---|---|---|
+| This analysis expected result | Expected $\mu$, expected local significance, expected CLs upper limit if sensitivity is weak, category yields, post-fit S/B, nuisance impacts, VBF/non-VBF sensitivity split. | Phase 4a inference artifact. | Direct internal baseline. |
+| This analysis observed result | Observed $\mu$, uncertainty components, observed local significance, observed CLs upper limit if needed, category yields, post-fit S/B, nuisance pulls/constraints/impacts. | Phase 4b/4c inference artifacts after gates. | Direct internal final result. |
+| This analysis validation history | 10% result versus expected and full-data result versus both 10% and expected. | Phase 4b and 4c artifacts. | Direct internal stability check. |
+| CMS 2014 global H to tau tau | Global Run 1 best-fit signal strength and local significance. | CMS JHEP 05 (2014) 104 abstract and results sections. | Not directly comparable as a pass/fail target because CMS combines channels, years, categories, and full calibrations; use as global context. |
+| CMS 2014 $\mu\tau_h$ and category-level anchors | $\mu\tau_h$ yields, category yields, control-region treatment, and any channel/category signal-strength or significance values extractable from CMS JHEP 05 (2014) 104 tables/figures. | CMS JHEP 05 (2014) 104; exact table/figure to extract in Phase 2/5. | Partly comparable after labeling channel, luminosity, mass observable, and open-data limitations. |
+| CMS 2014 W/QCD/top/DY controls | Published control-region or background-normalization methods and any extractable yields/uncertainties for $\mu\tau_h$. | CMS JHEP 05 (2014) 104 methods and systematic tables; exact rows to extract in Phase 2/5. | Method comparator, not a numerical agreement requirement if reduced samples lack identical regions. |
+| CMS 2018 H to tau tau | Observed/expected significance, signal strength, VBF/control-region methodology, and systematic impact patterns. | CMS Phys. Lett. B 779 (2018) 283. | Not directly comparable numerically because it uses 13 TeV data, 35.9 fb^-1, modern reconstruction, and more channels/categories; use as methodological context. |
+| ATLAS+CMS or PDG/world-average Higgs references | World-average or combined Higgs signal-strength/branching/decay comparators where available, especially H to tau tau global context. | ATLAS+CMS JHEP 08 (2016) 045 and PDG or official Higgs-summary tables retrieved in Phase 2/5. | Not directly comparable to the reduced single-channel open-data fit; use to contextualize scale and consistency, not to tune the result. |
+| VBF versus non-VBF sensitivity | Expected and observed contribution to sensitivity, category yields, S/B, and dominant nuisances. | This analysis Phase 4 artifacts; CMS category descriptions from CMS 2014/2018 where extractable. | Internally comparable; externally qualitative unless matching category definitions can be extracted. |
+| Alternative observables | Expected sensitivity and validation status for $m_\mathrm{vis}$, $m_\mathrm{addMET}$, $m_\mathrm{NNMET}$, and $D_\mathrm{NN}$. | Phase 3 selection artifact and Phase 4 expected inference artifact. | Direct internal method comparison; not a CMS result comparison unless a published observable matches. |
 
 ## Flagship Figure List
 
