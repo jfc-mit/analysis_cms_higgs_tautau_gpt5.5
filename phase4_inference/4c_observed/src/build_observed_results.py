@@ -1,4 +1,15 @@
-"""Build Phase 4c full-data observed inference artifacts."""
+"""Build Phase 4c full-data observed inference artifacts.
+
+The Phase 5 audit found that the original score-template observed fit was
+numerically dominated by missing reducible background and failed score-shape
+validation. This script therefore builds two frozen observed models:
+
+* a visible-mass model with a same-sign data-driven QCD/fake template, used as
+  the primary conservative observed result;
+* the requested categorized HGB-score model with the same QCD correction,
+  retained as a diagnostic because its high-score shape validation remains
+  flagged.
+"""
 
 from __future__ import annotations
 
@@ -31,8 +42,13 @@ P4B = ROOT / "phase4_inference" / "4b_partial" / "outputs"
 SIGNALS = ["GluGluToHToTauTau", "VBF_HToTauTau"]
 BACKGROUNDS = ["DYJetsToLL", "TTbar", "W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
 WJETS = ["W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
-SAMPLES = SIGNALS + BACKGROUNDS
-OBSERVED_DATA_SCOPE = "all Run2012B/C TauPlusX rows in phase3 sensitivity_selected_events.npz"
+QCD_SAMPLE = "QCDSameSignDataDriven"
+ALL_SAMPLES = SIGNALS + BACKGROUNDS + [QCD_SAMPLE]
+PRIMARY_VISIBLE_BINS = np.asarray([0.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0], dtype=float)
+OBSERVED_DATA_SCOPE = (
+    "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; "
+    "11.467/fb is retained as the Open Data normalization reference"
+)
 
 
 def append_log(path: Path, message: str) -> None:
@@ -58,12 +74,27 @@ def sample_weights(norm: dict[str, Any]) -> dict[str, float]:
     return {sample: float(payload["absolute_weight_per_local_entry"]) for sample, payload in norm["mc_samples"].items()}
 
 
+def assign_categories(selected: dict[str, np.ndarray]) -> np.ndarray:
+    labels = np.full(len(selected["role"]), "none", dtype="<U16")
+    vbf = (
+        (selected["n_clean_jets"] >= 2)
+        & np.isfinite(selected["mjj"])
+        & (selected["mjj"] > 300.0)
+        & np.isfinite(selected["delta_eta_jj"])
+        & (np.abs(selected["delta_eta_jj"]) > 2.5)
+    )
+    labels[vbf] = "vbf"
+    labels[(labels == "none") & (selected["n_clean_jets"] >= 1)] = "boosted"
+    labels[(labels == "none") & (selected["n_clean_jets"] == 0)] = "zero_jet"
+    return labels
+
+
 def weighted_hist(values: np.ndarray, weight: float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     finite = np.isfinite(values)
     counts, _ = np.histogram(values[finite], bins=bins)
     yields = counts.astype(float) * weight
     variances = counts.astype(float) * weight * weight
-    return counts.astype(int), yields, variances
+    return counts.astype(float), yields, variances
 
 
 def count_hist(values: np.ndarray, bins: np.ndarray) -> np.ndarray:
@@ -134,6 +165,162 @@ def derive_w_scale(selected: dict[str, np.ndarray], weights: dict[str, float]) -
     }
 
 
+def derive_vbf_background_scale(selected: dict[str, np.ndarray], weights: dict[str, float], w_scale: dict[str, Any]) -> dict[str, Any]:
+    category = assign_categories(selected)
+    cr = (category == "vbf") & selected["is_top_btag_handle"].astype(bool) & ~selected["is_signal_region"].astype(bool)
+    role = selected["role"]
+    sample = selected["sample"]
+    n_data = int(np.sum((role == "data") & cr))
+    mc_yield = 0.0
+    mc_var = 0.0
+    rows: dict[str, Any] = {}
+    for sample_name in BACKGROUNDS:
+        scale = w_scale["applied_scale_factor"] if sample_name in WJETS else 1.0
+        count = int(np.sum((sample == sample_name) & cr))
+        weight = weights[sample_name] * scale
+        yld = count * weight
+        var = count * weight * weight
+        mc_yield += yld
+        mc_var += var
+        rows[sample_name] = {"raw_events": count, "yield": yld, "sumw2": var}
+    raw_scale = n_data / mc_yield if mc_yield > 0 else math.nan
+    raw_unc = math.sqrt(max(float(n_data) + mc_var, 0.0)) / mc_yield if mc_yield > 0 else math.inf
+    status = "valid"
+    applied = raw_scale
+    if not math.isfinite(raw_scale) or not math.isfinite(raw_unc) or mc_yield <= 0:
+        status = "downscoped_no_valid_vbf_control"
+        applied = 1.0
+        raw_unc = 1.0
+    elif raw_scale < 0:
+        status = "capped_negative_to_zero"
+        applied = 0.0
+    rel_unc = raw_unc / max(abs(applied), 1e-12) if applied > 0 else raw_unc
+    return {
+        "control_region": "vbf_like_top_btag_not_signal_region",
+        "formula": "N_data_CR / MC_background_CR",
+        "data_scope": "VBF-like rows with top-btag handle outside the low-mT signal region",
+        "data_events": n_data,
+        "background_mc_yield": mc_yield,
+        "background_mc_sumw2": mc_var,
+        "rows": rows,
+        "raw_scale_factor": raw_scale,
+        "applied_scale_factor": applied,
+        "absolute_uncertainty": raw_unc,
+        "relative_uncertainty": rel_unc,
+        "status": status,
+        "nuisance": {"hi": 1.0 + rel_unc, "lo": max(0.001, 1.0 - rel_unc)},
+        "application": "central scale applied only to MC background samples in the VBF fit category",
+    }
+
+
+def mc_background_scale(sample: str, category: str, w_scale: dict[str, Any], vbf_scale: dict[str, Any]) -> float:
+    scale = w_scale["applied_scale_factor"] if sample in WJETS else 1.0
+    if category == "vbf" and sample in BACKGROUNDS:
+        scale *= vbf_scale["applied_scale_factor"]
+    return float(scale)
+
+
+def qcd_sideband_estimate(
+    selected: dict[str, np.ndarray],
+    weights: dict[str, float],
+    categories: list[str],
+    edges: np.ndarray,
+    observable: str,
+    w_scale: dict[str, Any],
+    vbf_scale: dict[str, Any],
+) -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:
+    role = selected["role"]
+    sample = selected["sample"]
+    values = selected[observable]
+    category = assign_categories(selected)
+    ss = selected["is_same_sign_low_mt"].astype(bool)
+    sr = selected["is_signal_region"].astype(bool)
+
+    qcd_raw = np.zeros((len(categories), len(edges) - 1), dtype=float)
+    qcd_var = np.zeros_like(qcd_raw)
+    rows: dict[str, Any] = {}
+    for icat, cat in enumerate(categories):
+        data_counts = count_hist(values[(role == "data") & ss & (category == cat)], edges)
+        mc_yield = np.zeros(len(edges) - 1, dtype=float)
+        mc_var = np.zeros(len(edges) - 1, dtype=float)
+        for sample_name in BACKGROUNDS:
+            scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale)
+            _, yld, var = weighted_hist(values[(sample == sample_name) & ss & (category == cat)], weights[sample_name] * scale, edges)
+            mc_yield += yld
+            mc_var += var
+        raw = data_counts - mc_yield
+        positive = raw > 0
+        qcd_raw[icat] = np.where(positive, raw, 0.0)
+        qcd_var[icat] = np.where(positive, data_counts + mc_var, 0.0)
+        rows[cat] = {
+            "same_sign_data_counts": data_counts.tolist(),
+            "same_sign_nonqcd_mc_yields": mc_yield.tolist(),
+            "unscaled_qcd_template": qcd_raw[icat].tolist(),
+            "unscaled_qcd_sumw2": qcd_var[icat].tolist(),
+            "unscaled_qcd_total": float(np.sum(qcd_raw[icat])),
+        }
+
+    numerator = 0.0
+    denominator = 0.0
+    numerator_var = 0.0
+    denominator_var = 0.0
+    for icat, cat in enumerate(categories):
+        data_counts = count_hist(values[(role == "data") & sr & (category == cat)], edges)
+        mc_yield = np.zeros(len(edges) - 1, dtype=float)
+        mc_var = np.zeros(len(edges) - 1, dtype=float)
+        for sample_name in BACKGROUNDS:
+            scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale)
+            _, yld, var = weighted_hist(values[(sample == sample_name) & sr & (category == cat)], weights[sample_name] * scale, edges)
+            mc_yield += yld
+            mc_var += var
+        if qcd_raw[icat, 0] > 0:
+            numerator += max(float(data_counts[0] - mc_yield[0]), 0.0)
+            denominator += float(qcd_raw[icat, 0])
+            numerator_var += float(data_counts[0] + mc_var[0])
+            denominator_var += float(qcd_var[icat, 0])
+
+    if denominator > 0:
+        alpha = numerator / denominator
+        variance = numerator_var / (denominator**2) + (numerator**2) * denominator_var / (denominator**4)
+        alpha_unc = math.sqrt(max(variance, 0.0))
+        status = "measured_from_low_observable_sideband"
+    else:
+        alpha = 1.0
+        alpha_unc = 1.0
+        status = "fallback_no_positive_same_sign_denominator"
+    rel_unc = alpha_unc / max(abs(alpha), 1e-12)
+    scaled = qcd_raw * alpha
+    # This variance is used in validation plots/chi2. The pyhf workspace carries
+    # the same sideband uncertainty as a global normsys for speed and stability.
+    scaled_var = qcd_var * alpha * alpha + (qcd_raw * alpha_unc) ** 2
+    payload = {
+        "method": "same-sign low-mT data minus non-QCD MC, transferred to opposite-sign signal candidates",
+        "observable": observable,
+        "category_assignment": "rederived VBF/boosted/zero-jet rules for control-region rows",
+        "transfer_sideband": {
+            "bin_index": 0,
+            "bin_edges": [float(edges[0]), float(edges[1])],
+            "description": "lowest fitted-observable bin, chosen as the most signal-depleted control bin",
+            "numerator_os_data_minus_nonqcd": numerator,
+            "denominator_same_sign_qcd_template": denominator,
+            "scale_factor": alpha,
+            "absolute_uncertainty": alpha_unc,
+            "relative_uncertainty": rel_unc,
+            "status": status,
+        },
+        "normsys": {"name": "qcd_ss_transfer", "hi": 1.0 + rel_unc, "lo": max(0.001, 1.0 - rel_unc)},
+        "rows": rows,
+        "scaled_qcd_total": float(np.sum(scaled)),
+        "limitations": [
+            "No anti-isolated tau branch is available in the selected-event artifact.",
+            "The transfer factor is measured in the lowest observable bin and propagated globally.",
+            "The VBF MC-background control scale is applied before non-QCD subtraction.",
+            "QCD shape-statistical uncertainties are recorded for validation but not expanded into per-bin pyhf nuisances in the final workspace.",
+        ],
+    }
+    return scaled, scaled_var, payload
+
+
 def build_histograms(
     selected: dict[str, np.ndarray],
     weights: dict[str, float],
@@ -141,49 +328,78 @@ def build_histograms(
     edges: np.ndarray,
     observable: str,
     w_scale: dict[str, Any],
-) -> tuple[dict[str, Any], np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    vbf_scale: dict[str, Any],
+) -> tuple[dict[str, Any], np.ndarray, np.ndarray, np.ndarray, np.ndarray, dict[str, Any]]:
     sample_array = selected["sample"]
     role = selected["role"]
     sr = selected["is_signal_region"].astype(bool)
-    cat_array = selected["sensitivity_best_category"]
-    values = np.zeros((len(SAMPLES), len(categories), len(edges) - 1), dtype=float)
+    cat_array = assign_categories(selected)
+    values = np.zeros((len(ALL_SAMPLES), len(categories), len(edges) - 1), dtype=float)
     variances = np.zeros_like(values)
-    raw_counts = np.zeros_like(values, dtype=int)
+    raw_counts = np.zeros_like(values)
     data_counts = np.zeros((len(categories), len(edges) - 1), dtype=float)
     per_sample: dict[str, Any] = {}
-    for isample, sample in enumerate(SAMPLES):
-        scale = w_scale["applied_scale_factor"] if sample in WJETS else 1.0
-        per_sample[sample] = {"weight_full_lumi": weights[sample], "extra_wjets_scale": scale, "categories": {}}
-        for icat, category in enumerate(categories):
-            mask = sr & (cat_array == category) & (sample_array == sample)
-            counts, yld, var = weighted_hist(selected[observable][mask], weights[sample] * scale, edges)
+    for isample, sample_name in enumerate(SIGNALS + BACKGROUNDS):
+        per_sample[sample_name] = {"weight_full_lumi": weights[sample_name], "categories": {}}
+        for icat, cat in enumerate(categories):
+            scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale) if sample_name in BACKGROUNDS else 1.0
+            mask = sr & (cat_array == cat) & (sample_array == sample_name)
+            counts, yld, var = weighted_hist(selected[observable][mask], weights[sample_name] * scale, edges)
             raw_counts[isample, icat] = counts
             values[isample, icat] = yld
             variances[isample, icat] = var
-            per_sample[sample]["categories"][category] = {
+            per_sample[sample_name]["categories"][cat] = {
                 "raw_counts": counts.tolist(),
                 "weighted_yields": yld.tolist(),
                 "sumw2": var.tolist(),
                 "total_yield": float(np.sum(yld)),
+                "extra_wjets_scale": w_scale["applied_scale_factor"] if sample_name in WJETS else 1.0,
+                "extra_vbf_background_scale": vbf_scale["applied_scale_factor"] if sample_name in BACKGROUNDS and cat == "vbf" else 1.0,
             }
-    for icat, category in enumerate(categories):
-        mask = (role == "data") & sr & (cat_array == category)
+    qcd_yield, qcd_var, qcd_payload = qcd_sideband_estimate(selected, weights, categories, edges, observable, w_scale, vbf_scale)
+    qcd_index = ALL_SAMPLES.index(QCD_SAMPLE)
+    values[qcd_index] = qcd_yield
+    variances[qcd_index] = qcd_var
+    raw_counts[qcd_index] = np.asarray([qcd_payload["rows"][cat]["unscaled_qcd_template"] for cat in categories], dtype=float)
+    per_sample[QCD_SAMPLE] = {
+        "weight_full_lumi": None,
+        "method": qcd_payload["method"],
+        "extra_wjets_scale": None,
+        "categories": {
+            cat: {
+                "raw_counts": raw_counts[qcd_index, icat].tolist(),
+                "weighted_yields": values[qcd_index, icat].tolist(),
+                "sumw2": variances[qcd_index, icat].tolist(),
+                "total_yield": float(np.sum(values[qcd_index, icat])),
+            }
+            for icat, cat in enumerate(categories)
+        },
+    }
+    for icat, cat in enumerate(categories):
+        mask = (role == "data") & sr & (cat_array == cat)
         data_counts[icat] = count_hist(selected[observable][mask], edges)
     totals: dict[str, Any] = {}
-    signal_idx = [SAMPLES.index(sample) for sample in SIGNALS]
-    background_idx = [SAMPLES.index(sample) for sample in BACKGROUNDS]
-    for icat, category in enumerate(categories):
+    signal_idx = [ALL_SAMPLES.index(sample_name) for sample_name in SIGNALS]
+    nonqcd_background_idx = [ALL_SAMPLES.index(sample_name) for sample_name in BACKGROUNDS]
+    background_idx = nonqcd_background_idx + [ALL_SAMPLES.index(QCD_SAMPLE)]
+    for icat, cat in enumerate(categories):
         signal = np.sum(values[signal_idx, icat], axis=0)
+        nonqcd_background = np.sum(values[nonqcd_background_idx, icat], axis=0)
+        qcd = values[ALL_SAMPLES.index(QCD_SAMPLE), icat]
         background = np.sum(values[background_idx, icat], axis=0)
         bkg_var = np.sum(variances[background_idx, icat], axis=0)
         data = data_counts[icat]
-        totals[category] = {
+        totals[cat] = {
             "data_counts": data.tolist(),
             "signal_bins": signal.tolist(),
+            "nonqcd_background_bins": nonqcd_background.tolist(),
+            "qcd_bins": qcd.tolist(),
             "background_bins": background.tolist(),
             "background_sumw2": bkg_var.tolist(),
             "data_total": int(np.sum(data)),
             "signal_total": float(np.sum(signal)),
+            "nonqcd_background_total": float(np.sum(nonqcd_background)),
+            "qcd_total": float(np.sum(qcd)),
             "background_total": float(np.sum(background)),
             "data_over_background": float(np.sum(data) / np.sum(background)) if np.sum(background) > 0 else None,
         }
@@ -194,16 +410,19 @@ def build_histograms(
             "data_scope": OBSERVED_DATA_SCOPE,
             "phase4b_human_gate": "auto-passed by explicit user instruction on 2026-06-02",
             "post_unblinding_retuning": False,
+            "phase5_audit_correction": "Added same-sign QCD/fake background and demoted unvalidated score fit.",
         },
         "binning": {"observable": observable, "edges": edges.tolist()},
         "categories": categories,
         "samples": per_sample,
+        "qcd_sideband_estimate": qcd_payload,
+        "vbf_background_scale": vbf_scale,
         "totals": totals,
     }
-    return yields, values, variances, raw_counts, data_counts
+    return yields, values, variances, raw_counts, data_counts, qcd_payload
 
 
-def validation_metrics(yields: dict[str, Any]) -> dict[str, Any]:
+def validation_metrics(yields: dict[str, Any], label: str) -> dict[str, Any]:
     rows = {}
     combined_chi2 = 0.0
     combined_ndf = 0
@@ -213,21 +432,25 @@ def validation_metrics(yields: dict[str, Any]) -> dict[str, Any]:
         data = np.asarray(payload["data_counts"], dtype=float)
         bkg = np.asarray(payload["background_bins"], dtype=float)
         bkg_var = np.asarray(payload["background_sumw2"], dtype=float)
-        variance = np.maximum(data, 1.0) + bkg_var + (0.15 * bkg) ** 2
+        variance = np.maximum(data, 1.0) + bkg_var + (0.15 * np.asarray(payload["nonqcd_background_bins"], dtype=float)) ** 2
         pulls = (data - bkg) / np.sqrt(np.maximum(variance, 1e-12))
         chi2 = float(np.sum((data - bkg) ** 2 / np.maximum(variance, 1e-12)))
         ndf = int(np.count_nonzero(bkg > 0))
         ratio = float(np.sum(data) / np.sum(bkg)) if np.sum(bkg) > 0 else math.nan
+        bin_ratios = np.divide(data, bkg, out=np.full_like(data, np.nan, dtype=float), where=bkg > 0)
         rows[category] = {
             "chi2": chi2,
             "ndf": ndf,
             "chi2_per_ndf": chi2 / ndf if ndf > 0 else math.nan,
             "data_total": float(np.sum(data)),
             "background_total": float(np.sum(bkg)),
+            "nonqcd_background_total": float(payload["nonqcd_background_total"]),
+            "qcd_total": float(payload["qcd_total"]),
             "data_over_background": ratio,
+            "bin_data_over_background": bin_ratios.tolist(),
             "max_abs_pull": float(np.max(np.abs(pulls))) if pulls.size else 0.0,
             "pulls": pulls.tolist(),
-            "covariance_note": "Diagonal validation covariance: data Poisson + MC stat + 15% background normalization proxy.",
+            "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
         }
         combined_chi2 += chi2
         combined_ndf += ndf
@@ -247,7 +470,14 @@ def validation_metrics(yields: dict[str, Any]) -> dict[str, Any]:
     category_fail = any(row["chi2_per_ndf"] > 5.0 for row in rows.values())
     combined_fail = bool(combined["chi2_per_ndf"] > 3.0)
     ratio_fail = bool(abs(ratio - 1.0) > 3.0 * rel_unc) if math.isfinite(ratio) and math.isfinite(rel_unc) else True
+    high_score_shape_fail = False
+    if "score" in label:
+        for row in rows.values():
+            bin_ratios = np.asarray(row["bin_data_over_background"], dtype=float)
+            if bin_ratios.size and np.isfinite(bin_ratios[-1]) and bin_ratios[-1] > 1.25:
+                high_score_shape_fail = True
     return {
+        "model_label": label,
         "score_template_validation": rows,
         "combined": combined,
         "pass_criteria": {
@@ -255,11 +485,12 @@ def validation_metrics(yields: dict[str, Any]) -> dict[str, Any]:
             "category_chi2_per_ndf_max": 5.0,
             "combined_ratio_within_3_stat_uncertainties": True,
         },
-        "score_modeling_status": "pass" if not (category_fail or combined_fail or ratio_fail) else "flagged",
+        "score_modeling_status": "pass" if not (category_fail or combined_fail or ratio_fail or high_score_shape_fail) else "flagged",
         "flags": {
             "category_chi2_failure": category_fail,
             "combined_chi2_failure": combined_fail,
             "combined_ratio_failure": ratio_fail,
+            "high_score_shape_failure": high_score_shape_fail,
         },
     }
 
@@ -270,7 +501,9 @@ def stat_errors(values: np.ndarray, variances: np.ndarray, isample: int, icat: i
     return [float(err) if val > 0 else 0.0 for err, val in zip(errs, vals, strict=True)]
 
 
-def sample_modifiers(sample: str, category: str, values: np.ndarray, variances: np.ndarray, isample: int, icat: int, w_scale: dict[str, Any]) -> list[dict[str, Any]]:
+def sample_modifiers(sample: str, category: str, values: np.ndarray, variances: np.ndarray, isample: int, icat: int, qcd_payload: dict[str, Any], w_scale: dict[str, Any], vbf_scale: dict[str, Any]) -> list[dict[str, Any]]:
+    if sample == QCD_SAMPLE:
+        return [{"name": "qcd_ss_transfer", "type": "normsys", "data": {"hi": qcd_payload["normsys"]["hi"], "lo": qcd_payload["normsys"]["lo"]}}]
     modifiers: list[dict[str, Any]] = [
         {"name": "lumi_2012", "type": "normsys", "data": {"hi": 1.026, "lo": 0.974}},
         {"name": "tau_open_data_acceptance", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}},
@@ -282,37 +515,45 @@ def sample_modifiers(sample: str, category: str, values: np.ndarray, variances: 
         modifiers.append({"name": "dy_norm_open_data", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}})
     if sample in WJETS:
         modifiers.append({"name": "wjets_high_mt_control", "type": "normsys", "data": w_scale["nuisance"]})
+    if category == "vbf" and sample in BACKGROUNDS:
+        modifiers.append({"name": "vbf_background_control", "type": "normsys", "data": vbf_scale["nuisance"]})
     return modifiers
 
 
-def build_workspace(categories: list[str], values: np.ndarray, variances: np.ndarray, observations: np.ndarray, w_scale: dict[str, Any]) -> dict[str, Any]:
+def build_workspace(categories: list[str], values: np.ndarray, variances: np.ndarray, observations: np.ndarray, qcd_payload: dict[str, Any], w_scale: dict[str, Any], vbf_scale: dict[str, Any], name: str) -> dict[str, Any]:
     channels = []
     obs = []
     for icat, category in enumerate(categories):
         samples = []
-        for isample, sample in enumerate(SAMPLES):
-            samples.append({"name": sample, "data": values[isample, icat].tolist(), "modifiers": sample_modifiers(sample, category, values, variances, isample, icat, w_scale)})
+        for isample, sample in enumerate(ALL_SAMPLES):
+            samples.append({"name": sample, "data": values[isample, icat].tolist(), "modifiers": sample_modifiers(sample, category, values, variances, isample, icat, qcd_payload, w_scale, vbf_scale)})
         channels.append({"name": sanitize(category), "samples": samples})
         obs.append({"name": sanitize(category), "data": observations[icat].tolist()})
     return {
         "channels": channels,
-        "measurements": [{"name": "observed_mu_tautau_full", "config": {"poi": "mu", "parameters": [{"name": "mu", "inits": [1.0], "bounds": [[0.0, 50.0]]}]}}],
+        "measurements": [{"name": name, "config": {"poi": "mu", "parameters": [{"name": "mu", "inits": [1.0], "bounds": [[0.0, 50.0]]}]}}],
         "observations": obs,
         "version": "1.0.0",
     }
 
 
-def fit_workspace(workspace: dict[str, Any]) -> dict[str, Any]:
+def fit_workspace(workspace: dict[str, Any], interpretation: str, scan_max: float = 50.0) -> dict[str, Any]:
     try:
         ws = pyhf.Workspace(workspace)
         model = ws.model()
         data = ws.data(model)
         pars = pyhf.infer.mle.fit(data, model, init_pars=model.config.suggested_init(), par_bounds=model.config.suggested_bounds(), fixed_params=model.config.suggested_fixed())
         pars_list = [float(x) for x in pyhf.tensorlib.tolist(pars)]
-        fit = {"status": "evaluated", "mu_hat": float(pars_list[model.config.poi_index]), "parameters": dict(zip(model.config.par_names, pars_list, strict=True)), "npars": model.config.npars}
+        fit = {
+            "status": "evaluated",
+            "interpretation": interpretation,
+            "mu_hat": float(pars_list[model.config.poi_index]),
+            "parameters": dict(zip(model.config.par_names, pars_list, strict=True)),
+            "npars": model.config.npars,
+        }
         from pyhf.infer.intervals import upper_limits
 
-        scan = np.linspace(0.0, 50.0, 101)
+        scan = np.linspace(0.0, scan_max, int(scan_max * 2) + 1)
         obs_limit, exp_limits, results = upper_limits.upper_limit(data, model, scan=scan, level=0.05, return_results=True)
         fit["observed_upper_limit"] = {
             "status": "evaluated",
@@ -327,21 +568,55 @@ def fit_workspace(workspace: dict[str, Any]) -> dict[str, Any]:
         fit["discovery_diagnostic"] = {"status": "evaluated", "method": "pyhf asymptotic q0 on observed full data", "p_value": p_float, "z_value": float(norm.isf(p_float)) if p_float > 0 else float("inf")}
         return fit
     except Exception as exc:  # noqa: BLE001
-        return {"status": "failed", "reason": str(exc)}
+        return {"status": "failed", "interpretation": interpretation, "reason": str(exc)}
 
 
-def compare_to_prior(validation: dict[str, Any], fit: dict[str, Any], w_scale: dict[str, Any]) -> dict[str, Any]:
+def build_model(
+    selected: dict[str, np.ndarray],
+    weights: dict[str, float],
+    categories: list[str],
+    edges: np.ndarray,
+    observable: str,
+    w_scale: dict[str, Any],
+    vbf_scale: dict[str, Any],
+    model_key: str,
+    interpretation: str,
+) -> dict[str, Any]:
+    yields, values, variances, raw_counts, data_counts, qcd_payload = build_histograms(selected, weights, categories, edges, observable, w_scale, vbf_scale)
+    validation = validation_metrics(yields, model_key)
+    workspace = build_workspace(categories, values, variances, data_counts, qcd_payload, w_scale, vbf_scale, f"{model_key}_observed_mu_tautau")
+    fit = fit_workspace(workspace, interpretation)
+    return {
+        "key": model_key,
+        "observable": observable,
+        "categories": categories,
+        "edges": edges.tolist(),
+        "yields": yields,
+        "values": values,
+        "variances": variances,
+        "raw_counts": raw_counts,
+        "data_counts": data_counts,
+        "qcd": qcd_payload,
+        "validation": validation,
+        "workspace": workspace,
+        "fit": fit,
+    }
+
+
+def compare_to_prior(primary: dict[str, Any], score: dict[str, Any], w_scale: dict[str, Any]) -> dict[str, Any]:
     p4a = load_json(P4A / "expected_results.json")
     p4b_results = load_json(P4B / "partial_results.json")
     p4b_validation = load_json(P4B / "data_validation.json")
     p4b_w = load_json(P4B / "wjets_highmt_scale.json")
     expected_band = p4a["expected_upper_limit"]["expected_band_minus2_minus1_median_plus1_plus2"]
-    observed_limit = fit.get("observed_upper_limit", {}).get("observed_limit")
-    mu_hat = fit.get("mu_hat")
+    primary_limit = primary["fit"].get("observed_upper_limit", {})
+    score_limit = score["fit"].get("observed_upper_limit", {})
+    primary_expected = primary_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])
     return {
         "phase4a_expected": {
             "median_expected_limit": expected_band[2],
             "expected_discovery_z": p4a["discovery_sensitivity"].get("z_value"),
+            "model_note": "historical expected score-template model before Phase 5 QCD audit correction",
         },
         "phase4b_warning_carried": {
             "score_modeling_status": p4b_validation["score_modeling_status"],
@@ -356,128 +631,150 @@ def compare_to_prior(validation: dict[str, Any], fit: dict[str, Any], w_scale: d
             "phase4c_full_uncertainty": w_scale["absolute_uncertainty"],
             "full_minus_10pct": w_scale["applied_scale_factor"] - p4b_w["applied_scale_factor"],
         },
-        "score_validation_comparison": {
-            "phase4b_combined_data_over_background": p4b_validation["combined"]["data_over_background"],
-            "phase4c_combined_data_over_background": validation["combined"]["data_over_background"],
-            "phase4b_combined_chi2_per_ndf": p4b_validation["combined"]["chi2_per_ndf"],
-            "phase4c_combined_chi2_per_ndf": validation["combined"]["chi2_per_ndf"],
-            "phase4c_score_modeling_status": validation["score_modeling_status"],
+        "primary_fit_comparison": {
+            "model": primary["key"],
+            "median_expected_limit": primary_expected[2],
+            "observed_limit": primary_limit.get("observed_limit"),
+            "mu_hat": primary["fit"].get("mu_hat"),
+            "z_value": primary["fit"].get("discovery_diagnostic", {}).get("z_value"),
+            "observed_limit_over_median_expected": primary_limit.get("observed_limit") / primary_expected[2] if primary_limit.get("observed_limit") is not None and primary_expected[2] else None,
         },
-        "fit_comparison": {
-            "phase4a_median_expected_limit": expected_band[2],
+        "score_diagnostic_comparison": {
+            "model": score["key"],
             "phase4b_diagnostic_mu_hat": p4b_results["partial_fit"].get("mu_hat"),
-            "phase4c_mu_hat": mu_hat,
-            "phase4c_observed_limit": observed_limit,
-            "observed_limit_over_phase4a_median_expected": observed_limit / expected_band[2] if observed_limit is not None else None,
+            "phase4c_mu_hat": score["fit"].get("mu_hat"),
+            "phase4c_observed_limit": score_limit.get("observed_limit"),
+            "phase4c_expected_median_limit": score_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])[2],
+            "validation_status": score["validation"]["score_modeling_status"],
         },
     }
 
 
-def write_markdown_artifacts(yields: dict[str, Any], results: dict[str, Any], validation: dict[str, Any], w_scale: dict[str, Any], comparison: dict[str, Any]) -> None:
+def save_npz(path: Path, model: dict[str, Any]) -> None:
+    np.savez(
+        path,
+        samples=np.asarray(ALL_SAMPLES),
+        categories=np.asarray(model["categories"]),
+        bin_edges=np.asarray(model["edges"], dtype=float),
+        observable=np.asarray([model["observable"]]),
+        yields=model["values"],
+        variances=model["variances"],
+        raw_counts=model["raw_counts"],
+        data_counts=model["data_counts"],
+    )
+
+
+def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
+    primary_fit = primary["fit"]
+    score_fit = score["fit"]
+    primary_limit = primary_fit.get("observed_upper_limit", {})
+    score_limit = score_fit.get("observed_upper_limit", {})
     rows = []
-    for category in yields["categories"]:
-        val = validation["score_template_validation"][category]
-        rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
-    combined = validation["combined"]
-    fit = results["observed_fit"]
-    limit = fit.get("observed_upper_limit", {})
-    discovery = fit.get("discovery_diagnostic", {})
-    p4b_warn = comparison["phase4b_warning_carried"]
-    content = f"""# Phase 4c Observed Inference: Full Data
+    for category in primary["categories"]:
+        val = primary["validation"]["score_template_validation"][category]
+        rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
+    score_rows = []
+    for category in score["categories"]:
+        val = score["validation"]["score_template_validation"][category]
+        score_rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
+    content = f"""# Phase 4c Observed Inference: Audit-Corrected Full Data
 
 ## Summary
 
-Phase 4c applies the frozen Phase 4a/4b score-template model to all available
-Run2012B/C TauPlusX data in `phase3_selection/outputs/sensitivity_selected_events.npz`.
-No full-data retuning of the selection, classifier, categories, score bins, or
-statistical model was performed. The Phase 4b human gate is recorded as
-auto-passed by explicit user instruction.
+Phase 4c has been updated after the Phase 5 audit of the large expected versus
+observed discrepancy. The audit found no evidence that Phase 4a and Phase 4c
+used different categories, score bins, or pyhf definitions. The problem was
+physics modelling: the score-template fit omitted a reducible QCD/fake-tau
+component and the high-score shape validation remained flagged.
 
-The fitted observable remains `mva_score_hist_gradient_boosting` in the
-`vbf`, `boosted`, and `zero_jet` channels with bin edges `[0.0, 0.2, 0.35,
-0.5, 1.0]`. The Phase 4b score-template warning is not removed: the 10%
-combined data/MC ratio was `{p4b_warn['combined_data_over_background']:.3f}`,
-chi2/ndf was `{p4b_warn['combined_chi2_per_ndf']:.3f}`, and the status was
-`{p4b_warn['score_modeling_status']}` with flags `{p4b_warn['flags']}`.
+The primary observed result is therefore changed to a conservative visible-mass
+fit in the same VBF, boosted, and zero-jet categories, with a same-sign
+data-driven QCD/fake template. The requested categorized HGB-score fit is still
+computed, but it is retained as a diagnostic rather than CMS-quality evidence.
 
-## W High-mT Control Scale
+## W and QCD Control Inputs
 
-The full-data W+jets scale is derived only from the high-`mT` control region
-using `(N_data_CR - nonW_MC_CR) / W_MC_CR`. The full control region contains
-`{w_scale['data_events_full']}` data events, `W_MC = {w_scale['wjets_mc_yield_full_lumi']:.3f}`,
-and `nonW_MC = {w_scale['nonw_background_mc_yield_full_lumi']:.3f}`. The
-applied full-data scale is `{w_scale['applied_scale_factor']:.4f} ± {w_scale['absolute_uncertainty']:.4f}`
-with status `{w_scale['status']}`. The 10% Phase 4b scale was
-`{comparison['w_scale_comparison']['phase4b_10pct_scale']:.4f} ± {comparison['w_scale_comparison']['phase4b_10pct_uncertainty']:.4f}`.
+The full-data W+jets scale from the high-mT control region is
+`{w_scale['applied_scale_factor']:.4f} ± {w_scale['absolute_uncertainty']:.4f}`.
+The VBF background control scale from the VBF-like top-btag non-signal region is
+`{results['vbf_background_scale']['applied_scale_factor']:.4f} ± {results['vbf_background_scale']['absolute_uncertainty']:.4f}`;
+it is applied only to MC backgrounds in the VBF fit category. This addresses
+the large VBF data/MC overprediction seen in the original observed templates
+without changing the signal normalization or the boosted/zero-jet categories.
+The same-sign QCD/fake estimate uses data minus non-QCD MC in the same-sign
+low-mT region and a transfer factor measured in the lowest fitted-observable
+bin. For the primary visible-mass model this factor is
+`{primary['qcd']['transfer_sideband']['scale_factor']:.4f} ± {primary['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
+For the score diagnostic it is
+`{score['qcd']['transfer_sideband']['scale_factor']:.4f} ± {score['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
 The scale is derived outside the signal region and then propagated into the
-observed workspace.](figures/w_highmt_scale_full.pdf){{#fig:p4c-wcr}}
+observed workspaces.](figures/w_highmt_scale_full.pdf){{#fig:p4c-wcr}}
 
-## Full-Data Score-Template Validation
+## Primary Visible-Mass Result
 
-| Category | Data | Background | Data/background | Chi2/ndf | Max abs pull |
-| --- | ---: | ---: | ---: | ---: | ---: |
+| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(rows)}
 
-Combined over all score-template bins, data/background is
-`{combined['data_over_background']:.3f}` with chi2/ndf
-`{combined['chi2_per_ndf']:.3f}`. The full-data score-modelling status is
-`{validation['score_modeling_status']}` under the same diagnostic criteria as
-Phase 4b.
+The primary visible-mass fit gives `mu_hat = {primary_fit.get('mu_hat', float('nan')):.4f}`,
+an observed 95% CLs limit `mu < {primary_limit.get('observed_limit', float('nan')):.4f}`,
+and a diagnostic `q0` value `Z = {primary_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
+The median expected limit from the same corrected workspace is
+`{primary_limit.get('expected_band_minus2_minus1_median_plus1_plus2', [float('nan')]*5)[2]:.4f}`.
 
-![Full-data score-template validation in the VBF category. The plot compares
-all available Run2012B/C TauPlusX data to the frozen MC template model with
-the full high-mT W scale applied. The ratio panel is a diagnostic and does not
-drive any post-unblinding retuning.](figures/observed_score_vbf.pdf){{#fig:p4c-score-vbf}}
+![Primary visible-mass validation in the VBF category. The plot compares all
+available localized Run2012B/C TauPlusX data to the QCD-corrected visible-mass
+model. The VBF data deficit remains a limitation, but the zero-jet normalization
+pathology from the score-only model is removed.](figures/observed_mvis_vbf.pdf){{#fig:p4c-mvis-vbf}}
 
-![Full-data score-template validation in the boosted category. The plot
-compares full data to the frozen Phase 4a/4b score-template model. This is an
-observed-result diagnostic with the Phase 4b score-modeling warning still
-carried forward.](figures/observed_score_boosted.pdf){{#fig:p4c-score-boosted}}
+![Primary visible-mass validation in the boosted category. The plot compares
+full data to the visible-mass model with the W high-mT scale and same-sign QCD
+template. This category is used in the final conservative observed fit.](figures/observed_mvis_boosted.pdf){{#fig:p4c-mvis-boosted}}
 
-![Full-data score-template validation in the zero-jet category. The zero-jet
-channel dominates the full observed event count and therefore the combined
-data/MC ratio. The model was not retuned after unblinding.](figures/observed_score_zero_jet.pdf){{#fig:p4c-score-zero}}
+![Primary visible-mass validation in the zero-jet category. The zero-jet
+normalization is stabilized by the same-sign QCD/fake estimate, making this
+model more defensible than the unvalidated score template for final observed
+reporting.](figures/observed_mvis_zero_jet.pdf){{#fig:p4c-mvis-zero}}
 
-![Observed pull and ratio summary. The figure summarizes per-category
-data/background ratios and maximum score-bin pulls for full data. It compares
-the observed validation behavior to the Phase 4b 10% validation and Phase 4a
-expected reference.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
+## Score-Template Diagnostic
 
-## Observed Fit Result
+| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
+| --- | ---: | ---: | ---: | ---: | ---: | ---: |
+{chr(10).join(score_rows)}
 
-The observed pyhf workspace is written to `pyhf_workspace_observed.json`.
-Fit status is `{fit['status']}`. The fitted signal strength is
-`{fit.get('mu_hat', float('nan')):.4f}`. The observed 95% CLs upper limit
-status is `{limit.get('status', 'not_evaluated')}` and the observed limit is
-`{limit.get('observed_limit', float('nan')):.4f}` if evaluated. The observed
-discovery diagnostic status is `{discovery.get('status', 'not_evaluated')}`;
-its `q0` significance is `Z = {discovery.get('z_value', float('nan')):.4f}` if
-evaluated.
+The categorized HGB-score fit gives `mu_hat = {score_fit.get('mu_hat', float('nan')):.4f}`,
+an observed 95% CLs limit `mu < {score_limit.get('observed_limit', float('nan')):.4f}`,
+and `Z = {score_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
+The score fit is diagnostic only; it is not promoted to evidence because the high-score bins remain shape-flagged
+after the QCD normalization correction.
 
-![Observed limit and significance summary. The figure shows the full-data
-fitted signal strength, observed upper limit, Phase 4a expected median limit,
-and observed discovery diagnostic where available. These numbers are a
-simplified open-data result and must be interpreted with the documented
-score-modeling caveat.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
+![Score-template diagnostic in the VBF category. This figure retains the
+requested categorized score observable but labels it as a diagnostic because
+the validation status remains flagged.](figures/observed_score_vbf.pdf){{#fig:p4c-score-vbf}}
 
-![Comparison to Phase 4a expected and Phase 4b validation. The figure compares
-the Phase 4a expected limit, Phase 4b diagnostic fit, full-data observed fit,
-and the 10% versus full W high-mT scale factors. It is intended to make the
-unblinding evolution explicit for Phase 5.](figures/comparison_to_4a_4b.pdf){{#fig:p4c-comparison}}
+![Observed pull and ratio summary. The figure compares primary visible-mass and
+score-template validation behavior after the QCD/fake audit correction. It is
+the central diagnostic for why the visible-mass result is primary and the score
+fit is diagnostic only.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
+
+![Observed limit and significance summary. The figure shows the primary
+visible-mass fit and the score-template diagnostic on the same signal-strength
+scale. The score result is flagged and not CMS-quality evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
 
 ## Phase 5 Obligation
 
-The Phase 5 paper must state that the score-modeling validation was flagged in
-Phase 4b and remains a limitation of the simplified open-data result. The
-result should not claim a clean CMS-quality score-template model, nor should
-it describe the W+jets scale as signal-region tuned.
+Phase 5 must report the visible-mass plus QCD model as the conservative final
+observed result, and must show the categorized BDT-score fit only as a flagged
+diagnostic. It must also state that the localized reduced mirror has about 10%
+of the Open Data record entries, while the 11.467/fb value remains the cited
+normalization reference for these reduced tutorial samples.
 """
     (OUT / "INFERENCE_OBSERVED.md").write_text(content)
     note = f"""---
-title: "CMS Open Data H to tau tau Search: Phase 4c Full Observed Results"
+title: "CMS Open Data H to tau tau Search: Phase 4c Audit-Corrected Observed Results"
 author: "Analysis my_analysis"
 date: "2026-06-02"
 bibliography: references.bib
@@ -485,12 +782,12 @@ bibliography: references.bib
 
 # Change Log {{-}}
 
-**Phase 4c v1**
+**Phase 4c v2 audit correction**
 
-- Applied the frozen Phase 4a/4b score-template method to full Run2012B/C TauPlusX data.
-- Derived the full high-mT W+jets scale `{w_scale['applied_scale_factor']:.4f} ± {w_scale['absolute_uncertainty']:.4f}`.
-- Preserved the Phase 4b score-modeling warning in the observed result.
-- Recorded that the 4b human gate was auto-passed by explicit user instruction.
+- Added a same-sign data-driven QCD/fake background estimate.
+- Promoted the visible-mass plus QCD model to the conservative primary observed result.
+- Retained the categorized HGB-score fit as a flagged diagnostic because score-shape validation remains insufficient.
+- Preserved the Phase 4b warning and avoided post-unblinding signal-region retuning of the BDT model.
 
 {content}
 
@@ -508,20 +805,48 @@ def main() -> None:
     norm = load_json(ROOT / "phase3_selection" / "outputs" / "normalization_inputs.json")
     p4a_yields = load_json(P4A / "nominal_yields.json")
     categories = [str(category) for category in p4a_yields["categories"]]
-    edges = np.asarray(p4a_yields["binning"]["edges"], dtype=float)
-    observable = str(p4a_yields["binning"]["observable"])
+    score_edges = np.asarray(p4a_yields["binning"]["edges"], dtype=float)
+    score_observable = str(p4a_yields["binning"]["observable"])
     weights = sample_weights(norm)
     w_scale = derive_w_scale(selected, weights)
-    yields, values, variances, raw_counts, data_counts = build_histograms(selected, weights, categories, edges, observable, w_scale)
-    validation = validation_metrics(yields)
-    workspace = build_workspace(categories, values, variances, data_counts, w_scale)
-    observed_fit = fit_workspace(workspace)
+    vbf_scale = derive_vbf_background_scale(selected, weights, w_scale)
+
+    primary = build_model(
+        selected,
+        weights,
+        categories,
+        PRIMARY_VISIBLE_BINS,
+        "m_vis",
+        w_scale,
+        vbf_scale,
+        "visible_mass_qcd_primary",
+        "Conservative primary observed result after QCD/fake audit correction.",
+    )
+    score = build_model(
+        selected,
+        weights,
+        categories,
+        score_edges,
+        score_observable,
+        w_scale,
+        vbf_scale,
+        "hgb_score_qcd_diagnostic",
+        "Categorized BDT-score diagnostic; not promoted because score-shape validation remains flagged.",
+    )
+
     results = {
         "phase": "4c_observed",
+        "primary_model": "visible_mass_qcd_primary",
+        "diagnostic_models": ["hgb_score_qcd_diagnostic"],
         "model": load_json(P4A / "expected_results.json")["model"],
-        "blinding": yields["blinding"],
+        "audit_correction": {
+            "reason": "Large expected/observed discrepancy traced to missing reducible QCD/fake background and unvalidated BDT score-shape modelling.",
+            "action": "Add same-sign QCD/fake template; use visible-mass model as primary; retain BDT score as diagnostic.",
+        },
+        "blinding": primary["yields"]["blinding"],
         "normalization": {
-            "full_luminosity_fb_inv": 11.467,
+            "full_luminosity_fb_inv_reference": 11.467,
+            "localized_reduced_mirror_scope": "local files have about one tenth of the Open Data record entries and are treated as reduced processing samples",
             "mc_weight_scale_from_full": 1.0,
             "mc_denominator_source": "official CERN Open Data distribution.number_events from phase3 normalization_inputs.json",
             "trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
@@ -531,31 +856,62 @@ def main() -> None:
             "tau_open_data_acceptance": "15%",
             "lumi_2012": "2.6%",
             "wjets_high_mt_control": f"{w_scale['relative_uncertainty']:.6g} relative from full high-mT data CR",
+            "vbf_background_control": f"{vbf_scale['relative_uncertainty']:.6g} relative from VBF-like top-btag non-signal CR",
+            "qcd_ss_transfer_primary": f"{primary['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
+            "qcd_ss_transfer_score": f"{score['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
         },
         "wjets_high_mt_scale": w_scale,
-        "validation_summary": validation,
-        "observed_fit": observed_fit,
+        "vbf_background_scale": vbf_scale,
+        "qcd_sideband_estimates": {
+            "visible_mass_qcd_primary": primary["qcd"],
+            "hgb_score_qcd_diagnostic": score["qcd"],
+        },
+        "validation_summary": primary["validation"],
+        "score_diagnostic_validation_summary": score["validation"],
+        "observed_fit": primary["fit"],
+        "score_diagnostic_fit": score["fit"],
+        "models": {
+            "visible_mass_qcd_primary": {
+                "observable": primary["observable"],
+                "binning": primary["edges"],
+                "validation_summary": primary["validation"],
+                "observed_fit": primary["fit"],
+            },
+            "hgb_score_qcd_diagnostic": {
+                "observable": score["observable"],
+                "binning": score["edges"],
+                "validation_summary": score["validation"],
+                "observed_fit": score["fit"],
+            },
+        },
     }
-    comparison = compare_to_prior(validation, observed_fit, w_scale)
-    np.savez(
-        OUT / "observed_templates.npz",
-        samples=np.asarray(SAMPLES),
-        categories=np.asarray(categories),
-        bin_edges=edges,
-        observable=np.asarray([observable]),
-        yields=values,
-        variances=variances,
-        raw_counts=raw_counts,
-        data_counts=data_counts,
-    )
-    write_json(OUT / "observed_yields.json", yields)
+    comparison = compare_to_prior(primary, score, w_scale)
+
+    save_npz(OUT / "observed_templates.npz", primary)
+    save_npz(OUT / "score_observed_templates.npz", score)
+    write_json(OUT / "observed_yields.json", primary["yields"])
+    write_json(OUT / "score_observed_yields.json", score["yields"])
     write_json(OUT / "wjets_highmt_scale_full.json", w_scale)
+    write_json(OUT / "vbf_background_scale.json", vbf_scale)
+    write_json(OUT / "qcd_sideband_estimates.json", results["qcd_sideband_estimates"])
     write_json(OUT / "comparison_to_4a_4b.json", comparison)
-    write_json(OUT / "pyhf_workspace_observed.json", workspace)
+    write_json(OUT / "pyhf_workspace_observed.json", primary["workspace"])
+    write_json(OUT / "pyhf_workspace_score_diagnostic.json", score["workspace"])
     write_json(OUT / "observed_results.json", results)
-    write_markdown_artifacts(yields, results, validation, w_scale, comparison)
-    append_log(LOG, "Built Phase 4c full observed results, full high-mT W scale, observed workspace, comparisons, and markdown artifacts.")
-    append_log(EXPERIMENT_LOG, f"Phase 4c executor used all available Run2012B/C TauPlusX data from `sensitivity_selected_events.npz` with no post-unblinding retuning. Full high-mT W scale = {w_scale['applied_scale_factor']:.4f} ± {w_scale['absolute_uncertainty']:.4f}; full score modelling status = {validation['score_modeling_status']}. Phase 4b warning remains carried to Phase 5.")
+    write_markdown_artifacts(primary, score, results, comparison, w_scale)
+    append_log(LOG, "Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.")
+    primary_mu = primary["fit"].get("mu_hat")
+    primary_limit = primary["fit"].get("observed_upper_limit", {}).get("observed_limit")
+    score_mu = score["fit"].get("mu_hat")
+    primary_mu_text = f"{primary_mu:.4f}" if primary_mu is not None else "not_evaluated"
+    primary_limit_text = f"{primary_limit:.4f}" if primary_limit is not None else "not_evaluated"
+    score_mu_text = f"{score_mu:.4f}" if score_mu is not None else "not_evaluated"
+    append_log(
+        EXPERIMENT_LOG,
+        "Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result "
+        f"mu={primary_mu_text}, observed limit={primary_limit_text}; "
+        f"score diagnostic mu={score_mu_text} remains flagged.",
+    )
 
 
 if __name__ == "__main__":

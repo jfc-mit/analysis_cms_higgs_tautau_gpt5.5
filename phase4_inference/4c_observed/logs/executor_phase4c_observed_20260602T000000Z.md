@@ -15,3 +15,31 @@
 Built Phase 4c full observed results, full high-mT W scale, observed workspace, comparisons, and markdown artifacts.
 
 ## Generated Phase 4c plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-02T17:11:25Z
+
+Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.
+
+## 2026-06-02T17:14:23Z
+
+Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-02T17:17:34Z
+
+Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-02T17:25:36Z
+
+Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-02T17:32:47Z
+
+Built Phase 4c audit-corrected primary visible-mass/QCD result and flagged categorized-score diagnostic.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.

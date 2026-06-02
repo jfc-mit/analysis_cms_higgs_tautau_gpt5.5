@@ -1,0 +1,45 @@
+{
+  "absolute_uncertainty": 0.05145868420469961,
+  "application": "central scale applied only to MC background samples in the VBF fit category",
+  "applied_scale_factor": 0.5571017091531486,
+  "background_mc_sumw2": 260.80319778614296,
+  "background_mc_yield": 436.18606083507586,
+  "control_region": "vbf_like_top_btag_not_signal_region",
+  "data_events": 243,
+  "data_scope": "VBF-like rows with top-btag handle outside the low-mT signal region",
+  "formula": "N_data_CR / MC_background_CR",
+  "nuisance": {
+    "hi": 1.0923685627942554,
+    "lo": 0.9076314372057446
+  },
+  "raw_scale_factor": 0.5571017091531486,
+  "relative_uncertainty": 0.09236856279425538,
+  "rows": {
+    "DYJetsToLL": {
+      "raw_events": 14,
+      "sumw2": 24.35868750085625,
+      "yield": 18.466770833364112
+    },
+    "TTbar": {
+      "raw_events": 737,
+      "sumw2": 150.2362010143399,
+      "yield": 332.75228045434716
+    },
+    "W1JetsToLNu": {
+      "raw_events": 12,
+      "sumw2": 52.678701555694886,
+      "yield": 25.142482348971406
+    },
+    "W2JetsToLNu": {
+      "raw_events": 60,
+      "sumw2": 25.34323710286236,
+      "yield": 38.99479742442242
+    },
+    "W3JetsToLNu": {
+      "raw_events": 53,
+      "sumw2": 8.186370612389538,
+      "yield": 20.829729773970797
+    }
+  },
+  "status": "valid"
+}

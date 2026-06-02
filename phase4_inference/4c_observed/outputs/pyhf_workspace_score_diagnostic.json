@@ -1,0 +1,1071 @@
+{
+  "channels": [
+    {
+      "name": "vbf",
+      "samples": [
+        {
+          "data": [
+            0.0,
+            0.0,
+            0.0,
+            0.73985918823892
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.0,
+                0.0,
+                0.0,
+                0.1542713051203814
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            }
+          ],
+          "name": "GluGluToHToTauTau"
+        },
+        {
+          "data": [
+            0.0023346683534932154,
+            0.007004005060479646,
+            0.007004005060479646,
+            0.8334766021970779
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.0023346683534932154,
+                0.004043764207073424,
+                0.004043764207073424,
+                0.04411225959443215
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            }
+          ],
+          "name": "VBF_HToTauTau"
+        },
+        {
+          "data": [
+            4.409086968774283,
+            2.939391312516189,
+            5.143934796903331,
+            12.492413078193803
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                1.800002217508597,
+                1.4696956562580945,
+                1.9442246047053937,
+                3.029855214131794
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "dy_norm_open_data",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.0923685627942554,
+                "lo": 0.9076314372057446
+              },
+              "name": "vbf_background_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "DYJetsToLL"
+        },
+        {
+          "data": [
+            35.2140583218473,
+            3.7729348201979245,
+            1.7607029160923646,
+            2.0122319041055596
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                2.9761311216967368,
+                0.974167581663509,
+                0.6654831498066602,
+                0.71143141235648
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0923685627942554,
+                "lo": 0.9076314372057446
+              },
+              "name": "vbf_background_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "TTbar"
+        },
+        {
+          "data": [
+            4.668973296321613,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                2.3344866481608064,
+                0.0,
+                0.0,
+                0.0
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.0923685627942554,
+                "lo": 0.9076314372057446
+              },
+              "name": "vbf_background_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W1JetsToLNu"
+        },
+        {
+          "data": [
+            2.534474634209762,
+            1.8103390244355442,
+            0.3620678048871088,
+            1.0862034146613264
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.9579413694743466,
+                0.809608224191706,
+                0.3620678048871088,
+                0.6271198338494075
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.0923685627942554,
+                "lo": 0.9076314372057446
+              },
+              "name": "vbf_background_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W2JetsToLNu"
+        },
+        {
+          "data": [
+            1.9705377834810611,
+            0.8757945704360272,
+            0.2189486426090068,
+            0.4378972852180136
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.6568459278270203,
+                0.4378972852180136,
+                0.2189486426090068,
+                0.3096401398408371
+              ],
+              "name": "mc_stat_vbf",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.0923685627942554,
+                "lo": 0.9076314372057446
+              },
+              "name": "vbf_background_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W3JetsToLNu"
+        },
+        {
+          "data": [
+            2.0755103501184182,
+            0.0,
+            3.090323567099099,
+            7.260695856409805
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.1043457669951218,
+                "lo": 0.8956542330048782
+              },
+              "name": "qcd_ss_transfer",
+              "type": "normsys"
+            }
+          ],
+          "name": "QCDSameSignDataDriven"
+        }
+      ]
+    },
+    {
+      "name": "boosted",
+      "samples": [
+        {
+          "data": [
+            0.8041947698249131,
+            1.2545438409268646,
+            1.4153827948918472,
+            4.5356585018125095
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.16083895396498263,
+                0.20088778911516172,
+                0.21337698479003692,
+                0.3819713520603094
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            }
+          ],
+          "name": "GluGluToHToTauTau"
+        },
+        {
+          "data": [
+            0.1073947442606879,
+            0.1494187746235658,
+            0.22179349358185546,
+            0.6863924959270054
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.015834491174550738,
+                0.018677346827945723,
+                0.022755532304832127,
+                0.04003122329277486
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            }
+          ],
+          "name": "VBF_HToTauTau"
+        },
+        {
+          "data": [
+            660.84658482253,
+            242.70613095278546,
+            96.29101934539858,
+            58.03842261914435
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                29.524448026688685,
+                17.892533359232658,
+                11.270011368870252,
+                8.749621420535352
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "dy_norm_open_data",
+              "type": "normsys"
+            }
+          ],
+          "name": "DYJetsToLL"
+        },
+        {
+          "data": [
+            620.8064933849761,
+            32.507685471795114,
+            17.156833999002977,
+            12.641877683475876
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                16.74190609825754,
+                3.8310674729642895,
+                2.783205993422847,
+                2.389090318241035
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            }
+          ],
+          "name": "TTbar"
+        },
+        {
+          "data": [
+            71.23703332208565,
+            2.0952068624142837,
+            2.0952068624142837,
+            2.0952068624142837
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                12.217050424487445,
+                2.0952068624142837,
+                2.0952068624142837,
+                2.0952068624142837
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W1JetsToLNu"
+        },
+        {
+          "data": [
+            115.68456569245319,
+            16.89774555058305,
+            11.048525936919686,
+            11.048525936919686
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                8.670924791421713,
+                3.3139205499287936,
+                2.6796611438409523,
+                2.6796611438409523
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W2JetsToLNu"
+        },
+        {
+          "data": [
+            67.99138209239524,
+            10.6113717716455,
+            5.109179001162648,
+            5.8952065398030555
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                5.169289057251728,
+                2.0421594496102418,
+                1.4170312972473706,
+                1.5221357834073523
+              ],
+              "name": "mc_stat_boosted",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W3JetsToLNu"
+        },
+        {
+          "data": [
+            207.86404444013618,
+            28.25643207335027,
+            17.08930017877408,
+            15.693488225875704
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.1043457669951218,
+                "lo": 0.8956542330048782
+              },
+              "name": "qcd_ss_transfer",
+              "type": "normsys"
+            }
+          ],
+          "name": "QCDSameSignDataDriven"
+        }
+      ]
+    },
+    {
+      "name": "zero_jet",
+      "samples": [
+        {
+          "data": [
+            5.500692225602406,
+            3.6671281504016036,
+            2.766430008197701,
+            2.1874097739237635
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.4206484479108899,
+                0.3434580194917962,
+                0.29831181965716896,
+                0.26526239836459187
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            }
+          ],
+          "name": "GluGluToHToTauTau"
+        },
+        {
+          "data": [
+            0.08171339237226254,
+            0.04669336706986431,
+            0.03735469365589145,
+            0.05369737213034395
+          ],
+          "modifiers": [
+            {
+              "data": null,
+              "name": "mu",
+              "type": "normfactor"
+            },
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                0.01381208424634368,
+                0.010440954286656676,
+                0.009338673413972862,
+                0.011196676086163366
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            }
+          ],
+          "name": "VBF_HToTauTau"
+        },
+        {
+          "data": [
+            5429.230625009049,
+            273.04439732188365,
+            117.3959002978147,
+            26.38110119052016
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                84.62537518529378,
+                18.977897506379893,
+                12.44394054371216,
+                5.89899355833037
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "dy_norm_open_data",
+              "type": "normsys"
+            }
+          ],
+          "name": "DYJetsToLL"
+        },
+        {
+          "data": [
+            30.250207314031563,
+            5.417947578632519,
+            1.8059825262108395,
+            2.2574781577635497
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                3.695651019218276,
+                1.564026746489383,
+                0.9029912631054198,
+                1.0095749236960583
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            }
+          ],
+          "name": "TTbar"
+        },
+        {
+          "data": [
+            657.8949547980851,
+            54.47537842277138,
+            18.856861761728553,
+            2.0952068624142837
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                37.127160193592545,
+                10.683500676463945,
+                6.285620587242851,
+                2.0952068624142837
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W1JetsToLNu"
+        },
+        {
+          "data": [
+            204.72268647821772,
+            14.948005679361929,
+            5.849219613663363,
+            0.6499132904070404
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                11.534816634434524,
+                3.1168746455539784,
+                1.9497398712211211,
+                0.6499132904070404
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W2JetsToLNu"
+        },
+        {
+          "data": [
+            45.58959724114363,
+            2.358082615921222,
+            1.179041307960611,
+            0.3930137693202037
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.026,
+                "lo": 0.974
+              },
+              "name": "lumi_2012",
+              "type": "normsys"
+            },
+            {
+              "data": {
+                "hi": 1.15,
+                "lo": 0.85
+              },
+              "name": "tau_open_data_acceptance",
+              "type": "normsys"
+            },
+            {
+              "data": [
+                4.232887838524879,
+                0.962683196722393,
+                0.6807198165367473,
+                0.3930137693202037
+              ],
+              "name": "mc_stat_zero_jet",
+              "type": "staterror"
+            },
+            {
+              "data": {
+                "hi": 1.0434427740579368,
+                "lo": 0.9565572259420632
+              },
+              "name": "wjets_high_mt_control",
+              "type": "normsys"
+            }
+          ],
+          "name": "W3JetsToLNu"
+        },
+        {
+          "data": [
+            1221.8063150547785,
+            46.66683761965219,
+            19.62356702504473,
+            4.304482554724456
+          ],
+          "modifiers": [
+            {
+              "data": {
+                "hi": 1.1043457669951218,
+                "lo": 0.8956542330048782
+              },
+              "name": "qcd_ss_transfer",
+              "type": "normsys"
+            }
+          ],
+          "name": "QCDSameSignDataDriven"
+        }
+      ]
+    }
+  ],
+  "measurements": [
+    {
+      "config": {
+        "parameters": [
+          {
+            "bounds": [
+              [
+                0.0,
+                50.0
+              ]
+            ],
+            "inits": [
+              1.0
+            ],
+            "name": "mu"
+          }
+        ],
+        "poi": "mu"
+      },
+      "name": "hgb_score_qcd_diagnostic_observed_mu_tautau"
+    }
+  ],
+  "observations": [
+    {
+      "data": [
+        33.0,
+        5.0,
+        11.0,
+        30.0
+      ],
+      "name": "vbf"
+    },
+    {
+      "data": [
+        1584.0,
+        327.0,
+        169.0,
+        133.0
+      ],
+      "name": "boosted"
+    },
+    {
+      "data": [
+        7752.0,
+        441.0,
+        219.0,
+        54.0
+      ],
+      "name": "zero_jet"
+    }
+  ],
+  "version": "1.0.0"
+}

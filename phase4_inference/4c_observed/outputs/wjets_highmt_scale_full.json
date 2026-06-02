@@ -3,7 +3,7 @@
   "applied_scale_factor": 0.8528436634946431,
   "control_region": "is_w_high_mt",
   "data_events_full": 4023,
-  "data_scope": "all Run2012B/C TauPlusX rows in phase3 sensitivity_selected_events.npz",
+  "data_scope": "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; 11.467/fb is retained as the Open Data normalization reference",
   "formula": "(N_data_CR - nonW_MC_CR) / W_MC_CR",
   "nonw_background_mc_sumw2_full_lumi": 1031.8766522856429,
   "nonw_background_mc_yield_full_lumi": 1963.569614876483,

@@ -1,573 +1,117 @@
-% Options for packages loaded elsewhere
-\PassOptionsToPackage{unicode}{hyperref}
-\PassOptionsToPackage{hyphens}{url}
-\documentclass[
-]{article}
-\usepackage[margin=0.75in]{geometry}
+\documentclass[aps,prl,reprint,superscriptaddress,nofootinbib]{revtex4-2}
+\usepackage{graphicx}
+\usepackage{amsmath}
+\usepackage{booktabs}
 \usepackage{xcolor}
-\usepackage{amsmath,amssymb}
-\setcounter{secnumdepth}{5}
-\usepackage{iftex}
-\ifPDFTeX
-  \usepackage[T1]{fontenc}
-  \usepackage[utf8]{inputenc}
-  \usepackage{textcomp} % provide euro and other symbols
-\else % if luatex or xetex
-  \usepackage{unicode-math} % this also loads fontspec
-  \defaultfontfeatures{Scale=MatchLowercase}
-  \defaultfontfeatures[\rmfamily]{Ligatures=TeX,Scale=1}
-\fi
-\usepackage{lmodern}
-\ifPDFTeX\else
-  % xetex/luatex font selection
-\fi
-% Use upquote if available, for straight quotes in verbatim environments
-\IfFileExists{upquote.sty}{\usepackage{upquote}}{}
-\IfFileExists{microtype.sty}{% use microtype if available
-  \usepackage[]{microtype}
-  \UseMicrotypeSet[protrusion]{basicmath} % disable protrusion for tt fonts
-}{}
-\makeatletter
-\@ifundefined{KOMAClassName}{% if non-KOMA class
-  \IfFileExists{parskip.sty}{%
-    \usepackage{parskip}
-  }{% else
-    \setlength{\parindent}{0pt}
-    \setlength{\parskip}{6pt plus 2pt minus 1pt}}
-}{% if KOMA class
-  \KOMAoptions{parskip=half}}
-\makeatother
-\usepackage{longtable,booktabs,array}
-\newcounter{none} % for unnumbered tables
-\usepackage{calc} % for calculating minipage widths
-% Correct order of tables after \paragraph or \subparagraph
-\usepackage{etoolbox}
-\makeatletter
-\patchcmd\longtable{\par}{\if@noskipsec\mbox{}\fi\par}{}{}
-\makeatother
-% Allow footnotes in longtable head/foot
-\IfFileExists{footnotehyper.sty}{\usepackage{footnotehyper}}{\usepackage{footnote}}
-\makesavenoteenv{longtable}
-\usepackage{graphicx}
-\makeatletter
-\newsavebox\pandoc@box
-\newcommand*\pandocbounded[1]{#1}%
-% Set default figure placement to htbp
-\def\fps@figure{htbp}
-\makeatother
-% definitions for citeproc citations
-\NewDocumentCommand\citeproctext{}{}
-\NewDocumentCommand\citeproc{mm}{%
-  \begingroup\def\citeproctext{#2}\cite{#1}\endgroup}
-\makeatletter
- % allow citations to break across lines
- \let\@cite@ofmt\@firstofone
- % avoid brackets around text for \cite:
- \def\@biblabel#1{}
- \def\@cite#1#2{{#1\if@tempswa , #2\fi}}
-\makeatother
-\newlength{\cslhangindent}
-\setlength{\cslhangindent}{1.5em}
-\newlength{\csllabelwidth}
-\setlength{\csllabelwidth}{3em}
-\newenvironment{CSLReferences}[2] % #1 hanging-indent, #2 entry-spacing
- {\begin{list}{}{%
-  \setlength{\itemindent}{0pt}
-  \setlength{\leftmargin}{0pt}
-  \setlength{\parsep}{0pt}
-  % turn on hanging indent if param 1 is 1
-  \ifodd #1
-   \setlength{\leftmargin}{\cslhangindent}
-   \setlength{\itemindent}{-1\cslhangindent}
-  \fi
-  % set entry spacing
-  \setlength{\itemsep}{#2\baselineskip}}}
- {\end{list}}
-\usepackage{calc}
-\newcommand{\CSLBlock}[1]{\hfill\break\parbox[t]{\linewidth}{\strut\ignorespaces#1\strut}}
-\newcommand{\CSLLeftMargin}[1]{\parbox[t]{\csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLRightInline}[1]{\parbox[t]{\linewidth - \csllabelwidth}{\strut#1\strut}}
-\newcommand{\CSLIndent}[1]{\hspace{\cslhangindent}#1}
-\setlength{\emergencystretch}{3em} % prevent overfull lines
-\providecommand{\tightlist}{%
-  \setlength{\itemsep}{0pt}\setlength{\parskip}{0pt}}
-% Standard preamble for reslop analysis notes.
-% Included via pandoc: --include-in-header=preamble.tex
-% Do not edit per-analysis unless you have a specific reason.
-
-% --- Graphics and floats ---
-\usepackage{graphicx}
-\usepackage{placeins}
-\usepackage{float}
-\usepackage{needspace}
-
-% Default figure sizing: HEIGHT-based, not width-based.
-%
-% All figures are produced at figsize=(10,10) — square. But figures
-% with colorbars (2D plots, correlation matrices) have extended width
-% (e.g., 12x10 effective) due to the colorbar axes. Setting size by
-% width makes these figures smaller than 1D plots at the same nominal
-% width fraction, because the extra colorbar width eats into the budget.
-%
-% Setting size by HEIGHT avoids this: a 0.45\linewidth height gives
-% consistent visual sizing regardless of colorbars, because the plot
-% area height is always 10 inches. Two figures side-by-side at
-% height=0.45\linewidth will have matching plot areas even if one has
-% a colorbar and the other doesn't.
-%
-% We unset the default width and set height instead.
-\setkeys{Gin}{height=0.45\linewidth,keepaspectratio}
-
-% --- Caption formatting ---
-% font=small keeps captions visually distinct from body text.
-% Full column width for both figure and table captions.
-\usepackage[font=small]{caption}
-
-% --- Tables: prevent page splits ---
-% Pandoc generates longtable by default, which splits across pages.
-% We strongly discourage this by penalizing breaks inside floats.
-% The typesetting agent should also convert longtables to regular
-% table floats where the table fits on a single page.
-\usepackage{longtable}
-\setlength{\LTpre}{0pt}
-\setlength{\LTpost}{0pt}
-
-% --- Float placement (relaxed) ---
-% LaTeX defaults are too conservative for figure-heavy technical docs.
-% These settings allow up to 90% of a page to be floats, preventing
-% overfull vbox warnings and figure cutoffs.
-\renewcommand{\topfraction}{0.9}
-\renewcommand{\bottomfraction}{0.9}
-\renewcommand{\textfraction}{0.05}
-\renewcommand{\floatpagefraction}{0.6}
-\setcounter{topnumber}{3}
-\setcounter{bottomnumber}{3}
-\setcounter{totalnumber}{6}
-
-% --- Paragraph and page breaking ---
-% Prevent widows and orphans (single lines at top/bottom of page).
-\widowpenalty=10000
-\clubpenalty=10000
-% Allow ragged page bottoms rather than stretching vertical glue
-% (which creates ugly spacing between paragraphs).
-\raggedbottom
-\usepackage{bookmark}
-\IfFileExists{xurl.sty}{\usepackage{xurl}}{} % add URL line breaks if available
-\urlstyle{same}
-\hypersetup{
-  pdftitle={A CMS Open Data Diagnostic Search for H to Tau Tau in the Mu Tau\_h Final State},
-  pdfauthor={Analysis my\_analysis},
-  hidelinks,
-  pdfcreator={LaTeX via pandoc}}
-
-\title{A CMS Open Data Diagnostic Search for H to Tau Tau in the Mu
-Tau\_h Final State}
-\author{Analysis my\_analysis}
-\date{2026-06-02}
-
 \begin{document}
+
+\title{A CMS Open Data Diagnostic Search for $H\to\tau\tau$ in the $\mu\tau_h$ Final State}
+\author{Analysis my\_analysis}
+\affiliation{CMS Open Data reduced-sample analysis}
+\date{June 2, 2026}
+
+\begin{abstract}
+A diagnostic search for Higgs boson decays to tau pairs is performed with
+CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  A Phase 5
+audit found that an initially selected BDT-score observed fit was not a valid
+evidence result because the score shape failed data validation.  The primary
+result is therefore a conservative visible-mass fit in VBF, boosted, and
+zero-jet categories with a same-sign data-driven QCD/fake template.  The fit
+gives $\hat\mu=0.438$, an observed 95\% CLs upper limit
+$\mu<10.764$, and a discovery diagnostic
+$Z=0.095$.  The BDT-score fit gives
+$\hat\mu=9.352$ and $\mu<14.837$ but
+is retained only as a flagged diagnostic, not as CMS-quality evidence.
+\end{abstract}
+
 \maketitle
 
-{
-\setcounter{tocdepth}{3}
-\tableofcontents
-}
-\needspace{4\baselineskip}
-\section*{Abstract}\label{abstract}
-\addcontentsline{toc}{section}{Abstract}
+\paragraph{Data and method.}
+The analysis uses the public Run2012B/C TauPlusX HiggsTauTauReduced mirror and
+the CMS Open Data luminosity reference of 11.467 fb$^{-1}$.  Signal and
+background simulations are normalized with official Open Data record event
+denominators rather than local reduced-file entries.  Events are selected with
+the $\mu+\tau_h$ trigger, tight muon and hadronic-tau requirements including a
+tight anti-muon veto, opposite-sign charge, and low transverse mass.
 
-A diagnostic search for H to tau tau is performed with CMS 2012 Open
-Data in the mu tau\_h final state using reduced Run2012B/C TauPlusX
-samples. A binned profile-likelihood fit to classifier-score templates
-in VBF, boosted, and zero-jet categories gives
-\texttt{mu\_hat\ =\ 7.664}, an observed 95\% CLs upper limit
-\texttt{mu\ \textless{}\ 13.323}, and an observed q0 diagnostic
-\texttt{Z\ =\ 2.978}. The score-template validation is flagged in both
-the 10\% validation sample and the full data, so these values are
-simplified open-data diagnostics and are not CMS-quality evidence for H
-to tau tau.
+\paragraph{Background correction.}
+The W+jets normalization is measured in a high-$m_T$ control region.  The
+VBF-background rate is calibrated in a VBF-like top-btag control region outside
+the low-$m_T$ signal region, giving a scale
+$0.557\pm0.051$.
+The reducible QCD/fake contribution is estimated from same-sign low-$m_T$ data
+after subtracting non-QCD simulation.  For the primary visible-mass fit, the
+OS/SS transfer factor measured in the lowest visible-mass bin is
+$0.996\pm0.120$.
 
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Introduction}\label{introduction}
-
-The H to tau tau decay probes the Higgs coupling to charged leptons. CMS
-reported Run 1 evidence for this decay and later observed it with 13 TeV
-data (CMS Collaboration 2014, 2018). This paper draft presents a compact
-open-data diagnostic using the public reduced CMS 2012 H to tau tau
-samples (CMS Collaboration 2021a). The analysis is limited to the mu
-tau\_h final state and is intended as a reproducible public-data
-workflow, not a replacement for the full CMS publications.
-
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Data And Simulation}\label{data-and-simulation}
-
-The data are Run2012B and Run2012C TauPlusX reduced NanoAOD-like samples
-from the CERN Open Data Portal (CMS Collaboration 2021d, 2021e). The
-integrated luminosity is 11.467/fb, following the CMS Open Data H to tau
-tau tutorial and 2012 luminosity provenance (CMS Open Data Analyses
-2021; CMS Collaboration 2017). The luminosity uncertainty is 2.6\% (CMS
-Collaboration 2013).
-
-{\def\LTcaptype{none} % do not increment counter
-\vspace{1em}
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 4\tabcolsep) * \real{0.3333}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Sample group
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Samples
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Use
-\end{minipage} \\
-\midrule\noalign{}
-Data & Run2012B/C TauPlusX & observed signal and control regions \\
-Signal & ggH and VBF H to tau tau & fitted signal templates \\
-Background & DYJetsToLL, TTbar, W1/W2/W3JetsToLNu & fitted background
-templates \\
-Unavailable in reduced set & QCD, diboson, single top, embedded Z to tau
-tau, W4/inclusive W & documented limitation \\
+\begin{table}[b]
+\caption{Selected yields in the primary visible-mass fit after the QCD/fake
+audit correction.  Background includes DY, ttbar, W+jets, and the same-sign
+QCD/fake estimate.}
+\begin{ruledtabular}
+\begin{tabular}{lrrrr}
+Category & Data & Bkg. & QCD/fake & Signal \\
+vbf & 78 & 96.3 & 17.7 & 1.59 \\
+boosted & 2183 & 2364.4 & 325.6 & 9.17 \\
+zero\_jet & 8451 & 8456.8 & 1569.6 & 14.34 \\
 \end{tabular}
-\end{table}
-}
-
-The signal and background records are the public CMS Open Data reduced
-samples (CMS Collaboration 2021c, 2021g, 2021b, 2021f, 2021h, 2021i,
-2021j). MC normalization uses official Open Data event denominators and
-cited cross-section inputs; it is not derived by matching data yields.
-
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Event Selection And
-Categories}\label{event-selection-and-categories}
-
-Events are required to pass
-\texttt{HLT\_IsoMu17\_eta2p1\_LooseIsoPFTau20}. Muons have pt
-\textgreater{} 20 GeV and \textbar eta\textbar{} \textless{} 2.1 with
-tight identification and isolation. Hadronic-tau candidates have pt
-\textgreater{} 20 GeV, \textbar eta\textbar{} \textless{} 2.3,
-decay-mode ID, tight isolation ID, and tight anti-muon ID. The
-signal-region selection requires an opposite-sign mu tau\_h pair and
-muon-MET transverse mass below 40 GeV.
-
-The fit uses three mutually exclusive categories: VBF, boosted, and
-zero-jet. VBF events have at least two clean jets with leading-dijet
-mass above 300 GeV and leading-dijet \textbar Delta eta\textbar{} above
-2.5. Boosted events have at least one clean jet after failing the VBF
-selection, and zero-jet events have no clean jets.
-
-{\def\LTcaptype{none} % do not increment counter
-\vspace{1em}
-\begin{table}[htbp]
-\centering
-\small
-\begin{tabular}{@{}
-lrrrr@{}}
-\toprule\noalign{}
-Category & Data & Background & Signal & Data/background \\
-\midrule\noalign{}
-VBF & 79 & 146.67 & 1.590 & 0.539 \\
-Boosted & 2213 & 2062.80 & 9.175 & 1.073 \\
-Zero-jet & 8466 & 6894.80 & 14.341 & 1.228 \\
-\end{tabular}
-\end{table}
-}
-
-\needspace{0.4\textheight}
-\begin{figure}[htbp]
-\centering
-\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Selected category yields. The figure shows the event yields in the three exclusive fit categories for data, signal MC, and background MC. It documents the channel composition of the simultaneous likelihood fit and shows that the zero-jet channel dominates the selected event count.}]{figures/category_yields.pdf}}
-\caption{Selected category yields. The figure shows the event yields in
-the three exclusive fit categories for data, signal MC, and background
-MC. It documents the channel composition of the simultaneous likelihood
-fit and shows that the zero-jet channel dominates the selected event
-count.}\label{fig:paper-category-yields}
-\end{figure}
-
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Statistical Analysis}\label{statistical-analysis}
-
-The fitted observable is a histogram-gradient-boosting classifier score
-in the three event categories. The likelihood is a binned profile
-likelihood implemented with pyhf (Heinrich et al. 2021),
-
-\begin{equation}\protect\phantomsection\label{eq:paper-likelihood}{
-L(\mu,\theta)=\prod_{c,b} \mathrm{Pois}\left(n_{cb}\mid
-\mu s_{cb}(\theta)+b_{cb}(\theta)\right)
-\prod_k \pi_k(\theta_k).
-}\end{equation}
-
-Upper limits use the CLs construction (Read 2002), and the discovery
-diagnostic uses the one-sided q0 asymptotic approximation (Cowan et al.
-2011). The W+jets rate is constrained by a high-mT control-region scale
-\texttt{0.8528\ ±\ 0.0370}. The retained nuisances include luminosity,
-DY normalization, tau open-data acceptance, W high-mT normalization, and
-MC statistical uncertainties.
-
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Results}\label{results}
-
-The expected median 95\% CLs upper limit is
-\texttt{mu\ \textless{}\ 4.199}, and the expected discovery diagnostic
-is \texttt{Z\ =\ 0.526}. The full-data fit gives the diagnostic results
-summarized in Table~\ref{tbl:paper-results}.
-
-\vspace{1em}
-\begin{table}[htbp]
-\centering
-\small
-\caption{Main open-data fit results. The observed entries are not
-CMS-quality evidence because score-template validation is
-flagged.}\label{tbl:paper-results}
-\begin{tabular}{@{}
-lrl@{}}
-\toprule\noalign{}
-Quantity & Value & Status \\
-\midrule\noalign{}
-Expected median 95\% CLs limit & mu \textless{} 4.199 & background
-Asimov \\
-Expected discovery diagnostic & 0.526 & background Asimov \\
-Observed mu\_hat & 7.664 & flagged diagnostic \\
-Observed 95\% CLs limit & mu \textless{} 13.323 & flagged diagnostic \\
-Observed q0 Z & 2.978 & flagged diagnostic \\
-\end{tabular}
+\end{ruledtabular}
 \end{table}
 
-\needspace{0.4\textheight}
-\begin{figure}[htbp]
-\centering
-\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Observed result summary. The figure summarizes the fitted signal strength, observed upper limit, expected median limit, and observed q0 diagnostic. The values are diagnostics of the reduced open-data model and must be read together with the validation caveat.}]{figures/observed_limit_significance_summary.pdf}}
-\caption{Observed result summary. The figure summarizes the fitted
-signal strength, observed upper limit, expected median limit, and
-observed q0 diagnostic. The values are diagnostics of the reduced
-open-data model and must be read together with the validation
-caveat.}\label{fig:paper-result-summary}
+\paragraph{Results.}
+The primary corrected workspace has median expected 95\% CLs limit
+$\mu<10.738$ and observed limit
+$\mu<10.764$.  The best fit is
+$\hat\mu=0.438$ with $Z=0.095$.
+This is the conservative final observed result.  The categorized BDT-score fit
+is shown only as a diagnostic because high-score residuals remain after the
+QCD/fake correction.
+
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figures/phase5_mu_limit_comparison.pdf}
+\caption{Signal-strength and limit comparison.  The primary open-data result
+is shown with expected bands and an observed marker following CMS-style limit
+plot conventions.  The BDT score row is flagged and the CMS publication rows
+are context, not direct validation targets.}
 \end{figure}
 
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Validation Caveat}\label{validation-caveat}
-
-The score-template model is not validated at CMS-publication quality. In
-the 10\% validation sample, the combined data/background ratio is
-\texttt{1.232} with chi2/ndf \texttt{1.732} and status \texttt{flagged}.
-In the full data, the combined data/background ratio is \texttt{1.182}
-with chi2/ndf \texttt{3.218} and status \texttt{flagged}. Therefore the
-observed \texttt{Z\ =\ 2.978} and \texttt{mu\_hat\ =\ 7.664} are
-simplified open-data diagnostics, not evidence comparable to CMS
-publications.
-
-\needspace{0.4\textheight}
-\begin{figure}[htbp]
-\centering
-\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Full-data score validation summary. The figure summarizes data/background ratios and maximum pulls in the observed score templates. It is the main diagnostic showing why the observed fit result is not promoted to a CMS-quality evidence statement.}]{figures/observed_pull_ratio_summary.pdf}}
-\caption{Full-data score validation summary. The figure summarizes
-data/background ratios and maximum pulls in the observed score
-templates. It is the main diagnostic showing why the observed fit result
-is not promoted to a CMS-quality evidence
-statement.}\label{fig:paper-validation}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figures/observed_mvis_zero_jet.pdf}
+\caption{Primary visible-mass validation in the zero-jet category.  The
+same-sign QCD/fake estimate stabilizes the dominant zero-jet normalization,
+which was the main pathology in the original score-only observed result.}
 \end{figure}
 
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Comparison With Published
-Results}\label{comparison-with-published-results}
+\paragraph{MVA diagnostics.}
+Histogram gradient boosting, an MLP neural network, and XGBoost were trained
+on selected simulation.  Their ROC curves and feature-importance diagnostics
+are retained to document the sensitivity study.  A transformer and the
+requested GenMET regression are downscoped because the fast attention stack and
+GenMET target are absent from the current reduced workflow.
 
-The open-data result is compared with CMS H to tau tau publications only
-as context. CMS Run 1 used 7 and 8 TeV data with multiple channels and
-reported mu = 0.78 ± 0.27 with local significance above three standard
-deviations (CMS Collaboration 2014). CMS 2018 used 13 TeV data and
-reported observed and expected significances of 4.9 and 4.7 with mu =
-1.09 and roughly 0.27 uncertainty (CMS Collaboration 2018). These
-publication results are not direct pass/fail targets for the reduced
-single-channel open-data model.
-
-\vspace{1em}
-\begin{table}[htbp]
-\centering
-\small
-\caption{Comparison of the open-data diagnostic with published CMS H to
-tau tau results. The entries differ in energy, channel coverage,
-calibration completeness, and validation
-quality.}\label{tbl:paper-comparison}
-\begin{tabular}{@{}
->{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}
-  >{\raggedleft\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.3077}}
-  >{\raggedright\arraybackslash}p{(\linewidth - 6\tabcolsep) * \real{0.2308}}@{}}
-\toprule\noalign{}
-\begin{minipage}[b]{\linewidth}\raggedright
-Result
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Scope
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedleft
-Significance
-\end{minipage} & \begin{minipage}[b]{\linewidth}\raggedright
-Signal-strength information
-\end{minipage} \\
-\midrule\noalign{}
-This open-data expected & 8 TeV mu tau\_h reduced samples & 0.526 &
-expected mu \textless{} 4.199 \\
-This open-data observed & 8 TeV mu tau\_h reduced samples & 2.978
-flagged & mu\_hat = 7.664; mu \textless{} 13.323 \\
-CMS Run 1 & 7+8 TeV multi-channel & \textgreater3 & mu = 0.78 ± 0.27 \\
-CMS 2018 & 13 TeV multi-channel & observed 4.9, expected 4.7 & mu = 1.09
-± about 0.27 \\
-\end{tabular}
-\end{table}
-
-\needspace{0.4\textheight}
-\begin{figure}[htbp]
-\centering
-\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Significance comparison. The figure compares the open-data expected and observed diagnostic significances with CMS publication values. The open-data observed point is explicitly labelled as flagged and should not be interpreted as CMS-quality evidence.}]{figures/phase5_significance_comparison.pdf}}
-\caption{Significance comparison. The figure compares the open-data
-expected and observed diagnostic significances with CMS publication
-values. The open-data observed point is explicitly labelled as flagged
-and should not be interpreted as CMS-quality
-evidence.}\label{fig:paper-significance}
+\begin{figure}[t]
+\includegraphics[width=\linewidth]{figures/phase5_mva_roc.pdf}
+\caption{Classifier ROC curves for the HGB, MLP neural-network, and XGBoost
+score columns on selected signal and background simulation.  These curves show
+MC separation power but do not validate observed score shapes.}
 \end{figure}
 
-\needspace{0.4\textheight}
-\begin{figure}[htbp]
-\centering
-\pandocbounded{\includegraphics[height=0.35\textheight,width=\linewidth,keepaspectratio,alt={Signal-strength and limit comparison. The figure compares open-data signal-strength-scale diagnostics with CMS Run 1 and CMS 2018 signal-strength measurements. The open-data limit and mu\_hat are not directly equivalent to the published measurements because the reduced public model has flagged score-template validation.}]{figures/phase5_mu_limit_comparison.pdf}}
-\caption{Signal-strength and limit comparison. The figure compares
-open-data signal-strength-scale diagnostics with CMS Run 1 and CMS 2018
-signal-strength measurements. The open-data limit and mu\_hat are not
-directly equivalent to the published measurements because the reduced
-public model has flagged score-template validation.}\label{fig:paper-mu}
-\end{figure}
+\paragraph{Comparison and interpretation.}
+CMS Run 1 reported evidence for $H\to\tau\tau$ with a best-fit signal strength
+of $0.78\pm0.27$, and CMS later observed the decay at 13 TeV with observed and
+expected significances of 4.9 and 4.7.  The present reduced open-data result is
+not a reproduction of those analyses: it uses fewer channels, a reduced public
+sample, limited calibrations, and a simplified background program.  Its value
+is methodological reproducibility, not an independent CMS-quality evidence
+claim.
 
-\needspace{4\baselineskip}
-\FloatBarrier
-\section{Conclusion}\label{conclusion}
-
-A reproducible reduced CMS 2012 Open Data H to tau tau diagnostic search
-has been documented in the mu tau\_h final state. The full-data fit
-gives \texttt{mu\_hat\ =\ 7.664}, \texttt{mu\ \textless{}\ 13.323} at
-95\% CLs, and \texttt{Z\ =\ 2.978}. Because the 10\% and full-data
-score-template validations are flagged, these are simplified open-data
-diagnostics and not CMS-quality evidence. The analysis is useful as a
-public workflow and as a scoped comparison to CMS H to tau tau
-publications, not as an independent publication measurement.
-
-\needspace{4\baselineskip}
-\section*{Reproducibility Note}\label{reproducibility-note}
-\addcontentsline{toc}{section}{Reproducibility Note}
-
-The markdown, TeX, PDF, and comparison figures are generated from the
-committed Phase 4 JSON outputs by
-\texttt{phase5\_documentation/src/build\_phase5\_docs.py}.
-\clearpage
-
-\needspace{4\baselineskip}
-\section*{References}\label{references}
-\addcontentsline{toc}{section}{References}
-
-\protect\phantomsection\label{refs}
-\begin{CSLReferences}{1}{1}
-\bibitem[\citeproctext]{ref-cms_lum_13_001}
-CMS Collaboration. 2013. \emph{CMS Luminosity Based on Pixel Cluster
-Counting: Summer 2013 Update}. CMS-PAS-LUM-13-001. CERN.
-\url{https://cds.cern.ch/record/1598864}.
-
-\bibitem[\citeproctext]{ref-cms_htt_2014}
-CMS Collaboration. 2014. {``Evidence for the 125 GeV Higgs Boson
-Decaying to a Pair of Tau Leptons.''} \emph{Journal of High Energy
-Physics} 2014 (5): 104. \url{https://doi.org/10.1007/JHEP05(2014)104}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_lumi_2012}
-CMS Collaboration. 2017. \emph{CMS Detailed Luminosity Information, for
-2012 CMS Open Data}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.SJ1E.7GFW}.
-
-\bibitem[\citeproctext]{ref-cms_htt_2018}
-CMS Collaboration. 2018. {``Observation of the Higgs Boson Decay to a
-Pair of Tau Leptons with the CMS Detector.''} \emph{Physics Letters B}
-779: 283--316. \url{https://doi.org/10.1016/j.physletb.2018.02.004}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_htt_2012}
-CMS Collaboration. 2021a. \emph{Analysis of Higgs Boson Decays to Two
-Tau Leptons Using Data and Simulation of Events at the CMS Detector from
-2012}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.GV20.PR5T}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_dyjets}
-CMS Collaboration. 2021b. \emph{DYJetsToLL Dataset in Reduced NanoAOD
-Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.SRRA.2GON}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_ggh_htt}
-CMS Collaboration. 2021c. \emph{GluGluToHToTauTau Dataset in Reduced
-NanoAOD Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.VLQO.U950}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_run2012b_tauplusx}
-CMS Collaboration. 2021d. \emph{Run2012B TauPlusX Dataset in Reduced
-NanoAOD Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.H95X.G286}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_run2012c_tauplusx}
-CMS Collaboration. 2021e. \emph{Run2012C TauPlusX Dataset in Reduced
-NanoAOD Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.1O08.0PTD}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_ttbar}
-CMS Collaboration. 2021f. \emph{TTbar Dataset in Reduced NanoAOD Format
-for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.A6WH.U343}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_vbf_htt}
-CMS Collaboration. 2021g. \emph{VBF HToTauTau Dataset in Reduced NanoAOD
-Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.EA1T.GVAF}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_w1jets}
-CMS Collaboration. 2021h. \emph{W1JetsToLNu Dataset in Reduced NanoAOD
-Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.QQZ2.FJZ3}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_w2jets}
-CMS Collaboration. 2021i. \emph{W2JetsToLNu Dataset in Reduced NanoAOD
-Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.3YJW.P203}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_w3jets}
-CMS Collaboration. 2021j. \emph{W3JetsToLNu Dataset in Reduced NanoAOD
-Format for Education and Outreach}. CERN Open Data Portal.
-\url{https://doi.org/10.7483/OPENDATA.CMS.3PB3.MNO2}.
-
-\bibitem[\citeproctext]{ref-cms_open_data_skim}
-CMS Open Data Analyses. 2021. \emph{HiggsTauTauNanoAODOutreachAnalysis
-2012 Skim Source}. GitHub repository.
-\url{https://github.com/cms-opendata-analyses/HiggsTauTauNanoAODOutreachAnalysis/blob/2012/skim.cxx}.
-
-\bibitem[\citeproctext]{ref-cowan_asymptotic}
-Cowan, Glen, Kyle Cranmer, Eilam Gross, and Ofer Vitells. 2011.
-{``Asymptotic Formulae for Likelihood-Based Tests of New Physics.''}
-\emph{European Physical Journal C} 71: 1554.
-\url{https://doi.org/10.1140/epjc/s10052-011-1554-0}.
-
-\bibitem[\citeproctext]{ref-pyhf_joss}
-Heinrich, Lukas, Matthew Feickert, Giordon Stark, and Kyle Cranmer.
-2021. {``Pyhf: Pure-Python Implementation of HistFactory Statistical
-Models.''} \emph{Journal of Open Source Software} 6 (58): 2823.
-\url{https://doi.org/10.21105/joss.02823}.
-
-\bibitem[\citeproctext]{ref-read_cls}
-Read, Alexander L. 2002. {``Presentation of Search Results: The CLs
-Technique.''} \emph{Journal of Physics G: Nuclear and Particle Physics}
-28 (10): 2693--704. \url{https://doi.org/10.1088/0954-3899/28/10/313}.
-
-\end{CSLReferences}
+\begin{thebibliography}{9}
+\bibitem{cms2014} CMS Collaboration, Evidence for the 125 GeV Higgs boson decaying to a pair of tau leptons, JHEP 05 (2014) 104.
+\bibitem{cms2018} CMS Collaboration, Observation of the SM scalar boson decaying to a pair of tau leptons, Phys. Lett. B 779 (2018) 283.
+\bibitem{opendata} CERN Open Data Portal, CMS Higgs to tau tau reduced samples for education and outreach.
+\bibitem{pyhf} L. Heinrich et al., pyhf: pure-Python implementation of HistFactory statistical models.
+\bibitem{cls} A. L. Read, Presentation of search results: the CLs technique.
+\bibitem{cowan} G. Cowan et al., Asymptotic formulae for likelihood-based tests of new physics.
+\end{thebibliography}
 
 \end{document}

@@ -1,14 +1,8 @@
 {
-  "fit_comparison": {
-    "observed_limit_over_phase4a_median_expected": 3.1724627114213044,
-    "phase4a_median_expected_limit": 4.199448081748937,
-    "phase4b_diagnostic_mu_hat": 2.6207997991774064,
-    "phase4c_mu_hat": 7.6642019977187354,
-    "phase4c_observed_limit": 13.322592447898227
-  },
   "phase4a_expected": {
     "expected_discovery_z": 0.5264171907925044,
-    "median_expected_limit": 4.199448081748937
+    "median_expected_limit": 4.199448081748937,
+    "model_note": "historical expected score-template model before Phase 5 QCD audit correction"
   },
   "phase4b_warning_carried": {
     "combined_chi2_per_ndf": 1.732476743083468,
@@ -20,12 +14,21 @@
     },
     "score_modeling_status": "flagged"
   },
-  "score_validation_comparison": {
-    "phase4b_combined_chi2_per_ndf": 1.732476743083468,
-    "phase4b_combined_data_over_background": 1.2322415773867215,
-    "phase4c_combined_chi2_per_ndf": 3.217610280087735,
-    "phase4c_combined_data_over_background": 1.181643391253855,
-    "phase4c_score_modeling_status": "flagged"
+  "primary_fit_comparison": {
+    "median_expected_limit": 10.737535128866,
+    "model": "visible_mass_qcd_primary",
+    "mu_hat": 0.43822864200217504,
+    "observed_limit": 10.764467444563975,
+    "observed_limit_over_median_expected": 1.0025082400546073,
+    "z_value": 0.09493888883239246
+  },
+  "score_diagnostic_comparison": {
+    "model": "hgb_score_qcd_diagnostic",
+    "phase4b_diagnostic_mu_hat": 2.6207997991774064,
+    "phase4c_expected_median_limit": 4.180230812079859,
+    "phase4c_mu_hat": 9.351813691910625,
+    "phase4c_observed_limit": 14.837281837543733,
+    "validation_status": "flagged"
   },
   "w_scale_comparison": {
     "full_minus_10pct": 0.009524674590639659,

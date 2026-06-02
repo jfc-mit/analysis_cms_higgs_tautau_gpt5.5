@@ -425,3 +425,37 @@ Phase 4c executor used all available Run2012B/C TauPlusX data from `sensitivity_
 - Generated final Phase 5 AN and PRL-style paper from Phase 4 JSON outputs.
 - Copied upstream figures into Phase 5 outputs and added CMS-style comparison figures.
 - Explicitly labelled observed Z and mu_hat as simplified open-data diagnostics because score-template validation is flagged.
+
+## 2026-06-02T17:14:23Z
+
+Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result mu=0.0000, observed limit=10.0193; score diagnostic mu=9.7022 remains flagged.
+
+## 2026-06-02T17:17:34Z
+
+Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result mu=0.0000, observed limit=10.0193; score diagnostic mu=9.7022 remains flagged.
+
+## 2026-06-02T17:25:36Z
+
+Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result mu=0.4382, observed limit=10.7645; score diagnostic mu=9.3518 remains flagged.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## 2026-06-02T17:32:47Z
+
+Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result mu=0.4382, observed limit=10.7645; score diagnostic mu=9.3518 remains flagged.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.

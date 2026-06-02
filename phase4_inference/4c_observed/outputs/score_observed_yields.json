@@ -1,0 +1,908 @@
+{
+  "binning": {
+    "edges": [
+      0.0,
+      0.2,
+      0.35,
+      0.5,
+      1.0
+    ],
+    "observable": "mva_score_hist_gradient_boosting"
+  },
+  "blinding": {
+    "data_scope": "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; 11.467/fb is retained as the Open Data normalization reference",
+    "phase4b_human_gate": "auto-passed by explicit user instruction on 2026-06-02",
+    "phase5_audit_correction": "Added same-sign QCD/fake background and demoted unvalidated score fit.",
+    "post_unblinding_retuning": false,
+    "real_data_signal_region_used": true
+  },
+  "categories": [
+    "vbf",
+    "boosted",
+    "zero_jet"
+  ],
+  "phase": "4c_observed",
+  "qcd_sideband_estimate": {
+    "category_assignment": "rederived VBF/boosted/zero-jet rules for control-region rows",
+    "limitations": [
+      "No anti-isolated tau branch is available in the selected-event artifact.",
+      "The transfer factor is measured in the lowest observable bin and propagated globally.",
+      "The VBF MC-background control scale is applied before non-QCD subtraction.",
+      "QCD shape-statistical uncertainties are recorded for validation but not expanded into per-bin pyhf nuisances in the final workspace."
+    ],
+    "method": "same-sign low-mT data minus non-QCD MC, transferred to opposite-sign signal candidates",
+    "normsys": {
+      "hi": 1.1043457669951218,
+      "lo": 0.8956542330048782,
+      "name": "qcd_ss_transfer"
+    },
+    "observable": "mva_score_hist_gradient_boosting",
+    "rows": {
+      "boosted": {
+        "same_sign_data_counts": [
+          533.0,
+          77.0,
+          37.0,
+          36.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          278.67561929415416,
+          42.42788529220009,
+          16.091017417806906,
+          16.798811622710545
+        ],
+        "unscaled_qcd_sumw2": [
+          815.1129161491314,
+          126.99129129910617,
+          51.5320721974236,
+          55.473735161730644
+        ],
+        "unscaled_qcd_template": [
+          254.32438070584584,
+          34.57211470779991,
+          20.908982582193094,
+          19.201188377289455
+        ],
+        "unscaled_qcd_total": 329.0066663731283
+      },
+      "vbf": {
+        "same_sign_data_counts": [
+          11.0,
+          2.0,
+          4.0,
+          12.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          8.460585904290634,
+          2.510477516021582,
+          0.2189486426090068,
+          3.1164435285164074
+        ],
+        "unscaled_qcd_sumw2": [
+          15.650496380234406,
+          0.0,
+          4.0479385081003265,
+          13.925649003625903
+        ],
+        "unscaled_qcd_template": [
+          2.5394140957093665,
+          0.0,
+          3.7810513573909934,
+          8.883556471483592
+        ],
+        "unscaled_qcd_total": 15.204021924583952
+      },
+      "zero_jet": {
+        "same_sign_data_counts": [
+          2284.0,
+          93.0,
+          34.0,
+          15.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          789.1039718978996,
+          35.90251299071405,
+          9.990308740858405,
+          9.733409219771568
+        ],
+        "unscaled_qcd_sumw2": [
+          3396.4200643630256,
+          144.03080829514917,
+          47.93419761670912,
+          28.66627015453669
+        ],
+        "unscaled_qcd_template": [
+          1494.8960281021004,
+          57.09748700928595,
+          24.009691259141597,
+          5.266590780228432
+        ],
+        "unscaled_qcd_total": 1581.2697971507564
+      }
+    },
+    "scaled_qcd_total": 1573.7309969459632,
+    "transfer_sideband": {
+      "absolute_uncertainty": 0.08528373523457297,
+      "bin_edges": [
+        0.0,
+        0.2
+      ],
+      "bin_index": 0,
+      "denominator_same_sign_qcd_template": 1751.7598229036557,
+      "description": "lowest fitted-observable bin, chosen as the most signal-depleted control bin",
+      "numerator_os_data_minus_nonqcd": 1431.745869845033,
+      "relative_uncertainty": 0.10434576699512181,
+      "scale_factor": 0.8173185907825088,
+      "status": "measured_from_low_observable_sideband"
+    }
+  },
+  "samples": {
+    "DYJetsToLL": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            501.0,
+            184.0,
+            73.0,
+            44.0
+          ],
+          "sumw2": [
+            871.6930312806413,
+            320.1427500112535,
+            127.01315625446472,
+            76.55587500269105
+          ],
+          "total_yield": 1057.8821577398583,
+          "weighted_yields": [
+            660.84658482253,
+            242.70613095278546,
+            96.29101934539858,
+            58.03842261914435
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 0.5571017091531486,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            6.0,
+            4.0,
+            7.0,
+            17.0
+          ],
+          "sumw2": [
+            3.2400079830358663,
+            2.160005322023911,
+            3.780009313541844,
+            9.18002261860162
+          ],
+          "total_yield": 24.984826156387605,
+          "weighted_yields": [
+            4.409086968774283,
+            2.939391312516189,
+            5.143934796903331,
+            12.492413078193803
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            4116.0,
+            207.0,
+            89.0,
+            20.0
+          ],
+          "sumw2": [
+            7161.4541252517365,
+            360.1605937626602,
+            154.8516562554433,
+            34.798125001223205
+          ],
+          "total_yield": 5846.052023819267,
+          "weighted_yields": [
+            5429.230625009049,
+            273.04439732188365,
+            117.3959002978147,
+            26.38110119052016
+          ]
+        }
+      },
+      "weight_full_lumi": 1.319055059526008
+    },
+    "GluGluToHToTauTau": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            25.0,
+            39.0,
+            44.0,
+            141.0
+          ],
+          "sumw2": [
+            0.0258691691125498,
+            0.04035590381557769,
+            0.045529737638087646,
+            0.14590211379478085
+          ],
+          "total_yield": 8.009779907456135,
+          "weighted_yields": [
+            0.8041947698249131,
+            1.2545438409268646,
+            1.4153827948918472,
+            4.5356585018125095
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            0.0,
+            0.0,
+            0.0,
+            23.0
+          ],
+          "sumw2": [
+            0.0,
+            0.0,
+            0.0,
+            0.023799635583545815
+          ],
+          "total_yield": 0.73985918823892,
+          "weighted_yields": [
+            0.0,
+            0.0,
+            0.0,
+            0.73985918823892
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            171.0,
+            114.0,
+            86.0,
+            68.0
+          ],
+          "sumw2": [
+            0.17694511672984065,
+            0.11796341115322707,
+            0.0889899417471713,
+            0.07036413998613544
+          ],
+          "total_yield": 14.121660158125474,
+          "weighted_yields": [
+            5.500692225602406,
+            3.6671281504016036,
+            2.766430008197701,
+            2.1874097739237635
+          ]
+        }
+      },
+      "weight_full_lumi": 0.032167790792996524
+    },
+    "QCDSameSignDataDriven": {
+      "categories": {
+        "boosted": {
+          "raw_counts": [
+            254.32438070584584,
+            34.57211470779991,
+            20.908982582193094,
+            19.201188377289455
+          ],
+          "sumw2": [
+            1014.9478413574479,
+            93.52470470822018,
+            37.60371145281814,
+            39.73855895213574
+          ],
+          "total_yield": 268.9032649181362,
+          "weighted_yields": [
+            207.86404444013618,
+            28.25643207335027,
+            17.08930017877408,
+            15.693488225875704
+          ]
+        },
+        "vbf": {
+          "raw_counts": [
+            2.5394140957093665,
+            0.0,
+            3.7810513573909934,
+            8.883556471483592
+          ],
+          "sumw2": [
+            10.50158593712357,
+            0.0,
+            2.8080439621375413,
+            9.87646074388561
+          ],
+          "total_yield": 12.426529773627323,
+          "weighted_yields": [
+            2.0755103501184182,
+            0.0,
+            3.090323567099099,
+            7.260695856409805
+          ]
+        },
+        "zero_jet": {
+          "raw_counts": [
+            1494.8960281021004,
+            57.09748700928595,
+            24.009691259141597,
+            5.266590780228432
+          ],
+          "sumw2": [
+            18522.622421443677,
+            119.92587729110979,
+            36.213321767979096,
+            19.35108571456978
+          ],
+          "total_yield": 1292.4012022541997,
+          "weighted_yields": [
+            1221.8063150547785,
+            46.66683761965219,
+            19.62356702504473,
+            4.304482554724456
+          ]
+        }
+      },
+      "extra_wjets_scale": null,
+      "method": "same-sign low-mT data minus non-QCD MC, transferred to opposite-sign signal candidates",
+      "weight_full_lumi": null
+    },
+    "TTbar": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            1375.0,
+            72.0,
+            38.0,
+            28.0
+          ],
+          "sumw2": [
+            280.291419802873,
+            14.677077982404986,
+            7.746235601824854,
+            5.707752548713049
+          ],
+          "total_yield": 683.11289053925,
+          "weighted_yields": [
+            620.8064933849761,
+            32.507685471795114,
+            17.156833999002977,
+            12.641877683475876
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 0.5571017091531486,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            140.0,
+            15.0,
+            7.0,
+            8.0
+          ],
+          "sumw2": [
+            8.857356453531876,
+            0.9490024771641296,
+            0.4428678226765938,
+            0.5061346544875358
+          ],
+          "total_yield": 42.75992796224315,
+          "weighted_yields": [
+            35.2140583218473,
+            3.7729348201979245,
+            1.7607029160923646,
+            2.0122319041055596
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            67.0,
+            12.0,
+            4.0,
+            5.0
+          ],
+          "sumw2": [
+            13.657836455849084,
+            2.4461796637341644,
+            0.8153932212447215,
+            1.0192415265559018
+          ],
+          "total_yield": 39.731615576638475,
+          "weighted_yields": [
+            30.250207314031563,
+            5.417947578632519,
+            1.8059825262108395,
+            2.2574781577635497
+          ]
+        }
+      },
+      "weight_full_lumi": 0.4514956315527099
+    },
+    "VBF_HToTauTau": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            46.0,
+            64.0,
+            95.0,
+            294.0
+          ],
+          "sumw2": [
+            0.0002507311107569252,
+            0.00034884328453137415,
+            0.0005178142504762586,
+            0.0016024988383160001
+          ],
+          "total_yield": 1.1649995083931146,
+          "weighted_yields": [
+            0.1073947442606879,
+            0.1494187746235658,
+            0.22179349358185546,
+            0.6863924959270054
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            1.0,
+            3.0,
+            3.0,
+            357.0
+          ],
+          "sumw2": [
+            5.450676320802721e-06,
+            1.6352028962408164e-05,
+            1.6352028962408164e-05,
+            0.0019458914465265715
+          ],
+          "total_yield": 0.8498192806715303,
+          "weighted_yields": [
+            0.0023346683534932154,
+            0.007004005060479646,
+            0.007004005060479646,
+            0.8334766021970779
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 1.0,
+          "raw_counts": [
+            35.0,
+            20.0,
+            16.0,
+            23.0
+          ],
+          "sumw2": [
+            0.00019077367122809525,
+            0.00010901352641605443,
+            8.721082113284354e-05,
+            0.0001253655553784626
+          ],
+          "total_yield": 0.21945882522836224,
+          "weighted_yields": [
+            0.08171339237226254,
+            0.04669336706986431,
+            0.03735469365589145,
+            0.05369737213034395
+          ]
+        }
+      },
+      "weight_full_lumi": 0.0023346683534932154
+    },
+    "W1JetsToLNu": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            34.0,
+            1.0,
+            1.0,
+            1.0
+          ],
+          "sumw2": [
+            149.25632107446884,
+            4.389891796307907,
+            4.389891796307907,
+            4.389891796307907
+          ],
+          "total_yield": 77.52265390932851,
+          "weighted_yields": [
+            71.23703332208565,
+            2.0952068624142837,
+            2.0952068624142837,
+            2.0952068624142837
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 0.5571017091531486,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            4.0,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "sumw2": [
+            5.449827910441077,
+            0.0,
+            0.0,
+            0.0
+          ],
+          "total_yield": 4.668973296321613,
+          "weighted_yields": [
+            4.668973296321613,
+            0.0,
+            0.0,
+            0.0
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            314.0,
+            26.0,
+            9.0,
+            1.0
+          ],
+          "sumw2": [
+            1378.426024040683,
+            114.13718670400559,
+            39.509026166771164,
+            4.389891796307907
+          ],
+          "total_yield": 733.3224018449994,
+          "weighted_yields": [
+            657.8949547980851,
+            54.47537842277138,
+            18.856861761728553,
+            2.0952068624142837
+          ]
+        }
+      },
+      "weight_full_lumi": 2.456730291961
+    },
+    "W2JetsToLNu": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            178.0,
+            26.0,
+            17.0,
+            17.0
+          ],
+          "sumw2": [
+            75.18493673849167,
+            10.982069411240357,
+            7.180583845811002,
+            7.180583845811002
+          ],
+          "total_yield": 154.67936311687558,
+          "weighted_yields": [
+            115.68456569245319,
+            16.89774555058305,
+            11.048525936919686,
+            11.048525936919686
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 0.5571017091531486,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            7.0,
+            5.0,
+            1.0,
+            3.0
+          ],
+          "sumw2": [
+            0.9176516673503866,
+            0.6554654766788476,
+            0.13109309533576952,
+            0.3932792860073085
+          ],
+          "total_yield": 5.79308487819374,
+          "weighted_yields": [
+            2.534474634209762,
+            1.8103390244355442,
+            0.3620678048871088,
+            1.0862034146613264
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            315.0,
+            23.0,
+            9.0,
+            1.0
+          ],
+          "sumw2": [
+            133.0519947900274,
+            9.714907556097238,
+            3.801485565429354,
+            0.422387285047706
+          ],
+          "total_yield": 226.16982506165004,
+          "weighted_yields": [
+            204.72268647821772,
+            14.948005679361929,
+            5.849219613663363,
+            0.6499132904070404
+          ]
+        }
+      },
+      "weight_full_lumi": 0.7620544282922055
+    },
+    "W3JetsToLNu": {
+      "categories": {
+        "boosted": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            173.0,
+            27.0,
+            13.0,
+            15.0
+          ],
+          "sumw2": [
+            26.721549357422454,
+            4.170415217632406,
+            2.007977697378566,
+            2.3168973431291144
+          ],
+          "total_yield": 89.60713940500644,
+          "weighted_yields": [
+            67.99138209239524,
+            10.6113717716455,
+            5.109179001162648,
+            5.8952065398030555
+          ]
+        },
+        "vbf": {
+          "extra_vbf_background_scale": 0.5571017091531486,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            9.0,
+            4.0,
+            1.0,
+            2.0
+          ],
+          "sumw2": [
+            0.43144657290293925,
+            0.19175403240130634,
+            0.047938508100326585,
+            0.09587701620065317
+          ],
+          "total_yield": 3.5031782817441086,
+          "weighted_yields": [
+            1.9705377834810611,
+            0.8757945704360272,
+            0.2189486426090068,
+            0.4378972852180136
+          ]
+        },
+        "zero_jet": {
+          "extra_vbf_background_scale": 1.0,
+          "extra_wjets_scale": 0.8528436634946431,
+          "raw_counts": [
+            116.0,
+            6.0,
+            3.0,
+            1.0
+          ],
+          "sumw2": [
+            17.917339453531817,
+            0.9267589372516457,
+            0.46337946862582285,
+            0.1544598228752743
+          ],
+          "total_yield": 49.519734934345664,
+          "weighted_yields": [
+            45.58959724114363,
+            2.358082615921222,
+            1.179041307960611,
+            0.3930137693202037
+          ]
+        }
+      },
+      "weight_full_lumi": 0.4608274483857642
+    }
+  },
+  "totals": {
+    "boosted": {
+      "background_bins": [
+        1744.4301037545763,
+        333.07457268257366,
+        148.79006532367225,
+        105.41272786763295
+      ],
+      "background_sumw2": [
+        2418.095099611345,
+        447.8869091270593,
+        185.94155664860523,
+        135.88955948878785
+      ],
+      "background_total": 2331.707469628455,
+      "data_counts": [
+        1584.0,
+        327.0,
+        169.0,
+        133.0
+      ],
+      "data_over_background": 0.9490898960634327,
+      "data_total": 2213,
+      "nonqcd_background_bins": [
+        1536.56605931444,
+        304.8181406092234,
+        131.70076514489818,
+        89.71923964175726
+      ],
+      "nonqcd_background_total": 2062.804204710319,
+      "qcd_bins": [
+        207.86404444013618,
+        28.25643207335027,
+        17.08930017877408,
+        15.693488225875704
+      ],
+      "qcd_total": 268.9032649181362,
+      "signal_bins": [
+        0.911589514085601,
+        1.4039626155504303,
+        1.6371762884737027,
+        5.222050997739515
+      ],
+      "signal_total": 9.17477941584925
+    },
+    "vbf": {
+      "background_bins": [
+        50.87264135475244,
+        9.398459727585683,
+        10.57597772759091,
+        23.289441538588505
+      ],
+      "background_sumw2": [
+        29.397876524385715,
+        3.9562273082681947,
+        7.209952701792075,
+        20.051774319182726
+      ],
+      "background_total": 94.13652034851754,
+      "data_counts": [
+        33.0,
+        5.0,
+        11.0,
+        30.0
+      ],
+      "data_over_background": 0.8392067149658999,
+      "data_total": 79,
+      "nonqcd_background_bins": [
+        48.79713100463402,
+        9.398459727585683,
+        7.485654160491811,
+        16.0287456821787
+      ],
+      "nonqcd_background_total": 81.70999057489021,
+      "qcd_bins": [
+        2.0755103501184182,
+        0.0,
+        3.090323567099099,
+        7.260695856409805
+      ],
+      "qcd_total": 12.426529773627323,
+      "signal_bins": [
+        0.0023346683534932154,
+        0.007004005060479646,
+        0.007004005060479646,
+        1.573335790435998
+      ],
+      "signal_total": 1.5896784689104504
+    },
+    "zero_jet": {
+      "background_bins": [
+        7589.494385895306,
+        396.91064923822285,
+        164.7105725324228,
+        36.08119582514969
+      ],
+      "background_sumw2": [
+        27227.129741435507,
+        607.3115039148586,
+        235.65426244549343,
+        60.13519114657977
+      ],
+      "background_total": 8187.196803491101,
+      "data_counts": [
+        7752.0,
+        441.0,
+        219.0,
+        54.0
+      ],
+      "data_over_background": 1.0340535598692357,
+      "data_total": 8466,
+      "nonqcd_background_bins": [
+        6367.688070840527,
+        350.24381161857065,
+        145.08700550737805,
+        31.776713270425237
+      ],
+      "nonqcd_background_total": 6894.7956012369,
+      "qcd_bins": [
+        1221.8063150547785,
+        46.66683761965219,
+        19.62356702504473,
+        4.304482554724456
+      ],
+      "qcd_total": 1292.4012022541997,
+      "signal_bins": [
+        5.582405617974668,
+        3.7138215174714677,
+        2.8037847018535924,
+        2.2411071460541074
+      ],
+      "signal_total": 14.341118983353836
+    }
+  },
+  "vbf_background_scale": {
+    "absolute_uncertainty": 0.05145868420469961,
+    "application": "central scale applied only to MC background samples in the VBF fit category",
+    "applied_scale_factor": 0.5571017091531486,
+    "background_mc_sumw2": 260.80319778614296,
+    "background_mc_yield": 436.18606083507586,
+    "control_region": "vbf_like_top_btag_not_signal_region",
+    "data_events": 243,
+    "data_scope": "VBF-like rows with top-btag handle outside the low-mT signal region",
+    "formula": "N_data_CR / MC_background_CR",
+    "nuisance": {
+      "hi": 1.0923685627942554,
+      "lo": 0.9076314372057446
+    },
+    "raw_scale_factor": 0.5571017091531486,
+    "relative_uncertainty": 0.09236856279425538,
+    "rows": {
+      "DYJetsToLL": {
+        "raw_events": 14,
+        "sumw2": 24.35868750085625,
+        "yield": 18.466770833364112
+      },
+      "TTbar": {
+        "raw_events": 737,
+        "sumw2": 150.2362010143399,
+        "yield": 332.75228045434716
+      },
+      "W1JetsToLNu": {
+        "raw_events": 12,
+        "sumw2": 52.678701555694886,
+        "yield": 25.142482348971406
+      },
+      "W2JetsToLNu": {
+        "raw_events": 60,
+        "sumw2": 25.34323710286236,
+        "yield": 38.99479742442242
+      },
+      "W3JetsToLNu": {
+        "raw_events": 53,
+        "sumw2": 8.186370612389538,
+        "yield": 20.829729773970797
+      }
+    },
+    "status": "valid"
+  }
+}

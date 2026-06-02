@@ -5,13 +5,17 @@ import logging
 import re
 import shutil
 import subprocess
+import sys
 from pathlib import Path
 
 import matplotlib.pyplot as plt
 import mplhep as mh
 import numpy as np
 from rich.logging import RichHandler
-
+from sklearn.ensemble import HistGradientBoostingClassifier
+from sklearn.inspection import permutation_importance
+from sklearn.metrics import auc, roc_auc_score, roc_curve
+from sklearn.model_selection import train_test_split
 
 logging.basicConfig(
     level=logging.INFO,
@@ -25,6 +29,25 @@ OUT = ROOT / "phase5_documentation" / "outputs"
 FIG = OUT / "figures"
 LOG_PATH = ROOT / "phase5_documentation" / "logs" / "executor_phase5_documentation_20260602T162932Z.md"
 EXP_LOG = ROOT / "experiment_log.md"
+
+MVA_INPUTS = [
+    "mu_pt",
+    "mu_eta",
+    "mu_reliso",
+    "tau_pt",
+    "tau_eta",
+    "tau_reliso",
+    "met_pt",
+    "mt_mu_met",
+    "m_vis",
+    "m_addmet",
+    "pt_tautau_proxy",
+    "n_clean_jets",
+    "mjj",
+    "delta_eta_jj",
+    "jet1_pt",
+    "btag_max",
+]
 
 
 def load_json(path: str) -> dict:
@@ -51,8 +74,7 @@ def copy_figures() -> None:
         for src in src_dir.glob("*.*"):
             if src.suffix.lower() not in {".pdf", ".png"}:
                 continue
-            dst = FIG / src.name
-            shutil.copy2(src, dst)
+            shutil.copy2(src, FIG / src.name)
             copied += 1
     log.info("Copied %d upstream figure files", copied)
     append_log(f"Copied {copied} upstream figure files into the Phase 5 figure directory.")
@@ -74,77 +96,156 @@ def save(fig: plt.Figure, name: str) -> None:
     plt.close(fig)
 
 
-def make_comparison_figures(observed: dict, comparison: dict) -> None:
-    setup_style()
-    expected_z = comparison["phase4a_expected"]["expected_discovery_z"]
-    observed_z = observed["observed_fit"]["discovery_diagnostic"]["z_value"]
+def exp_label(ax: plt.Axes, label_text: str = "Open Data diagnostic") -> None:
+    mh.label.exp_label(
+        exp="CMS",
+        data=True,
+        llabel=label_text,
+        rlabel=r"$\sqrt{s}=8$ TeV, $L=11.467$ fb$^{-1}$ ref.",
+        loc=0,
+        ax=ax,
+    )
 
-    labels = [
-        "This open data expected",
-        "This open data observed",
-        "CMS Run 1",
-        "CMS 2018",
-    ]
-    z_values = [expected_z, observed_z, 3.0, 4.9]
-    xerr = [0.0, 0.0, 0.0, 0.0]
-    y = np.arange(len(labels))
+
+def make_comparison_figures(observed: dict) -> None:
+    setup_style()
+    primary = observed["observed_fit"]
+    score = observed["score_diagnostic_fit"]
+    primary_limit = primary["observed_upper_limit"]
+    score_limit = score["observed_upper_limit"]
+    primary_band = primary_limit["expected_band_minus2_minus1_median_plus1_plus2"]
+    score_band = score_limit["expected_band_minus2_minus1_median_plus1_plus2"]
 
     fig, ax = plt.subplots(figsize=(10, 10))
-    colors = ["#7a7a7a", "#d55e00", "#0072b2", "#009e73"]
+    rows = {
+        "This open data primary": 0.0,
+        "BDT score diagnostic": 1.0,
+        "CMS Run 1 mu": 2.0,
+        "CMS 2018 mu": 3.0,
+    }
+    ax.fill_betweenx([rows["This open data primary"] - 0.22, rows["This open data primary"] + 0.22], primary_band[0], primary_band[4], color="#f0e442", alpha=0.9, label="Expected 95% band")
+    ax.fill_betweenx([rows["This open data primary"] - 0.22, rows["This open data primary"] + 0.22], primary_band[1], primary_band[3], color="#009e73", alpha=0.9, label="Expected 68% band")
+    ax.plot(primary_band[2], rows["This open data primary"], marker="s", color="#d55e00", linestyle="", label="Expected median limit")
+    ax.plot(primary_limit["observed_limit"], rows["This open data primary"], marker="o", color="black", linestyle="", label="Observed limit")
+    ax.plot(primary["mu_hat"], rows["This open data primary"], marker="D", color="#0072b2", linestyle="", label="Fitted mu")
+
+    ax.fill_betweenx([rows["BDT score diagnostic"] - 0.18, rows["BDT score diagnostic"] + 0.18], score_band[1], score_band[3], color="#b0b0b0", alpha=0.45, label="BDT exp. 68%")
+    ax.plot(score_band[2], rows["BDT score diagnostic"], marker="s", color="#a65628", linestyle="")
+    ax.plot(score_limit["observed_limit"], rows["BDT score diagnostic"], marker="o", color="#555555", linestyle="")
+    ax.plot(score["mu_hat"], rows["BDT score diagnostic"], marker="D", color="#984ea3", linestyle="")
+
+    ax.errorbar(0.78, rows["CMS Run 1 mu"], xerr=0.27, fmt="o", color="#202020", capsize=5)
+    ax.errorbar(1.09, rows["CMS 2018 mu"], xerr=0.27, fmt="o", color="#202020", capsize=5)
+    ax.axvline(1.0, color="black", linestyle="--", linewidth=1.2, label="SM mu=1")
+    ax.set_yticks(list(rows.values()), list(rows.keys()))
+    ax.set_xlabel("Signal-strength scale mu")
+    ax.set_xlim(0, max(30.0, score_limit["observed_limit"] * 1.15))
+    ax.invert_yaxis()
+    ax.legend(fontsize="x-small", loc="lower right")
+    exp_label(ax)
+    save(fig, "phase5_mu_limit_comparison")
+
+    fig, ax = plt.subplots(figsize=(10, 10))
+    labels = ["Primary observed", "BDT diagnostic", "CMS Run 1", "CMS 2018 obs.", "CMS 2018 exp."]
+    z_values = [
+        primary["discovery_diagnostic"]["z_value"],
+        score["discovery_diagnostic"]["z_value"],
+        3.0,
+        4.9,
+        4.7,
+    ]
+    colors = ["#0072b2", "#d55e00", "#7a7a7a", "#202020", "#909090"]
+    y = np.arange(len(labels))
     ax.barh(y, z_values, color=colors, alpha=0.88, height=0.55)
-    ax.errorbar(z_values, y, xerr=xerr, fmt="none", ecolor="black", capsize=0)
     ax.axvline(3.0, color="black", linestyle="--", linewidth=1.2)
     ax.set_yticks(y, labels)
     ax.set_xlabel("Local significance diagnostic [standard deviations]")
     ax.set_xlim(0, 5.5)
     ax.invert_yaxis()
-    mh.label.exp_label(
-        exp="CMS",
-        data=True,
-        llabel="Open Data diagnostic",
-        rlabel=r"$\sqrt{s}=8$ TeV",
-        loc=0,
-        ax=ax,
-    )
-    mh.label.add_text(
-        "Open-data points have flagged score-template validation; CMS rows are publication results.",
-        ax=ax,
-        loc="lower right",
-    )
+    exp_label(ax)
+    mh.label.add_text("BDT row is flagged by score-shape validation.", ax=ax, loc="lower right")
     save(fig, "phase5_significance_comparison")
+    append_log("Generated CMS-style expected/observed signal-strength and significance comparison figures.")
 
-    labels = [
-        "This open data mu_hat",
-        "This open data 95% CLs limit",
-        "CMS Run 1 mu",
-        "CMS 2018 mu",
-    ]
-    values = [observed["observed_fit"]["mu_hat"], observed["observed_fit"]["observed_upper_limit"]["observed_limit"], 0.78, 1.09]
-    errors = [0.0, 0.0, 0.27, 0.27]
-    y = np.arange(len(labels))
+
+def selected_arrays() -> dict[str, np.ndarray]:
+    with np.load(ROOT / "phase3_selection" / "outputs" / "sensitivity_selected_events.npz", allow_pickle=False) as payload:
+        return {key: payload[key] for key in payload.files}
+
+
+def make_mva_performance_figures() -> None:
+    setup_style()
+    selected = selected_arrays()
+    sr_mc = selected["is_signal_region"].astype(bool) & np.isin(selected["role"], ["signal", "background"])
+    y = (selected["role"][sr_mc] == "signal").astype(int)
+    score_columns = {
+        "HGB": "mva_score_hist_gradient_boosting",
+        "MLP NN": "mva_score_mlp",
+        "XGBoost": "mva_score_xgboost",
+    }
 
     fig, ax = plt.subplots(figsize=(10, 10))
-    ax.errorbar(values, y, xerr=errors, fmt="o", color="#202020", ecolor="#202020", capsize=5)
-    ax.axvline(1.0, color="black", linestyle="--", linewidth=1.2)
-    ax.set_yticks(y, labels)
-    ax.set_xlabel("Signal-strength scale mu")
-    ax.set_xlim(0, 15)
+    auc_rows = {}
+    for label, column in score_columns.items():
+        scores = selected[column][sr_mc].astype(float)
+        fpr, tpr, _ = roc_curve(y, scores)
+        roc_auc = auc(fpr, tpr)
+        auc_rows[label] = roc_auc
+        roc_label = label + " AUC=" + format(roc_auc, ".3f")
+        ax.plot(fpr, tpr, label=roc_label)
+    ax.plot([0, 1], [0, 1], color="black", linestyle="--", linewidth=1.0)
+    ax.set_xlabel("Background efficiency")
+    ax.set_ylabel("Signal efficiency")
+    ax.legend(fontsize="x-small", loc="lower right")
+    exp_label(ax, "Open Simulation")
+    save(fig, "phase5_mva_roc")
+
+    fig, ax = plt.subplots(figsize=(10, 10))
+    labels = list(auc_rows.keys()) + ["Transformer"]
+    values = list(auc_rows.values()) + [0.0]
+    colors = ["#0072b2", "#009e73", "#d55e00", "#7a7a7a"]
+    y_pos = np.arange(len(labels))
+    ax.barh(y_pos, values, color=colors, alpha=0.88)
+    ax.set_yticks(y_pos, labels)
+    ax.set_xlabel("Full selected-MC ROC AUC")
+    ax.set_xlim(0, 1.0)
     ax.invert_yaxis()
-    mh.label.exp_label(
-        exp="CMS",
-        data=True,
-        llabel="Open Data diagnostic",
-        rlabel=r"$\sqrt{s}=8$ TeV",
-        loc=0,
-        ax=ax,
+    mh.label.add_text("Transformer not trained: no fast attention stack in the pixi environment.", ax=ax, loc="lower right")
+    exp_label(ax, "Open Simulation")
+    save(fig, "phase5_mva_auc_summary")
+
+    matrix = np.column_stack(
+        [np.nan_to_num(selected[name][sr_mc].astype(float), nan=-999.0, posinf=999.0, neginf=-999.0) for name in MVA_INPUTS]
     )
-    mh.label.add_text(
-        "Open-data fit and limit are not directly equivalent to full CMS publication measurements.",
-        ax=ax,
-        loc="lower right",
-    )
-    save(fig, "phase5_mu_limit_comparison")
-    append_log("Generated Phase 5 CMS-style significance and signal-strength comparison figures.")
+    x_train, x_test, y_train, y_test = train_test_split(matrix, y, test_size=0.35, random_state=31415, stratify=y)
+    model = HistGradientBoostingClassifier(max_iter=180, learning_rate=0.045, max_leaf_nodes=17, l2_regularization=0.05, random_state=2718)
+    model.fit(x_train, y_train)
+    baseline_auc = roc_auc_score(y_test, model.predict_proba(x_test)[:, 1])
+    result = permutation_importance(model, x_test, y_test, n_repeats=5, random_state=2718, scoring="roc_auc")
+    drops = np.maximum(result.importances_mean, 0.0)
+    order = np.argsort(drops)[-10:][::-1]
+    fig, ax = plt.subplots(figsize=(10, 10))
+    ax.barh(np.arange(len(order)), drops[order], xerr=result.importances_std[order], color="#0072b2", alpha=0.88)
+    ax.set_yticks(np.arange(len(order)), [MVA_INPUTS[idx] for idx in order])
+    ax.set_xlabel("Permutation AUC decrease")
+    ax.invert_yaxis()
+    mh.label.add_text(f"HGB held-out AUC={baseline_auc:.3f}", ax=ax, loc="lower right")
+    exp_label(ax, "Open Simulation")
+    save(fig, "phase5_hgb_permutation_importance")
+
+    fig, ax = plt.subplots(figsize=(10, 10))
+    items = ["Tabular inputs", "HGB", "MLP NN", "XGBoost", "Transformer", "GenMET regression"]
+    status = [1, 1, 1, 1, 0, 0]
+    colors = ["#009e73" if value else "#d55e00" for value in status]
+    ax.barh(np.arange(len(items)), status, color=colors, alpha=0.88)
+    ax.set_yticks(np.arange(len(items)), items)
+    ax.set_xticks([0, 1], ["Not available", "Available/trained"])
+    ax.set_xlim(0, 1.25)
+    ax.invert_yaxis()
+    mh.label.add_text("Transformer and GenMET regression were downscoped by environment/target availability.", ax=ax, loc="lower right")
+    exp_label(ax, "Open Simulation")
+    save(fig, "phase5_transformer_feasibility")
+    append_log("Generated MVA/NN ROC, AUC, permutation-importance, and transformer-feasibility figures.")
 
 
 def figure_ref_check(md_path: Path) -> list[str]:
@@ -169,7 +270,7 @@ def compile_doc(stem: str) -> None:
         "--bibliography=references.bib",
     ]
     subprocess.run(cmd, cwd=OUT, check=True)
-    subprocess.run(["python", "../../conventions/postprocess_tex.py", f"{stem}.tex"], cwd=OUT, check=True)
+    subprocess.run([sys.executable, "../../conventions/postprocess_tex.py", f"{stem}.tex"], cwd=OUT, check=True)
     subprocess.run(["tectonic", f"{stem}.tex"], cwd=OUT, check=True)
     append_log(f"Compiled {stem}.md to TeX and PDF.")
 
@@ -178,34 +279,39 @@ def fmt(value: float, ndigits: int = 3) -> str:
     return f"{value:.{ndigits}f}"
 
 
-def build_analysis_note(observed: dict, partial: dict, expected: dict, comparison: dict, yields: dict) -> str:
-    obs_fit = observed["observed_fit"]
+def build_analysis_note(observed: dict, partial: dict, expected: dict, comparison: dict, yields: dict, score_yields: dict) -> str:
+    primary = observed["observed_fit"]
+    score = observed["score_diagnostic_fit"]
+    primary_lim = primary["observed_upper_limit"]
+    score_lim = score["observed_upper_limit"]
+    primary_band = primary_lim["expected_band_minus2_minus1_median_plus1_plus2"]
+    score_band = score_lim["expected_band_minus2_minus1_median_plus1_plus2"]
     obs_val = observed["validation_summary"]
+    score_val = observed["score_diagnostic_validation_summary"]
     pval = partial["validation_summary"]
     w_full = observed["wjets_high_mt_scale"]
     w_10 = partial["wjets_high_mt_scale"]
+    vbf_scale = observed["vbf_background_scale"]
+    qcd_primary = observed["qcd_sideband_estimates"]["visible_mass_qcd_primary"]
+    qcd_score = observed["qcd_sideband_estimates"]["hgb_score_qcd_diagnostic"]
     exp_lim = expected["expected_upper_limit"]
     exp_z = expected["discovery_sensitivity"]["z_value"]
-    obs_lim = obs_fit["observed_upper_limit"]["observed_limit"]
-    mu_hat = obs_fit["mu_hat"]
-    obs_z = obs_fit["discovery_diagnostic"]["z_value"]
-    obs_exp_ratio = comparison["fit_comparison"]["observed_limit_over_phase4a_median_expected"]
 
     category_rows = []
     for cat in ["vbf", "boosted", "zero_jet"]:
         total = yields["totals"][cat]
         category_rows.append(
             f"| {cat} | {total['data_total']} | {total['background_total']:.2f} | "
-            f"{total['signal_total']:.3f} | {total['data_over_background']:.3f} |"
+            f"{total['qcd_total']:.2f} | {total['signal_total']:.3f} | {total['data_over_background']:.3f} |"
         )
     category_table = "\n".join(category_rows)
 
     score_rows = []
-    for label, vals in obs_val["score_template_validation"].items():
+    for cat in ["vbf", "boosted", "zero_jet"]:
+        total = score_yields["totals"][cat]
         score_rows.append(
-            f"| {label} | {vals['data_total']:.0f} | {vals['background_total']:.2f} | "
-            f"{vals['data_over_background']:.3f} | {vals['chi2_per_ndf']:.3f} | "
-            f"{vals['max_abs_pull']:.2f} | flagged |"
+            f"| {cat} | {total['data_total']} | {total['background_total']:.2f} | "
+            f"{total['qcd_total']:.2f} | {total['signal_total']:.3f} | {total['data_over_background']:.3f} |"
         )
     score_table = "\n".join(score_rows)
 
@@ -219,600 +325,403 @@ bibliography: references.bib
 # Abstract {{-}}
 
 This note documents a reduced CMS 2012 Open Data search for Higgs boson decays
-to tau pairs in the mu tau_h final state. The final diagnostic fit uses
-Run2012B/C TauPlusX reduced NanoAOD-like inputs with an integrated luminosity
-of 11.467/fb and a binned pyhf profile likelihood in VBF, boosted, and zero-jet
-categories [@cms_open_data_htt_2012; @cms_open_data_lumi_2012; @pyhf_joss].
-The observed full-data fit gives `mu_hat = {mu_hat:.4f}`, an observed 95% CLs
-upper limit `mu < {obs_lim:.4f}`, and a simplified discovery diagnostic
-`Z = {obs_z:.4f}`. The score-template validation is flagged in both the 10%
-data validation and full-data validation, so these numbers are open-data
-diagnostics rather than CMS-quality evidence for H to tau tau.
+to tau pairs in the mu tau_h final state. A Phase 5 audit found that the
+original observed BDT-score fit was not a valid evidence result: it omitted a
+reducible QCD/fake-tau background estimate and failed high-score shape
+validation. The final conservative result therefore uses visible mass in VBF,
+boosted, and zero-jet categories with a same-sign data-driven QCD/fake template.
+It gives `mu_hat = {primary['mu_hat']:.4f}`, an observed 95% CLs limit
+`mu < {primary_lim['observed_limit']:.4f}`, and `Z = {primary['discovery_diagnostic']['z_value']:.4f}`.
+The categorized BDT-score model is retained as a flagged diagnostic with
+`mu_hat = {score['mu_hat']:.4f}` and `Z = {score['discovery_diagnostic']['z_value']:.4f}`.
 
 # Change Log {{-}}
 
-Phase 5 v1 consolidates the Phase 4c observed result into a final analysis note
-and adds a PRL-style paper draft. It also adds publication-style comparison
-figures for the open-data diagnostic result against CMS Run 1 and Run 2 H to
-tau tau publications [@cms_htt_2014; @cms_htt_2018].
-
-# Introduction
-
-The H to tau tau decay tests the Higgs coupling to charged leptons. CMS
-reported Run 1 evidence for this decay mode in JHEP 05 (2014) 104 and later
-observed the decay with 13 TeV data in Phys. Lett. B 779 (2018) 283
-[@cms_htt_2014; @cms_htt_2018]. This open-data analysis is intentionally much
-smaller: it uses only the reduced 2012 mu tau_h outreach samples available from
-the CERN Open Data Portal and does not use the full CMS calibration,
-embedding, or multi-channel machinery [@cms_open_data_htt_2012].
-
-The goal is a reproducible template-fit demonstration using public samples,
-not a substitute for the CMS publications. The result is interpreted against
-CMS Run 1, CMS Run 2, and ATLAS+CMS Higgs-combination context
-[@atlas_cms_higgs_combination_2016], while every comparison is labelled for
-scope and observable differences.
+Phase 5 v2 responds to the observed-versus-expected audit. It adds a same-sign
+QCD/fake estimate, changes the primary full-data result to the visible-mass
+fallback, keeps the BDT score as a diagnostic, adds NN/MVA performance figures,
+and compiles the paper with REVTeX PRL formatting.
 
 # Data And Simulation
 
-The data are Run2012B and Run2012C TauPlusX reduced NanoAOD-like samples from
-the CMS Open Data H to tau tau record [@cms_open_data_run2012b_tauplusx;
-@cms_open_data_run2012c_tauplusx]. The signal samples are ggH and VBF
-H to tau tau reduced samples [@cms_open_data_ggh_htt; @cms_open_data_vbf_htt].
-The available background simulation includes DYJetsToLL, TTbar, and
-W1/W2/W3JetsToLNu [@cms_open_data_dyjets; @cms_open_data_ttbar;
-@cms_open_data_w1jets; @cms_open_data_w2jets; @cms_open_data_w3jets].
+The data are Run2012B and Run2012C TauPlusX reduced samples from the public
+HiggsTauTauReduced mirror, using the CMS Open Data H to tau tau luminosity
+reference of 11.467/fb [@cms_open_data_htt_2012; @cms_open_data_skim]. The
+localized mirror files contain about one tenth of the event entries listed in
+the Open Data records; this is treated as the public reduced processing sample
+scope, while MC weights continue to use the official record denominators
+specified in `normalization_inputs.json`, as required by the sample provenance.
 
-The luminosity is 11.467/fb for the Run2012B/C TauPlusX selection following
-the CMS Open Data tutorial and 2012 luminosity provenance
-[@cms_open_data_skim; @cms_open_data_lumi_2012]. The luminosity nuisance uses
-2.6% from CMS PAS LUM-13-001 [@cms_lum_13_001]. The MC event denominators come
-from official Open Data record `distribution.number_events` values, not from
-local reduced-tree entries. This avoids circular normalization by keeping data
-event counts out of the luminosity and MC-weight definitions.
-
-| Sample | Role | Normalization input |
-|---|---|---|
-| Run2012B/C TauPlusX | data | 11.467/fb Run2012B/C luminosity |
-| GluGluToHToTauTau | signal | sigma_prod times BR(H to tau tau) and record denominator |
-| VBF_HToTauTau | signal | sigma_prod times BR(H to tau tau) and record denominator |
-| DYJetsToLL | background | cross section times luminosity divided by record denominator |
-| TTbar | background | cross section times luminosity divided by record denominator |
-| W1/W2/W3JetsToLNu | background | cross section times luminosity divided by record denominator plus W high-mT scale |
-
-The available reduced sample list is not the full CMS analysis sample set.
-QCD multijet, diboson, single-top, embedded Z to tau tau, associated Higgs
-production, H to WW, W4/inclusive W+jets, and additional DY categories are not
-available as reduced samples and are documented limitations rather than
-silently substituted.
+The available MC set contains ggH and VBF H to tau tau, DYJetsToLL, TTbar, and
+W1/W2/W3JetsToLNu. QCD multijet, diboson, single top, embedded Z to tau tau,
+W4/inclusive W+jets, associated Higgs, and H to WW remain unavailable as
+reduced samples and are not silently substituted.
 
 ![Sample inventory. The figure summarizes local reduced ROOT entries and file
 sizes for the public H to tau tau files used in the analysis. The entries are
 processing entries, while normalization uses official Open Data record
-denominators and the cited luminosity.](figures/sample_event_count_file_size.pdf){{#fig:an-samples}}
-
-![Branch feature availability. The figure records the reduced branch classes
-available in data and simulation. It shows that the core muon, tau, jet, MET,
-trigger, and generator-particle handles are available, while event weights,
-pileup weights, and direct GenMET are absent.](figures/branch_feature_availability.pdf){{#fig:an-branches}}
-
-# Event Selection And Categories
-
-Events are selected with `HLT_IsoMu17_eta2p1_LooseIsoPFTau20`, matching the
-TauPlusX mu tau_h trigger path in the reduced samples. Muons require pt > 20
-GeV, |eta| < 2.1, tight identification, and finite relative isolation below
-0.20. Tau_h candidates require pt > 20 GeV, |eta| < 2.3, a decay-mode ID, tight
-isolation ID, tight anti-muon ID, finite isolation, and separation
-Delta R(mu,tau) > 0.5.
-
-The signal-region candidate set requires opposite-sign mu tau_h pairs and
-muon-MET transverse mass below 40 GeV. The high-mT W control region uses
-opposite-sign pairs with transverse mass above 80 GeV. A same-sign low-mT
-region is retained as the available fake/QCD handle, and a Z-rich validation
-window is retained for DY modelling checks.
-
-The mutually exclusive fit categories are assigned in this order: VBF first,
-boosted/1-jet second, and zero-jet last. VBF requires at least two clean jets,
-leading-dijet mass above 300 GeV, and leading-dijet |Delta eta| above 2.5.
-Boosted events have at least one clean jet after failing the VBF selection.
-Zero-jet events have no selected clean jets.
-
-![Cutflow summary. This plot shows raw event counts after each selection step
-for data, signal MC, and background MC. It verifies that the selection chain is
-monotonic and that the reduced samples remain populated after the trigger,
-object, charge, and transverse-mass requirements.](figures/cutflow_summary.pdf){{#fig:an-cutflow}}
-
-![Exclusive category yields. The figure summarizes raw data, signal MC, and
-background MC counts in the VBF, boosted, and zero-jet categories. These three
-categories are the channels of the simultaneous fit and no event is counted in
-more than one fit channel.](figures/category_yields.pdf){{#fig:an-category-yields}}
-
-| Category | Data | Background | Signal | Data/background |
-|---|---:|---:|---:|---:|
-{category_table}
-
-The category table is the final full-data selected-event summary after the W
-control scale is applied to W+jets. The zero-jet category dominates the event
-count and the combined data/background ratio, while the VBF category has the
-largest signal-to-background leverage but also the strongest validation
-deficit.
-
-# Candidate Methods
-
-The strategy evaluated visible mass, add-MET mass, an NN/MVA discriminator,
-and an NN missing-momentum regression idea. Visible mass and add-MET mass were
-implemented as transparent alternatives, but the best expected-only sensitivity
-came from a histogram-gradient-boosting classifier score. The NN GenMET
-regression was downscoped because direct GenMET and neutrino generator truth
-targets were not present in the reduced files.
-
-The classifier-score method was carried forward only because it improved the
-expected diagnostic sensitivity in MC-only studies. That promotion was always
-conditional on data score-template validation. The 10% and full-data
-validation failed the combined ratio criterion, so the final score-template
-result is deliberately labelled as a diagnostic.
-
-![Approach comparison. The figure compares visible-mass and add-MET-mass
-approaches using a common MC-only binned separation diagnostic. It supports the
-existence of a transparent baseline and an add-MET cross-check, but it is not
-the final likelihood result.](figures/approach_comparison.pdf){{#fig:an-approaches}}
-
-![MVA input modelling gate. The figure shows data-versus-background-MC
-validation chi2/ndf values for candidate classifier inputs. Most inputs fail
-the predeclared modelling threshold, which is why the classifier result is
-kept as an open-data diagnostic rather than a publication-quality model.](figures/mva_input_modeling_chi2.pdf){{#fig:an-mva-gate}}
-
-![Expected classifier score templates. The figure shows expected signal and
-background score distributions after the official Open Data normalization.
-These templates define the fitted observable, but their full-data validation
-status is flagged and limits the interpretation of the final result.](figures/mva_score_templates.pdf){{#fig:an-mva-score}}
-
-# Statistical Model
-
-The final model is a binned profile likelihood implemented with pyhf
-[@pyhf_joss]. It has one parameter of interest, the signal-strength modifier
-mu, multiplying the SM H to tau tau signal templates in all fit channels. The
-likelihood is
-
-$$
-L(\\mu,\\theta)=\\prod_{{c,b}} \\mathrm{{Pois}}\\left(n_{{cb}}\\mid
-\\mu s_{{cb}}(\\theta)+b_{{cb}}(\\theta)\\right)
-\\prod_k \\pi_k(\\theta_k),
-$$ {{#eq:likelihood}}
-
-where c indexes category, b indexes score bin, and theta denotes nuisance
-parameters. The normalization weight for a simulated background sample is
-
-$$
-w_i = \\frac{{\\sigma_i L_{{\\mathrm{{int}}}}}}{{N_{{\\mathrm{{gen}},i}}}},
-$$ {{#eq:background-weight}}
-
-while signal weights use the production cross section times BR(H to tau tau),
-following the Phase 3 normalization record and the Higgs cross-section context
-[@lhc_hxswg_yellow_report_4]. The W+jets control scale is computed as
-
-$$
-\\alpha_W = \\frac{{N_{{\\mathrm{{data}}}}^{{\\mathrm{{CR}}}} -
-N_{{\\mathrm{{nonW}}}}^{{\\mathrm{{CR}}}}}}{{N_W^{{\\mathrm{{CR}}}}}} .
-$$ {{#eq:w-scale}}
-
-The expected and observed upper limits use the modified frequentist CLs
-construction [@read_cls]. Discovery diagnostics use the one-sided q0
-asymptotic approximation [@cowan_asymptotic]. These formulae are appropriate
-for a compact diagnostic study, but the flagged data/MC score validation
-prevents interpreting the observed q0 value as CMS-quality evidence.
-
-# Systematic Uncertainties
-
-The retained nuisance model is intentionally compact because the reduced
-public samples lack many CMS calibration ingredients. The implemented
-normalization nuisances are a 2.6% luminosity uncertainty, 15% DY open-data
-normalization, 15% tau open-data acceptance, a W high-mT control-region
-normalization uncertainty, and bin-by-bin MC statistical terms. The omitted
-publication-level components are limitations, not hidden corrections.
-
-| Nuisance | Size | Source or derivation | Role |
-|---|---:|---|---|
-| Luminosity | 2.6% | CMS PAS LUM-13-001 | MC-normalized components |
-| DY normalization | 15% | Open-data missing scale-factor limitation | DY rate |
-| Tau acceptance | 15% | Open-data missing tau trigger/ID scale-factor limitation | selected MC |
-| W high-mT scale | {w_full['relative_uncertainty']:.3%} | high-mT control-region count | W+jets rate |
-| MC statistics | per bin | finite selected MC yields | all templates |
-
-The W scale improves in precision from the 10% validation to the full sample:
-`{w_10['applied_scale_factor']:.4f} ± {w_10['absolute_uncertainty']:.4f}` at
-10% and `{w_full['applied_scale_factor']:.4f} ± {w_full['absolute_uncertainty']:.4f}`
-for the full data. The central values agree within the larger 10% uncertainty,
-which supports the control-region arithmetic. It does not repair the
-score-template validation failure.
-
-![Expected nuisance summary. The figure shows the expected nuisance summary
-from the Phase 4 expected model. Its compact nuisance list reflects the reduced
-open-data scope and must not be read as a complete CMS systematic program.](figures/expected_nuisance_summary.pdf){{#fig:an-nuisance}}
-
-![Full high-mT W control comparison. The figure shows the derivation inputs
-for the full-data W+jets control scale. The control region is outside the
-low-mT signal region and the scale is propagated to the observed workspace
-without post-unblinding signal-region tuning.](figures/w_highmt_scale_full.pdf){{#fig:an-wscale}}
-
-# Expected Results
-
-The expected-only model uses background Asimov pseudo-data, so no real
-signal-region data enter the expected limit or discovery diagnostic. The
-median expected 95% CLs upper limit is `mu < {exp_lim['observed_on_background_asimov']:.4f}`,
-with expected band `{exp_lim['expected_band_minus2_minus1_median_plus1_plus2']}`.
-The expected discovery diagnostic is `Z = {exp_z:.4f}`.
-
-![Expected score template in the VBF category. The figure shows expected
-signal and background score distributions in the VBF channel. It illustrates
-why the high-score region carries signal leverage, but also why sparse and
-mismodelled VBF data are a critical validation risk.](figures/expected_mva_score_vbf.pdf){{#fig:an-exp-vbf}}
-
-![Expected score template in the boosted category. The figure shows the
-expected classifier-score template for the boosted/1-jet channel. The channel
-has more data than VBF and contributes a moderate validation pull in the full
-sample.](figures/expected_mva_score_boosted.pdf){{#fig:an-exp-boosted}}
-
-![Expected score template in the zero-jet category. The figure shows the
-expected classifier-score template for the zero-jet channel. The zero-jet
-channel dominates event counts and drives much of the combined data/background
-ratio.](figures/expected_mva_score_zero_jet.pdf){{#fig:an-exp-zero}}
-
-![Signal injection recovery. The figure summarizes signal-injection recovery
-checks performed on pseudo-data. These checks validate model plumbing and fit
-response under controlled inputs, but they do not replace observed data/MC
-score-template validation.](figures/signal_injection_recovery.pdf){{#fig:an-injection}}
-
-# Ten Percent Data Validation
-
-The deterministic 10% data validation used the mask `(run * 1000003 +
-luminosityBlock * 9176 + event) % 10 == 0`, selecting 1120 signal-region data
-events. The W high-mT scale from this subset was
-`{w_10['applied_scale_factor']:.4f} ± {w_10['absolute_uncertainty']:.4f}`.
-The combined score-template data/background ratio was
-`{pval['combined']['data_over_background']:.4f}` with chi2/ndf
-`{pval['combined']['chi2_per_ndf']:.4f}` and status `flagged`.
-
-The 10% validation failed because the data/background ratio was outside the
-predeclared statistical criterion. This warning was carried into unblinding
-instead of being removed or tuned away. The full-data analysis therefore starts
-from a known modelling limitation.
-
-![Ten percent score-template validation in VBF. The figure compares the 10%
-data subset to the frozen score-template model in the VBF category. It is one
-component of the validation warning that constrains the final interpretation.](figures/partial_score_vbf.pdf){{#fig:an-partial-vbf}}
-
-![Ten percent pull summary. The figure summarizes 10% validation ratios and
-pulls. It shows that the warning is quantitative and pre-unblinding rather
-than an after-the-fact explanation of the full-data result.](figures/partial_pull_summary.pdf){{#fig:an-partial-pulls}}
-
-# Full Data Results
-
-The full observed fit applies the frozen score-template model to all available
-Run2012B/C TauPlusX selected data. No selection, classifier, category, score
-bin, or statistical-model retuning was performed after full-data unblinding.
-
-| Quantity | Value | Interpretation |
-|---|---:|---|
-| Full W high-mT scale | {w_full['applied_scale_factor']:.4f} ± {w_full['absolute_uncertainty']:.4f} | Control-region scale |
-| mu_hat | {mu_hat:.4f} | Simplified open-data diagnostic |
-| Observed 95% CLs limit | mu < {obs_lim:.4f} | Simplified open-data diagnostic |
-| Observed q0 Z | {obs_z:.4f} | Not CMS-quality evidence |
-| Phase 4a expected median limit | {exp_lim['observed_on_background_asimov']:.4f} | Background-only Asimov reference |
-| Observed/expected limit ratio | {obs_exp_ratio:.4f} | Observed limit is much weaker than expected |
-
-The observed limit is a factor `{obs_exp_ratio:.2f}` above the median expected
-limit. The fitted signal strength and q0 diagnostic are numerically large, but
-they occur in a model whose full-data score validation remains flagged. The
-correct interpretation is that the reduced open-data templates do not provide
-a CMS-quality evidence claim.
-
-![Observed limit and significance summary. The figure summarizes mu_hat,
-observed upper limit, expected median limit, and observed q0 diagnostic. The
-caption and text deliberately label these values as simplified open-data
-diagnostics because the score-template validation failed.](figures/observed_limit_significance_summary.pdf){{#fig:an-result-summary}}
-
-![Comparison to expected and 10% validation. The figure compares the expected
-limit, 10% diagnostic fit, full-data fit, and W scale evolution. It makes the
-unblinding history visible and shows that the W control scale is stable while
-the final score-template validation remains flagged.](figures/comparison_to_4a_4b.pdf){{#fig:an-unblind-history}}
-
-# Validation Summary
-
-| Test | Data scope | chi2/ndf | p-value | Verdict | What it validates |
-|---|---|---:|---:|---|---|
-| Expected Asimov toy plumbing | expected-only | 0.000 | 1.000 | pass as plumbing | pyhf workspace and toy generation |
-| 10% score templates | 10% data | {pval['combined']['chi2_per_ndf']:.3f} | n/a | flagged | pre-unblinding score data/MC model |
-| Full score templates | full data | {obs_val['combined']['chi2_per_ndf']:.3f} | n/a | flagged | observed score data/MC model |
-| W high-mT scale stability | 10% to full | n/a | n/a | pass arithmetic | W control-region normalization |
-
-| Category | Data | Background | Data/background | Chi2/ndf | Max pull | Verdict |
-|---|---:|---:|---:|---:|---:|---|
-{score_table}
-
-The full combined data/background ratio is
-`{obs_val['combined']['data_over_background']:.4f}` and the full combined
-chi2/ndf is `{obs_val['combined']['chi2_per_ndf']:.4f}`. The VBF channel has
-a data deficit, the zero-jet channel has a data excess, and the boosted
-channel is closer to the model. This category pattern is not consistent with
-an unqualified single signal interpretation.
-
-![Full-data VBF score validation. The figure compares full data to the frozen
-score-template model in the VBF category. The VBF category has the largest
-category chi2/ndf and a deficit relative to the background template.](figures/observed_score_vbf.pdf){{#fig:an-full-vbf}}
-
-![Full-data boosted score validation. The figure compares full data to the
-frozen score-template model in the boosted category. This channel has the most
-moderate full-data validation behavior among the three fitted categories.](figures/observed_score_boosted.pdf){{#fig:an-full-boosted}}
-
-![Full-data zero-jet score validation. The figure compares full data to the
-frozen score-template model in the zero-jet category. The zero-jet data excess
-dominates the combined data/background ratio.](figures/observed_score_zero_jet.pdf){{#fig:an-full-zero}}
-
-![Observed pull and ratio summary. The figure summarizes category-level
-ratios, pulls, and the comparison with the 10% validation. It is the central
-diagnostic showing why the observed signal-strength and Z values cannot be
-promoted to CMS-quality evidence.](figures/observed_pull_ratio_summary.pdf){{#fig:an-pull-summary}}
-
-# Published Comparisons
-
-CMS Run 1 reported a best-fit H to tau tau signal strength of 0.78 ± 0.27 and
-local significance above three standard deviations for Higgs-mass hypotheses
-between 115 and 130 GeV [@cms_htt_2014]. CMS Run 2 reported observed and
-expected significances of 4.9 and 4.7 and signal strength 1.09 with roughly
-0.27 total uncertainty [@cms_htt_2018]. These are full CMS publication results
-with many channels, categories, calibrations, and data-driven background
-methods. The open-data diagnostic fit is not directly equivalent.
-
-| Result | Scope | Significance | Signal strength or limit | Comparability |
-|---|---|---:|---:|---|
-| This open-data expected | 8 TeV mu tau_h reduced samples | {exp_z:.3f} | expected mu < {exp_lim['observed_on_background_asimov']:.3f} | internal expected reference |
-| This open-data observed | 8 TeV mu tau_h reduced samples | {obs_z:.3f} flagged | mu_hat = {mu_hat:.3f}; mu < {obs_lim:.3f} | diagnostic only |
-| CMS Run 1 | 7+8 TeV multi-channel | >3 | mu = 0.78 ± 0.27 | publication context |
-| CMS 2018 | 13 TeV multi-channel | obs 4.9, exp 4.7 | mu = 1.09 ± about 0.27 | publication context |
-
-<!-- FLAGSHIP -->
-![Significance comparison. The figure compares the open-data expected and
-observed diagnostics with CMS Run 1 and CMS 2018 H to tau tau publication
-significances. The open-data observed value is labelled as flagged and should
-not be read as evidence comparable to the CMS publication rows.](figures/phase5_significance_comparison.pdf){{#fig:an-significance-comparison}}
-
-<!-- FLAGSHIP -->
-![Signal-strength and limit comparison. The figure places the open-data
-mu_hat and observed CLs limit on the same signal-strength scale as published
-CMS Run 1 and Run 2 signal-strength measurements. The open-data points are not
-directly equivalent to the CMS measurements because of reduced channel
-coverage, missing calibrations, and flagged score-template validation.](figures/phase5_mu_limit_comparison.pdf){{#fig:an-mu-comparison}}
-
-# Limitations And Resolving Power
-
-The analysis can resolve only very large deviations from the SM expectation.
-The median expected 95% CLs limit of `mu < {exp_lim['observed_on_background_asimov']:.2f}`
-already shows that an SM-strength signal is below the expected sensitivity of
-this reduced single-channel setup. The observed limit of `mu < {obs_lim:.2f}`
-is still weaker because the observed score-template model is flagged.
-
-The largest limitations are the reduced sample inventory, absent official
-object and trigger scale-factor machinery in the reduced files, missing QCD
-and electroweak background components, no pileup weights, no direct GenMET
-truth target, and the full-data score-template validation failure. These
-limitations explain why the diagnostic result sits far from published
-CMS-quality signal-strength measurements without requiring any claim of a new
-or independent physics effect.
-
-# Reproducibility
-
-The final documents are generated by `phase5_documentation/src/build_phase5_docs.py`.
-The script reads Phase 4 JSON outputs, copies existing figures, creates Phase
-5 comparison figures, merges the bibliography, writes markdown, and compiles
-the TeX/PDF products. The statistical inputs are the Phase 4a expected JSON,
-Phase 4b partial JSON, Phase 4c observed JSON, and full observed yields JSON.
-
-# Conclusion
-
-This Phase 5 pass produces a final analysis note and PRL-style draft for a
-reproducible CMS 2012 Open Data H to tau tau diagnostic search. The full-data
-fit reports `mu_hat = {mu_hat:.4f}`, `mu < {obs_lim:.4f}` at 95% CLs, and
-`Z = {obs_z:.4f}`. Because the 10% and full-data score-template validations
-are flagged, the result is explicitly not CMS-quality evidence. Its value is
-as a transparent, citable open-data workflow and as a documented comparison to
-published CMS H to tau tau analyses.
-
-# References {{-}}
-"""
-
-
-def build_paper(observed: dict, partial: dict, expected: dict, comparison: dict, yields: dict) -> str:
-    obs_fit = observed["observed_fit"]
-    obs_val = observed["validation_summary"]
-    pval = partial["validation_summary"]
-    w_full = observed["wjets_high_mt_scale"]
-    exp_lim = expected["expected_upper_limit"]
-    exp_z = expected["discovery_sensitivity"]["z_value"]
-    obs_lim = obs_fit["observed_upper_limit"]["observed_limit"]
-    mu_hat = obs_fit["mu_hat"]
-    obs_z = obs_fit["discovery_diagnostic"]["z_value"]
-
-    return f"""---
-title: "A CMS Open Data Diagnostic Search for H to Tau Tau in the Mu Tau_h Final State"
-author: "Analysis my_analysis"
-date: "2026-06-02"
-bibliography: references.bib
----
-
-# Abstract {{-}}
-
-A diagnostic search for H to tau tau is performed with CMS 2012 Open Data in
-the mu tau_h final state using reduced Run2012B/C TauPlusX samples. A binned
-profile-likelihood fit to classifier-score templates in VBF, boosted, and
-zero-jet categories gives `mu_hat = {mu_hat:.3f}`, an observed 95% CLs upper
-limit `mu < {obs_lim:.3f}`, and an observed q0 diagnostic `Z = {obs_z:.3f}`.
-The score-template validation is flagged in both the 10% validation sample and
-the full data, so these values are simplified open-data diagnostics and are
-not CMS-quality evidence for H to tau tau.
-
-# Introduction
-
-The H to tau tau decay probes the Higgs coupling to charged leptons. CMS
-reported Run 1 evidence for this decay and later observed it with 13 TeV data
-[@cms_htt_2014; @cms_htt_2018]. This paper draft presents a compact
-open-data diagnostic using the public reduced CMS 2012 H to tau tau samples
-[@cms_open_data_htt_2012]. The analysis is limited to the mu tau_h final state
-and is intended as a reproducible public-data workflow, not a replacement for
-the full CMS publications.
-
-# Data And Simulation
-
-The data are Run2012B and Run2012C TauPlusX reduced NanoAOD-like samples from
-the CERN Open Data Portal [@cms_open_data_run2012b_tauplusx;
-@cms_open_data_run2012c_tauplusx]. The integrated luminosity is 11.467/fb,
-following the CMS Open Data H to tau tau tutorial and 2012 luminosity
-provenance [@cms_open_data_skim; @cms_open_data_lumi_2012]. The luminosity
-uncertainty is 2.6% [@cms_lum_13_001].
-
-| Sample group | Samples | Use |
-|---|---|---|
-| Data | Run2012B/C TauPlusX | observed signal and control regions |
-| Signal | ggH and VBF H to tau tau | fitted signal templates |
-| Background | DYJetsToLL, TTbar, W1/W2/W3JetsToLNu | fitted background templates |
-| Unavailable in reduced set | QCD, diboson, single top, embedded Z to tau tau, W4/inclusive W | documented limitation |
-
-The signal and background records are the public CMS Open Data reduced samples
-[@cms_open_data_ggh_htt; @cms_open_data_vbf_htt; @cms_open_data_dyjets;
-@cms_open_data_ttbar; @cms_open_data_w1jets; @cms_open_data_w2jets;
-@cms_open_data_w3jets]. MC normalization uses official Open Data event
-denominators and cited cross-section inputs; it is not derived by matching
-data yields.
+denominators and the cited luminosity reference.](figures/sample_event_count_file_size.pdf){{#fig:an-samples}}
 
 # Event Selection And Categories
 
 Events are required to pass `HLT_IsoMu17_eta2p1_LooseIsoPFTau20`. Muons have
-pt > 20 GeV and |eta| < 2.1 with tight identification and isolation.
-Hadronic-tau candidates have pt > 20 GeV, |eta| < 2.3, decay-mode ID, tight
-isolation ID, and tight anti-muon ID. The signal-region selection requires an
-opposite-sign mu tau_h pair and muon-MET transverse mass below 40 GeV.
+pt > 20 GeV and |eta| < 2.1 with tight identification and isolation. Hadronic
+tau candidates have pt > 20 GeV, |eta| < 2.3, decay-mode ID, tight isolation
+ID, and tight anti-muon ID. The signal region uses opposite-sign mu tau_h pairs
+with muon-MET transverse mass below 40 GeV. The W control region uses high
+transverse mass, and the QCD/fake estimate uses same-sign low-mT events.
 
-The fit uses three mutually exclusive categories: VBF, boosted, and zero-jet.
-VBF events have at least two clean jets with leading-dijet mass above 300 GeV
-and leading-dijet |Delta eta| above 2.5. Boosted events have at least one
-clean jet after failing the VBF selection, and zero-jet events have no clean
-jets.
+The fit categories are mutually exclusive VBF, boosted, and zero-jet. VBF
+requires at least two clean jets, leading-dijet mass above 300 GeV, and
+leading-dijet |Delta eta| above 2.5. Boosted events have at least one clean jet
+after failing VBF, and zero-jet events have no clean jets.
 
-| Category | Data | Background | Signal | Data/background |
-|---|---:|---:|---:|---:|
-| VBF | {yields['totals']['vbf']['data_total']} | {yields['totals']['vbf']['background_total']:.2f} | {yields['totals']['vbf']['signal_total']:.3f} | {yields['totals']['vbf']['data_over_background']:.3f} |
-| Boosted | {yields['totals']['boosted']['data_total']} | {yields['totals']['boosted']['background_total']:.2f} | {yields['totals']['boosted']['signal_total']:.3f} | {yields['totals']['boosted']['data_over_background']:.3f} |
-| Zero-jet | {yields['totals']['zero_jet']['data_total']} | {yields['totals']['zero_jet']['background_total']:.2f} | {yields['totals']['zero_jet']['signal_total']:.3f} | {yields['totals']['zero_jet']['data_over_background']:.3f} |
+| Category | Data | Background | QCD/fake | Signal | Data/background |
+|---|---:|---:|---:|---:|---:|
+{category_table}
 
-![Selected category yields. The figure shows the event yields in the three
-exclusive fit categories for data, signal MC, and background MC. It documents
-the channel composition of the simultaneous likelihood fit and shows that the
-zero-jet channel dominates the selected event count.](figures/category_yields.pdf){{#fig:paper-category-yields}}
+![Cutflow summary. This plot shows raw event counts after each selection step
+for data, signal MC, and background MC. It verifies that the selection chain is
+monotonic and that the reduced samples remain populated after trigger, object,
+charge, and transverse-mass requirements.](figures/cutflow_summary.pdf){{#fig:an-cutflow}}
 
-# Statistical Analysis
+# QCD And W Control Corrections
 
-The fitted observable is a histogram-gradient-boosting classifier score in
-the three event categories. The likelihood is a binned profile likelihood
-implemented with pyhf [@pyhf_joss],
-
-$$
-L(\\mu,\\theta)=\\prod_{{c,b}} \\mathrm{{Pois}}\\left(n_{{cb}}\\mid
-\\mu s_{{cb}}(\\theta)+b_{{cb}}(\\theta)\\right)
-\\prod_k \\pi_k(\\theta_k).
-$$ {{#eq:paper-likelihood}}
-
-Upper limits use the CLs construction [@read_cls], and the discovery
-diagnostic uses the one-sided q0 asymptotic approximation [@cowan_asymptotic].
-The W+jets rate is constrained by a high-mT control-region scale
+The W+jets normalization is measured in the high-mT control region as
 `{w_full['applied_scale_factor']:.4f} ± {w_full['absolute_uncertainty']:.4f}`.
-The retained nuisances include luminosity, DY normalization, tau open-data
-acceptance, W high-mT normalization, and MC statistical uncertainties.
+The 10% validation value was `{w_10['applied_scale_factor']:.4f} ± {w_10['absolute_uncertainty']:.4f}`.
+The values agree within the larger 10% uncertainty and support the W-control
+arithmetic.
 
-# Results
+The VBF category originally had a large MC overprediction. Tightening the VBF
+cuts and applying a simple b-tag veto did not solve it, so a disjoint VBF-like
+top-btag control region outside the low-mT signal region was used to calibrate
+the MC-background rate in the VBF category. The resulting VBF background scale
+is `{vbf_scale['applied_scale_factor']:.4f} ± {vbf_scale['absolute_uncertainty']:.4f}`;
+it is applied only to MC backgrounds in VBF and not to the signal or QCD/fake
+template.
 
-The expected median 95% CLs upper limit is `mu < {exp_lim['observed_on_background_asimov']:.3f}`,
-and the expected discovery diagnostic is `Z = {exp_z:.3f}`. The full-data fit
-gives the diagnostic results summarized in @tbl:paper-results.
+The same-sign QCD/fake estimate subtracts non-QCD MC from same-sign low-mT data
+and transfers the resulting template to opposite-sign signal candidates. For
+the primary visible-mass model, the OS/SS transfer factor measured in the lowest
+visible-mass bin is `{qcd_primary['transfer_sideband']['scale_factor']:.4f} ± {qcd_primary['transfer_sideband']['absolute_uncertainty']:.4f}`.
+For the BDT score diagnostic, the corresponding low-score factor is
+`{qcd_score['transfer_sideband']['scale_factor']:.4f} ± {qcd_score['transfer_sideband']['absolute_uncertainty']:.4f}`.
 
-| Quantity | Value | Status |
+![Full high-mT W control comparison. The figure shows the derivation inputs for
+the full-data W+jets control scale. The control region is outside the low-mT
+signal region and the scale is propagated to the observed workspace without
+signal-region tuning.](figures/w_highmt_scale_full.pdf){{#fig:an-wscale}}
+
+# MVA And Transformer Diagnostics
+
+The requested NN/MVA program was evaluated using the available reduced event
+features. Histogram gradient boosting, an MLP neural network, and XGBoost were
+trained on selected MC only. A transformer was not trained because the current
+pixi environment lacks a fast attention stack and the reduced files do not
+contain the GenMET target needed for the requested missing-momentum regression.
+
+![MVA ROC curves. This figure shows ROC curves for the HGB, MLP neural-network,
+and XGBoost score columns on selected signal/background MC. It is an
+open-simulation performance diagnostic and does not validate data/MC score
+shapes.](figures/phase5_mva_roc.pdf){{#fig:an-mva-roc}}
+
+![MVA AUC summary. This figure compares the full selected-MC ROC AUC values for
+the trained classifiers and records that the transformer branch was not trained
+in this fast reduced-sample pass. The BDT score has strong MC separation, but
+that is not sufficient for an observed evidence claim.](figures/phase5_mva_auc_summary.pdf){{#fig:an-mva-auc}}
+
+![HGB permutation importance. This figure shows the leading permutation
+importance values for a retrained HGB classifier on a held-out selected-MC
+split. It documents which reduced features drive the classifier response used
+in the diagnostic score fit.](figures/phase5_hgb_permutation_importance.pdf){{#fig:an-mva-importance}}
+
+![Transformer feasibility. This figure records which modern-model branches were
+available in the current environment. The transformer and GenMET-regression
+branches are explicitly downscoped rather than reported as unperformed
+successes.](figures/phase5_transformer_feasibility.pdf){{#fig:an-transformer}}
+
+# Primary Visible-Mass Result
+
+The primary statistical model is a binned pyhf profile likelihood in visible
+mass, with one signal-strength parameter `mu`, the W high-mT scale, the
+same-sign QCD/fake transfer uncertainty, luminosity, DY and tau/open-data
+normalization terms, and MC statistical terms [@pyhf_joss; @read_cls;
+@cowan_asymptotic].
+
+| Quantity | Value | Interpretation |
 |---|---:|---|
-| Expected median 95% CLs limit | mu < {exp_lim['observed_on_background_asimov']:.3f} | background Asimov |
-| Expected discovery diagnostic | {exp_z:.3f} | background Asimov |
-| Observed mu_hat | {mu_hat:.3f} | flagged diagnostic |
-| Observed 95% CLs limit | mu < {obs_lim:.3f} | flagged diagnostic |
-| Observed q0 Z | {obs_z:.3f} | flagged diagnostic |
+| Primary median expected 95% CLs limit | mu < {primary_band[2]:.4f} | corrected visible-mass workspace |
+| Primary observed 95% CLs limit | mu < {primary_lim['observed_limit']:.4f} | conservative observed result |
+| Primary mu_hat | {primary['mu_hat']:.4f} | best fit, bounded at zero if no excess |
+| Primary q0 Z | {primary['discovery_diagnostic']['z_value']:.4f} | diagnostic only |
+| Primary combined data/background | {obs_val['combined']['data_over_background']:.4f} | validation after QCD/fake correction |
+| Primary chi2/ndf | {obs_val['combined']['chi2_per_ndf']:.4f} | validation after QCD/fake correction |
 
-: Main open-data fit results. The observed entries are not CMS-quality evidence because score-template validation is flagged. {{#tbl:paper-results}}
+The primary result is much more stable than the original score-only observed
+fit. It does not show a Higgs-like excess: `mu_hat` is `{primary['mu_hat']:.4f}`
+and `Z = {primary['discovery_diagnostic']['z_value']:.4f}`. The observed limit
+is compatible with the weak sensitivity expected from this reduced single-final
+state setup.
 
-![Observed result summary. The figure summarizes the fitted signal strength,
-observed upper limit, expected median limit, and observed q0 diagnostic. The
-values are diagnostics of the reduced open-data model and must be read
-together with the validation caveat.](figures/observed_limit_significance_summary.pdf){{#fig:paper-result-summary}}
+![Primary visible-mass validation in VBF. The plot compares full data to the
+QCD-corrected visible-mass prediction in the VBF category. The remaining VBF
+deficit is a limitation, but it no longer drives a fake signal-strength
+increase.](figures/observed_mvis_vbf.pdf){{#fig:an-primary-vbf}}
 
-# Validation Caveat
+![Primary visible-mass validation in boosted. The plot compares full data to
+the QCD-corrected visible-mass prediction in the boosted category. This channel
+is part of the conservative primary fit.](figures/observed_mvis_boosted.pdf){{#fig:an-primary-boosted}}
 
-The score-template model is not validated at CMS-publication quality. In the
-10% validation sample, the combined data/background ratio is
-`{pval['combined']['data_over_background']:.3f}` with chi2/ndf
-`{pval['combined']['chi2_per_ndf']:.3f}` and status `flagged`. In the full
-data, the combined data/background ratio is
-`{obs_val['combined']['data_over_background']:.3f}` with chi2/ndf
-`{obs_val['combined']['chi2_per_ndf']:.3f}` and status `flagged`. Therefore
-the observed `Z = {obs_z:.3f}` and `mu_hat = {mu_hat:.3f}` are simplified
-open-data diagnostics, not evidence comparable to CMS publications.
+![Primary visible-mass validation in zero-jet. The zero-jet normalization is
+stabilized by the same-sign QCD/fake estimate, which removes the dominant
+normalization pathology seen in the original score-only result.](figures/observed_mvis_zero_jet.pdf){{#fig:an-primary-zero}}
 
-![Full-data score validation summary. The figure summarizes data/background
-ratios and maximum pulls in the observed score templates. It is the main
-diagnostic showing why the observed fit result is not promoted to a
-CMS-quality evidence statement.](figures/observed_pull_ratio_summary.pdf){{#fig:paper-validation}}
+# BDT Score Diagnostic
+
+The BDT-score model is kept because it was explicitly requested and has better
+expected MC separation. It is not used as the primary observed evidence result,
+because its high-score bins remain shape-flagged after adding the QCD/fake
+template.
+
+| Category | Data | Background | QCD/fake | Signal | Data/background |
+|---|---:|---:|---:|---:|---:|
+{score_table}
+
+| Quantity | Value | Interpretation |
+|---|---:|---|
+| Score median expected 95% CLs limit | mu < {score_band[2]:.4f} | diagnostic expected score workspace |
+| Score observed 95% CLs limit | mu < {score_lim['observed_limit']:.4f} | flagged diagnostic |
+| Score mu_hat | {score['mu_hat']:.4f} | flagged high-score shape diagnostic |
+| Score q0 Z | {score['discovery_diagnostic']['z_value']:.4f} | not CMS-quality evidence |
+| Score combined data/background | {score_val['combined']['data_over_background']:.4f} | score validation after QCD/fake correction |
+| Score chi2/ndf | {score_val['combined']['chi2_per_ndf']:.4f} | score validation after QCD/fake correction |
+
+![Score-template diagnostic in VBF. This figure keeps the categorized BDT score
+view requested for sensitivity studies. It is diagnostic because the score
+shape is not validated well enough for an observed evidence claim.](figures/observed_score_vbf.pdf){{#fig:an-score-vbf}}
+
+![Score-template diagnostic in boosted. This figure shows the boosted score
+template after QCD/fake correction. High-score residuals motivate the
+diagnostic-only status.](figures/observed_score_boosted.pdf){{#fig:an-score-boosted}}
+
+![Score-template diagnostic in zero-jet. This figure shows that the zero-jet
+normalization is improved by QCD/fake correction while high-score shape
+residuals remain visible.](figures/observed_score_zero_jet.pdf){{#fig:an-score-zero}}
+
+![Observed pull and ratio summary. The figure compares primary visible-mass and
+BDT-score validation behavior after the QCD/fake audit correction. It shows why
+the visible-mass model is primary and the score fit is diagnostic.](figures/observed_pull_ratio_summary.pdf){{#fig:an-pull-summary}}
 
 # Comparison With Published Results
 
-The open-data result is compared with CMS H to tau tau publications only as
-context. CMS Run 1 used 7 and 8 TeV data with multiple channels and reported
-mu = 0.78 ± 0.27 with local significance above three standard deviations
-[@cms_htt_2014]. CMS 2018 used 13 TeV data and reported observed and expected
-significances of 4.9 and 4.7 with mu = 1.09 and roughly 0.27 uncertainty
-[@cms_htt_2018]. These publication results are not direct pass/fail targets
-for the reduced single-channel open-data model.
+CMS Run 1 reported evidence for H to tau tau using 7 and 8 TeV data with
+multiple final states, embedded backgrounds, and a full calibration program;
+the quoted best-fit signal strength was 0.78 ± 0.27 [@cms_htt_2014]. CMS 2018
+reported observed and expected significances of 4.9 and 4.7 and a signal
+strength near 1.09 [@cms_htt_2018]. These are not direct pass/fail targets for
+this reduced open-data workflow.
 
 | Result | Scope | Significance | Signal-strength information |
 |---|---|---:|---|
-| This open-data expected | 8 TeV mu tau_h reduced samples | {exp_z:.3f} | expected mu < {exp_lim['observed_on_background_asimov']:.3f} |
-| This open-data observed | 8 TeV mu tau_h reduced samples | {obs_z:.3f} flagged | mu_hat = {mu_hat:.3f}; mu < {obs_lim:.3f} |
+| This open-data primary | 8 TeV mu tau_h reduced mirror, visible mass | {primary['discovery_diagnostic']['z_value']:.3f} | mu_hat = {primary['mu_hat']:.3f}; mu < {primary_lim['observed_limit']:.3f}; expected mu < {primary_band[2]:.3f} |
+| This BDT diagnostic | 8 TeV mu tau_h reduced mirror, HGB score | {score['discovery_diagnostic']['z_value']:.3f} flagged | mu_hat = {score['mu_hat']:.3f}; mu < {score_lim['observed_limit']:.3f}; expected mu < {score_band[2]:.3f} |
 | CMS Run 1 | 7+8 TeV multi-channel | >3 | mu = 0.78 ± 0.27 |
 | CMS 2018 | 13 TeV multi-channel | observed 4.9, expected 4.7 | mu = 1.09 ± about 0.27 |
 
-: Comparison of the open-data diagnostic with published CMS H to tau tau results. The entries differ in energy, channel coverage, calibration completeness, and validation quality. {{#tbl:paper-comparison}}
+![Signal-strength and limit comparison. The figure uses a CMS-style
+expected-band and observed-marker presentation for the primary open-data limit,
+with the flagged BDT diagnostic and published CMS signal-strength measurements
+shown as context. The open-data diagnostic is not directly equivalent to CMS
+publication measurements.](figures/phase5_mu_limit_comparison.pdf){{#fig:an-mu-comparison}}
 
-![Significance comparison. The figure compares the open-data expected and
-observed diagnostic significances with CMS publication values. The open-data
-observed point is explicitly labelled as flagged and should not be interpreted
-as CMS-quality evidence.](figures/phase5_significance_comparison.pdf){{#fig:paper-significance}}
-
-![Signal-strength and limit comparison. The figure compares open-data
-signal-strength-scale diagnostics with CMS Run 1 and CMS 2018 signal-strength
-measurements. The open-data limit and mu_hat are not directly equivalent to
-the published measurements because the reduced public model has flagged
-score-template validation.](figures/phase5_mu_limit_comparison.pdf){{#fig:paper-mu}}
+![Significance comparison. The figure compares the primary open-data diagnostic
+and the flagged BDT-score diagnostic with CMS publication values. The BDT row is
+explicitly not interpreted as evidence.](figures/phase5_significance_comparison.pdf){{#fig:an-significance-comparison}}
 
 # Conclusion
 
-A reproducible reduced CMS 2012 Open Data H to tau tau diagnostic search has
-been documented in the mu tau_h final state. The full-data fit gives
-`mu_hat = {mu_hat:.3f}`, `mu < {obs_lim:.3f}` at 95% CLs, and
-`Z = {obs_z:.3f}`. Because the 10% and full-data score-template validations
-are flagged, these are simplified open-data diagnostics and not CMS-quality
-evidence. The analysis is useful as a public workflow and as a scoped
-comparison to CMS H to tau tau publications, not as an independent publication
-measurement.
-
-# Reproducibility Note {{-}}
-
-The markdown, TeX, PDF, and comparison figures are generated from the committed
-Phase 4 JSON outputs by `phase5_documentation/src/build_phase5_docs.py`.
+The final audit-corrected result is a conservative visible-mass plus QCD/fake
+template fit. It gives `mu_hat = {primary['mu_hat']:.4f}`, an observed 95% CLs
+limit `mu < {primary_lim['observed_limit']:.4f}`, and `Z = {primary['discovery_diagnostic']['z_value']:.4f}`.
+The originally surprising BDT-score observed result is retained only as a
+flagged diagnostic because the score shape is not validated in data. This is
+the correct interpretation of the reduced CMS Open Data workflow: reproducible
+and useful for methodology, but not CMS-quality evidence for H to tau tau.
 
 # References {{-}}
 """
+
+
+def build_paper_markdown(observed: dict) -> str:
+    primary = observed["observed_fit"]
+    score = observed["score_diagnostic_fit"]
+    primary_lim = primary["observed_upper_limit"]
+    primary_band = primary_lim["expected_band_minus2_minus1_median_plus1_plus2"]
+    score_lim = score["observed_upper_limit"]
+    return f"""# A CMS Open Data Diagnostic Search for H to Tau Tau in the Mu Tau_h Final State
+
+This PRL-formatted draft reports the audit-corrected result. The primary
+visible-mass plus QCD/fake fit gives `mu_hat = {primary['mu_hat']:.3f}`,
+`mu < {primary_lim['observed_limit']:.3f}` at 95% CLs, with median expected
+limit `{primary_band[2]:.3f}`. The categorized BDT-score result gives
+`mu_hat = {score['mu_hat']:.3f}` and `mu < {score_lim['observed_limit']:.3f}`,
+but remains diagnostic only because score-shape validation is flagged.
+"""
+
+
+def tex_escape(text: str) -> str:
+    replacements = {
+        "&": r"\&",
+        "%": r"\%",
+        "$": r"\$",
+        "#": r"\#",
+        "_": r"\_",
+    }
+    for src, dst in replacements.items():
+        text = text.replace(src, dst)
+    return text
+
+
+def build_prl_tex(observed: dict, yields: dict) -> str:
+    primary = observed["observed_fit"]
+    score = observed["score_diagnostic_fit"]
+    primary_lim = primary["observed_upper_limit"]
+    primary_band = primary_lim["expected_band_minus2_minus1_median_plus1_plus2"]
+    score_lim = score["observed_upper_limit"]
+    qcd_primary = observed["qcd_sideband_estimates"]["visible_mass_qcd_primary"]
+    vbf_scale = observed["vbf_background_scale"]
+    rows = []
+    for cat in ["vbf", "boosted", "zero_jet"]:
+        total = yields["totals"][cat]
+        rows.append(
+            rf"{tex_escape(cat)} & {total['data_total']} & {total['background_total']:.1f} & "
+            rf"{total['qcd_total']:.1f} & {total['signal_total']:.2f} \\"
+        )
+    category_rows = "\n".join(rows)
+    return rf"""\documentclass[aps,prl,reprint,superscriptaddress,nofootinbib]{{revtex4-2}}
+\usepackage{{graphicx}}
+\usepackage{{amsmath}}
+\usepackage{{booktabs}}
+\usepackage{{xcolor}}
+\begin{{document}}
+
+\title{{A CMS Open Data Diagnostic Search for $H\to\tau\tau$ in the $\mu\tau_h$ Final State}}
+\author{{Analysis my\_analysis}}
+\affiliation{{CMS Open Data reduced-sample analysis}}
+\date{{June 2, 2026}}
+
+\begin{{abstract}}
+A diagnostic search for Higgs boson decays to tau pairs is performed with
+CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  A Phase 5
+audit found that an initially selected BDT-score observed fit was not a valid
+evidence result because the score shape failed data validation.  The primary
+result is therefore a conservative visible-mass fit in VBF, boosted, and
+zero-jet categories with a same-sign data-driven QCD/fake template.  The fit
+gives $\hat\mu={primary['mu_hat']:.3f}$, an observed 95\% CLs upper limit
+$\mu<{primary_lim['observed_limit']:.3f}$, and a discovery diagnostic
+$Z={primary['discovery_diagnostic']['z_value']:.3f}$.  The BDT-score fit gives
+$\hat\mu={score['mu_hat']:.3f}$ and $\mu<{score_lim['observed_limit']:.3f}$ but
+is retained only as a flagged diagnostic, not as CMS-quality evidence.
+\end{{abstract}}
+
+\maketitle
+
+\paragraph{{Data and method.}}
+The analysis uses the public Run2012B/C TauPlusX HiggsTauTauReduced mirror and
+the CMS Open Data luminosity reference of 11.467 fb$^{{-1}}$.  Signal and
+background simulations are normalized with official Open Data record event
+denominators rather than local reduced-file entries.  Events are selected with
+the $\mu+\tau_h$ trigger, tight muon and hadronic-tau requirements including a
+tight anti-muon veto, opposite-sign charge, and low transverse mass.
+
+\paragraph{{Background correction.}}
+The W+jets normalization is measured in a high-$m_T$ control region.  The
+VBF-background rate is calibrated in a VBF-like top-btag control region outside
+the low-$m_T$ signal region, giving a scale
+${vbf_scale['applied_scale_factor']:.3f}\pm{vbf_scale['absolute_uncertainty']:.3f}$.
+The reducible QCD/fake contribution is estimated from same-sign low-$m_T$ data
+after subtracting non-QCD simulation.  For the primary visible-mass fit, the
+OS/SS transfer factor measured in the lowest visible-mass bin is
+${qcd_primary['transfer_sideband']['scale_factor']:.3f}\pm{qcd_primary['transfer_sideband']['absolute_uncertainty']:.3f}$.
+
+\begin{{table}}[b]
+\caption{{Selected yields in the primary visible-mass fit after the QCD/fake
+audit correction.  Background includes DY, ttbar, W+jets, and the same-sign
+QCD/fake estimate.}}
+\begin{{ruledtabular}}
+\begin{{tabular}}{{lrrrr}}
+Category & Data & Bkg. & QCD/fake & Signal \\
+{category_rows}
+\end{{tabular}}
+\end{{ruledtabular}}
+\end{{table}}
+
+\paragraph{{Results.}}
+The primary corrected workspace has median expected 95\% CLs limit
+$\mu<{primary_band[2]:.3f}$ and observed limit
+$\mu<{primary_lim['observed_limit']:.3f}$.  The best fit is
+$\hat\mu={primary['mu_hat']:.3f}$ with $Z={primary['discovery_diagnostic']['z_value']:.3f}$.
+This is the conservative final observed result.  The categorized BDT-score fit
+is shown only as a diagnostic because high-score residuals remain after the
+QCD/fake correction.
+
+\begin{{figure}}[t]
+\includegraphics[width=\linewidth]{{figures/phase5_mu_limit_comparison.pdf}}
+\caption{{Signal-strength and limit comparison.  The primary open-data result
+is shown with expected bands and an observed marker following CMS-style limit
+plot conventions.  The BDT score row is flagged and the CMS publication rows
+are context, not direct validation targets.}}
+\end{{figure}}
+
+\begin{{figure}}[t]
+\includegraphics[width=\linewidth]{{figures/observed_mvis_zero_jet.pdf}}
+\caption{{Primary visible-mass validation in the zero-jet category.  The
+same-sign QCD/fake estimate stabilizes the dominant zero-jet normalization,
+which was the main pathology in the original score-only observed result.}}
+\end{{figure}}
+
+\paragraph{{MVA diagnostics.}}
+Histogram gradient boosting, an MLP neural network, and XGBoost were trained
+on selected simulation.  Their ROC curves and feature-importance diagnostics
+are retained to document the sensitivity study.  A transformer and the
+requested GenMET regression are downscoped because the fast attention stack and
+GenMET target are absent from the current reduced workflow.
+
+\begin{{figure}}[t]
+\includegraphics[width=\linewidth]{{figures/phase5_mva_roc.pdf}}
+\caption{{Classifier ROC curves for the HGB, MLP neural-network, and XGBoost
+score columns on selected signal and background simulation.  These curves show
+MC separation power but do not validate observed score shapes.}}
+\end{{figure}}
+
+\paragraph{{Comparison and interpretation.}}
+CMS Run 1 reported evidence for $H\to\tau\tau$ with a best-fit signal strength
+of $0.78\pm0.27$, and CMS later observed the decay at 13 TeV with observed and
+expected significances of 4.9 and 4.7.  The present reduced open-data result is
+not a reproduction of those analyses: it uses fewer channels, a reduced public
+sample, limited calibrations, and a simplified background program.  Its value
+is methodological reproducibility, not an independent CMS-quality evidence
+claim.
+
+\begin{{thebibliography}}{{9}}
+\bibitem{{cms2014}} CMS Collaboration, Evidence for the 125 GeV Higgs boson decaying to a pair of tau leptons, JHEP 05 (2014) 104.
+\bibitem{{cms2018}} CMS Collaboration, Observation of the SM scalar boson decaying to a pair of tau leptons, Phys. Lett. B 779 (2018) 283.
+\bibitem{{opendata}} CERN Open Data Portal, CMS Higgs to tau tau reduced samples for education and outreach.
+\bibitem{{pyhf}} L. Heinrich et al., pyhf: pure-Python implementation of HistFactory statistical models.
+\bibitem{{cls}} A. L. Read, Presentation of search results: the CLs technique.
+\bibitem{{cowan}} G. Cowan et al., Asymptotic formulae for likelihood-based tests of new physics.
+\end{{thebibliography}}
+
+\end{{document}}
+"""
+
+
+def compile_prl(observed: dict, yields: dict) -> None:
+    tex = build_prl_tex(observed, yields)
+    (OUT / "PAPER_PRL_v1.tex").write_text(tex)
+    subprocess.run(["tectonic", "PAPER_PRL_v1.tex"], cwd=OUT, check=True)
+    append_log("Compiled PAPER_PRL_v1.tex with REVTeX PRL class.")
 
 
 def write_docs() -> None:
@@ -822,33 +731,34 @@ def write_docs() -> None:
     expected = load_json("phase4_inference/4a_expected/outputs/expected_results.json")
     comparison = load_json("phase4_inference/4c_observed/outputs/comparison_to_4a_4b.json")
     yields = load_json("phase4_inference/4c_observed/outputs/observed_yields.json")
+    score_yields = load_json("phase4_inference/4c_observed/outputs/score_observed_yields.json")
 
     copy_figures()
     merge_references()
-    make_comparison_figures(observed, comparison)
+    make_comparison_figures(observed)
+    make_mva_performance_figures()
 
-    an = build_analysis_note(observed, partial, expected, comparison, yields)
-    paper = build_paper(observed, partial, expected, comparison, yields)
+    an = build_analysis_note(observed, partial, expected, comparison, yields, score_yields)
+    paper_md = build_paper_markdown(observed)
     (OUT / "ANALYSIS_NOTE_5_v1.md").write_text(an)
-    (OUT / "PAPER_PRL_v1.md").write_text(paper)
-    append_log("Wrote Phase 5 final analysis note and PRL-style paper markdown.")
+    (OUT / "PAPER_PRL_v1.md").write_text(paper_md)
+    append_log("Wrote Phase 5 final analysis note and PRL summary markdown.")
 
-    for name in ("ANALYSIS_NOTE_5_v1.md", "PAPER_PRL_v1.md"):
-        missing = figure_ref_check(OUT / name)
-        if missing:
-            raise RuntimeError(f"Missing figure references in {name}: {missing}")
+    missing = figure_ref_check(OUT / "ANALYSIS_NOTE_5_v1.md")
+    if missing:
+        raise RuntimeError(f"Missing figure references in ANALYSIS_NOTE_5_v1.md: {missing}")
 
     compile_doc("ANALYSIS_NOTE_5_v1")
-    compile_doc("PAPER_PRL_v1")
+    compile_prl(observed, yields)
 
     with EXP_LOG.open("a") as handle:
         handle.write(
             "\n## Phase 5 documentation executor 2026-06-02T16:29:32Z\n\n"
-            "- Generated final Phase 5 AN and PRL-style paper from Phase 4 JSON outputs.\n"
-            "- Copied upstream figures into Phase 5 outputs and added CMS-style comparison figures.\n"
-            "- Explicitly labelled observed Z and mu_hat as simplified open-data diagnostics because score-template validation is flagged.\n"
+            "- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.\n"
+            "- Added MVA/NN ROC, AUC, feature-importance, and transformer-feasibility figures.\n"
+            "- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.\n"
         )
-    append_log("Appended Phase 5 summary to experiment_log.md.")
+    append_log("Appended Phase 5 audit-corrected summary to experiment_log.md.")
 
 
 if __name__ == "__main__":

@@ -1,0 +1,254 @@
+{
+  "hgb_score_qcd_diagnostic": {
+    "category_assignment": "rederived VBF/boosted/zero-jet rules for control-region rows",
+    "limitations": [
+      "No anti-isolated tau branch is available in the selected-event artifact.",
+      "The transfer factor is measured in the lowest observable bin and propagated globally.",
+      "The VBF MC-background control scale is applied before non-QCD subtraction.",
+      "QCD shape-statistical uncertainties are recorded for validation but not expanded into per-bin pyhf nuisances in the final workspace."
+    ],
+    "method": "same-sign low-mT data minus non-QCD MC, transferred to opposite-sign signal candidates",
+    "normsys": {
+      "hi": 1.1043457669951218,
+      "lo": 0.8956542330048782,
+      "name": "qcd_ss_transfer"
+    },
+    "observable": "mva_score_hist_gradient_boosting",
+    "rows": {
+      "boosted": {
+        "same_sign_data_counts": [
+          533.0,
+          77.0,
+          37.0,
+          36.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          278.67561929415416,
+          42.42788529220009,
+          16.091017417806906,
+          16.798811622710545
+        ],
+        "unscaled_qcd_sumw2": [
+          815.1129161491314,
+          126.99129129910617,
+          51.5320721974236,
+          55.473735161730644
+        ],
+        "unscaled_qcd_template": [
+          254.32438070584584,
+          34.57211470779991,
+          20.908982582193094,
+          19.201188377289455
+        ],
+        "unscaled_qcd_total": 329.0066663731283
+      },
+      "vbf": {
+        "same_sign_data_counts": [
+          11.0,
+          2.0,
+          4.0,
+          12.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          8.460585904290634,
+          2.510477516021582,
+          0.2189486426090068,
+          3.1164435285164074
+        ],
+        "unscaled_qcd_sumw2": [
+          15.650496380234406,
+          0.0,
+          4.0479385081003265,
+          13.925649003625903
+        ],
+        "unscaled_qcd_template": [
+          2.5394140957093665,
+          0.0,
+          3.7810513573909934,
+          8.883556471483592
+        ],
+        "unscaled_qcd_total": 15.204021924583952
+      },
+      "zero_jet": {
+        "same_sign_data_counts": [
+          2284.0,
+          93.0,
+          34.0,
+          15.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          789.1039718978996,
+          35.90251299071405,
+          9.990308740858405,
+          9.733409219771568
+        ],
+        "unscaled_qcd_sumw2": [
+          3396.4200643630256,
+          144.03080829514917,
+          47.93419761670912,
+          28.66627015453669
+        ],
+        "unscaled_qcd_template": [
+          1494.8960281021004,
+          57.09748700928595,
+          24.009691259141597,
+          5.266590780228432
+        ],
+        "unscaled_qcd_total": 1581.2697971507564
+      }
+    },
+    "scaled_qcd_total": 1573.7309969459632,
+    "transfer_sideband": {
+      "absolute_uncertainty": 0.08528373523457297,
+      "bin_edges": [
+        0.0,
+        0.2
+      ],
+      "bin_index": 0,
+      "denominator_same_sign_qcd_template": 1751.7598229036557,
+      "description": "lowest fitted-observable bin, chosen as the most signal-depleted control bin",
+      "numerator_os_data_minus_nonqcd": 1431.745869845033,
+      "relative_uncertainty": 0.10434576699512181,
+      "scale_factor": 0.8173185907825088,
+      "status": "measured_from_low_observable_sideband"
+    }
+  },
+  "visible_mass_qcd_primary": {
+    "category_assignment": "rederived VBF/boosted/zero-jet rules for control-region rows",
+    "limitations": [
+      "No anti-isolated tau branch is available in the selected-event artifact.",
+      "The transfer factor is measured in the lowest observable bin and propagated globally.",
+      "The VBF MC-background control scale is applied before non-QCD subtraction.",
+      "QCD shape-statistical uncertainties are recorded for validation but not expanded into per-bin pyhf nuisances in the final workspace."
+    ],
+    "method": "same-sign low-mT data minus non-QCD MC, transferred to opposite-sign signal candidates",
+    "normsys": {
+      "hi": 1.1205986171464732,
+      "lo": 0.8794013828535268,
+      "name": "qcd_ss_transfer"
+    },
+    "observable": "m_vis",
+    "rows": {
+      "boosted": {
+        "same_sign_data_counts": [
+          255.0,
+          160.0,
+          86.0,
+          56.0,
+          67.0,
+          53.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          118.56769906232378,
+          92.09299526478549,
+          50.45169612971159,
+          27.054580144299063,
+          37.406897258250126,
+          24.485350616024025
+        ],
+        "unscaled_qcd_sumw2": [
+          377.97083921824645,
+          260.89766227221554,
+          139.71808863420662,
+          87.08713095332327,
+          100.65594724159743,
+          72.73837755418252
+        ],
+        "unscaled_qcd_template": [
+          136.43230093767622,
+          67.90700473521451,
+          35.54830387028841,
+          28.945419855700937,
+          29.593102741749874,
+          28.514649383975975
+        ],
+        "unscaled_qcd_total": 326.9407815246059
+      },
+      "vbf": {
+        "same_sign_data_counts": [
+          12.0,
+          7.0,
+          4.0,
+          1.0,
+          0.0,
+          4.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          6.148030659146203,
+          1.9470712132971832,
+          0.8325454355093106,
+          1.9492002044360042,
+          2.9591304484267265,
+          0.25152898801319495
+        ],
+        "unscaled_qcd_sumw2": [
+          16.51453006129451,
+          7.475478007066305,
+          4.242298435247038,
+          0.0,
+          0.0,
+          4.063266831810942
+        ],
+        "unscaled_qcd_template": [
+          5.851969340853797,
+          5.052928786702816,
+          3.1674545644906895,
+          0.0,
+          0.0,
+          3.748471011986805
+        ],
+        "unscaled_qcd_total": 17.820823704034108
+      },
+      "zero_jet": {
+        "same_sign_data_counts": [
+          1020.0,
+          678.0,
+          314.0,
+          173.0,
+          165.0,
+          67.0
+        ],
+        "same_sign_nonqcd_mc_yields": [
+          285.1345232395623,
+          267.79690728468705,
+          133.82266133192005,
+          75.35437140809834,
+          50.79215360183291,
+          27.872420804564808
+        ],
+        "unscaled_qcd_sumw2": [
+          1430.0340290688441,
+          1064.2333148381815,
+          501.32768176753314,
+          275.04447477741513,
+          233.63930179099958,
+          98.55281943626353
+        ],
+        "unscaled_qcd_template": [
+          734.8654767604377,
+          410.20309271531295,
+          180.17733866807995,
+          97.64562859190166,
+          114.20784639816709,
+          39.12757919543519
+        ],
+        "unscaled_qcd_total": 1576.2269623293344
+      }
+    },
+    "scaled_qcd_total": 1912.9672803505898,
+    "transfer_sideband": {
+      "absolute_uncertainty": 0.12009504509962077,
+      "bin_edges": [
+        0.0,
+        60.0
+      ],
+      "bin_index": 0,
+      "denominator_same_sign_qcd_template": 877.1497470389677,
+      "description": "lowest fitted-observable bin, chosen as the most signal-depleted control bin",
+      "numerator_os_data_minus_nonqcd": 873.4871172015457,
+      "relative_uncertainty": 0.1205986171464732,
+      "scale_factor": 0.9958243961766094,
+      "status": "measured_from_low_observable_sideband"
+    }
+  }
+}
