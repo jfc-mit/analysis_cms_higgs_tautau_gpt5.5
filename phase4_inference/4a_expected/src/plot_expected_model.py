@@ -109,13 +109,13 @@ def plot_templates() -> None:
             label="H to tau tau x20",
             color="black",
         )
-        ax.set_xlabel("Visible mass [GeV]")
+        ax.set_xlabel("Histogram-gradient-boosting classifier score")
         ax.set_ylabel("Expected events")
         ax.set_xlim(float(edges[0]), float(edges[-1]))
         ax.legend(fontsize="x-small", loc="upper right")
         mpl_magic(ax)
         label(ax)
-        save(fig, f"expected_mvis_{category}")
+        save(fig, f"expected_mva_score_{category}")
 
 
 def plot_s_over_b() -> None:
@@ -130,8 +130,10 @@ def plot_s_over_b() -> None:
     x = np.arange(len(categories), dtype=float)
     ax.errorbar(x, values, yerr=errors, marker="o", linestyle="", label="Nominal S/B")
     ax.set_xticks(x)
-    ax.set_xticklabels([category.replace("_", "-") for category in categories])
-    ax.set_xlabel("Exclusive category")
+    ax.set_xticklabels(
+        ["Inclusive SR" if category == "inclusive_sr" else category.replace("_", "-") for category in categories]
+    )
+    ax.set_xlabel("Score-template channel")
     ax.set_ylabel("Expected signal / background")
     ax.set_ylim(0.0, max(values) * 1.4 if values else 1.0)
     ax.legend(fontsize="x-small", loc="upper right")

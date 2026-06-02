@@ -35,3 +35,19 @@ violations in 10 scripts. A standalone `pixi run phase4a-validate` passed JSON,
 NPZ, pyhf workspace, figure, artifact, and blinding checks. `git diff --check`
 passed, and a source scan found no Phase 4a use of real Run2012/data
 signal-region observed results.
+
+## 2026-06-02T14:54:52Z
+
+Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact. The score model is an expected-primary candidate pending Phase 4b score-modelling validation.
+
+## 2026-06-02T14:55:40Z
+
+Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact. The score model is an expected-primary candidate pending Phase 4b score-modelling validation.
+
+## Phase 4a expected figures generated as PDF and PNG from machine-readable outputs.
+
+## 2026-06-02T14:57:41Z
+
+Built Phase 4a MVA-score weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact. The score model is an expected-primary candidate pending Phase 4b score-modelling validation.
+
+## Phase 4a expected figures generated as PDF and PNG from machine-readable outputs.

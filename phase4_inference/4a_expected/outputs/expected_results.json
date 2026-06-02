@@ -1,58 +1,26 @@
 {
   "background_asimov_fit": {
-    "mu_hat": 0.0,
+    "mu_hat": 0.000696183376887347,
     "parameters": {
-      "dy_norm_open_data": 3.1930373673045734e-05,
-      "lumi_2012": 6.320897172081344e-05,
-      "mc_stat_boosted[0]": 1.0000011678287872,
-      "mc_stat_boosted[1]": 1.0000005343717022,
-      "mc_stat_boosted[2]": 1.0000002711294764,
-      "mc_stat_boosted[3]": 1.0000011241366586,
-      "mc_stat_boosted[4]": 1.0000021403610782,
-      "mc_stat_boosted[5]": 1.0000019960344833,
-      "mc_stat_boosted[6]": 1.0000010753754665,
-      "mc_stat_vbf[0]": 1.0000022309403733,
-      "mc_stat_vbf[1]": 1.000000975395597,
-      "mc_stat_vbf[2]": 1.000000621587887,
-      "mc_stat_vbf[3]": 1.0000025232181657,
-      "mc_stat_vbf[4]": 0.9999986099607894,
-      "mc_stat_vbf[5]": 1.0000041634969792,
-      "mc_stat_vbf[6]": 1.0000006740186358,
-      "mc_stat_zero_jet[0]": 1.0000017410279076,
-      "mc_stat_zero_jet[1]": 0.9999999855666577,
-      "mc_stat_zero_jet[2]": 1.0000001460594385,
-      "mc_stat_zero_jet[3]": 1.0000007859057278,
-      "mc_stat_zero_jet[4]": 1.0000010970631577,
-      "mc_stat_zero_jet[5]": 1.0000010147673692,
-      "mc_stat_zero_jet[6]": 1.00000292604418,
-      "mu": 0.0,
-      "tau_open_data_acceptance": -4.0686239373864355e-05
+      "dy_norm_open_data": 0.0007721474498036321,
+      "lumi_2012": -0.00029009431299072906,
+      "mc_stat_inclusive_sr[0]": 1.0000008198786028,
+      "mc_stat_inclusive_sr[1]": 0.999995429788732,
+      "mc_stat_inclusive_sr[2]": 0.9999898857607182,
+      "mc_stat_inclusive_sr[3]": 0.9999875371841077,
+      "mc_stat_inclusive_sr[4]": 0.9999212707391865,
+      "mu": 0.000696183376887347,
+      "tau_open_data_acceptance": -0.0005482364976900626
     },
     "pulls_minus_nominal": {
-      "dy_norm_open_data": 3.1930373673045734e-05,
-      "lumi_2012": 6.320897172081344e-05,
-      "mc_stat_boosted[0]": 1.1678287872296522e-06,
-      "mc_stat_boosted[1]": 5.34371702221037e-07,
-      "mc_stat_boosted[2]": 2.711294764257133e-07,
-      "mc_stat_boosted[3]": 1.1241366586478563e-06,
-      "mc_stat_boosted[4]": 2.1403610781511873e-06,
-      "mc_stat_boosted[5]": 1.9960344832536947e-06,
-      "mc_stat_boosted[6]": 1.0753754664527548e-06,
-      "mc_stat_vbf[0]": 2.2309403733267175e-06,
-      "mc_stat_vbf[1]": 9.753955969582506e-07,
-      "mc_stat_vbf[2]": 6.215878869397784e-07,
-      "mc_stat_vbf[3]": 2.523218165739749e-06,
-      "mc_stat_vbf[4]": -1.3900392106247494e-06,
-      "mc_stat_vbf[5]": 4.163496979181502e-06,
-      "mc_stat_vbf[6]": 6.740186357934164e-07,
-      "mc_stat_zero_jet[0]": 1.7410279076202073e-06,
-      "mc_stat_zero_jet[1]": -1.443334229911386e-08,
-      "mc_stat_zero_jet[2]": 1.4605943854384407e-07,
-      "mc_stat_zero_jet[3]": 7.85905727829217e-07,
-      "mc_stat_zero_jet[4]": 1.0970631576512346e-06,
-      "mc_stat_zero_jet[5]": 1.0147673692451065e-06,
-      "mc_stat_zero_jet[6]": 2.9260441800627035e-06,
-      "tau_open_data_acceptance": -4.0686239373864355e-05
+      "dy_norm_open_data": 0.0007721474498036321,
+      "lumi_2012": -0.00029009431299072906,
+      "mc_stat_inclusive_sr[0]": 8.198786027868721e-07,
+      "mc_stat_inclusive_sr[1]": -4.570211267984625e-06,
+      "mc_stat_inclusive_sr[2]": -1.011423928176658e-05,
+      "mc_stat_inclusive_sr[3]": -1.2462815892289036e-05,
+      "mc_stat_inclusive_sr[4]": -7.872926081353704e-05,
+      "tau_open_data_acceptance": -0.0005482364976900626
     }
   },
   "blinding": {
@@ -62,20 +30,20 @@
   },
   "discovery_sensitivity": {
     "method": "pyhf asymptotic q0 test on signal-plus-background Asimov data",
-    "p_value": 0.42441567523328405,
+    "p_value": 0.2775170276378641,
     "status": "evaluated",
-    "z_value": 0.1906097504953417
+    "z_value": 0.5902335901806391
   },
   "expected_upper_limit": {
     "expected_band_minus2_minus1_median_plus1_plus2": [
-      5.827524819214151,
-      7.957921603408464,
-      11.374122822819393,
-      16.47217967234938,
-      23.193850014062555
+      1.9597879108699552,
+      2.7426354357668172,
+      3.988056352198724,
+      6.054971307318602,
+      9.066320524807212
     ],
     "method": "pyhf asymptotic modified frequentist CLs",
-    "observed_on_background_asimov": 11.374122346421771,
+    "observed_on_background_asimov": 3.988056441440069,
     "poi": "mu",
     "result_count": 2,
     "scan": [
@@ -182,8 +150,56 @@
       50.0
     ]
   },
+  "low_background_bin_handling": {
+    "merged_bins": [
+      "0.86-0.94",
+      "0.94-1.00"
+    ],
+    "merged_edges": [
+      0.0,
+      0.35,
+      0.55,
+      0.72,
+      0.86,
+      1.0
+    ],
+    "reason": "Phase 3 recommendation had one expected-background bin below five events; the merged high-score tail keeps all nominal expected background bins at or above five without using observed data.",
+    "strategy": "merged adjacent high-score tail bins",
+    "unmerged_edges": [
+      0.0,
+      0.35,
+      0.55,
+      0.72,
+      0.86,
+      0.94,
+      1.0
+    ]
+  },
+  "model": {
+    "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+    "description": "histogram-gradient-boosting classifier score templates in one inclusive signal-region channel",
+    "family": "expected_only_mva",
+    "name": "mva_hist_gradient_boosting_score_single_category",
+    "phase3_recommendation_file": "phase3_selection/outputs/sensitivity_recommendation.json",
+    "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
+    "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration"
+  },
+  "phase3_unmerged_recommendation": {
+    "bin_edges": [
+      0.0,
+      0.35,
+      0.55,
+      0.72,
+      0.86,
+      0.94,
+      1.0
+    ],
+    "low_background_bins_lt5": 1,
+    "median_limit": 3.977300465753028,
+    "z_value": 0.5955085932694459
+  },
   "pyhf": {
-    "npars": 25,
+    "npars": 9,
     "poi": "mu",
     "version": "0.7.6"
   }

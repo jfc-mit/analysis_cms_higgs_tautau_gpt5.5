@@ -33,9 +33,7 @@ JSON_FILES = [
 ]
 
 FIGURES = [
-    "expected_mvis_vbf",
-    "expected_mvis_boosted",
-    "expected_mvis_zero_jet",
+    "expected_mva_score_inclusive_sr",
     "expected_s_over_b",
     "expected_nuisance_summary",
     "signal_injection_recovery",
@@ -69,6 +67,14 @@ def main() -> None:
     expected = payloads["expected_results.json"]
     if expected["blinding"]["real_data_signal_region_used"]:
         raise ValueError("Phase 4a expected result claims real data signal-region use")
+    if expected["model"]["status"] != "expected-primary candidate pending Phase 4b score-modelling validation/calibration":
+        raise ValueError("Expected MVA caveat/status missing from expected_results.json")
+    min_background = min(
+        row["min_background_bin"]
+        for row in payloads["nominal_yields.json"]["totals"].values()
+    )
+    if min_background < 5.0:
+        raise ValueError(f"Low-background bin remains after merging: {min_background}")
     if not payloads["signal_injection.json"]["all_pass"]:
         raise ValueError("Signal injection gate failed")
     if not payloads["gof_validation.json"]["combined"]["passes"]:

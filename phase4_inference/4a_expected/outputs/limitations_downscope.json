@@ -98,6 +98,7 @@
       "status": "deferred-AOD-conversion"
     }
   ],
+  "mva_validation_caveat": "The MVA score is promoted only as the Phase 4a expected-primary candidate. Phase 4b must validate score modelling and calibration before unqualified primary use with data.",
   "phase": "4a_expected",
   "raw_phase3_validation_caveat": "Broad raw background-only templates were not final closure-validated predictions until normalization, missing-background treatment, QCD/control-region constraints, and nuisance modelling are implemented."
 }

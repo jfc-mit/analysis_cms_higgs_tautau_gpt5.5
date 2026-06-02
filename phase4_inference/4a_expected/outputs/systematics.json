@@ -75,7 +75,7 @@
   ],
   "downscoped": [
     {
-      "impact": "Could shift m_vis templates; carried to AN limitations and Phase 4b/5 obligations.",
+      "impact": "Could shift score-template inputs through reconstructed tau kinematics; carried to AN limitations and Phase 4b/5 obligations.",
       "name": "tau_energy_scale",
       "reason": "No reduced-sample tau energy scale variation or citable scale-factor prescription was available in Phase 4a."
     },
@@ -140,7 +140,7 @@
       "applies_to": "all samples sharing one MC-stat modifier per category",
       "name": "per-category staterror",
       "size": "sqrt(sum of weights squared) per bin",
-      "source": "finite selected MC counts from phase3 selected_events.npz and official weights from normalization_inputs.json",
+      "source": "finite selected MC counts from phase3 sensitivity_selected_events.npz and official weights from normalization_inputs.json",
       "type": "staterror"
     }
   ]

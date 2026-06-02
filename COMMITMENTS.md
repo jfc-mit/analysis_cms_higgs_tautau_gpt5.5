@@ -17,10 +17,15 @@ Status key:
 
 - [x] [D1] Search/template-fit analysis with profile likelihood and search
   conventions. Phase 4a uses a pyhf binned template workspace.
-- [x] [D2] Primary observable is `m_vis` by category. Phase 4a builds the
-  expected model on visible mass.
+- [x] [D2] Primary observable is `m_vis` by category. The Phase 3
+  sensitivity regression and user approval supersede this for the Phase 4a
+  expected rerun: the expected-primary candidate now uses
+  `mva_score_hist_gradient_boosting`, pending Phase 4b score-modelling
+  validation.
 - [x] [D3] Fit categories are mutually exclusive VBF, boosted/1-jet, and
-  zero-jet. Phase 4a uses the Phase 3 exclusive `category` labels.
+  zero-jet for the visible-mass baseline. The accepted Phase 3 sensitivity
+  rerun uses a single `inclusive_sr` score-template channel as the Phase 4a
+  expected-primary candidate, pending Phase 4b validation.
 - [D] [D4] W+jets normalization from data using high-mT control region.
   Phase 4a is expected-only and blinded, so it does not use real high-mT data
   to tune W. It documents the available Phase 3 high-mT handle and carries W
@@ -34,10 +39,11 @@ Status key:
   modifiers.
 - [x] [D8] Blinding. Phase 4a uses Asimov/pseudo-data only and does not use
   real signal-region observed results.
-- [D] [D9] Alternative observables and NN gates. Phase 3 downscoped the NN
-  classifier and NN genMET regression; Phase 4a retains visible mass primary
-  and records add-MET as diagnostic only unless expected-sensitivity
-  comparison with nuisances is implemented later.
+- [x] [D9] Alternative observables and NN gates. Phase 3 sensitivity
+  regression selected the histogram-gradient-boosting MVA score as the
+  expected-primary candidate with improved expected sensitivity. Phase 4a
+  rerun implements it without claiming final-data validation; Phase 4b must
+  validate score modelling/calibration before unqualified primary use.
 
 ## Constraints and Limitations
 

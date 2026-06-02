@@ -26,11 +26,14 @@ ROOT = PHASE.parent.parent
 OUT = PHASE / "outputs"
 FIG = OUT / "figures"
 LOG = PHASE / "logs" / "executor_phase4a_expected_20260602T124406Z.md"
+FIX_LOG = PHASE / "logs" / "fixer_phase4a_sensitivity_rerun_20260602T145148Z.md"
 EXPERIMENT_LOG = ROOT / "experiment_log.md"
 COMMITMENTS = ROOT / "COMMITMENTS.md"
 
-CATEGORIES = ["vbf", "boosted", "zero_jet"]
-BIN_EDGES = np.asarray([0.0, 40.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0])
+CATEGORIES = ["inclusive_sr"]
+RECOMMENDED_OBSERVABLE = "mva_score_hist_gradient_boosting"
+BIN_EDGES = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 1.0])
+UNMERGED_BIN_EDGES = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 0.94, 1.0])
 SIGNALS = ["GluGluToHToTauTau", "VBF_HToTauTau"]
 BACKGROUNDS = ["DYJetsToLL", "TTbar", "W1JetsToLNu", "W2JetsToLNu", "W3JetsToLNu"]
 SAMPLES = SIGNALS + BACKGROUNDS
@@ -132,8 +135,13 @@ def write_json(path: Path, payload: dict[str, Any]) -> None:
 
 
 def load_selected() -> dict[str, np.ndarray]:
-    with np.load(ROOT / "phase3_selection" / "outputs" / "selected_events.npz", allow_pickle=False) as payload:
+    with np.load(ROOT / "phase3_selection" / "outputs" / "sensitivity_selected_events.npz", allow_pickle=False) as payload:
         return {key: payload[key] for key in payload.files}
+
+
+def load_recommendation() -> dict[str, Any]:
+    path = ROOT / "phase3_selection" / "outputs" / "sensitivity_recommendation.json"
+    return json.loads(path.read_text())
 
 
 def load_norm() -> dict[str, Any]:
@@ -148,7 +156,11 @@ def weighted_hist(values: np.ndarray, weight: float) -> tuple[np.ndarray, np.nda
     return counts.astype(int), yields, variances
 
 
-def build_templates(selected: dict[str, np.ndarray], norm_payload: dict[str, Any]) -> tuple[dict[str, Any], np.ndarray, np.ndarray]:
+def build_templates(
+    selected: dict[str, np.ndarray],
+    norm_payload: dict[str, Any],
+    recommendation: dict[str, Any],
+) -> tuple[dict[str, Any], np.ndarray, np.ndarray]:
     weights = {
         sample: float(payload["absolute_weight_per_local_entry"])
         for sample, payload in norm_payload["mc_samples"].items()
@@ -162,10 +174,10 @@ def build_templates(selected: dict[str, np.ndarray], norm_payload: dict[str, Any
         for icat, category in enumerate(CATEGORIES):
             mask = (
                 selected["is_signal_region"].astype(bool)
-                & (selected["category"] == category)
+                & (selected["sensitivity_best_category"] == category)
                 & (selected["sample"] == sample)
             )
-            counts, yld, var = weighted_hist(selected["m_vis"][mask], weights[sample])
+            counts, yld, var = weighted_hist(selected[RECOMMENDED_OBSERVABLE][mask], weights[sample])
             raw[isample, icat, :] = counts
             values[isample, icat, :] = yld
             variances[isample, icat, :] = var
@@ -189,14 +201,38 @@ def build_templates(selected: dict[str, np.ndarray], norm_payload: dict[str, Any
             "background_total": float(np.sum(background_bins)),
             "min_background_bin": float(np.min(background_bins)),
             "s_over_sqrt_b": float(np.sum(signal_bins) / np.sqrt(np.sum(background_bins))),
+            "s_over_b": float(np.sum(signal_bins) / np.sum(background_bins)),
         }
+    best = recommendation["best"]
     yields = {
         "blinding": {
             "phase": "4a_expected",
             "real_data_signal_region_used": False,
             "observation_source": "background-only Asimov pseudo-data from nominal MC templates",
         },
-        "binning": {"observable": "m_vis", "edges_gev": BIN_EDGES.tolist()},
+        "model": {
+            "name": best["name"],
+            "family": best["family"],
+            "description": "histogram-gradient-boosting classifier score templates in one inclusive signal-region channel",
+            "phase3_recommendation_file": "phase3_selection/outputs/sensitivity_recommendation.json",
+            "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
+            "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration",
+            "caveat": best["caveat"],
+        },
+        "phase3_unmerged_recommendation": {
+            "bin_edges": recommendation["best_full_result"]["spec"]["bin_edges"],
+            "z_value": best["z_value"],
+            "median_limit": best["median_limit"],
+            "low_background_bins_lt5": best["low_background_bins_lt5"],
+        },
+        "low_background_bin_handling": {
+            "strategy": "merged adjacent high-score tail bins",
+            "unmerged_edges": UNMERGED_BIN_EDGES.tolist(),
+            "merged_edges": BIN_EDGES.tolist(),
+            "merged_bins": ["0.86-0.94", "0.94-1.00"],
+            "reason": "Phase 3 recommendation had one expected-background bin below five events; the merged high-score tail keeps all nominal expected background bins at or above five without using observed data.",
+        },
+        "binning": {"observable": RECOMMENDED_OBSERVABLE, "edges": BIN_EDGES.tolist()},
         "categories": CATEGORIES,
         "samples": per_sample,
         "totals": totals,
@@ -447,7 +483,7 @@ def systematics_payload() -> dict[str, Any]:
             "name": "per-category staterror",
             "type": "staterror",
             "size": "sqrt(sum of weights squared) per bin",
-            "source": "finite selected MC counts from phase3 selected_events.npz and official weights from normalization_inputs.json",
+            "source": "finite selected MC counts from phase3 sensitivity_selected_events.npz and official weights from normalization_inputs.json",
             "applies_to": "all samples sharing one MC-stat modifier per category",
         },
     ]
@@ -455,7 +491,7 @@ def systematics_payload() -> dict[str, Any]:
         {
             "name": "tau_energy_scale",
             "reason": "No reduced-sample tau energy scale variation or citable scale-factor prescription was available in Phase 4a.",
-            "impact": "Could shift m_vis templates; carried to AN limitations and Phase 4b/5 obligations.",
+            "impact": "Could shift score-template inputs through reconstructed tau kinematics; carried to AN limitations and Phase 4b/5 obligations.",
         },
         {
             "name": "muon_efficiency_scale",
@@ -516,6 +552,7 @@ def limitations_payload() -> dict[str, Any]:
         "missing_components": missing,
         "raw_phase3_validation_caveat": "Broad raw background-only templates were not final closure-validated predictions until normalization, missing-background treatment, QCD/control-region constraints, and nuisance modelling are implemented.",
         "expected_only_blinding": "No real data signal-region observed result is used in Phase 4a.",
+        "mva_validation_caveat": "The MVA score is promoted only as the Phase 4a expected-primary candidate. Phase 4b must validate score modelling and calibration before unqualified primary use with data.",
     }
 
 
@@ -528,6 +565,9 @@ def update_commitments() -> None:
         "- [ ] Chi2/ndf and limited toy GoF.": "- [x] Chi2/ndf and limited toy GoF. Phase 4a wrote `gof_validation.json`.",
         "- [ ] Systematic completeness table versus conventions and reference analyses.": "- [x] Systematic completeness table versus conventions and reference analyses. Phase 4a wrote it in `systematics.json` and `INFERENCE_EXPECTED.md`.",
         "- [ ] Machine-readable nominal templates/yields, workspace, expected summary,\n  systematics, injections, GoF, and limitations.": "- [x] Machine-readable nominal templates/yields, workspace, expected summary,\n  systematics, injections, GoF, and limitations. Phase 4a populated `outputs/`.",
+        "- [x] [D2] Primary observable is `m_vis` by category. Phase 4a builds the\n  expected model on visible mass.": "- [x] [D2] Primary observable is `m_vis` by category. The Phase 3 sensitivity regression and user approval supersede this for Phase 4a expected rerun: the expected-primary candidate now uses `mva_score_hist_gradient_boosting`, pending Phase 4b score-modelling validation.",
+        "- [x] [D3] Fit categories are mutually exclusive VBF, boosted/1-jet, and\n  zero-jet. Phase 4a uses the Phase 3 exclusive `category` labels.": "- [x] [D3] Fit categories are mutually exclusive VBF, boosted/1-jet, and zero-jet for the visible-mass baseline. The accepted Phase 3 sensitivity rerun uses a single `inclusive_sr` score-template channel as the Phase 4a expected-primary candidate, pending Phase 4b validation.",
+        "- [D] [D9] Alternative observables and NN gates. Phase 3 downscoped the NN\n  classifier and NN genMET regression; Phase 4a retains visible mass primary\n  and records add-MET as diagnostic only unless expected-sensitivity\n  comparison with nuisances is implemented later.": "- [x] [D9] Alternative observables and NN gates. Phase 3 sensitivity regression selected the histogram-gradient-boosting MVA score as the expected-primary candidate with improved expected sensitivity. Phase 4a rerun implements it without claiming final-data validation; Phase 4b must validate score modelling/calibration before unqualified primary use.",
     }
     for old, new in replacements.items():
         text = text.replace(old, new)
@@ -570,33 +610,56 @@ def write_artifact(yields: dict[str, Any], expected: dict[str, Any], injections:
     ]
     limit = expected["expected_upper_limit"]
     bands = limit["expected_band_minus2_minus1_median_plus1_plus2"]
+    z_value = expected["discovery_sensitivity"]["z_value"]
+    phase3 = yields["phase3_unmerged_recommendation"]
+    low_bkg = yields["low_background_bin_handling"]
     content = f"""# Phase 4a Expected Inference: CMS 2012 Open Data H to Tau Tau Search
 
 ## Summary
 
 Phase 4a builds an expected-only binned pyhf model for the reduced CMS 2012
-Open Data H to tau tau search in the mu tau_h final state. The model uses the
-Phase 3 visible-mass baseline in three mutually exclusive categories: VBF,
-boosted/1-jet, and zero-jet. The observation is background-only Asimov
-pseudo-data from the nominal model, so no real data signal-region distribution
-or full-data observed fit result enters this phase.
+Open Data H to tau tau search in the mu tau_h final state. This rerun uses the
+Phase 3 sensitivity-regression recommendation as the Phase 4a expected-primary
+candidate: the histogram-gradient-boosting MVA score in one inclusive
+signal-region channel. The observation is background-only Asimov pseudo-data
+from the nominal model, so no real data signal-region distribution or
+full-data observed fit result enters this phase.
+
+The MVA score is an expected-primary candidate, not a final data-validated
+primary observable. Phase 4b must validate score modelling and calibration
+before the analysis can use this score model without qualification on data.
 
 The expected 95% CLs upper limit on the signal strength is
 `{limit['observed_on_background_asimov']:.3f}` on the background-only Asimov
 sample. The median expected band from pyhf is `{bands[2]:.3f}`, with minus-one
-and plus-one variations `{bands[1]:.3f}` and `{bands[3]:.3f}`. These are
-single-channel reduced-open-data expectations and are not directly comparable
-to the CMS all-channel Run 1 results without the missing components and
-calibrations listed below.
+and plus-one variations `{bands[1]:.3f}` and `{bands[3]:.3f}`. The expected
+discovery diagnostic is `Z = {z_value:.3f}`. For comparison, the stale
+visible-mass Phase 4a baseline had `Z = 0.191` and median expected limit
+`mu = 11.374`, while the unmerged Phase 3 score recommendation had
+`Z = {phase3['z_value']:.3f}` and median expected limit
+`mu = {phase3['median_limit']:.3f}`. These are single-channel
+reduced-open-data expectations and are not directly comparable to the CMS
+all-channel Run 1 results without the missing components and calibrations
+listed below.
 
 ## Method
 
-The primary observable is visible mass, `m_vis`, with bin edges
-`{BIN_EDGES.tolist()}` GeV. The Phase 4a executor uses
-`phase3_selection/outputs/selected_events.npz`, requiring `is_signal_region`
-and the exclusive `category` labels `vbf`, `boosted`, and `zero_jet`. The
+The expected-primary candidate observable is
+`mva_score_hist_gradient_boosting`, with merged bin edges
+`{BIN_EDGES.tolist()}`. The Phase 4a executor uses
+`phase3_selection/outputs/sensitivity_recommendation.json` and
+`phase3_selection/outputs/sensitivity_selected_events.npz`, requiring
+`is_signal_region` and the Phase 3 sensitivity category `inclusive_sr`. The
 Phase 3 `region_exclusive` diagnostic labels are not used to form the fit
 templates.
+
+The Phase 3 recommendation used score edges `{UNMERGED_BIN_EDGES.tolist()}`
+and had `{phase3['low_background_bins_lt5']}` expected-background bin below
+five events. Phase 4a merges the adjacent high-score tail bins
+`{', '.join(low_bkg['merged_bins'])}`, producing edges `{BIN_EDGES.tolist()}`.
+The merged model has a minimum nominal expected-background bin of
+`{min(yields['totals'][category]['min_background_bin'] for category in CATEGORIES):.3f}`,
+so no score bin remains below five expected background events.
 
 MC normalization follows `phase3_selection/outputs/normalization_inputs.json`.
 Signal weights use `sigma_prod * BR(H->tautau) * L_int / N_gen`, and
@@ -608,31 +671,23 @@ The workspace is written to `outputs/pyhf_workspace.json`. It includes a common
 signal-strength POI `mu`, luminosity and tau/open-data acceptance normsys
 modifiers, a DY normalization normsys, and per-category Barlow-Beeston-lite
 staterror modifiers. The observation in the workspace is the background-only
-Asimov expectation in each category.
+Asimov expectation in the inclusive score-template channel.
 
 ## Expected Yields
 
 {markdown_table(yield_rows, ['Category', 'Signal yield', 'Background yield', 'S/sqrt(B)', 'Minimum background bin'])}
 
-![Expected visible-mass templates in the VBF category. This figure shows the
-Phase 4a background-only expected stack and nominal Higgs signal overlay after
-official Open Data normalization. The observation used by the fit is the
-Asimov background expectation rather than real collision data.](figures/expected_mvis_vbf.pdf){{#fig:p4a-mvis-vbf}}
+![Expected MVA score templates in the inclusive signal region. This figure
+shows the Phase 4a background-only expected stack and nominal Higgs signal
+overlay after official Open Data normalization. The fit observation is the
+Asimov background expectation rather than real collision data, and the score
+model remains pending Phase 4b data-validation of score modelling and
+calibration.](figures/expected_mva_score_inclusive_sr.pdf){{#fig:p4a-mva-score}}
 
-![Expected visible-mass templates in the boosted category. This figure shows
-the non-VBF one-or-more-jet category used in the simultaneous expected fit. The
-category has the largest nonzero Higgs yield outside zero-jet, but the expected
-background remains much larger than the signal.](figures/expected_mvis_boosted.pdf){{#fig:p4a-mvis-boosted}}
-
-![Expected visible-mass templates in the zero-jet category. This figure shows
-the DY-dominated category retained from Phase 3. It mainly constrains the
-background shape and normalization in the simplified reduced-sample model,
-while contributing limited Higgs discrimination.](figures/expected_mvis_zero_jet.pdf){{#fig:p4a-mvis-zero}}
-
-![Expected signal-to-background ratio by category. This figure summarizes the
-category-integrated nominal Higgs signal divided by the nominal background.
-The VBF category has the best relative signal purity, but the absolute signal
-yield is still small in the reduced sample.](figures/expected_s_over_b.pdf){{#fig:p4a-sob}}
+![Expected signal-to-background ratio by score channel. This figure summarizes
+the category-integrated nominal Higgs signal divided by the nominal background.
+It is a compact diagnostic for the inclusive score-template workspace and not a
+replacement for Phase 4b score-shape validation.](figures/expected_s_over_b.pdf){{#fig:p4a-sob}}
 
 ## Systematics
 
@@ -729,8 +784,9 @@ def main() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     FIG.mkdir(parents=True, exist_ok=True)
     selected = load_selected()
+    recommendation = load_recommendation()
     norm_payload = load_norm()
-    yields, values, variances = build_templates(selected, norm_payload)
+    yields, values, variances = build_templates(selected, norm_payload, recommendation)
     np.savez(
         OUT / "templates.npz",
         samples=np.asarray(SAMPLES),
@@ -748,6 +804,9 @@ def main() -> None:
     fit = fit_data(model, bkg_asimov)
     expected = {
         "blinding": yields["blinding"],
+        "model": yields["model"],
+        "phase3_unmerged_recommendation": yields["phase3_unmerged_recommendation"],
+        "low_background_bin_handling": yields["low_background_bin_handling"],
         "expected_upper_limit": expected_limit(model, bkg_asimov),
         "background_asimov_fit": fit,
         "discovery_sensitivity": discovery_sensitivity(model),
@@ -764,8 +823,15 @@ def main() -> None:
     write_json(OUT / "limitations_downscope.json", limitations)
     write_artifact(yields, expected, injections, gof, systematics, limitations)
     update_commitments()
-    append_log(LOG, "Built Phase 4a weighted templates, pyhf workspace, expected CLs result, injection tests, GoF toys, systematics, limitations, and inference artifact.")
-    append_log(EXPERIMENT_LOG, "Phase 4a expected-only model built from Phase 3 selected MC using official Open Data normalization. No real data signal-region observed result was used; the observation is background-only Asimov pseudo-data.")
+    message = (
+        "Built Phase 4a MVA-score weighted templates, pyhf workspace, expected "
+        "CLs result, injection tests, GoF toys, systematics, limitations, and "
+        "inference artifact. The score model is an expected-primary candidate "
+        "pending Phase 4b score-modelling validation."
+    )
+    append_log(LOG, message)
+    append_log(FIX_LOG, message)
+    append_log(EXPERIMENT_LOG, "Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.")
 
 
 if __name__ == "__main__":

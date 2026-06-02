@@ -333,3 +333,15 @@ gradient-boosted classifier score legend out of the plotted data region, and
 adding the three sensitivity figures to `SELECTION.md` with expected-only
 interpretive captions. Physics logic, MVA training, scores, and sensitivity
 ranking were intentionally left unchanged.
+
+## 2026-06-02T14:54:52Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-02T14:55:40Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-02T14:57:41Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in `inclusive_sr`, using official Open Data normalization and background-only Asimov pseudo-data. The high-score tail bins were merged to remove the single expected-background bin below five events. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
