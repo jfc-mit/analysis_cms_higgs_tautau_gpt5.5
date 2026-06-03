@@ -1,240 +1,20 @@
 {
-  "blinding": "Trained only on signal/background MC in signal-region selected events; no observed data SR distribution used.",
+  "blinding": "Trained only on signal/background MC in signal-region selected events. Data enter only through pre-training background-shape reweights derived in validation/control regions.",
   "class_counts": {
     "background": 8402,
     "signal": 1668
   },
   "expected_sensitivity_results": [
     {
-      "background_total": 9338.22528295425,
-      "bin_edges": [
-        0.0,
-        0.2,
-        0.35,
-        0.5,
-        1.0
-      ],
-      "categories": [
-        "vbf",
-        "boosted",
-        "zero_jet"
-      ],
-      "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
-      "family": "expected_only_mva",
-      "low_background_bins_lt5": 0,
-      "low_background_fraction": 0.0,
-      "median_limit": 4.24380622771541,
-      "median_limit_improvement_factor": 0.9397357320778603,
-      "model_name": "hist_gradient_boosting",
-      "name": "mva_hist_gradient_boosting_score_baseline_categories",
-      "observable": "mva_score_hist_gradient_boosting",
-      "s_over_b": 0.0026884741058818312,
-      "s_over_sqrt_b": 0.2597993327996612,
-      "selection_role": "primary_candidate",
-      "signal_total": 25.105576868113538,
-      "sparse_bin_handling": {
-        "all_pass": true,
-        "categories": {
-          "boosted": {
-            "background_bins": [
-              1580.55074494093,
-              309.9263029585545,
-              134.85026574634497,
-              93.00436760133518
-            ],
-            "min_background_bin": 93.00436760133518,
-            "passes_min_background": true
-          },
-          "vbf": {
-            "background_bins": [
-              90.43246797589676,
-              17.702236646398763,
-              13.616736714228995,
-              29.243719246011956
-            ],
-            "min_background_bin": 13.616736714228995,
-            "passes_min_background": true
-          },
-          "zero_jet": {
-            "background_bins": [
-              6524.3972729236275,
-              362.62954903253745,
-              149.55342765146167,
-              32.31819151692268
-            ],
-            "min_background_bin": 32.31819151692268,
-            "passes_min_background": true
-          }
-        },
-        "initial_edges": [
-          0.0,
-          0.2,
-          0.35,
-          0.5,
-          0.65,
-          0.78,
-          0.88,
-          0.94,
-          0.985,
-          1.0
-        ],
-        "merge_count": 5,
-        "merged_edges": [
-          0.0,
-          0.2,
-          0.35,
-          0.5,
-          1.0
-        ],
-        "merges": [
-          {
-            "category": "vbf",
-            "low_bin_background": 0.0,
-            "low_bin_index": 8,
-            "low_bin_range": [
-              0.985,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.985
-          },
-          {
-            "category": "boosted",
-            "low_bin_background": 0.0,
-            "low_bin_index": 7,
-            "low_bin_range": [
-              0.94,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.94
-          },
-          {
-            "category": "boosted",
-            "low_bin_background": 0.0,
-            "low_bin_index": 6,
-            "low_bin_range": [
-              0.88,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.88
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 0.0,
-            "low_bin_index": 5,
-            "low_bin_range": [
-              0.78,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.78
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 1.7705506910787179,
-            "low_bin_index": 4,
-            "low_bin_range": [
-              0.65,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.65
-          }
-        ],
-        "method": "common adjacent-bin merging across all fit categories using expected MC background only",
-        "minimum_expected_background_per_fit_bin": 5.0
-      },
-      "z_improvement_factor": 0.8919117151619772,
-      "z_value": 0.5264362537642254
-    },
-    {
-      "background_total": 9338.225282954249,
-      "bin_edges": [
-        0.0,
-        0.35,
-        0.55,
-        0.72,
-        0.86,
-        1.0
-      ],
-      "categories": [
-        "inclusive_sr"
-      ],
-      "caveat": "Expected-only MC comparison retained for continuity. The user-requested primary method must preserve event categories and is therefore not selected from this inclusive candidate.",
-      "family": "expected_only_mva",
-      "low_background_bins_lt5": 0,
-      "low_background_fraction": 0.0,
-      "median_limit": null,
-      "median_limit_improvement_factor": null,
-      "model_name": "hist_gradient_boosting",
-      "name": "mva_hist_gradient_boosting_score_single_category",
-      "observable": "mva_score_hist_gradient_boosting",
-      "s_over_b": 0.0026884741058818312,
-      "s_over_sqrt_b": 0.2597993327996612,
-      "selection_role": "comparison_only_not_selected",
-      "signal_total": 25.105576868113534,
-      "sparse_bin_handling": {
-        "all_pass": true,
-        "categories": {
-          "inclusive_sr": {
-            "background_bins": [
-              8885.638574477945,
-              349.7555779467643,
-              73.91394777601955,
-              19.60360184974237,
-              9.313580903779354
-            ],
-            "min_background_bin": 9.313580903779354,
-            "passes_min_background": true
-          }
-        },
-        "initial_edges": [
-          0.0,
-          0.35,
-          0.55,
-          0.72,
-          0.86,
-          0.94,
-          1.0
-        ],
-        "merge_count": 1,
-        "merged_edges": [
-          0.0,
-          0.35,
-          0.55,
-          0.72,
-          0.86,
-          1.0
-        ],
-        "merges": [
-          {
-            "category": "inclusive_sr",
-            "low_bin_background": 2.222046322631428,
-            "low_bin_index": 5,
-            "low_bin_range": [
-              0.94,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.94
-          }
-        ],
-        "method": "common adjacent-bin merging across all fit categories using expected MC background only",
-        "minimum_expected_background_per_fit_bin": 5.0
-      },
-      "z_improvement_factor": 1.0,
-      "z_value": 0.5902335901806391
-    },
-    {
-      "background_total": 9338.22528295425,
+      "background_total": 9338.225282954252,
       "bin_edges": [
         0.0,
         0.2,
         0.35,
         0.5,
         0.65,
+        0.78,
+        0.88,
         1.0
       ],
       "categories": [
@@ -246,49 +26,55 @@
       "family": "expected_only_mva",
       "low_background_bins_lt5": 0,
       "low_background_fraction": 0.0,
-      "median_limit": null,
-      "median_limit_improvement_factor": null,
-      "model_name": "mlp",
-      "name": "mva_mlp_score_baseline_categories",
-      "observable": "mva_score_mlp",
-      "s_over_b": 0.0026884741058818317,
-      "s_over_sqrt_b": 0.2597993327996613,
+      "median_limit": 2.9444035940637314,
+      "median_limit_improvement_factor": 1.4262474377546355,
+      "model_name": "hist_gradient_boosting",
+      "name": "mva_hist_gradient_boosting_score_baseline_categories",
+      "observable": "mva_score_hist_gradient_boosting",
+      "s_over_b": 0.0026884741058818304,
+      "s_over_sqrt_b": 0.25979933279966116,
       "selection_role": "primary_candidate",
-      "signal_total": 25.10557686811354,
+      "signal_total": 25.105576868113534,
       "sparse_bin_handling": {
         "all_pass": true,
         "categories": {
           "boosted": {
             "background_bins": [
-              1372.1399600767586,
-              349.1757942515264,
-              221.77501901230562,
-              112.68527282101725,
-              62.555635085556595
+              1154.4500686201295,
+              241.92449507335,
+              226.92870615967882,
+              184.26476432706733,
+              151.12783698339578,
+              115.50080282615798,
+              44.135007257385475
             ],
-            "min_background_bin": 62.555635085556595,
+            "min_background_bin": 44.135007257385475,
             "passes_min_background": true
           },
           "vbf": {
             "background_bins": [
-              74.76141228960691,
-              18.549651437532376,
-              12.2910357757853,
-              16.140010016766865,
-              29.25305106284501
+              67.23788992662912,
+              13.556785872228351,
+              10.736505420370046,
+              9.271503189729547,
+              15.140845570813406,
+              11.404022208430622,
+              23.64760839433538
             ],
-            "min_background_bin": 12.2910357757853,
+            "min_background_bin": 9.271503189729547,
             "passes_min_background": true
           },
           "zero_jet": {
             "background_bins": [
-              6464.56683221303,
-              480.31312548368396,
-              98.7209628217973,
-              16.896262782198118,
-              8.40125782384088
+              4861.256823919123,
+              1012.7856357905597,
+              534.9697918206061,
+              366.77473991712424,
+              173.92929418157357,
+              106.40766869672356,
+              12.774486798839492
             ],
-            "min_background_bin": 8.40125782384088,
+            "min_background_bin": 12.774486798839492,
             "passes_min_background": true
           }
         },
@@ -304,13 +90,15 @@
           0.985,
           1.0
         ],
-        "merge_count": 4,
+        "merge_count": 2,
         "merged_edges": [
           0.0,
           0.2,
           0.35,
           0.5,
           0.65,
+          0.78,
+          0.88,
           1.0
         ],
         "merges": [
@@ -326,7 +114,7 @@
             "removed_edge": 0.985
           },
           {
-            "category": "boosted",
+            "category": "zero_jet",
             "low_bin_background": 0.0,
             "low_bin_index": 7,
             "low_bin_range": [
@@ -335,38 +123,16 @@
             ],
             "merged_with": "previous",
             "removed_edge": 0.94
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 0.0,
-            "low_bin_index": 6,
-            "low_bin_range": [
-              0.88,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.88
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 1.319055059526008,
-            "low_bin_index": 5,
-            "low_bin_range": [
-              0.78,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.78
           }
         ],
         "method": "common adjacent-bin merging across all fit categories using expected MC background only",
         "minimum_expected_background_per_fit_bin": 5.0
       },
-      "z_improvement_factor": 0.5729078897375589,
-      "z_value": 0.33814948060261313
+      "z_improvement_factor": 1.492094854452877,
+      "z_value": 0.7854643816770341
     },
     {
-      "background_total": 9338.225282954249,
+      "background_total": 9338.22528295425,
       "bin_edges": [
         0.0,
         0.35,
@@ -385,11 +151,11 @@
       "low_background_fraction": 0.0,
       "median_limit": null,
       "median_limit_improvement_factor": null,
-      "model_name": "mlp",
-      "name": "mva_mlp_score_single_category",
-      "observable": "mva_score_mlp",
-      "s_over_b": 0.0026884741058818317,
-      "s_over_sqrt_b": 0.2597993327996613,
+      "model_name": "hist_gradient_boosting",
+      "name": "mva_hist_gradient_boosting_score_single_category",
+      "observable": "mva_score_hist_gradient_boosting",
+      "s_over_b": 0.0026884741058818312,
+      "s_over_sqrt_b": 0.2597993327996612,
       "selection_role": "comparison_only_not_selected",
       "signal_total": 25.105576868113538,
       "sparse_bin_handling": {
@@ -397,14 +163,14 @@
         "categories": {
           "inclusive_sr": {
             "background_bins": [
-              8759.506775752137,
-              393.5158557348235,
-              129.16409245356698,
-              41.1027672399674,
-              9.765076535332064,
-              5.17071523842294
+              7351.211699202019,
+              963.1385027712616,
+              566.9994043079059,
+              338.26998089800844,
+              94.96120310566533,
+              23.644492669389795
             ],
-            "min_background_bin": 5.17071523842294,
+            "min_background_bin": 23.644492669389795,
             "passes_min_background": true
           }
         },
@@ -431,8 +197,8 @@
         "method": "common adjacent-bin merging across all fit categories using expected MC background only",
         "minimum_expected_background_per_fit_bin": 5.0
       },
-      "z_improvement_factor": 0.550318816168938,
-      "z_value": 0.3248166506113514
+      "z_improvement_factor": 1.3983563584621814,
+      "z_value": 0.7361188259484978
     },
     {
       "background_total": 9338.225282954252,
@@ -440,6 +206,203 @@
         0.0,
         0.2,
         0.35,
+        0.5,
+        0.65,
+        0.78,
+        0.88,
+        1.0
+      ],
+      "categories": [
+        "vbf",
+        "boosted",
+        "zero_jet"
+      ],
+      "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+      "family": "expected_only_mva",
+      "low_background_bins_lt5": 0,
+      "low_background_fraction": 0.0,
+      "median_limit": null,
+      "median_limit_improvement_factor": null,
+      "model_name": "mlp",
+      "name": "mva_mlp_score_baseline_categories",
+      "observable": "mva_score_mlp",
+      "s_over_b": 0.0026884741058818304,
+      "s_over_sqrt_b": 0.25979933279966116,
+      "selection_role": "primary_candidate",
+      "signal_total": 25.105576868113534,
+      "sparse_bin_handling": {
+        "all_pass": true,
+        "categories": {
+          "boosted": {
+            "background_bins": [
+              423.15355025780866,
+              256.62126205135223,
+              298.9711157540966,
+              324.1916668980175,
+              317.987304527889,
+              269.45756158078683,
+              227.94922017721376
+            ],
+            "min_background_bin": 227.94922017721376,
+            "passes_min_background": true
+          },
+          "vbf": {
+            "background_bins": [
+              31.845493440805367,
+              9.660362041366243,
+              8.907639429907093,
+              17.008460779556803,
+              21.13524792006111,
+              22.850912636626326,
+              39.58704433421353
+            ],
+            "min_background_bin": 8.907639429907093,
+            "passes_min_background": true
+          },
+          "zero_jet": {
+            "background_bins": [
+              3023.5785426304806,
+              1680.9367806334606,
+              1143.6624920650763,
+              764.0514756646041,
+              328.90356565787374,
+              106.7071027152201,
+              21.058481757834542
+            ],
+            "min_background_bin": 21.058481757834542,
+            "passes_min_background": true
+          }
+        },
+        "initial_edges": [
+          0.0,
+          0.2,
+          0.35,
+          0.5,
+          0.65,
+          0.78,
+          0.88,
+          0.94,
+          0.985,
+          1.0
+        ],
+        "merge_count": 2,
+        "merged_edges": [
+          0.0,
+          0.2,
+          0.35,
+          0.5,
+          0.65,
+          0.78,
+          0.88,
+          1.0
+        ],
+        "merges": [
+          {
+            "category": "zero_jet",
+            "low_bin_background": 0.0,
+            "low_bin_index": 8,
+            "low_bin_range": [
+              0.985,
+              1.0
+            ],
+            "merged_with": "previous",
+            "removed_edge": 0.985
+          },
+          {
+            "category": "zero_jet",
+            "low_bin_background": 0.0,
+            "low_bin_index": 7,
+            "low_bin_range": [
+              0.94,
+              1.0
+            ],
+            "merged_with": "previous",
+            "removed_edge": 0.94
+          }
+        ],
+        "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+        "minimum_expected_background_per_fit_bin": 5.0
+      },
+      "z_improvement_factor": 0.5581182973221342,
+      "z_value": 0.2938030662062136
+    },
+    {
+      "background_total": 9338.22528295425,
+      "bin_edges": [
+        0.0,
+        0.35,
+        0.55,
+        0.72,
+        0.86,
+        0.94,
+        1.0
+      ],
+      "categories": [
+        "inclusive_sr"
+      ],
+      "caveat": "Expected-only MC comparison retained for continuity. The user-requested primary method must preserve event categories and is therefore not selected from this inclusive candidate.",
+      "family": "expected_only_mva",
+      "low_background_bins_lt5": 0,
+      "low_background_fraction": 0.0,
+      "median_limit": null,
+      "median_limit_improvement_factor": null,
+      "model_name": "mlp",
+      "name": "mva_mlp_score_single_category",
+      "observable": "mva_score_mlp",
+      "s_over_b": 0.0026884741058818312,
+      "s_over_sqrt_b": 0.2597993327996612,
+      "selection_role": "comparison_only_not_selected",
+      "signal_total": 25.105576868113538,
+      "sparse_bin_handling": {
+        "all_pass": true,
+        "categories": {
+          "inclusive_sr": {
+            "background_bins": [
+              5425.7959910552745,
+              1908.9892738364424,
+              1040.380211902114,
+              608.2836328581743,
+              262.39044435656166,
+              92.38572894568495
+            ],
+            "min_background_bin": 92.38572894568495,
+            "passes_min_background": true
+          }
+        },
+        "initial_edges": [
+          0.0,
+          0.35,
+          0.55,
+          0.72,
+          0.86,
+          0.94,
+          1.0
+        ],
+        "merge_count": 0,
+        "merged_edges": [
+          0.0,
+          0.35,
+          0.55,
+          0.72,
+          0.86,
+          0.94,
+          1.0
+        ],
+        "merges": [],
+        "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+        "minimum_expected_background_per_fit_bin": 5.0
+      },
+      "z_improvement_factor": 0.5291562548763611,
+      "z_value": 0.27855694918229645
+    },
+    {
+      "background_total": 9338.225282954249,
+      "bin_edges": [
+        0.0,
+        0.2,
+        0.35,
+        0.65,
+        0.78,
         1.0
       ],
       "categories": [
@@ -456,8 +419,8 @@
       "model_name": "xgboost",
       "name": "mva_xgboost_score_baseline_categories",
       "observable": "mva_score_xgboost",
-      "s_over_b": 0.00268847410588183,
-      "s_over_sqrt_b": 0.2597993327996611,
+      "s_over_b": 0.002688474105881831,
+      "s_over_sqrt_b": 0.25979933279966116,
       "selection_role": "primary_candidate",
       "signal_total": 25.10557686811353,
       "sparse_bin_handling": {
@@ -465,29 +428,35 @@
         "categories": {
           "boosted": {
             "background_bins": [
-              1385.8750621197853,
-              424.1326742613515,
-              308.323944866028
+              688.678060780038,
+              241.64340285532404,
+              514.1345142052598,
+              316.9729185274501,
+              356.9027848790926
             ],
-            "min_background_bin": 308.323944866028,
+            "min_background_bin": 241.64340285532404,
             "passes_min_background": true
           },
           "vbf": {
             "background_bins": [
-              80.99714448710188,
-              14.667570580649002,
-              55.33044551478559
+              38.870171411451274,
+              23.91672010141362,
+              15.305557204695374,
+              14.788209060024103,
+              58.1145028049521
             ],
-            "min_background_bin": 14.667570580649002,
+            "min_background_bin": 14.788209060024103,
             "passes_min_background": true
           },
           "zero_jet": {
             "background_bins": [
-              6429.802942702892,
-              435.5694348751008,
-              203.52606354655694
+              3424.2241061083914,
+              1445.6077741368902,
+              1574.1389981402124,
+              458.5400946562855,
+              166.38746808277034
             ],
-            "min_background_bin": 203.52606354655694,
+            "min_background_bin": 166.38746808277034,
             "passes_min_background": true
           }
         },
@@ -503,11 +472,13 @@
           0.985,
           1.0
         ],
-        "merge_count": 6,
+        "merge_count": 4,
         "merged_edges": [
           0.0,
           0.2,
           0.35,
+          0.65,
+          0.78,
           1.0
         ],
         "merges": [
@@ -523,7 +494,7 @@
             "removed_edge": 0.985
           },
           {
-            "category": "vbf",
+            "category": "zero_jet",
             "low_bin_background": 0.0,
             "low_bin_index": 7,
             "low_bin_range": [
@@ -534,8 +505,8 @@
             "removed_edge": 0.94
           },
           {
-            "category": "boosted",
-            "low_bin_background": 0.0,
+            "category": "zero_jet",
+            "low_bin_background": 3.0896057506047256,
             "low_bin_index": 6,
             "low_bin_range": [
               0.88,
@@ -545,34 +516,12 @@
             "removed_edge": 0.88
           },
           {
-            "category": "boosted",
-            "low_bin_background": 0.0,
-            "low_bin_index": 5,
-            "low_bin_range": [
-              0.78,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.78
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 0.0,
-            "low_bin_index": 4,
-            "low_bin_range": [
-              0.65,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.65
-          },
-          {
-            "category": "zero_jet",
-            "low_bin_background": 3.0896057506047256,
+            "category": "vbf",
+            "low_bin_background": 3.931855665994229,
             "low_bin_index": 3,
             "low_bin_range": [
               0.5,
-              1.0
+              0.65
             ],
             "merged_with": "previous",
             "removed_edge": 0.5
@@ -581,8 +530,8 @@
         "method": "common adjacent-bin merging across all fit categories using expected MC background only",
         "minimum_expected_background_per_fit_bin": 5.0
       },
-      "z_improvement_factor": 0.5303092238385197,
-      "z_value": 0.3130063170921177
+      "z_improvement_factor": 0.6265857268979038,
+      "z_value": 0.3298454981442739
     },
     {
       "background_total": 9338.22528295425,
@@ -591,6 +540,8 @@
         0.35,
         0.55,
         0.72,
+        0.86,
+        0.94,
         1.0
       ],
       "categories": [
@@ -605,21 +556,23 @@
       "model_name": "xgboost",
       "name": "mva_xgboost_score_single_category",
       "observable": "mva_score_xgboost",
-      "s_over_b": 0.0026884741058818312,
-      "s_over_sqrt_b": 0.2597993327996612,
+      "s_over_b": 0.002688474105881831,
+      "s_over_sqrt_b": 0.25979933279966116,
       "selection_role": "comparison_only_not_selected",
-      "signal_total": 25.105576868113538,
+      "signal_total": 25.105576868113534,
       "sparse_bin_handling": {
         "all_pass": true,
         "categories": {
           "inclusive_sr": {
             "background_bins": [
-              8771.04482902688,
-              470.79553497855477,
-              69.9750318020811,
-              26.409887146734594
+              5862.9402353935075,
+              1542.4098857529145,
+              956.6649704506384,
+              774.3070482772293,
+              175.42239226296132,
+              26.48075081699884
             ],
-            "min_background_bin": 26.409887146734594,
+            "min_background_bin": 26.48075081699884,
             "passes_min_background": true
           }
         },
@@ -632,43 +585,22 @@
           0.94,
           1.0
         ],
-        "merge_count": 2,
+        "merge_count": 0,
         "merged_edges": [
           0.0,
           0.35,
           0.55,
           0.72,
+          0.86,
+          0.94,
           1.0
         ],
-        "merges": [
-          {
-            "category": "inclusive_sr",
-            "low_bin_background": 0.0,
-            "low_bin_index": 5,
-            "low_bin_range": [
-              0.94,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.94
-          },
-          {
-            "category": "inclusive_sr",
-            "low_bin_background": 1.3544868946581297,
-            "low_bin_index": 4,
-            "low_bin_range": [
-              0.86,
-              1.0
-            ],
-            "merged_with": "previous",
-            "removed_edge": 0.86
-          }
-        ],
+        "merges": [],
         "method": "common adjacent-bin merging across all fit categories using expected MC background only",
         "minimum_expected_background_per_fit_bin": 5.0
       },
-      "z_improvement_factor": 0.5729753180875342,
-      "z_value": 0.33818927907969903
+      "z_improvement_factor": 0.6873405187967446,
+      "z_value": 0.36182786502284486
     }
   ],
   "genmet_regression_feasibility": {
@@ -681,18 +613,228 @@
     "requested_approach": "transformer regression of genMET direction / genMET phi followed by combined-mass construction",
     "target_branches_found": []
   },
+  "input_reweighting": {
+    "application": "background MC events receive the correction; signal MC and data events keep weight 1",
+    "control_regions": [
+      "is_w_high_mt",
+      "is_same_sign_low_mt",
+      "is_z_rich",
+      "is_top_btag_handle"
+    ],
+    "method": "Multivariate density-ratio reweighting derived in non-signal validation/control regions before classifier training. Data events are not used in the signal-region training target.",
+    "nd_reweight": {
+      "control_background_weight_sum_after_prior_balance": 16600.0,
+      "control_data_weight_sum": 16600.0,
+      "method": "HistGradientBoostingClassifier density-ratio reweighting in validation/control regions",
+      "status": "applied",
+      "test_auc_data_vs_background": 0.5998729507766607,
+      "train_auc_data_vs_background": 0.6721600915757276,
+      "variables": [
+        "m_vis",
+        "mu_pt",
+        "tau_pt",
+        "met_pt",
+        "mt_mu_met",
+        "pt_tautau_proxy",
+        "delta_phi_mu_tau",
+        "delta_r_mu_tau",
+        "n_clean_jets"
+      ],
+      "weight_cap": [
+        0.1,
+        10.0
+      ]
+    },
+    "normalization": "background corrections are renormalized to preserve the nominal weighted background total",
+    "rows": [
+      {
+        "bins": [
+          0.0,
+          40.0,
+          60.0,
+          80.0,
+          100.0,
+          120.0,
+          160.0,
+          250.0
+        ],
+        "post_chi2_ndf": 1.2666138447494324,
+        "pre_chi2_ndf": 7.663456095512899,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "m_vis"
+      },
+      {
+        "bins": [
+          20.0,
+          25.0,
+          30.0,
+          40.0,
+          55.0,
+          75.0,
+          110.0,
+          160.0
+        ],
+        "post_chi2_ndf": 3.4661527538204613,
+        "pre_chi2_ndf": 53.79388643912906,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "mu_pt"
+      },
+      {
+        "bins": [
+          20.0,
+          25.0,
+          30.0,
+          40.0,
+          55.0,
+          80.0,
+          120.0,
+          180.0
+        ],
+        "post_chi2_ndf": 2.053093018322112,
+        "pre_chi2_ndf": 37.4614751229605,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "tau_pt"
+      },
+      {
+        "bins": [
+          0.0,
+          20.0,
+          35.0,
+          50.0,
+          75.0,
+          110.0,
+          160.0,
+          220.0
+        ],
+        "post_chi2_ndf": 2.0902068957999878,
+        "pre_chi2_ndf": 37.761624896071375,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "met_pt"
+      },
+      {
+        "bins": [
+          0.0,
+          20.0,
+          40.0,
+          60.0,
+          80.0,
+          120.0,
+          180.0
+        ],
+        "post_chi2_ndf": 2.2031028758712377,
+        "pre_chi2_ndf": 48.80590505539865,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "mt_mu_met"
+      },
+      {
+        "bins": [
+          0.0,
+          25.0,
+          50.0,
+          75.0,
+          100.0,
+          140.0,
+          200.0,
+          300.0
+        ],
+        "post_chi2_ndf": 1.6435985823439057,
+        "pre_chi2_ndf": 30.01497893267424,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "pt_tautau_proxy"
+      },
+      {
+        "bins": [
+          0.0,
+          0.5,
+          1.0,
+          1.5,
+          2.0,
+          2.5,
+          3.141592653589793
+        ],
+        "post_chi2_ndf": 0.7842293295414445,
+        "pre_chi2_ndf": 8.830007442328522,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "delta_phi_mu_tau"
+      },
+      {
+        "bins": [
+          0.5,
+          1.0,
+          1.5,
+          2.0,
+          2.6,
+          3.4,
+          5.0
+        ],
+        "post_chi2_ndf": 1.6860655321670606,
+        "pre_chi2_ndf": 37.36850455249269,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "delta_r_mu_tau"
+      },
+      {
+        "bins": [
+          -0.5,
+          0.5,
+          1.5,
+          2.5,
+          4.5,
+          8.5
+        ],
+        "post_chi2_ndf": 6.193621255161359,
+        "pre_chi2_ndf": 188.3228779860479,
+        "reweight_type": "multivariate_density_ratio",
+        "reweighted": true,
+        "selected_for_nd_reweight": true,
+        "variable": "n_clean_jets"
+      }
+    ],
+    "shape_chi2_threshold_for_reweight": 3.0,
+    "summary": {
+      "control_background_events": 18592,
+      "control_data_events": 16600,
+      "max_weight": 10.3369236066519,
+      "median_post_chi2_ndf": 2.053093018322112,
+      "median_pre_chi2_ndf": 37.4614751229605,
+      "min_weight": 0.10758475481354167,
+      "reweighted_variable_count": 9
+    }
+  },
   "inputs": [
     "m_vis",
     "m_addmet",
     "mu_pt",
     "mu_eta",
+    "abs_mu_eta",
     "mu_reliso",
     "tau_pt",
     "tau_eta",
+    "abs_tau_eta",
     "tau_reliso",
     "met_pt",
     "mt_mu_met",
     "pt_tautau_proxy",
+    "delta_phi_mu_tau",
+    "delta_eta_mu_tau",
+    "delta_r_mu_tau",
+    "pt_balance_mu_tau",
+    "met_fraction",
     "n_clean_jets",
     "mjj",
     "delta_eta_jj",
@@ -704,25 +846,25 @@
     "hist_gradient_boosting": {
       "n_test": 3525,
       "n_train": 6545,
-      "overtraining_gap_train_minus_test": 0.07880467909046629,
-      "test_auc": 0.8777917770956668,
-      "train_auc": 0.9565964561861331,
+      "overtraining_gap_train_minus_test": 0.0799904500986155,
+      "test_auc": 0.9120780753812541,
+      "train_auc": 0.9920685254798696,
       "type": "HistGradientBoostingClassifier"
     },
     "mlp": {
       "n_test": 3525,
       "n_train": 6545,
-      "overtraining_gap_train_minus_test": 0.016193824796799983,
-      "test_auc": 0.864353984526743,
-      "train_auc": 0.8805478093235429,
+      "overtraining_gap_train_minus_test": 0.00797562136460761,
+      "test_auc": 0.9044128204293559,
+      "train_auc": 0.9123884417939635,
       "type": "Pipeline"
     },
     "xgboost": {
       "n_test": 3525,
       "n_train": 6545,
-      "overtraining_gap_train_minus_test": 0.02267189589231433,
-      "test_auc": 0.8750803472865907,
-      "train_auc": 0.897752243178905,
+      "overtraining_gap_train_minus_test": 0.03214520600647086,
+      "test_auc": 0.9133586251554704,
+      "train_auc": 0.9455038311619413,
       "type": "XGBClassifier"
     }
   },
@@ -738,6 +880,13 @@
     "requested": "tight anti-muon veto on hadronic tau ID",
     "selection": "Tau_idAntiMuTight > 0 in phase3_selection/src/build_selection.py",
     "status": "implemented_in_phase3_selection"
+  },
+  "training_weight": {
+    "formula": "background_control_shape_reweight times class-balance factor; signal shape reweight fixed to 1",
+    "max": 3.7950933742284385,
+    "min": 0.0410914552199133,
+    "sum_background": 5035.0,
+    "sum_signal": 5034.999999999999
   },
   "transformer_feasibility": {
     "available_stacks": {

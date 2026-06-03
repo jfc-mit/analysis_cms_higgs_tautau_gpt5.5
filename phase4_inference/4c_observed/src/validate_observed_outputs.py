@@ -22,6 +22,7 @@ JSON_FILES = [
     "observed_results.json",
     "observed_yields.json",
     "score_observed_yields.json",
+    "visible_observed_yields.json",
     "addmet_observed_yields.json",
     "wjets_highmt_scale_full.json",
     "vbf_background_scale.json",
@@ -29,12 +30,16 @@ JSON_FILES = [
     "comparison_to_4a_4b.json",
     "pyhf_workspace_observed.json",
     "pyhf_workspace_score_diagnostic.json",
+    "pyhf_workspace_visible_crosscheck.json",
     "pyhf_workspace_addmet.json",
 ]
 FIGURE_STEMS = [
-    "observed_mvis_vbf",
-    "observed_mvis_boosted",
-    "observed_mvis_zero_jet",
+    "observed_primary_score_vbf",
+    "observed_primary_score_boosted",
+    "observed_primary_score_zero_jet",
+    "observed_visible_vbf",
+    "observed_visible_boosted",
+    "observed_visible_zero_jet",
     "observed_addmet_vbf",
     "observed_addmet_boosted",
     "observed_addmet_zero_jet",
@@ -56,7 +61,7 @@ def main() -> None:
             raise FileNotFoundError(path)
         payloads[name] = json.loads(path.read_text())
         log.info("Valid JSON: %s", path)
-    for template_name in ["observed_templates.npz", "score_observed_templates.npz", "addmet_observed_templates.npz"]:
+    for template_name in ["observed_templates.npz", "score_observed_templates.npz", "visible_observed_templates.npz", "addmet_observed_templates.npz"]:
         with np.load(OUT / template_name, allow_pickle=False) as templates:
             required = {"samples", "categories", "bin_edges", "observable", "yields", "variances", "raw_counts", "data_counts"}
             if set(templates.files) != required:
@@ -72,8 +77,11 @@ def main() -> None:
         required = {"samples", "categories", "bin_edges", "observable", "yields", "variances", "raw_counts", "data_counts"}
         if set(templates.files) != required:
             raise ValueError(f"Unexpected observed_templates.npz keys: {templates.files}")
+        if "mva_score" not in str(templates["observable"][0]):
+            raise ValueError("Primary observed template is not the calibrated classifier score")
+    with np.load(OUT / "visible_observed_templates.npz", allow_pickle=False) as templates:
         if str(templates["observable"][0]) != "m_vis":
-            raise ValueError("Primary observed template is not the visible-mass fallback")
+            raise ValueError("Visible cross-check template is not m_vis")
     with np.load(OUT / "addmet_observed_templates.npz", allow_pickle=False) as templates:
         if str(templates["observable"][0]) != "m_addmet":
             raise ValueError("Add-MET observed template does not use m_addmet")
@@ -94,6 +102,11 @@ def main() -> None:
     addmet_data = addmet_ws.data(addmet_model)
     _ = addmet_model.logpdf(addmet_model.config.suggested_init(), addmet_data)
     log.info("pyhf add-MET workspace constructs with %s parameters", addmet_model.config.npars)
+    visible_ws = pyhf.Workspace(payloads["pyhf_workspace_visible_crosscheck.json"])
+    visible_model = visible_ws.model()
+    visible_data = visible_ws.data(visible_model)
+    _ = visible_model.logpdf(visible_model.config.suggested_init(), visible_data)
+    log.info("pyhf visible cross-check workspace constructs with %s parameters", visible_model.config.npars)
     results = payloads["observed_results.json"]
     blinding = results["blinding"]
     if "Run2012B/C TauPlusX" not in blinding["data_scope"]:
@@ -102,8 +115,8 @@ def main() -> None:
         raise ValueError("Observed outputs claim post-unblinding retuning")
     if "auto-passed" not in blinding["phase4b_human_gate"]:
         raise ValueError("Observed outputs do not record Phase 4b gate auto-pass")
-    if results["primary_model"] != "visible_mass_qcd_primary":
-        raise ValueError("Phase 4c audit correction did not promote visible-mass/QCD primary model")
+    if results["primary_model"] != "calibrated_score_qcd_primary":
+        raise ValueError("Phase 4c update did not promote calibrated-score/QCD primary model")
     if results["addmet"]["observable"] != "m_addmet":
         raise ValueError("observed_results.json addmet section does not document m_addmet")
     if results["addmet"]["workspace"] != "pyhf_workspace_addmet.json":
@@ -119,7 +132,7 @@ def main() -> None:
     if not (0.2 <= vbf_scale["applied_scale_factor"] <= 0.9):
         raise ValueError("VBF background scale is outside the expected audit range")
     qcd = payloads["qcd_sideband_estimates.json"]
-    for key in ["visible_mass_qcd_primary", "hgb_score_qcd_diagnostic", "addmet_mass_qcd_crosscheck"]:
+    for key in ["calibrated_score_qcd_primary", "visible_mass_qcd_crosscheck", "addmet_mass_qcd_crosscheck"]:
         if qcd[key]["scaled_qcd_total"] <= 0:
             raise ValueError(f"QCD estimate is empty for {key}")
         if qcd[key]["transfer_sideband"]["relative_uncertainty"] <= 0:
@@ -127,9 +140,9 @@ def main() -> None:
     validation = results["validation_summary"]
     if validation["score_modeling_status"] not in {"pass", "flagged"}:
         raise ValueError("Invalid primary modelling status")
-    score_validation = results["score_diagnostic_validation_summary"]
-    if score_validation["score_modeling_status"] != "flagged":
-        raise ValueError("Score diagnostic should remain flagged after audit correction")
+    visible_validation = results["visible_mass_validation_summary"]
+    if visible_validation["model_label"] != "visible_mass_qcd_crosscheck":
+        raise ValueError("Visible cross-check validation summary has the wrong model label")
     addmet_validation = results["addmet_validation_summary"]
     if addmet_validation["model_label"] != "addmet_mass_qcd_crosscheck":
         raise ValueError("Add-MET validation summary has the wrong model label")
@@ -142,9 +155,9 @@ def main() -> None:
     fit = results["observed_fit"]
     if fit["status"] != "evaluated":
         raise ValueError(f"Observed fit did not evaluate: {fit}")
-    score_fit = results["score_diagnostic_fit"]
-    if score_fit["status"] != "evaluated":
-        raise ValueError(f"Score diagnostic fit did not evaluate: {score_fit}")
+    visible_fit = results["visible_mass_observed_fit"]
+    if visible_fit["status"] != "evaluated":
+        raise ValueError(f"Visible cross-check fit did not evaluate: {visible_fit}")
     addmet_fit = results["addmet_observed_fit"]
     if addmet_fit["status"] != "evaluated":
         raise ValueError(f"Add-MET fit did not evaluate: {addmet_fit}")
@@ -158,7 +171,7 @@ def main() -> None:
         if not path.exists() or path.stat().st_size == 0:
             raise FileNotFoundError(path)
     artifact_text = (OUT / "INFERENCE_OBSERVED.md").read_text()
-    required_phrases = ["same-sign QCD/fake", "visible-mass fit", "score fit is diagnostic", "Add-MET Mass Cross-Check"]
+    required_phrases = ["same-sign QCD/fake", "calibrated-score fit", "multivariate", "Add-MET Mass Cross-Check"]
     for phrase in required_phrases:
         if phrase not in artifact_text:
             raise ValueError(f"Artifact does not document required phrase: {phrase}")

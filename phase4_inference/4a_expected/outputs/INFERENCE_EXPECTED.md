@@ -15,14 +15,14 @@ primary observable. Phase 4b must validate score modelling and calibration
 before the analysis can use this score model without qualification on data.
 
 The expected 95% CLs upper limit on the signal strength is
-`4.199` on the background-only Asimov
-sample. The median expected band from pyhf is `4.199`, with minus-one
-and plus-one variations `2.920` and `6.146`. The expected
-discovery diagnostic is `Z = 0.526`. For comparison, the stale
+`2.904` on the background-only Asimov
+sample. The median expected band from pyhf is `2.904`, with minus-one
+and plus-one variations `1.982` and `4.335`. The expected
+discovery diagnostic is `Z = 0.787`. For comparison, the stale
 visible-mass Phase 4a baseline had `Z = 0.191` and median expected limit
 `mu = 11.374`, while the unmerged Phase 3 score recommendation had
-`Z = 0.526` and median expected limit
-`mu = 4.244`. These are single-channel
+`Z = 0.785` and median expected limit
+`mu = 2.944`. These are single-channel
 reduced-open-data expectations and are not directly comparable to the CMS
 all-channel Run 1 results without the missing components and calibrations
 listed below.
@@ -31,7 +31,7 @@ listed below.
 
 The expected-primary candidate observable is
 `mva_score_hist_gradient_boosting`, with merged bin edges
-`[0.0, 0.2, 0.35, 0.5, 1.0]`. The Phase 4a executor uses
+`[0.0, 0.2, 0.35, 0.5, 0.65, 0.78, 0.88, 1.0]`. The Phase 4a executor uses
 `phase3_selection/outputs/sensitivity_recommendation.json` and
 `phase3_selection/outputs/sensitivity_selected_events.npz`, requiring
 `is_signal_region` and the Phase 3 sensitivity categories `vbf, boosted, zero_jet`.
@@ -40,7 +40,7 @@ templates.
 
 The Phase 3 recommendation records sparse-bin handling as `Phase 3 common score-bin merging across fit categories`.
 The merged model has a minimum nominal expected-background bin of
-`13.617`, so no score bin remains below five expected background
+`6.899`, so no score bin remains below five expected background
 events in the promoted category-preserving fit.
 
 The W+jets normalization method is prepared through the high-`mT` control flag
@@ -66,9 +66,9 @@ channels.
 
 | Category | Signal yield | Background yield | S/sqrt(B) | Minimum background bin |
 | --- | --- | --- | --- | --- |
-| vbf | 1.590 | 150.995 | 0.129 | 13.617 |
-| boosted | 9.175 | 2118.332 | 0.199 | 93.004 |
-| zero_jet | 14.341 | 7068.898 | 0.171 | 32.318 |
+| vbf | 1.590 | 110.223 | 0.151 | 6.899 |
+| boosted | 9.175 | 2173.547 | 0.197 | 38.699 |
+| zero_jet | 14.341 | 14326.936 | 0.120 | 14.401 |
 
 ![Expected MVA score templates in the promoted signal-region categories. This figure
 shows the Phase 4a background-only expected stack and nominal Higgs signal
@@ -108,7 +108,7 @@ data.](figures/expected_nuisance_summary.pdf){#fig:p4a-nuisance-summary}
 ## Expected Result
 
 The pyhf asymptotic CLs calculation gives an expected 95% upper limit of
-`4.199` on `mu` for the background-only
+`2.904` on `mu` for the background-only
 Asimov dataset. The scan range was 0 to 50, and the POI bound in the workspace
 is also 0 to 50. The expected discovery-sensitivity diagnostic status is
 `evaluated`.
@@ -122,10 +122,10 @@ bias requirement for the 0x injection.
 
 | Injected mu | Fitted mu | Abs. bias | Rel. bias | Pass |
 | --- | --- | --- | --- | --- |
-| 0.0 | 0.0003 | 0.000324 | 0 | True |
-| 1.0 | 1.0000 | 1.78e-08 | 1.78e-08 | True |
-| 2.0 | 1.9977 | -0.00233 | -0.00116 | True |
-| 5.0 | 5.0005 | 0.000482 | 9.63e-05 | True |
+| 0.0 | 0.0008 | 0.000777 | 0 | True |
+| 1.0 | 1.0000 | -7.25e-09 | -7.25e-09 | True |
+| 2.0 | 2.0018 | 0.00179 | 0.000897 | True |
+| 5.0 | 5.0009 | 0.00094 | 0.000188 | True |
 
 ![Signal-injection recovery. This figure compares the injected and fitted
 signal strength in Asimov pseudo-data. The points lie on the diagonal within

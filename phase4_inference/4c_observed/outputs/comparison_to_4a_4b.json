@@ -3,14 +3,14 @@
     "model": "addmet_mass_qcd_crosscheck",
     "observable": "m_addmet",
     "phase3_status": "retained as reconstructed-MET alternative observable after visible mass won the raw MC-only metric",
-    "phase4c_expected_median_limit": 13.842359360878032,
-    "phase4c_mu_hat": 0.0,
-    "phase4c_observed_limit": 13.29395673008472,
+    "phase4c_expected_median_limit": 13.51855381051554,
+    "phase4c_mu_hat": 39.11617819159213,
+    "phase4c_observed_limit": 50.0,
     "validation_status": "flagged"
   },
   "phase4a_expected": {
-    "expected_discovery_z": 0.5264171907925044,
-    "median_expected_limit": 4.199448081748937,
+    "expected_discovery_z": 0.7867484248039479,
+    "median_expected_limit": 2.90409966080617,
     "model_note": "historical expected score-template model before Phase 5 QCD audit correction"
   },
   "phase4b_warning_carried": {
@@ -24,19 +24,19 @@
     "score_modeling_status": "flagged"
   },
   "primary_fit_comparison": {
-    "median_expected_limit": 10.737535128866,
-    "model": "visible_mass_qcd_primary",
-    "mu_hat": 0.43822864200217504,
-    "observed_limit": 10.764467444563975,
-    "observed_limit_over_median_expected": 1.0025082400546073,
-    "z_value": 0.09493888883239246
+    "median_expected_limit": 1.9735117795854344,
+    "model": "calibrated_score_qcd_primary",
+    "mu_hat": 38.380184326872644,
+    "observed_limit": 50.0,
+    "observed_limit_over_median_expected": 25.335546773631748,
+    "z_value": 12.469838725635482
   },
   "score_diagnostic_comparison": {
-    "model": "hgb_score_qcd_diagnostic",
+    "model": "calibrated_score_qcd_primary",
     "phase4b_diagnostic_mu_hat": 2.6207997991774064,
-    "phase4c_expected_median_limit": 4.180230812079859,
-    "phase4c_mu_hat": 9.351813691910625,
-    "phase4c_observed_limit": 14.837281837543733,
+    "phase4c_expected_median_limit": 1.9735117795854344,
+    "phase4c_mu_hat": 38.380184326872644,
+    "phase4c_observed_limit": 50.0,
     "validation_status": "flagged"
   },
   "w_scale_comparison": {

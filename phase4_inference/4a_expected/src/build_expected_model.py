@@ -151,12 +151,24 @@ def sanitize_category(name: str) -> str:
     return name.replace("-", "_").replace("/", "_")
 
 
-def weighted_hist(values: np.ndarray, weight: float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
-    values = values[np.isfinite(values)]
+def weighted_hist(values: np.ndarray, event_weights: np.ndarray | float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+    finite = np.isfinite(values)
+    values = values[finite]
+    if np.isscalar(event_weights):
+        weights = np.full(values.shape, float(event_weights), dtype=float)
+    else:
+        weights = np.asarray(event_weights, dtype=float)[finite]
     counts, _ = np.histogram(values, bins=bins)
-    yields = counts.astype(float) * weight
-    variances = counts.astype(float) * weight * weight
+    yields, _ = np.histogram(values, bins=bins, weights=weights)
+    variances, _ = np.histogram(values, bins=bins, weights=weights * weights)
     return counts.astype(int), yields, variances
+
+
+def template_event_weights(selected: dict[str, np.ndarray], sample: str, mask: np.ndarray, nominal_weight: float) -> np.ndarray:
+    correction = np.ones(np.sum(mask), dtype=float)
+    if sample in BACKGROUNDS and "background_input_reweight" in selected:
+        correction = selected["background_input_reweight"][mask].astype(float)
+    return nominal_weight * correction
 
 
 def recommended_model(recommendation: dict[str, Any]) -> dict[str, Any]:
@@ -249,7 +261,8 @@ def build_templates(
                 & (selected["sensitivity_best_category"] == category)
                 & (selected["sample"] == sample)
             )
-            counts, yld, var = weighted_hist(selected[observable][mask], weights[sample], bin_edges)
+            event_weights = template_event_weights(selected, sample, mask, weights[sample])
+            counts, yld, var = weighted_hist(selected[observable][mask], event_weights, bin_edges)
             raw[isample, icat, :] = counts
             values[isample, icat, :] = yld
             variances[isample, icat, :] = var
@@ -260,6 +273,7 @@ def build_templates(
                 "sumw2": var.tolist(),
                 "total_yield": float(np.sum(yld)),
                 "raw_total": int(np.sum(counts)),
+                "uses_background_input_reweight": bool(sample in BACKGROUNDS and "background_input_reweight" in selected),
             }
     totals = {}
     signal_idx = [SAMPLES.index(sample) for sample in SIGNALS]
@@ -294,6 +308,7 @@ def build_templates(
             "phase3_selected_events_file": "phase3_selection/outputs/sensitivity_selected_events.npz",
             "status": "expected-primary candidate pending Phase 4b score-modelling validation/calibration",
             "caveat": model_info["caveat"],
+            "input_reweighting": "background_input_reweight from phase3_selection/outputs/input_reweighting.json is applied to background templates when present",
         },
         "phase3_unmerged_recommendation": {
             "bin_edges": recommendation["best_full_result"]["spec"]["bin_edges"],
@@ -349,7 +364,14 @@ def sample_modifiers(
     if sample in SIGNALS:
         modifiers.insert(0, {"name": "mu", "type": "normfactor", "data": None})
     if sample == "DYJetsToLL":
-        modifiers.append({"name": "dy_norm_open_data", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}})
+        dy_rel = 0.50 if category == "vbf" else 0.30
+        modifiers.append(
+            {
+                "name": f"dy_ztautau_open_data_{sanitize_category(category)}",
+                "type": "normsys",
+                "data": {"hi": 1.0 + dy_rel, "lo": max(0.001, 1.0 - dy_rel)},
+            }
+        )
     if sample.startswith("W"):
         modifiers.append(
             {
@@ -562,10 +584,10 @@ def systematics_payload(w_control: dict[str, Any]) -> dict[str, Any]:
             "applies_to": "all MC-normalized samples",
         },
         {
-            "name": "dy_norm_open_data",
+            "name": "dy_ztautau_open_data",
             "type": "normsys",
-            "size": "15%",
-            "source": "Phase 1 [D6] and user-provided 10-15% requirement for missing trigger turn-on and tau efficiency scale factors",
+            "size": "30% in boosted/zero-jet, 50% in VBF",
+            "source": "User-requested Z=>tau tau loosening after noting the original analysis used Z=>mumu/embedded samples not present in the reduced Open Data files",
             "applies_to": "DYJetsToLL",
         },
         {
@@ -633,7 +655,7 @@ def systematics_payload(w_control: dict[str, Any]) -> dict[str, Any]:
         "completeness_table": REFERENCE_ROWS,
         "wjets_high_mt_control": w_control,
         "flat_systematic_justification": {
-            "dy_norm_open_data": "Phase 1 and user prompt require 10-15% because the reduced analysis lacks official trigger turn-on and tau scale factors; Phase 4a uses the high end before data unblinding.",
+            "dy_ztautau_open_data": "The reduced analysis lacks embedded Z=>tau tau and EWK Z samples; the DY/Z normalization is loosened beyond the original 10-15% tau/trigger allowance, especially in VBF.",
             "tau_open_data_acceptance": "Phase 1 records CMS Run 1 tau ID/trigger variations in the 6-19% range and the reduced-file missing-scale-factor limitation; Phase 4a uses 15% as a predeclared open-data acceptance nuisance.",
             "wjets_high_mt_control": "The W nuisance size is not tuned from the signal region. It is the expected high-mT W control-region statistical precision from the same official MC weights; Phase 4b must replace the central scale with data.",
         },

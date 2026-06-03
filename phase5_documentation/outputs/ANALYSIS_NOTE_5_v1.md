@@ -8,19 +8,20 @@ bibliography: references.bib
 # Abstract {-}
 
 This note documents a reduced CMS 2012 Open Data search for Higgs boson decays
-to tau pairs in the mu tau_h final state. The final result uses visible mass in
-VBF, boosted, and zero-jet categories with a same-sign data-driven QCD/fake
-template. It gives `mu = 0.4382 +4.9443 -0.4382`
-from a profile-likelihood scan and an observed 95% CLs limit
-`mu < 10.7645`.
+to tau pairs in the mu tau_h final state. An optimized calibrated-score model
+is trained after multivariate input reweighting derived before training. On the
+full data it gives `mu = 38.3802 +7.0346 -6.1157`
+with the upper interval finite, and an observed 95% CLs limit
+`mu < 50.0000`. This optimized-score result fails
+the observed validation gate (`fail`), so the previous visible-mass
+result is retained as the validated baseline: mu = 0.4382 +4.9443 -0.4382; 95% CLs mu < 10.7645; median expected 95% CLs mu < 10.7375.
 
 # Change Log {-}
 
-Phase 5 v2 responds to the observed-versus-expected audit. It adds a same-sign
-QCD/fake estimate, changes the primary full-data result to the visible-mass
-fallback, removes alternative-method presentation from the final result per the
-latest user instruction, adds category-level `mu` diagnostics for the primary
-method, and compiles the paper with REVTeX PRL formatting.
+Phase 5 v3 updates the final result to the best available trained classifier
+after applying data/MC input reweighting before training. It retains the
+previous visible-mass result as a frozen baseline for `mu` comparison and
+documents the absence of embedded and EWK Z reduced samples.
 
 # Data And Simulation
 
@@ -58,9 +59,9 @@ after failing VBF, and zero-jet events have no clean jets.
 
 | Category | Data | Background | QCD/fake | Signal | Data/background |
 |---|---:|---:|---:|---:|---:|
-| vbf | 78 | 96.28 | 17.75 | 1.590 | 0.810 |
-| boosted | 2183 | 2364.39 | 325.58 | 9.170 | 0.923 |
-| zero_jet | 8451 | 8456.81 | 1569.65 | 14.341 | 0.999 |
+| vbf | 79 | 60.17 | 0.36 | 1.590 | 1.313 |
+| boosted | 2213 | 2115.53 | 5.64 | 9.175 | 1.046 |
+| zero_jet | 8466 | 14047.12 | 22.93 | 14.341 | 0.603 |
 
 ![Cutflow summary. This plot shows raw event counts after each selection step
 for data, signal MC, and background MC. It verifies that the selection chain is
@@ -85,55 +86,71 @@ template.
 
 The same-sign QCD/fake estimate subtracts non-QCD MC from same-sign low-mT data
 and transfers the resulting template to opposite-sign signal candidates. For
-the primary visible-mass model, the OS/SS transfer factor measured in the lowest
-visible-mass bin is `0.9958 ± 0.1201`.
+the primary calibrated-score model, the OS/SS transfer factor measured in the
+lowest score bin is `0.0204 ± 0.2533`.
+
+Large control-region data/MC differences in several classifier inputs are
+handled before training by a multivariate density-ratio reweighting of
+background MC. The reweighting classifier is trained only in non-signal
+validation/control regions and is then applied to background MC in the
+signal-region classifier training and final score templates. The reduced file
+set contains no embedded Z to tau tau or EWK Z reduced sample, so DY/Z is not
+silently substituted; instead its normalization is loosened to 30% in
+boosted/zero-jet and 50% in VBF.
 
 ![Full high-mT W control comparison. The figure shows the derivation inputs for
 the full-data W+jets control scale. The control region is outside the low-mT
 signal region and the scale is propagated to the observed workspace without
 signal-region tuning.](figures/w_highmt_scale_full.pdf){#fig:an-wscale}
 
-# Primary Visible-Mass Result
+# Optimized Score Result And Baseline
 
-The primary statistical model is a binned pyhf profile likelihood in visible
-mass, with one signal-strength parameter `mu`, the W high-mT scale, the
-same-sign QCD/fake transfer uncertainty, luminosity, DY and tau/open-data
-normalization terms, and MC statistical terms [@pyhf_joss; @read_cls;
-@cowan_asymptotic].
+The primary statistical model is a binned pyhf profile likelihood in the
+calibrated classifier score, with one signal-strength parameter `mu`, the W
+high-mT scale, the same-sign QCD/fake transfer uncertainty, luminosity, widened
+DY/Z and tau/open-data normalization terms, and MC statistical terms
+[@pyhf_joss; @read_cls; @cowan_asymptotic].
 
 | Quantity | Value | Interpretation |
 |---|---:|---|
-| Primary median expected 95% CLs limit | mu < 10.7375 | corrected visible-mass workspace |
-| Primary observed 95% CLs limit | mu < 10.7645 | conservative observed result |
-| Primary mu central value | 0.4382 +4.9443 -0.4382 | profile likelihood q(mu)=1 interval |
-| Primary q0 Z | 0.0949 | diagnostic only |
-| Primary combined data/background | 0.9812 | validation after QCD/fake correction |
-| Primary chi2/ndf | 0.7224 | validation after QCD/fake correction |
+| Primary median expected 95% CLs limit | mu < 1.9735 | calibrated-score workspace |
+| Primary observed 95% CLs limit | mu < 50.0000 | conservative observed result |
+| Primary mu central value | 38.3802 +7.0346 -6.1157 | profile likelihood q(mu)=1 interval |
+| Primary q0 Z | 12.4698 | diagnostic only |
+| Primary combined data/background | 0.6631 | validation after QCD/fake correction |
+| Primary chi2/ndf | 2.4808 | validation after QCD/fake correction |
+| Optimized-score observed gate | fail | Observed optimized-score model must avoid boundary limits, >5 sigma diagnostic excesses, and gross combined normalization mismatch. |
+| Frozen baseline visible-mass result | mu = 0.4382 +4.9443 -0.4382; 95% CLs mu < 10.7645; median expected 95% CLs mu < 10.7375 | previous primary result before this update |
 
-The primary result does not show a Higgs-like excess: `mu` is
-`0.4382 +4.9443 -0.4382`
-and the observed 95% CLs limit is `mu < 10.7645`.
-The broad interval is compatible with the weak sensitivity expected from this
-reduced single-final-state setup.
+The optimized score improves expected sensitivity but fails the observed-data
+gate because the fitted signal strength is boundary-like and the diagnostic
+significance is too large for this reduced single-channel setup. The previous
+visible-mass result is therefore kept as the validated baseline, while the new
+score result is reported as an attempted optimized model for comparison.
 
-![Primary visible-mass validation in VBF. The plot compares full data to the
-QCD-corrected visible-mass prediction in the VBF category. The remaining VBF
-deficit is a limitation, but it no longer drives a fake signal-strength
-increase.](figures/observed_mvis_vbf.pdf){#fig:an-primary-vbf}
+![Primary calibrated-score validation in VBF. The plot compares full data to
+the calibrated score prediction in the VBF category after multivariate input
+reweighting, widened DY/Z normalization, W and VBF control factors, and the
+same-sign QCD/fake estimate.](figures/observed_primary_score_vbf.pdf){#fig:an-primary-vbf}
 
-![Primary visible-mass validation in boosted. The plot compares full data to
-the QCD-corrected visible-mass prediction in the boosted category. This channel
-is part of the conservative primary fit.](figures/observed_mvis_boosted.pdf){#fig:an-primary-boosted}
+![Primary calibrated-score validation in boosted. The plot compares full data
+to the calibrated score prediction in the boosted category. This channel is
+part of the final simultaneous fit.](figures/observed_primary_score_boosted.pdf){#fig:an-primary-boosted}
 
-![Primary visible-mass validation in zero-jet. The zero-jet normalization is
-stabilized by the same-sign QCD/fake estimate, which removes the dominant
-normalization pathology seen before the QCD/fake correction.](figures/observed_mvis_zero_jet.pdf){#fig:an-primary-zero}
+![Primary calibrated-score validation in zero-jet. The zero-jet normalization
+is stabilized by the same-sign QCD/fake estimate and the control-region-derived
+background input reweighting.](figures/observed_primary_score_zero_jet.pdf){#fig:an-primary-zero}
 
 ![Category signal-strength comparison. The figure shows the Standard Model
 expectation `mu = 1` and the observed single-category profile-fit value for
-VBF, boosted, and zero-jet categories using the primary visible-mass model.
+VBF, boosted, and zero-jet categories using the primary calibrated-score model.
 These category fits are diagnostics; the quoted result remains the simultaneous
 three-category fit.](figures/phase5_category_mu_comparison.pdf){#fig:an-category-mu}
+
+![Primary and baseline signal-strength comparison. The figure compares the new
+calibrated-score primary result with the frozen previous visible-mass baseline
+using the same signal-strength convention. Error bars are profile-likelihood
+`q(mu)=1` intervals with the physical lower bound at `mu >= 0`.](figures/phase5_primary_vs_baseline_mu.pdf){#fig:an-primary-baseline-mu}
 
 # Comparison With Published Results
 
@@ -151,7 +168,8 @@ single-channel open-data comparison target [@atlas_cms_higgs_combination_2016;
 
 | Result | Scope | Significance | Signal-strength information |
 |---|---|---:|---|
-| This analysis | 8 TeV mu tau_h reduced mirror, visible mass | 0.095 | mu = 0.438 +4.944 -0.438; 95% CLs mu < 10.764; expected mu < 10.738 |
+| Optimized score attempt | 8 TeV mu tau_h reduced mirror, calibrated score | 12.470 | mu = 38.380 +7.035 -6.116; 95% CLs mu < 50.000; expected mu < 1.974; gate fail |
+| This analysis baseline | 8 TeV mu tau_h reduced mirror, visible mass | 0.095 | mu = 0.4382 +4.9443 -0.4382; 95% CLs mu < 10.7645; median expected 95% CLs mu < 10.7375 |
 | CMS Run 1 JHEP 2014 | 7+8 TeV multi-channel | observed 3.2, expected 3.7 | mu = 0.78 ± 0.27 |
 | CMS PLB 2018 2016 data | 13 TeV multi-channel | observed 4.9, expected 4.7 | mu = 1.09 ± about 0.27 |
 | CMS PLB 2018 combined | CMS 7+8+13 TeV combination | observed 5.9, expected 5.9 | same signal-strength model as CMS 2018 publication |
@@ -170,11 +188,10 @@ shown from this analysis in the final result figure.](figures/phase5_significanc
 
 # Conclusion
 
-The final audit-corrected result is a conservative visible-mass plus QCD/fake
-template fit. It gives `mu = 0.4382 +4.9443 -0.4382`
-and an observed 95% CLs limit `mu < 10.7645`.
-This is the correct interpretation of the reduced CMS Open Data workflow:
-reproducible and useful for methodology, but not CMS-quality evidence for
-H to tau tau.
+The optimized calibrated-score fit was attempted after pre-training
+multivariate input reweighting, but it fails the observed validation gate. It
+is therefore compared against, not substituted for, the frozen visible-mass
+baseline. The baseline gives mu = 0.4382 +4.9443 -0.4382; 95% CLs mu < 10.7645; median expected 95% CLs mu < 10.7375. This remains a reduced Open Data
+diagnostic, not CMS-quality evidence for H to tau tau.
 
 # References {-}

@@ -2,6 +2,7 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{booktabs}
+\usepackage{array}
 \usepackage{xcolor}
 \begin{document}
 
@@ -12,12 +13,15 @@
 
 \begin{abstract}
 A diagnostic search for Higgs boson decays to tau pairs is performed with
-CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  The result
-uses a conservative visible-mass fit in VBF, boosted, and zero-jet categories
-with a same-sign data-driven QCD/fake template.  The fit gives
-$\mu=0.438^{+4.944}_{-0.438}$
+CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  An
+optimized calibrated-score model is trained with multivariate input
+reweighting, widened DY/Z normalization, and a same-sign data-driven QCD/fake
+template.  The score fit gives
+$\mu=38.380^{+7.035}_{-6.116}$
 from the profile likelihood and an observed 95\% CLs upper limit
-$\mu<10.764$.
+$\mu<50.000$, but it fails the observed validation
+gate.  The previous visible-mass result is retained as the validated baseline:
+$\mu=0.438^{+4.944}_{-0.438}$, 95\% CLs $\mu<10.764$, exp. $\mu<10.738$.
 \end{abstract}
 
 \maketitle
@@ -36,20 +40,24 @@ VBF-background rate is calibrated in a VBF-like top-btag control region outside
 the low-$m_T$ signal region, giving a scale
 $0.557\pm0.051$.
 The reducible QCD/fake contribution is estimated from same-sign low-$m_T$ data
-after subtracting non-QCD simulation.  For the primary visible-mass fit, the
-OS/SS transfer factor measured in the lowest visible-mass bin is
-$0.996\pm0.120$.
+after subtracting non-QCD simulation.  For the primary calibrated-score fit, the
+OS/SS transfer factor measured in the lowest score bin is
+$0.020\pm0.253$.
+The classifier input correction is derived before training from validation and
+control regions using a multivariate data-vs-background density-ratio model.
+Embedded and EWK $Z$ reduced samples are unavailable, so the DY/Z normalization
+is loosened rather than replaced by fabricated samples.
 
 \begin{table}[b]
-\caption{Selected yields in the primary visible-mass fit after the QCD/fake
-audit correction.  Background includes DY, ttbar, W+jets, and the same-sign
-QCD/fake estimate.}
+\caption{Selected yields in the primary calibrated-score fit after the
+QCD/fake, DY/Z, and input-reweighting corrections.  Background includes DY,
+ttbar, W+jets, and the same-sign QCD/fake estimate.}
 \begin{ruledtabular}
 \begin{tabular}{lrrrr}
 Category & Data & Bkg. & QCD/fake & Signal \\
-vbf & 78 & 96.3 & 17.7 & 1.59 \\
-boosted & 2183 & 2364.4 & 325.6 & 9.17 \\
-zero\_jet & 8451 & 8456.8 & 1569.6 & 14.34 \\
+vbf & 79 & 60.2 & 0.4 & 1.59 \\
+boosted & 2213 & 2115.5 & 5.6 & 9.17 \\
+zero\_jet & 8466 & 14047.1 & 22.9 & 14.34 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
@@ -60,9 +68,10 @@ reference context.  The open-data rows use only the localized 2012
 $\mu\tau_h$ reduced samples and are not direct reproductions of the
 multi-channel CMS or ATLAS+CMS analyses.}
 \begin{ruledtabular}
-\begin{tabular}{llll}
+\begin{tabular}{p{0.16\textwidth}p{0.27\textwidth}cp{0.40\textwidth}}
 Result & Scope & Significance & Signal-strength information \\
-This analysis & 8 TeV $\mu\tau_h$ reduced, visible mass & 0.095 & $\mu=0.438^{+4.944}_{-0.438}$, 95\% CLs $\mu<10.764$ \\
+Optimized score attempt & 8 TeV $\mu\tau_h$ reduced, calibrated score & 12.470 & $\mu=38.380^{+7.035}_{-6.116}$, 95\% CLs $\mu<50.000$, exp. $\mu<1.974$, gate fail \\
+This analysis baseline & 8 TeV $\mu\tau_h$ reduced, visible mass & 0.095 & $\mu=0.438^{+4.944}_{-0.438}$, 95\% CLs $\mu<10.764$, exp. $\mu<10.738$ \\
 CMS Run 1 & 7+8 TeV multi-channel & obs. 3.2, exp. 3.7 & $\mu=0.78\pm0.27$ \\
 CMS 2018 & 13 TeV multi-channel & obs. 4.9, exp. 4.7 & $\mu\simeq1.09$ \\
 CMS 2018 combined & CMS 7+8+13 TeV & obs. 5.9, exp. 5.9 & CMS combination context \\
@@ -74,10 +83,12 @@ PDG/HXSWG SM & $H\to\tau\tau$ branching fraction & not a search & BR about 6.3\%
 
 \paragraph{Results.}
 The primary corrected workspace has median expected 95\% CLs limit
-$\mu<10.738$ and observed limit
-$\mu<10.764$.  The best fit is
-$\mu=0.438^{+4.944}_{-0.438}$
-from the profile likelihood.  This is the conservative final observed result.
+$\mu<1.974$ and observed limit
+$\mu<50.000$.  The best fit is
+$\mu=38.380^{+7.035}_{-6.116}$
+from the profile likelihood, but it fails the observed validation gate.  The
+frozen previous visible-mass baseline gives $\mu=0.438^{+4.944}_{-0.438}$, 95\% CLs $\mu<10.764$, exp. $\mu<10.738$ and is retained as
+the validated result for this reduced Open Data workflow.
 
 \begin{figure}[t]
 \includegraphics[width=\linewidth]{figures/phase5_mu_limit_comparison.pdf}
@@ -89,18 +100,25 @@ normalization uncertainty.}
 \end{figure}
 
 \begin{figure}[t]
+\includegraphics[width=\linewidth]{figures/phase5_primary_vs_baseline_mu.pdf}
+\caption{Primary and baseline signal-strength comparison.  The calibrated
+score primary result is compared with the frozen previous visible-mass
+baseline using profile-likelihood $\mu$ intervals.}
+\end{figure}
+
+\begin{figure}[t]
 \includegraphics[width=\linewidth]{figures/phase5_category_mu_comparison.pdf}
-\caption{Category signal-strength comparison for the primary visible-mass
+\caption{Category signal-strength comparison for the primary calibrated-score
 model.  The expected marker is the Standard Model value $\mu=1$ and the
 observed marker is the single-category profile-fit value; the quoted result
 remains the simultaneous three-category fit.}
 \end{figure}
 
 \begin{figure}[t]
-\includegraphics[width=\linewidth]{figures/observed_mvis_zero_jet.pdf}
-\caption{Primary visible-mass validation in the zero-jet category.  The
-same-sign QCD/fake estimate stabilizes the dominant zero-jet normalization,
-which was the main pathology before the QCD/fake correction.}
+\includegraphics[width=\linewidth]{figures/observed_primary_score_zero_jet.pdf}
+\caption{Primary calibrated-score validation in the zero-jet category.  The
+same-sign QCD/fake estimate and pre-training input reweighting stabilize the
+dominant zero-jet normalization.}
 \end{figure}
 
 \paragraph{Comparison and interpretation.}

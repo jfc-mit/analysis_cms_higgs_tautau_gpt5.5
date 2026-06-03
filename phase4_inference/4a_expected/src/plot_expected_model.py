@@ -4,6 +4,7 @@ from __future__ import annotations
 
 import json
 import logging
+import re
 from pathlib import Path
 
 import hist
@@ -150,7 +151,8 @@ def plot_nuisance_summary() -> None:
     for row in systematics["implemented"]:
         if row["type"] == "normsys":
             labels.append(row["name"].replace("_", " "))
-            sizes.append(float(row["size"].replace("%", "")) / 100.0)
+            matches = re.findall(r"[-+]?\d*\.?\d+(?=%)", row["size"])
+            sizes.append(max(float(value) for value in matches) / 100.0 if matches else 0.0)
     payload = np.load(OUT / "templates.npz", allow_pickle=False)
     variances = payload["variances"]
     values = payload["yields"]

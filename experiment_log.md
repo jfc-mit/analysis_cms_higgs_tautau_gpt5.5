@@ -522,3 +522,43 @@ Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-ma
 - Added a per-category expected/observed mu comparison for the primary visible-mass model.
 - Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
 - Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## 2026-06-03T02:55:11Z
+
+Phase 4a sensitivity rerun built the expected-primary candidate from Phase 3 `mva_score_hist_gradient_boosting` in simultaneous `vbf, boosted, zero_jet` channels, using official Open Data normalization and background-only Asimov pseudo-data. Score bins were merged using expected background only to keep each fit bin above five expected background events where possible. No real data signal-region observed result was used, and the MVA remains pending Phase 4b score-modelling validation/calibration.
+
+## 2026-06-03T03:04:45Z
+
+Phase 4c update added multivariate input reweighting before classifier training, same-sign QCD/fake templates, and wider DY/Z normalization. Primary calibrated-score/QCD result mu=38.3802, observed limit=50.0000; visible-mass cross-check mu=50.0000; add-MET cross-check mu=39.1162, observed limit=50.0000.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary calibrated-score model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary calibrated-score model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary calibrated-score model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 documentation executor 2026-06-02T16:29:32Z
+
+- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.
+- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.
+- Added a per-category expected/observed mu comparison for the primary calibrated-score model.
+- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
+- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.

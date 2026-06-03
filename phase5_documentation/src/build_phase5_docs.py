@@ -34,6 +34,12 @@ def load_json(path: str) -> dict:
         return json.load(handle)
 
 
+def write_json(path: str, payload: dict) -> None:
+    with (ROOT / path).open("w") as handle:
+        json.dump(payload, handle, indent=2, sort_keys=True)
+        handle.write("\n")
+
+
 def append_log(message: str) -> None:
     with LOG_PATH.open("a") as handle:
         handle.write(f"\n## milestone\n\n{message}\n")
@@ -127,9 +133,8 @@ def tensor_scalar(value: object) -> float:
     return float(payload)
 
 
-@lru_cache(maxsize=1)
-def profile_mu_summary() -> dict[str, float | str]:
-    workspace = load_json("phase4_inference/4c_observed/outputs/pyhf_workspace_observed.json")
+def profile_mu_summary_for_workspace(workspace_relpath: str) -> dict[str, float | str]:
+    workspace = load_json(workspace_relpath)
     ws = pyhf.Workspace(workspace)
     model = ws.model()
     data = ws.data(model)
@@ -142,6 +147,7 @@ def profile_mu_summary() -> dict[str, float | str]:
     )
     par_values = [float(x) for x in pyhf.tensorlib.tolist(free_pars)]
     mu_hat = float(par_values[model.config.poi_index])
+    upper_bound = float(model.config.suggested_bounds()[model.config.poi_index][1])
     best_nll = tensor_scalar(pyhf.infer.mle.twice_nll(free_pars, data, model))
 
     def q_mu(mu_value: float) -> float:
@@ -167,10 +173,15 @@ def profile_mu_summary() -> dict[str, float | str]:
     if mu_hat > 0 and q_mu(0.0) >= 1.0:
         lower = bisect_crossing(0.0, mu_hat)
         lower_status = "profile_q_equals_1"
-    upper_hi = max(2.0 * mu_hat + 1.0, 2.0)
-    while q_mu(upper_hi) < 1.0 and upper_hi < 50.0:
-        upper_hi *= 1.6
-    upper = bisect_crossing(mu_hat, upper_hi)
+    upper_hi = min(max(2.0 * mu_hat + 1.0, 2.0), upper_bound)
+    while upper_hi < upper_bound and q_mu(upper_hi) < 1.0:
+        upper_hi = min(upper_bound, upper_hi * 1.6)
+    upper_status = "profile_q_equals_1"
+    if q_mu(upper_hi) < 1.0:
+        upper = upper_bound
+        upper_status = "bounded_at_workspace_limit"
+    else:
+        upper = bisect_crossing(mu_hat, upper_hi)
     return {
         "mu_hat": mu_hat,
         "err_minus": mu_hat - lower,
@@ -178,7 +189,64 @@ def profile_mu_summary() -> dict[str, float | str]:
         "lower": lower,
         "upper": upper,
         "lower_status": lower_status,
+        "upper_status": upper_status,
         "method": "profile likelihood scan with q(mu)=2DeltaNLL=1; lower side bounded at mu>=0 when needed",
+    }
+
+
+@lru_cache(maxsize=1)
+def profile_mu_summary() -> dict[str, float | str]:
+    return profile_mu_summary_for_workspace("phase4_inference/4c_observed/outputs/pyhf_workspace_observed.json")
+
+
+@lru_cache(maxsize=1)
+def baseline_mu_summary() -> dict[str, float | str] | None:
+    path = ROOT / "phase4_inference" / "4c_observed" / "outputs" / "pyhf_workspace_baseline_visible.json"
+    if not path.exists():
+        return None
+    return profile_mu_summary_for_workspace("phase4_inference/4c_observed/outputs/pyhf_workspace_baseline_visible.json")
+
+
+def baseline_result(observed: dict) -> dict | None:
+    payload = observed.get("baseline_previous_result")
+    if payload:
+        return payload
+    path = ROOT / "phase4_inference" / "4c_observed" / "outputs" / "baseline_previous_result.json"
+    if path.exists():
+        return json.loads(path.read_text())
+    return None
+
+
+def persist_profile_intervals(observed: dict) -> dict:
+    """Persist profile-likelihood mu intervals in the result JSON artifacts."""
+    mu_interval = profile_mu_summary()
+    observed["observed_fit"]["profile_mu_interval"] = mu_interval
+    baseline = baseline_result(observed)
+    baseline_mu = baseline_mu_summary()
+    if baseline and baseline_mu:
+        baseline["observed_fit"]["profile_mu_interval"] = baseline_mu
+        baseline_path = "phase4_inference/4c_observed/outputs/baseline_previous_result.json"
+        write_json(baseline_path, baseline)
+        observed["baseline_previous_result"] = baseline
+    write_json("phase4_inference/4c_observed/outputs/observed_results.json", observed)
+    append_log("Persisted profile-likelihood mu intervals in observed and baseline result JSON artifacts.")
+    return observed
+
+
+def optimized_score_gate(observed: dict) -> dict[str, object]:
+    fit = observed["observed_fit"]
+    limit = fit["observed_upper_limit"]
+    validation = observed["validation_summary"]["combined"]
+    flags = {
+        "mu_hat_gt_20": float(fit["mu_hat"]) > 20.0,
+        "observed_limit_hits_scan": float(limit["observed_limit"]) >= 49.9,
+        "q0_z_gt_5": float(fit["discovery_diagnostic"]["z_value"]) > 5.0,
+        "combined_data_background_ratio_lt_0p8": float(validation["data_over_background"]) < 0.8,
+    }
+    return {
+        "status": "fail" if any(flags.values()) else "pass",
+        "flags": flags,
+        "rule": "Observed optimized-score model must avoid boundary limits, >5 sigma diagnostic excesses, and gross combined normalization mismatch.",
     }
 
 
@@ -188,15 +256,21 @@ def make_comparison_figures(observed: dict) -> None:
     primary_limit = primary["observed_upper_limit"]
     primary_band = primary_limit["expected_band_minus2_minus1_median_plus1_plus2"]
     mu_summary = profile_mu_summary()
+    baseline = baseline_result(observed)
+    baseline_fit = baseline.get("observed_fit", {}) if baseline else {}
+    baseline_limit = baseline_fit.get("observed_upper_limit", {}) if baseline else {}
+    baseline_band = baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [np.nan] * 5)
+    baseline_mu = baseline_mu_summary()
 
     fig, ax = plt.subplots(figsize=(10, 10))
     rows = {
-        "This analysis\n11.467 fb$^{-1}$": 0.0,
-        "CMS Run 1 mu\n4.9+19.7 fb$^{-1}$": 1.0,
-        "CMS 2018 mu\n35.9 fb$^{-1}$": 2.0,
-        "ATLAS+CMS Run 1 global\nRun 1 per experiment": 3.0,
+        "Optimized score attempt\ncalibrated score\n11.467 fb$^{-1}$": 0.0,
+        "Baseline\nvisible mass\n11.467 fb$^{-1}$": 1.0,
+        "CMS Run 1 mu\n4.9+19.7 fb$^{-1}$": 2.0,
+        "CMS 2018 mu\n35.9 fb$^{-1}$": 3.0,
+        "ATLAS+CMS Run 1 global\nRun 1 per experiment": 4.0,
     }
-    this_row = rows["This analysis\n11.467 fb$^{-1}$"]
+    this_row = rows["Optimized score attempt\ncalibrated score\n11.467 fb$^{-1}$"]
     ax.fill_betweenx([this_row - 0.22, this_row + 0.22], primary_band[0], primary_band[4], color="#f0e442", alpha=0.9, label="Expected 95% band")
     ax.fill_betweenx([this_row - 0.22, this_row + 0.22], primary_band[1], primary_band[3], color="#009e73", alpha=0.9, label="Expected 68% band")
     ax.plot(primary_band[2], this_row, marker="s", color="#d55e00", linestyle="", label="Expected median limit")
@@ -210,6 +284,18 @@ def make_comparison_figures(observed: dict) -> None:
         capsize=5,
         label="Observed fitted mu",
     )
+    if baseline and baseline_mu:
+        baseline_row = rows["Baseline\nvisible mass\n11.467 fb$^{-1}$"]
+        ax.plot(baseline_band[2], baseline_row, marker="s", color="#d55e00", linestyle="")
+        ax.plot(baseline_limit.get("observed_limit", np.nan), baseline_row, marker="o", color="black", linestyle="")
+        ax.errorbar(
+            baseline_mu["mu_hat"],
+            baseline_row + 0.16,
+            xerr=np.asarray([[baseline_mu["err_minus"]], [baseline_mu["err_plus"]]], dtype=float),
+            fmt="D",
+            color="#56b4e9",
+            capsize=5,
+        )
 
     ax.errorbar(0.78, rows["CMS Run 1 mu\n4.9+19.7 fb$^{-1}$"], xerr=0.27, fmt="o", color="#202020", capsize=5)
     ax.errorbar(1.09, rows["CMS 2018 mu\n35.9 fb$^{-1}$"], xerr=0.27, fmt="o", color="#202020", capsize=5)
@@ -218,11 +304,45 @@ def make_comparison_figures(observed: dict) -> None:
     ax.axvline(1.0, color="black", linestyle="--", linewidth=1.2, label="SM mu=1")
     ax.set_yticks(list(rows.values()), list(rows.keys()))
     ax.set_xlabel("Signal-strength scale mu")
-    ax.set_xlim(0, 30.0)
+    x_limit_candidates = [
+        float(primary_limit.get("observed_limit", np.nan)),
+        float(baseline_limit.get("observed_limit", np.nan)),
+        float(mu_summary["mu_hat"] + mu_summary["err_plus"]),
+    ]
+    if baseline_mu:
+        x_limit_candidates.append(float(baseline_mu["mu_hat"] + baseline_mu["err_plus"]))
+    finite_x_limits = [value for value in x_limit_candidates if np.isfinite(value)]
+    ax.set_xlim(0, max(30.0, max(finite_x_limits, default=30.0) * 1.08))
     ax.invert_yaxis()
     ax.legend(fontsize="x-small", loc="lower right")
     exp_label_no_lumi(ax)
     save(fig, "phase5_mu_limit_comparison")
+
+    if baseline and baseline_mu:
+        fig, ax = plt.subplots(figsize=(10, 10))
+        labels = [
+            "Optimized score attempt\ncalibrated score\n11.467 fb$^{-1}$",
+            "Baseline\nvisible mass\n11.467 fb$^{-1}$",
+        ]
+        y = np.asarray([0.0, 0.65], dtype=float)
+        mu_values = [mu_summary["mu_hat"], baseline_mu["mu_hat"]]
+        xerr = np.asarray(
+            [
+                [mu_summary["err_minus"], baseline_mu["err_minus"]],
+                [mu_summary["err_plus"], baseline_mu["err_plus"]],
+            ],
+            dtype=float,
+        )
+        ax.errorbar(mu_values, y, xerr=xerr, fmt="o", color="black", capsize=5, label="Observed fit")
+        ax.axvline(1.0, color="black", linestyle="--", linewidth=1.2, label="SM mu=1")
+        ax.set_yticks(y, labels)
+        ax.set_xlabel("Signal strength mu")
+        ax.set_xlim(0.0, max(12.0, float(np.nanmax(np.asarray(mu_values) + xerr[1])) * 1.15))
+        ax.set_ylim(-0.24, 0.92)
+        ax.invert_yaxis()
+        ax.legend(fontsize="x-small", loc="lower right")
+        exp_label_no_lumi(ax)
+        save(fig, "phase5_primary_vs_baseline_mu")
 
     fig, ax = plt.subplots(figsize=(10, 10))
     labels = ["This analysis", "CMS Run 1 obs.", "CMS Run 1 exp.", "CMS 2018 obs.", "CMS 2018 exp.", "CMS 2018 combined", "ATLAS+CMS Run 1 H to tau tau"]
@@ -302,7 +422,7 @@ def make_category_mu_figure() -> None:
     save(fig, "phase5_category_mu_comparison")
     write_json = json.dumps({"categories": results}, indent=2, sort_keys=True) + "\n"
     (OUT / "category_mu_comparison.json").write_text(write_json)
-    append_log("Generated per-category expected-vs-observed mu comparison for the primary visible-mass model.")
+    append_log("Generated per-category expected-vs-observed mu comparison for the primary calibrated-score model.")
 
 
 def figure_ref_check(md_path: Path) -> list[str]:
@@ -346,9 +466,27 @@ def build_analysis_note(observed: dict, partial: dict, expected: dict, compariso
     w_full = observed["wjets_high_mt_scale"]
     w_10 = partial["wjets_high_mt_scale"]
     vbf_scale = observed["vbf_background_scale"]
-    qcd_primary = observed["qcd_sideband_estimates"]["visible_mass_qcd_primary"]
+    qcd_primary = observed["qcd_sideband_estimates"]["calibrated_score_qcd_primary"]
     exp_lim = expected["expected_upper_limit"]
     exp_z = expected["discovery_sensitivity"]["z_value"]
+    baseline = baseline_result(observed)
+    baseline_fit = baseline.get("observed_fit", {}) if baseline else {}
+    baseline_lim = baseline_fit.get("observed_upper_limit", {}) if baseline else {}
+    baseline_band = baseline_lim.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
+    baseline_mu = baseline_mu_summary()
+    baseline_text = (
+        f"mu = {baseline_mu['mu_hat']:.4f} +{baseline_mu['err_plus']:.4f} -{baseline_mu['err_minus']:.4f}; "
+        f"95% CLs mu < {baseline_lim.get('observed_limit', float('nan')):.4f}; "
+        f"median expected 95% CLs mu < {baseline_band[2]:.4f}"
+        if baseline and baseline_mu
+        else "not available"
+    )
+    gate = optimized_score_gate(observed)
+    score_interval_note = (
+        "finite"
+        if mu_summary.get("upper_status") != "bounded_at_workspace_limit"
+        else "bounded at the workspace limit"
+    )
 
     category_rows = []
     for cat in ["vbf", "boosted", "zero_jet"]:
@@ -369,19 +507,20 @@ bibliography: references.bib
 # Abstract {{-}}
 
 This note documents a reduced CMS 2012 Open Data search for Higgs boson decays
-to tau pairs in the mu tau_h final state. The final result uses visible mass in
-VBF, boosted, and zero-jet categories with a same-sign data-driven QCD/fake
-template. It gives `mu = {mu_summary['mu_hat']:.4f} +{mu_summary['err_plus']:.4f} -{mu_summary['err_minus']:.4f}`
-from a profile-likelihood scan and an observed 95% CLs limit
-`mu < {primary_lim['observed_limit']:.4f}`.
+to tau pairs in the mu tau_h final state. An optimized calibrated-score model
+is trained after multivariate input reweighting derived before training. On the
+full data it gives `mu = {mu_summary['mu_hat']:.4f} +{mu_summary['err_plus']:.4f} -{mu_summary['err_minus']:.4f}`
+with the upper interval {score_interval_note}, and an observed 95% CLs limit
+`mu < {primary_lim['observed_limit']:.4f}`. This optimized-score result fails
+the observed validation gate (`{gate['status']}`), so the previous visible-mass
+result is retained as the validated baseline: {baseline_text}.
 
 # Change Log {{-}}
 
-Phase 5 v2 responds to the observed-versus-expected audit. It adds a same-sign
-QCD/fake estimate, changes the primary full-data result to the visible-mass
-fallback, removes alternative-method presentation from the final result per the
-latest user instruction, adds category-level `mu` diagnostics for the primary
-method, and compiles the paper with REVTeX PRL formatting.
+Phase 5 v3 updates the final result to the best available trained classifier
+after applying data/MC input reweighting before training. It retains the
+previous visible-mass result as a frozen baseline for `mu` comparison and
+documents the absence of embedded and EWK Z reduced samples.
 
 # Data And Simulation
 
@@ -444,55 +583,71 @@ template.
 
 The same-sign QCD/fake estimate subtracts non-QCD MC from same-sign low-mT data
 and transfers the resulting template to opposite-sign signal candidates. For
-the primary visible-mass model, the OS/SS transfer factor measured in the lowest
-visible-mass bin is `{qcd_primary['transfer_sideband']['scale_factor']:.4f} ± {qcd_primary['transfer_sideband']['absolute_uncertainty']:.4f}`.
+the primary calibrated-score model, the OS/SS transfer factor measured in the
+lowest score bin is `{qcd_primary['transfer_sideband']['scale_factor']:.4f} ± {qcd_primary['transfer_sideband']['absolute_uncertainty']:.4f}`.
+
+Large control-region data/MC differences in several classifier inputs are
+handled before training by a multivariate density-ratio reweighting of
+background MC. The reweighting classifier is trained only in non-signal
+validation/control regions and is then applied to background MC in the
+signal-region classifier training and final score templates. The reduced file
+set contains no embedded Z to tau tau or EWK Z reduced sample, so DY/Z is not
+silently substituted; instead its normalization is loosened to 30% in
+boosted/zero-jet and 50% in VBF.
 
 ![Full high-mT W control comparison. The figure shows the derivation inputs for
 the full-data W+jets control scale. The control region is outside the low-mT
 signal region and the scale is propagated to the observed workspace without
 signal-region tuning.](figures/w_highmt_scale_full.pdf){{#fig:an-wscale}}
 
-# Primary Visible-Mass Result
+# Optimized Score Result And Baseline
 
-The primary statistical model is a binned pyhf profile likelihood in visible
-mass, with one signal-strength parameter `mu`, the W high-mT scale, the
-same-sign QCD/fake transfer uncertainty, luminosity, DY and tau/open-data
-normalization terms, and MC statistical terms [@pyhf_joss; @read_cls;
-@cowan_asymptotic].
+The primary statistical model is a binned pyhf profile likelihood in the
+calibrated classifier score, with one signal-strength parameter `mu`, the W
+high-mT scale, the same-sign QCD/fake transfer uncertainty, luminosity, widened
+DY/Z and tau/open-data normalization terms, and MC statistical terms
+[@pyhf_joss; @read_cls; @cowan_asymptotic].
 
 | Quantity | Value | Interpretation |
 |---|---:|---|
-| Primary median expected 95% CLs limit | mu < {primary_band[2]:.4f} | corrected visible-mass workspace |
+| Primary median expected 95% CLs limit | mu < {primary_band[2]:.4f} | calibrated-score workspace |
 | Primary observed 95% CLs limit | mu < {primary_lim['observed_limit']:.4f} | conservative observed result |
 | Primary mu central value | {mu_summary['mu_hat']:.4f} +{mu_summary['err_plus']:.4f} -{mu_summary['err_minus']:.4f} | profile likelihood q(mu)=1 interval |
 | Primary q0 Z | {primary['discovery_diagnostic']['z_value']:.4f} | diagnostic only |
 | Primary combined data/background | {obs_val['combined']['data_over_background']:.4f} | validation after QCD/fake correction |
 | Primary chi2/ndf | {obs_val['combined']['chi2_per_ndf']:.4f} | validation after QCD/fake correction |
+| Optimized-score observed gate | {gate['status']} | {gate['rule']} |
+| Frozen baseline visible-mass result | {baseline_text} | previous primary result before this update |
 
-The primary result does not show a Higgs-like excess: `mu` is
-`{mu_summary['mu_hat']:.4f} +{mu_summary['err_plus']:.4f} -{mu_summary['err_minus']:.4f}`
-and the observed 95% CLs limit is `mu < {primary_lim['observed_limit']:.4f}`.
-The broad interval is compatible with the weak sensitivity expected from this
-reduced single-final-state setup.
+The optimized score improves expected sensitivity but fails the observed-data
+gate because the fitted signal strength is boundary-like and the diagnostic
+significance is too large for this reduced single-channel setup. The previous
+visible-mass result is therefore kept as the validated baseline, while the new
+score result is reported as an attempted optimized model for comparison.
 
-![Primary visible-mass validation in VBF. The plot compares full data to the
-QCD-corrected visible-mass prediction in the VBF category. The remaining VBF
-deficit is a limitation, but it no longer drives a fake signal-strength
-increase.](figures/observed_mvis_vbf.pdf){{#fig:an-primary-vbf}}
+![Primary calibrated-score validation in VBF. The plot compares full data to
+the calibrated score prediction in the VBF category after multivariate input
+reweighting, widened DY/Z normalization, W and VBF control factors, and the
+same-sign QCD/fake estimate.](figures/observed_primary_score_vbf.pdf){{#fig:an-primary-vbf}}
 
-![Primary visible-mass validation in boosted. The plot compares full data to
-the QCD-corrected visible-mass prediction in the boosted category. This channel
-is part of the conservative primary fit.](figures/observed_mvis_boosted.pdf){{#fig:an-primary-boosted}}
+![Primary calibrated-score validation in boosted. The plot compares full data
+to the calibrated score prediction in the boosted category. This channel is
+part of the final simultaneous fit.](figures/observed_primary_score_boosted.pdf){{#fig:an-primary-boosted}}
 
-![Primary visible-mass validation in zero-jet. The zero-jet normalization is
-stabilized by the same-sign QCD/fake estimate, which removes the dominant
-normalization pathology seen before the QCD/fake correction.](figures/observed_mvis_zero_jet.pdf){{#fig:an-primary-zero}}
+![Primary calibrated-score validation in zero-jet. The zero-jet normalization
+is stabilized by the same-sign QCD/fake estimate and the control-region-derived
+background input reweighting.](figures/observed_primary_score_zero_jet.pdf){{#fig:an-primary-zero}}
 
 ![Category signal-strength comparison. The figure shows the Standard Model
 expectation `mu = 1` and the observed single-category profile-fit value for
-VBF, boosted, and zero-jet categories using the primary visible-mass model.
+VBF, boosted, and zero-jet categories using the primary calibrated-score model.
 These category fits are diagnostics; the quoted result remains the simultaneous
 three-category fit.](figures/phase5_category_mu_comparison.pdf){{#fig:an-category-mu}}
+
+![Primary and baseline signal-strength comparison. The figure compares the new
+calibrated-score primary result with the frozen previous visible-mass baseline
+using the same signal-strength convention. Error bars are profile-likelihood
+`q(mu)=1` intervals with the physical lower bound at `mu >= 0`.](figures/phase5_primary_vs_baseline_mu.pdf){{#fig:an-primary-baseline-mu}}
 
 # Comparison With Published Results
 
@@ -510,7 +665,8 @@ single-channel open-data comparison target [@atlas_cms_higgs_combination_2016;
 
 | Result | Scope | Significance | Signal-strength information |
 |---|---|---:|---|
-| This analysis | 8 TeV mu tau_h reduced mirror, visible mass | {primary['discovery_diagnostic']['z_value']:.3f} | mu = {mu_summary['mu_hat']:.3f} +{mu_summary['err_plus']:.3f} -{mu_summary['err_minus']:.3f}; 95% CLs mu < {primary_lim['observed_limit']:.3f}; expected mu < {primary_band[2]:.3f} |
+| Optimized score attempt | 8 TeV mu tau_h reduced mirror, calibrated score | {primary['discovery_diagnostic']['z_value']:.3f} | mu = {mu_summary['mu_hat']:.3f} +{mu_summary['err_plus']:.3f} -{mu_summary['err_minus']:.3f}; 95% CLs mu < {primary_lim['observed_limit']:.3f}; expected mu < {primary_band[2]:.3f}; gate {gate['status']} |
+| This analysis baseline | 8 TeV mu tau_h reduced mirror, visible mass | {baseline_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.3f} | {baseline_text} |
 | CMS Run 1 JHEP 2014 | 7+8 TeV multi-channel | observed 3.2, expected 3.7 | mu = 0.78 ± 0.27 |
 | CMS PLB 2018 2016 data | 13 TeV multi-channel | observed 4.9, expected 4.7 | mu = 1.09 ± about 0.27 |
 | CMS PLB 2018 combined | CMS 7+8+13 TeV combination | observed 5.9, expected 5.9 | same signal-strength model as CMS 2018 publication |
@@ -529,12 +685,11 @@ shown from this analysis in the final result figure.](figures/phase5_significanc
 
 # Conclusion
 
-The final audit-corrected result is a conservative visible-mass plus QCD/fake
-template fit. It gives `mu = {mu_summary['mu_hat']:.4f} +{mu_summary['err_plus']:.4f} -{mu_summary['err_minus']:.4f}`
-and an observed 95% CLs limit `mu < {primary_lim['observed_limit']:.4f}`.
-This is the correct interpretation of the reduced CMS Open Data workflow:
-reproducible and useful for methodology, but not CMS-quality evidence for
-H to tau tau.
+The optimized calibrated-score fit was attempted after pre-training
+multivariate input reweighting, but it fails the observed validation gate. It
+is therefore compared against, not substituted for, the frozen visible-mass
+baseline. The baseline gives {baseline_text}. This remains a reduced Open Data
+diagnostic, not CMS-quality evidence for H to tau tau.
 
 # References {{-}}
 """
@@ -545,12 +700,32 @@ def build_paper_markdown(observed: dict) -> str:
     primary_lim = primary["observed_upper_limit"]
     primary_band = primary_lim["expected_band_minus2_minus1_median_plus1_plus2"]
     mu_summary = profile_mu_summary()
+    baseline = baseline_result(observed)
+    baseline_fit = baseline.get("observed_fit", {}) if baseline else {}
+    baseline_lim = baseline_fit.get("observed_upper_limit", {}) if baseline else {}
+    baseline_band = baseline_lim.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
+    baseline_mu = baseline_mu_summary()
+    gate = optimized_score_gate(observed)
+    baseline_text = (
+        f"`mu = {baseline_mu['mu_hat']:.3f} +{baseline_mu['err_plus']:.3f} -{baseline_mu['err_minus']:.3f}`, "
+        f"`mu < {baseline_lim.get('observed_limit', float('nan')):.3f}` at 95% CLs, "
+        f"median expected `mu < {baseline_band[2]:.3f}`"
+        if baseline and baseline_mu
+        else "not available"
+    )
     return f"""# A CMS Open Data Diagnostic Search for H to Tau Tau in the Mu Tau_h Final State
 
-This PRL-formatted draft reports the audit-corrected result. The primary
-visible-mass plus QCD/fake fit gives `mu = {mu_summary['mu_hat']:.3f} +{mu_summary['err_plus']:.3f} -{mu_summary['err_minus']:.3f}`,
+This PRL-formatted draft reports the audit-corrected reduced CMS Open Data
+result. The optimized calibrated-score plus QCD/fake fit gives
+`mu = {mu_summary['mu_hat']:.3f} +{mu_summary['err_plus']:.3f} -{mu_summary['err_minus']:.3f}`,
 `mu < {primary_lim['observed_limit']:.3f}` at 95% CLs, with median expected
-limit `{primary_band[2]:.3f}`.
+limit `mu < {primary_band[2]:.3f}`. This optimized-score result fails the
+observed validation gate (`{gate['status']}`), so it is not retained as the
+validated evidence result.
+
+The previous visible-mass result is retained as the validated baseline:
+{baseline_text}. The final comparison figures include both the optimized-score
+attempt and this frozen baseline in the same signal-strength convention.
 """
 
 
@@ -572,8 +747,19 @@ def build_prl_tex(observed: dict, yields: dict) -> str:
     primary_lim = primary["observed_upper_limit"]
     primary_band = primary_lim["expected_band_minus2_minus1_median_plus1_plus2"]
     mu_summary = profile_mu_summary()
-    qcd_primary = observed["qcd_sideband_estimates"]["visible_mass_qcd_primary"]
+    qcd_primary = observed["qcd_sideband_estimates"]["calibrated_score_qcd_primary"]
     vbf_scale = observed["vbf_background_scale"]
+    baseline = baseline_result(observed)
+    baseline_fit = baseline.get("observed_fit", {}) if baseline else {}
+    baseline_lim = baseline_fit.get("observed_upper_limit", {}) if baseline else {}
+    baseline_band = baseline_lim.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
+    baseline_mu = baseline_mu_summary()
+    baseline_tex = (
+        rf"$\mu={baseline_mu['mu_hat']:.3f}^{{+{baseline_mu['err_plus']:.3f}}}_{{-{baseline_mu['err_minus']:.3f}}}$, 95\% CLs $\mu<{baseline_lim.get('observed_limit', float('nan')):.3f}$, exp. $\mu<{baseline_band[2]:.3f}$"
+        if baseline and baseline_mu
+        else "not available"
+    )
+    gate = optimized_score_gate(observed)
     rows = []
     for cat in ["vbf", "boosted", "zero_jet"]:
         total = yields["totals"][cat]
@@ -586,6 +772,7 @@ def build_prl_tex(observed: dict, yields: dict) -> str:
 \usepackage{{graphicx}}
 \usepackage{{amsmath}}
 \usepackage{{booktabs}}
+\usepackage{{array}}
 \usepackage{{xcolor}}
 \begin{{document}}
 
@@ -596,12 +783,15 @@ def build_prl_tex(observed: dict, yields: dict) -> str:
 
 \begin{{abstract}}
 A diagnostic search for Higgs boson decays to tau pairs is performed with
-CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  The result
-uses a conservative visible-mass fit in VBF, boosted, and zero-jet categories
-with a same-sign data-driven QCD/fake template.  The fit gives
+CMS 2012 Open Data reduced samples in the $\mu\tau_h$ final state.  An
+optimized calibrated-score model is trained with multivariate input
+reweighting, widened DY/Z normalization, and a same-sign data-driven QCD/fake
+template.  The score fit gives
 $\mu={mu_summary['mu_hat']:.3f}^{{+{mu_summary['err_plus']:.3f}}}_{{-{mu_summary['err_minus']:.3f}}}$
 from the profile likelihood and an observed 95\% CLs upper limit
-$\mu<{primary_lim['observed_limit']:.3f}$.
+$\mu<{primary_lim['observed_limit']:.3f}$, but it fails the observed validation
+gate.  The previous visible-mass result is retained as the validated baseline:
+{baseline_tex}.
 \end{{abstract}}
 
 \maketitle
@@ -620,14 +810,18 @@ VBF-background rate is calibrated in a VBF-like top-btag control region outside
 the low-$m_T$ signal region, giving a scale
 ${vbf_scale['applied_scale_factor']:.3f}\pm{vbf_scale['absolute_uncertainty']:.3f}$.
 The reducible QCD/fake contribution is estimated from same-sign low-$m_T$ data
-after subtracting non-QCD simulation.  For the primary visible-mass fit, the
-OS/SS transfer factor measured in the lowest visible-mass bin is
+after subtracting non-QCD simulation.  For the primary calibrated-score fit, the
+OS/SS transfer factor measured in the lowest score bin is
 ${qcd_primary['transfer_sideband']['scale_factor']:.3f}\pm{qcd_primary['transfer_sideband']['absolute_uncertainty']:.3f}$.
+The classifier input correction is derived before training from validation and
+control regions using a multivariate data-vs-background density-ratio model.
+Embedded and EWK $Z$ reduced samples are unavailable, so the DY/Z normalization
+is loosened rather than replaced by fabricated samples.
 
 \begin{{table}}[b]
-\caption{{Selected yields in the primary visible-mass fit after the QCD/fake
-audit correction.  Background includes DY, ttbar, W+jets, and the same-sign
-QCD/fake estimate.}}
+\caption{{Selected yields in the primary calibrated-score fit after the
+QCD/fake, DY/Z, and input-reweighting corrections.  Background includes DY,
+ttbar, W+jets, and the same-sign QCD/fake estimate.}}
 \begin{{ruledtabular}}
 \begin{{tabular}}{{lrrrr}}
 Category & Data & Bkg. & QCD/fake & Signal \\
@@ -642,9 +836,10 @@ reference context.  The open-data rows use only the localized 2012
 $\mu\tau_h$ reduced samples and are not direct reproductions of the
 multi-channel CMS or ATLAS+CMS analyses.}}
 \begin{{ruledtabular}}
-\begin{{tabular}}{{llll}}
+\begin{{tabular}}{{p{{0.16\textwidth}}p{{0.27\textwidth}}cp{{0.40\textwidth}}}}
 Result & Scope & Significance & Signal-strength information \\
-This analysis & 8 TeV $\mu\tau_h$ reduced, visible mass & {primary['discovery_diagnostic']['z_value']:.3f} & $\mu={mu_summary['mu_hat']:.3f}^{{+{mu_summary['err_plus']:.3f}}}_{{-{mu_summary['err_minus']:.3f}}}$, 95\% CLs $\mu<{primary_lim['observed_limit']:.3f}$ \\
+Optimized score attempt & 8 TeV $\mu\tau_h$ reduced, calibrated score & {primary['discovery_diagnostic']['z_value']:.3f} & $\mu={mu_summary['mu_hat']:.3f}^{{+{mu_summary['err_plus']:.3f}}}_{{-{mu_summary['err_minus']:.3f}}}$, 95\% CLs $\mu<{primary_lim['observed_limit']:.3f}$, exp. $\mu<{primary_band[2]:.3f}$, gate {gate['status']} \\
+This analysis baseline & 8 TeV $\mu\tau_h$ reduced, visible mass & {baseline_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.3f} & {baseline_tex} \\
 CMS Run 1 & 7+8 TeV multi-channel & obs. 3.2, exp. 3.7 & $\mu=0.78\pm0.27$ \\
 CMS 2018 & 13 TeV multi-channel & obs. 4.9, exp. 4.7 & $\mu\simeq1.09$ \\
 CMS 2018 combined & CMS 7+8+13 TeV & obs. 5.9, exp. 5.9 & CMS combination context \\
@@ -659,7 +854,9 @@ The primary corrected workspace has median expected 95\% CLs limit
 $\mu<{primary_band[2]:.3f}$ and observed limit
 $\mu<{primary_lim['observed_limit']:.3f}$.  The best fit is
 $\mu={mu_summary['mu_hat']:.3f}^{{+{mu_summary['err_plus']:.3f}}}_{{-{mu_summary['err_minus']:.3f}}}$
-from the profile likelihood.  This is the conservative final observed result.
+from the profile likelihood, but it fails the observed validation gate.  The
+frozen previous visible-mass baseline gives {baseline_tex} and is retained as
+the validated result for this reduced Open Data workflow.
 
 \begin{{figure}}[t]
 \includegraphics[width=\linewidth]{{figures/phase5_mu_limit_comparison.pdf}}
@@ -671,18 +868,25 @@ normalization uncertainty.}}
 \end{{figure}}
 
 \begin{{figure}}[t]
+\includegraphics[width=\linewidth]{{figures/phase5_primary_vs_baseline_mu.pdf}}
+\caption{{Primary and baseline signal-strength comparison.  The calibrated
+score primary result is compared with the frozen previous visible-mass
+baseline using profile-likelihood $\mu$ intervals.}}
+\end{{figure}}
+
+\begin{{figure}}[t]
 \includegraphics[width=\linewidth]{{figures/phase5_category_mu_comparison.pdf}}
-\caption{{Category signal-strength comparison for the primary visible-mass
+\caption{{Category signal-strength comparison for the primary calibrated-score
 model.  The expected marker is the Standard Model value $\mu=1$ and the
 observed marker is the single-category profile-fit value; the quoted result
 remains the simultaneous three-category fit.}}
 \end{{figure}}
 
 \begin{{figure}}[t]
-\includegraphics[width=\linewidth]{{figures/observed_mvis_zero_jet.pdf}}
-\caption{{Primary visible-mass validation in the zero-jet category.  The
-same-sign QCD/fake estimate stabilizes the dominant zero-jet normalization,
-which was the main pathology before the QCD/fake correction.}}
+\includegraphics[width=\linewidth]{{figures/observed_primary_score_zero_jet.pdf}}
+\caption{{Primary calibrated-score validation in the zero-jet category.  The
+same-sign QCD/fake estimate and pre-training input reweighting stabilize the
+dominant zero-jet normalization.}}
 \end{{figure}}
 
 \paragraph{{Comparison and interpretation.}}
@@ -720,6 +924,7 @@ def compile_prl(observed: dict, yields: dict) -> None:
 def write_docs() -> None:
     OUT.mkdir(parents=True, exist_ok=True)
     observed = load_json("phase4_inference/4c_observed/outputs/observed_results.json")
+    observed = persist_profile_intervals(observed)
     partial = load_json("phase4_inference/4b_partial/outputs/partial_results.json")
     expected = load_json("phase4_inference/4a_expected/outputs/expected_results.json")
     comparison = load_json("phase4_inference/4c_observed/outputs/comparison_to_4a_4b.json")
@@ -748,7 +953,7 @@ def write_docs() -> None:
             "\n## Phase 5 documentation executor 2026-06-02T16:29:32Z\n\n"
             "- Rewrote final AN around the audit-corrected visible-mass/QCD primary result.\n"
             "- Reported the primary signal strength as a profile-likelihood central value with asymmetric uncertainty and as a 95% CLs upper limit.\n"
-            "- Added a per-category expected/observed mu comparison for the primary visible-mass model.\n"
+            "- Added a per-category expected/observed mu comparison for the primary calibrated-score model.\n"
             "- Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.\n"
             "- Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.\n"
         )

@@ -1,42 +1,64 @@
 {
   "background_asimov_fit": {
-    "mu_hat": 0.000323637881409408,
+    "mu_hat": 0.0007773173941718693,
     "parameters": {
-      "dy_norm_open_data": -5.5360088374823225e-05,
-      "lumi_2012": -2.859147026490665e-05,
-      "mc_stat_boosted[0]": 0.9999991989650936,
-      "mc_stat_boosted[1]": 1.0000005871842437,
-      "mc_stat_boosted[2]": 0.9999967167040492,
-      "mc_stat_boosted[3]": 0.9999957149328268,
-      "mc_stat_vbf[0]": 0.9999988643269242,
-      "mc_stat_vbf[1]": 0.9999929307804674,
-      "mc_stat_vbf[2]": 0.9999884988785789,
-      "mc_stat_vbf[3]": 0.9999910134090335,
-      "mc_stat_zero_jet[0]": 1.0000011285010038,
-      "mc_stat_zero_jet[1]": 1.0000020884074001,
-      "mc_stat_zero_jet[2]": 0.9999972465686443,
-      "mc_stat_zero_jet[3]": 0.9999954860562147,
-      "mu": 0.000323637881409408,
-      "tau_open_data_acceptance": 4.32573531880676e-05,
-      "wjets_high_mt_control": -0.000199119968279554
+      "dy_ztautau_open_data_boosted": -0.00013521991246116664,
+      "dy_ztautau_open_data_vbf": -0.00011211912993825958,
+      "dy_ztautau_open_data_zero_jet": -0.00010216986929933124,
+      "lumi_2012": 0.00043821080161005906,
+      "mc_stat_boosted[0]": 0.9999962809434253,
+      "mc_stat_boosted[1]": 0.9999994587932994,
+      "mc_stat_boosted[2]": 1.0000058313711546,
+      "mc_stat_boosted[3]": 1.0000047605407325,
+      "mc_stat_boosted[4]": 0.9999939909921631,
+      "mc_stat_boosted[5]": 0.999988019050093,
+      "mc_stat_boosted[6]": 0.9999363538360613,
+      "mc_stat_vbf[0]": 0.999988769515522,
+      "mc_stat_vbf[1]": 0.9999891393642917,
+      "mc_stat_vbf[2]": 0.9999580206257427,
+      "mc_stat_vbf[3]": 1.00001915913337,
+      "mc_stat_vbf[4]": 1.0000122265861158,
+      "mc_stat_vbf[5]": 1.0000058457913825,
+      "mc_stat_vbf[6]": 0.9999813579591341,
+      "mc_stat_zero_jet[0]": 1.0000022617011646,
+      "mc_stat_zero_jet[1]": 1.0000028745876166,
+      "mc_stat_zero_jet[2]": 1.0000004246186251,
+      "mc_stat_zero_jet[3]": 0.9999972255162534,
+      "mc_stat_zero_jet[4]": 0.9999899956706655,
+      "mc_stat_zero_jet[5]": 0.9999872448582086,
+      "mc_stat_zero_jet[6]": 0.999901629924068,
+      "mu": 0.0007773173941718693,
+      "tau_open_data_acceptance": 9.491577819762087e-05,
+      "wjets_high_mt_control": -0.00026258716300664973
     },
     "pulls_minus_nominal": {
-      "dy_norm_open_data": -5.5360088374823225e-05,
-      "lumi_2012": -2.859147026490665e-05,
-      "mc_stat_boosted[0]": -8.010349064058175e-07,
-      "mc_stat_boosted[1]": 5.871842436722119e-07,
-      "mc_stat_boosted[2]": -3.2832959507844706e-06,
-      "mc_stat_boosted[3]": -4.2850671732042045e-06,
-      "mc_stat_vbf[0]": -1.1356730758027567e-06,
-      "mc_stat_vbf[1]": -7.069219532640503e-06,
-      "mc_stat_vbf[2]": -1.1501121421120253e-05,
-      "mc_stat_vbf[3]": -8.986590966486574e-06,
-      "mc_stat_zero_jet[0]": 1.1285010037553889e-06,
-      "mc_stat_zero_jet[1]": 2.0884074001248365e-06,
-      "mc_stat_zero_jet[2]": -2.7534313556953904e-06,
-      "mc_stat_zero_jet[3]": -4.513943785311447e-06,
-      "tau_open_data_acceptance": 4.32573531880676e-05,
-      "wjets_high_mt_control": -0.000199119968279554
+      "dy_ztautau_open_data_boosted": -0.00013521991246116664,
+      "dy_ztautau_open_data_vbf": -0.00011211912993825958,
+      "dy_ztautau_open_data_zero_jet": -0.00010216986929933124,
+      "lumi_2012": 0.00043821080161005906,
+      "mc_stat_boosted[0]": -3.719056574702506e-06,
+      "mc_stat_boosted[1]": -5.412067005661214e-07,
+      "mc_stat_boosted[2]": 5.831371154618736e-06,
+      "mc_stat_boosted[3]": 4.760540732506868e-06,
+      "mc_stat_boosted[4]": -6.009007836871305e-06,
+      "mc_stat_boosted[5]": -1.198094990695342e-05,
+      "mc_stat_boosted[6]": -6.364616393872424e-05,
+      "mc_stat_vbf[0]": -1.123048447804198e-05,
+      "mc_stat_vbf[1]": -1.0860635708320743e-05,
+      "mc_stat_vbf[2]": -4.1979374257317126e-05,
+      "mc_stat_vbf[3]": 1.915913337002806e-05,
+      "mc_stat_vbf[4]": 1.2226586115771099e-05,
+      "mc_stat_vbf[5]": 5.845791382519394e-06,
+      "mc_stat_vbf[6]": -1.8642040865879395e-05,
+      "mc_stat_zero_jet[0]": 2.261701164574248e-06,
+      "mc_stat_zero_jet[1]": 2.874587616608082e-06,
+      "mc_stat_zero_jet[2]": 4.2461862514997506e-07,
+      "mc_stat_zero_jet[3]": -2.7744837466370242e-06,
+      "mc_stat_zero_jet[4]": -1.0004329334512008e-05,
+      "mc_stat_zero_jet[5]": -1.2755141791442881e-05,
+      "mc_stat_zero_jet[6]": -9.837007593205271e-05,
+      "tau_open_data_acceptance": 9.491577819762087e-05,
+      "wjets_high_mt_control": -0.00026258716300664973
     }
   },
   "blinding": {
@@ -46,20 +68,20 @@
   },
   "discovery_sensitivity": {
     "method": "pyhf asymptotic q0 test on signal-plus-background Asimov data",
-    "p_value": 0.29929918703661884,
+    "p_value": 0.21571457525460158,
     "status": "evaluated",
-    "z_value": 0.5264171907925044
+    "z_value": 0.7867484248039479
   },
   "expected_upper_limit": {
     "expected_band_minus2_minus1_median_plus1_plus2": [
-      2.143687842430168,
-      2.9202283397658175,
-      4.199448081748937,
-      6.145739528239424,
-      8.817265131700397
+      1.4543352251018393,
+      1.9820112292162195,
+      2.90409966080617,
+      4.335456897134364,
+      6.366948064665394
     ],
     "method": "pyhf asymptotic modified frequentist CLs",
-    "observed_on_background_asimov": 4.199448081748937,
+    "observed_on_background_asimov": 2.904099586569949,
     "poi": "mu",
     "result_count": 2,
     "scan": [
@@ -172,32 +194,41 @@
       "categories": {
         "boosted": {
           "background_bins": [
-            1580.55074494093,
-            309.9263029585545,
-            134.85026574634497,
-            93.00436760133518
+            1154.4500686201295,
+            241.92449507335,
+            226.92870615967882,
+            184.26476432706733,
+            151.12783698339578,
+            115.50080282615798,
+            44.135007257385475
           ],
-          "min_background_bin": 93.00436760133518,
+          "min_background_bin": 44.135007257385475,
           "passes_min_background": true
         },
         "vbf": {
           "background_bins": [
-            90.43246797589676,
-            17.702236646398763,
-            13.616736714228995,
-            29.243719246011956
+            67.23788992662912,
+            13.556785872228351,
+            10.736505420370046,
+            9.271503189729547,
+            15.140845570813406,
+            11.404022208430622,
+            23.64760839433538
           ],
-          "min_background_bin": 13.616736714228995,
+          "min_background_bin": 9.271503189729547,
           "passes_min_background": true
         },
         "zero_jet": {
           "background_bins": [
-            6524.3972729236275,
-            362.62954903253745,
-            149.55342765146167,
-            32.31819151692268
+            4861.256823919123,
+            1012.7856357905597,
+            534.9697918206061,
+            366.77473991712424,
+            173.92929418157357,
+            106.40766869672356,
+            12.774486798839492
           ],
-          "min_background_bin": 32.31819151692268,
+          "min_background_bin": 12.774486798839492,
           "passes_min_background": true
         }
       },
@@ -213,17 +244,20 @@
         0.985,
         1.0
       ],
-      "merge_count": 5,
+      "merge_count": 2,
       "merged_edges": [
         0.0,
         0.2,
         0.35,
         0.5,
+        0.65,
+        0.78,
+        0.88,
         1.0
       ],
       "merges": [
         {
-          "category": "vbf",
+          "category": "boosted",
           "low_bin_background": 0.0,
           "low_bin_index": 8,
           "low_bin_range": [
@@ -234,7 +268,7 @@
           "removed_edge": 0.985
         },
         {
-          "category": "boosted",
+          "category": "zero_jet",
           "low_bin_background": 0.0,
           "low_bin_index": 7,
           "low_bin_range": [
@@ -243,39 +277,6 @@
           ],
           "merged_with": "previous",
           "removed_edge": 0.94
-        },
-        {
-          "category": "boosted",
-          "low_bin_background": 0.0,
-          "low_bin_index": 6,
-          "low_bin_range": [
-            0.88,
-            1.0
-          ],
-          "merged_with": "previous",
-          "removed_edge": 0.88
-        },
-        {
-          "category": "zero_jet",
-          "low_bin_background": 0.0,
-          "low_bin_index": 5,
-          "low_bin_range": [
-            0.78,
-            1.0
-          ],
-          "merged_with": "previous",
-          "removed_edge": 0.78
-        },
-        {
-          "category": "zero_jet",
-          "low_bin_background": 1.7705506910787179,
-          "low_bin_index": 4,
-          "low_bin_range": [
-            0.65,
-            1.0
-          ],
-          "merged_with": "previous",
-          "removed_edge": 0.65
         }
       ],
       "method": "common adjacent-bin merging across all fit categories using expected MC background only",
@@ -286,6 +287,9 @@
       0.2,
       0.35,
       0.5,
+      0.65,
+      0.78,
+      0.88,
       1.0
     ],
     "reason": "Sparse-bin merging used expected MC background only and preserves the event-category channels requested by the user.",
@@ -295,6 +299,7 @@
     "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
     "description": "classifier score templates in VBF, boosted, and zero-jet signal-region channels",
     "family": "expected_only_mva",
+    "input_reweighting": "background_input_reweight from phase3_selection/outputs/input_reweighting.json is applied to background templates when present",
     "model_name": "hist_gradient_boosting",
     "name": "mva_hist_gradient_boosting_score_baseline_categories",
     "observable": "mva_score_hist_gradient_boosting",
@@ -309,14 +314,17 @@
       0.2,
       0.35,
       0.5,
+      0.65,
+      0.78,
+      0.88,
       1.0
     ],
     "low_background_bins_lt5": 0,
-    "median_limit": 4.24380622771541,
-    "z_value": 0.5264362537642254
+    "median_limit": 2.9444035940637314,
+    "z_value": 0.7854643816770341
   },
   "pyhf": {
-    "npars": 17,
+    "npars": 28,
     "poi": "mu",
     "version": "0.7.6"
   }

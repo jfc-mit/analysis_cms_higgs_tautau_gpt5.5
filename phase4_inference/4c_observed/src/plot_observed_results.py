@@ -157,7 +157,7 @@ def plot_w_highmt() -> None:
 def plot_pull_ratio_summary() -> None:
     results = json.loads((OUT / "observed_results.json").read_text())
     primary = results["validation_summary"]
-    score = results["score_diagnostic_validation_summary"]
+    visible = results["visible_mass_validation_summary"]
     addmet = results["addmet_validation_summary"]
     categories = list(primary["score_template_validation"].keys())
     x = np.arange(len(categories), dtype=float)
@@ -165,9 +165,9 @@ def plot_pull_ratio_summary() -> None:
     fig, (ax, rax) = plt.subplots(2, 1, figsize=(10, 10), sharex=True, gridspec_kw={"height_ratios": [1, 1]})
     fig.subplots_adjust(hspace=0)
     for offset, payload, label_text, color in [
-        (-width, primary, "m_vis+QCD primary", "#0072b2"),
+        (-width, primary, "Calibrated score primary", "#0072b2"),
         (0.0, addmet, "add-MET cross-check", "#009e73"),
-        (width, score, "HGB score diagnostic", "#d55e00"),
+        (width, visible, "Visible-mass cross-check", "#d55e00"),
     ]:
         ratios = [payload["score_template_validation"][category]["data_over_background"] for category in categories]
         pulls = [payload["score_template_validation"][category]["max_abs_pull"] for category in categories]
@@ -191,34 +191,34 @@ def plot_pull_ratio_summary() -> None:
 def plot_result_summary() -> None:
     results = json.loads((OUT / "observed_results.json").read_text())
     primary = results["observed_fit"]
-    score = results["score_diagnostic_fit"]
+    visible = results["visible_mass_observed_fit"]
     addmet = results["addmet_observed_fit"]
     primary_limit = primary["observed_upper_limit"]
-    score_limit = score["observed_upper_limit"]
+    visible_limit = visible["observed_upper_limit"]
     addmet_limit = addmet["observed_upper_limit"]
     labels = [
         "Primary mu_hat",
         "Primary obs. limit",
         "Primary exp. median",
+        "Visible mu_hat",
+        "Visible obs. limit",
+        "Visible exp. median",
         "Add-MET mu_hat",
         "Add-MET obs. limit",
         "Add-MET exp. median",
-        "Score mu_hat",
-        "Score obs. limit",
-        "Score exp. median",
     ]
     values = [
         primary["mu_hat"],
         primary_limit["observed_limit"],
         primary_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
+        visible["mu_hat"],
+        visible_limit["observed_limit"],
+        visible_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
         addmet["mu_hat"],
         addmet_limit["observed_limit"],
         addmet_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
-        score["mu_hat"],
-        score_limit["observed_limit"],
-        score_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
     ]
-    colors = ["#0072b2", "#0072b2", "#0072b2", "#009e73", "#009e73", "#009e73", "#d55e00", "#d55e00", "#d55e00"]
+    colors = ["#0072b2", "#0072b2", "#0072b2", "#d55e00", "#d55e00", "#d55e00", "#009e73", "#009e73", "#009e73"]
     fig, ax = plt.subplots(figsize=(10, 10))
     y = np.arange(len(values), dtype=float)
     ax.errorbar(values, y, xerr=np.zeros(len(values)), marker="o", linestyle="", color="black")
@@ -290,9 +290,10 @@ def compile_note() -> None:
 
 def main() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
-    plot_template_file("observed_templates.npz", "observed_mvis", r"Visible mass $m_{\mu\tau_h}$ [GeV]", 20.0)
+    plot_template_file("observed_templates.npz", "observed_primary_score", "Calibrated classifier score", 20.0)
+    plot_template_file("visible_observed_templates.npz", "observed_visible", r"Visible mass $m_{\mu\tau_h}$ [GeV]", 20.0)
     plot_template_file("addmet_observed_templates.npz", "observed_addmet", "Add-MET mass [GeV]", 20.0)
-    plot_template_file("score_observed_templates.npz", "observed_score", "HGB score", 20.0)
+    plot_template_file("score_observed_templates.npz", "observed_score", "Calibrated classifier score", 20.0)
     plot_w_highmt()
     plot_pull_ratio_summary()
     plot_result_summary()

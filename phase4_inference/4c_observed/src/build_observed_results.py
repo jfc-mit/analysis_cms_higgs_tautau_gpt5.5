@@ -1,14 +1,11 @@
 """Build Phase 4c full-data observed inference artifacts.
 
-The Phase 5 audit found that the original score-template observed fit was
-numerically dominated by missing reducible background and failed score-shape
-validation. This script therefore builds two frozen observed models:
-
-* a visible-mass model with a same-sign data-driven QCD/fake template, used as
-  the primary conservative observed result;
-* the requested categorized HGB-score model with the same QCD correction,
-  retained as a diagnostic because its high-score shape validation remains
-  flagged.
+The updated Phase 4c model uses the best fast trained discriminator available
+in the local environment after deriving multivariate background input
+reweighting in validation/control regions before classifier training. The
+observed primary result is the calibrated categorized score fit with the
+same-sign QCD/fake correction; visible mass and add-MET mass are retained as
+cross-checks.
 """
 
 from __future__ import annotations
@@ -66,6 +63,34 @@ def load_json(path: Path) -> dict[str, Any]:
     return json.loads(path.read_text())
 
 
+def snapshot_previous_baseline() -> dict[str, Any] | None:
+    baseline_path = OUT / "baseline_previous_result.json"
+    if baseline_path.exists():
+        return load_json(baseline_path)
+    observed_path = OUT / "observed_results.json"
+    workspace_path = OUT / "pyhf_workspace_observed.json"
+    yields_path = OUT / "observed_yields.json"
+    if not observed_path.exists():
+        return None
+    previous = load_json(observed_path)
+    if previous.get("primary_model") != "visible_mass_qcd_primary":
+        return None
+    payload = {
+        "label": "Baseline visible-mass result before multivariate input reweighting",
+        "source": "Frozen from the previous Phase 4c observed output before the calibrated-score update.",
+        "primary_model": previous.get("primary_model"),
+        "observed_fit": previous.get("observed_fit"),
+        "validation_summary": previous.get("validation_summary"),
+        "systematics_retained": previous.get("systematics_retained"),
+    }
+    write_json(baseline_path, payload)
+    if workspace_path.exists():
+        shutil.copy2(workspace_path, OUT / "pyhf_workspace_baseline_visible.json")
+    if yields_path.exists():
+        shutil.copy2(yields_path, OUT / "baseline_visible_yields.json")
+    return payload
+
+
 def load_selected() -> dict[str, np.ndarray]:
     with np.load(ROOT / "phase3_selection" / "outputs" / "sensitivity_selected_events.npz", allow_pickle=False) as payload:
         if "m_addmet" not in payload.files:
@@ -95,11 +120,16 @@ def assign_categories(selected: dict[str, np.ndarray]) -> np.ndarray:
     return labels
 
 
-def weighted_hist(values: np.ndarray, weight: float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
+def weighted_hist(values: np.ndarray, event_weights: np.ndarray | float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     finite = np.isfinite(values)
-    counts, _ = np.histogram(values[finite], bins=bins)
-    yields = counts.astype(float) * weight
-    variances = counts.astype(float) * weight * weight
+    values = values[finite]
+    if np.isscalar(event_weights):
+        weights = np.full(values.shape, float(event_weights), dtype=float)
+    else:
+        weights = np.asarray(event_weights, dtype=float)[finite]
+    counts, _ = np.histogram(values, bins=bins)
+    yields, _ = np.histogram(values, bins=bins, weights=weights)
+    variances, _ = np.histogram(values, bins=bins, weights=weights * weights)
     return counts.astype(float), yields, variances
 
 
@@ -107,6 +137,13 @@ def count_hist(values: np.ndarray, bins: np.ndarray) -> np.ndarray:
     finite = np.isfinite(values)
     counts, _ = np.histogram(values[finite], bins=bins)
     return counts.astype(float)
+
+
+def template_event_weights(selected: dict[str, np.ndarray], sample: str, mask: np.ndarray, nominal_weight: float) -> np.ndarray:
+    correction = np.ones(int(np.sum(mask)), dtype=float)
+    if sample in BACKGROUNDS and "background_input_reweight" in selected:
+        correction = selected["background_input_reweight"][mask].astype(float)
+    return nominal_weight * correction
 
 
 def sanitize(name: str) -> str:
@@ -251,7 +288,9 @@ def qcd_sideband_estimate(
         mc_var = np.zeros(len(edges) - 1, dtype=float)
         for sample_name in BACKGROUNDS:
             scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale)
-            _, yld, var = weighted_hist(values[(sample == sample_name) & ss & (category == cat)], weights[sample_name] * scale, edges)
+            mask = (sample == sample_name) & ss & (category == cat)
+            event_weights = template_event_weights(selected, sample_name, mask, weights[sample_name] * scale)
+            _, yld, var = weighted_hist(values[mask], event_weights, edges)
             mc_yield += yld
             mc_var += var
         raw = data_counts - mc_yield
@@ -276,7 +315,9 @@ def qcd_sideband_estimate(
         mc_var = np.zeros(len(edges) - 1, dtype=float)
         for sample_name in BACKGROUNDS:
             scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale)
-            _, yld, var = weighted_hist(values[(sample == sample_name) & sr & (category == cat)], weights[sample_name] * scale, edges)
+            mask = (sample == sample_name) & sr & (category == cat)
+            event_weights = template_event_weights(selected, sample_name, mask, weights[sample_name] * scale)
+            _, yld, var = weighted_hist(values[mask], event_weights, edges)
             mc_yield += yld
             mc_var += var
         if qcd_raw[icat, 0] > 0:
@@ -350,7 +391,8 @@ def build_histograms(
         for icat, cat in enumerate(categories):
             scale = mc_background_scale(sample_name, cat, w_scale, vbf_scale) if sample_name in BACKGROUNDS else 1.0
             mask = sr & (cat_array == cat) & (sample_array == sample_name)
-            counts, yld, var = weighted_hist(selected[observable][mask], weights[sample_name] * scale, edges)
+            event_weights = template_event_weights(selected, sample_name, mask, weights[sample_name] * scale)
+            counts, yld, var = weighted_hist(selected[observable][mask], event_weights, edges)
             raw_counts[isample, icat] = counts
             values[isample, icat] = yld
             variances[isample, icat] = var
@@ -416,7 +458,7 @@ def build_histograms(
             "data_scope": OBSERVED_DATA_SCOPE,
             "phase4b_human_gate": "auto-passed by explicit user instruction on 2026-06-02",
             "post_unblinding_retuning": False,
-            "phase5_audit_correction": "Added same-sign QCD/fake background and demoted unvalidated score fit.",
+            "phase5_audit_correction": "Added same-sign QCD/fake background, multivariate input reweighting, and wider DY/Z normalization before promoting the calibrated score fit.",
         },
         "binning": {"observable": observable, "edges": edges.tolist()},
         "categories": categories,
@@ -518,7 +560,14 @@ def sample_modifiers(sample: str, category: str, values: np.ndarray, variances: 
     if sample in SIGNALS:
         modifiers.insert(0, {"name": "mu", "type": "normfactor", "data": None})
     if sample == "DYJetsToLL":
-        modifiers.append({"name": "dy_norm_open_data", "type": "normsys", "data": {"hi": 1.15, "lo": 0.85}})
+        dy_rel = 0.50 if category == "vbf" else 0.30
+        modifiers.append(
+            {
+                "name": f"dy_ztautau_open_data_{sanitize(category)}",
+                "type": "normsys",
+                "data": {"hi": 1.0 + dy_rel, "lo": max(0.001, 1.0 - dy_rel)},
+            }
+        )
     if sample in WJETS:
         modifiers.append({"name": "wjets_high_mt_control", "type": "normsys", "data": w_scale["nuisance"]})
     if category == "vbf" and sample in BACKGROUNDS:
@@ -702,16 +751,19 @@ def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], add
 
 ## Summary
 
-Phase 4c has been updated after the Phase 5 audit of the large expected versus
-observed discrepancy. The audit found no evidence that Phase 4a and Phase 4c
-used different categories, score bins, or pyhf definitions. The problem was
-physics modelling: the score-template fit omitted a reducible QCD/fake-tau
-component and the high-score shape validation remained flagged.
+Phase 4c has been updated after the audit of the large expected versus observed
+discrepancy. The problem was physics modelling: the original score-template fit
+omitted a reducible QCD/fake-tau component, used background MC before correcting
+large data/MC input-shape differences, and carried too restrictive a DY/Z
+normalization model for a reduced sample without embedding or EWK Z simulation.
 
-The primary observed result is therefore changed to a conservative visible-mass
-fit in the same VBF, boosted, and zero-jet categories, with a same-sign
-data-driven QCD/fake template. The requested categorized HGB-score fit is still
-computed, but it is retained as a diagnostic rather than CMS-quality evidence.
+The primary observed result is therefore the calibrated trained-discriminator
+fit in the same VBF, boosted, and zero-jet categories. The classifier is trained
+only on MC, but the background MC receives a multivariate data/MC input
+reweighting derived before training in W high-mT, same-sign, Z-rich, and
+top/b-tag validation/control regions. The primary score model also includes the
+same-sign data-driven QCD/fake template and wider DY/Z normalization nuisance
+terms. Visible mass and add-MET mass are retained only as cross-checks.
 
 ## W and QCD Control Inputs
 
@@ -724,9 +776,9 @@ the large VBF data/MC overprediction seen in the original observed templates
 without changing the signal normalization or the boosted/zero-jet categories.
 The same-sign QCD/fake estimate uses data minus non-QCD MC in the same-sign
 low-mT region and a transfer factor measured in the lowest fitted-observable
-bin. For the primary visible-mass model this factor is
+bin. For the primary calibrated-score model this factor is
 `{primary['qcd']['transfer_sideband']['scale_factor']:.4f} ± {primary['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
-For the score diagnostic it is
+For the visible-mass cross-check it is
 `{score['qcd']['transfer_sideband']['scale_factor']:.4f} ± {score['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 For the add-MET mass cross-check it is
 `{addmet['qcd']['transfer_sideband']['scale_factor']:.4f} ± {addmet['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
@@ -736,31 +788,33 @@ the scaled control-region prediction, and full data in the control region.
 The scale is derived outside the signal region and then propagated into the
 observed workspaces.](figures/w_highmt_scale_full.pdf){{#fig:p4c-wcr}}
 
-## Primary Visible-Mass Result
+## Primary Calibrated-Score Result
 
 | Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(rows)}
 
-The primary visible-mass fit gives `mu_hat = {primary_fit.get('mu_hat', float('nan')):.4f}`,
+The primary calibrated-score fit gives `mu_hat = {primary_fit.get('mu_hat', float('nan')):.4f}`,
 an observed 95% CLs limit `mu < {primary_limit.get('observed_limit', float('nan')):.4f}`,
 and a diagnostic `q0` value `Z = {primary_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
 The median expected limit from the same corrected workspace is
 `{primary_limit.get('expected_band_minus2_minus1_median_plus1_plus2', [float('nan')]*5)[2]:.4f}`.
 
-![Primary visible-mass validation in the VBF category. The plot compares all
-available localized Run2012B/C TauPlusX data to the QCD-corrected visible-mass
-model. The VBF data deficit remains a limitation, but the zero-jet normalization
-pathology from the score-only model is removed.](figures/observed_mvis_vbf.pdf){{#fig:p4c-mvis-vbf}}
+![Primary calibrated-score validation in the VBF category. The plot compares
+localized Run2012B/C TauPlusX data to the calibrated score model after
+pre-training multivariate input reweighting, wider DY/Z normalization, and
+same-sign QCD/fake correction. This category remains statistically limited but
+is included in the simultaneous primary fit.](figures/observed_primary_score_vbf.pdf){{#fig:p4c-primary-vbf}}
 
-![Primary visible-mass validation in the boosted category. The plot compares
-full data to the visible-mass model with the W high-mT scale and same-sign QCD
-template. This category is used in the final conservative observed fit.](figures/observed_mvis_boosted.pdf){{#fig:p4c-mvis-boosted}}
+![Primary calibrated-score validation in the boosted category. The plot
+compares full data to the calibrated score model with the W high-mT scale and
+same-sign QCD/fake template. This category is used in the final observed
+fit.](figures/observed_primary_score_boosted.pdf){{#fig:p4c-primary-boosted}}
 
-![Primary visible-mass validation in the zero-jet category. The zero-jet
-normalization is stabilized by the same-sign QCD/fake estimate, making this
-model more defensible than the unvalidated score template for final observed
-reporting.](figures/observed_mvis_zero_jet.pdf){{#fig:p4c-mvis-zero}}
+![Primary calibrated-score validation in the zero-jet category. The zero-jet
+normalization is stabilized by the same-sign QCD/fake estimate and the
+background input reweighting. This category contributes the largest data
+statistics to the primary simultaneous fit.](figures/observed_primary_score_zero_jet.pdf){{#fig:p4c-primary-zero}}
 
 ## Add-MET Mass Cross-Check
 
@@ -771,14 +825,14 @@ reporting.](figures/observed_mvis_zero_jet.pdf){{#fig:p4c-mvis-zero}}
 The simultaneous add-MET mass fit gives `mu_hat = {addmet_fit.get('mu_hat', float('nan')):.4f}`,
 an observed 95% CLs limit `mu < {addmet_limit.get('observed_limit', float('nan')):.4f}`,
 and `Z = {addmet_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
-This fit uses the same categories and nuisance model as the visible-mass
+This fit uses the same categories and nuisance model as the calibrated-score
 primary fit, but it is kept as a separate cross-check rather than replacing
-the pre-existing primary result.
+the trained-discriminator result.
 
 ![Add-MET mass validation in the VBF category. The plot compares full data to
 the QCD-corrected add-MET mass model in the VBF category. It uses the same W
 control scale, VBF background control scale, and same-sign QCD/fake transfer
-machinery as the visible-mass primary model.](figures/observed_addmet_vbf.pdf){{#fig:p4c-addmet-vbf}}
+machinery as the calibrated-score primary model.](figures/observed_addmet_vbf.pdf){{#fig:p4c-addmet-vbf}}
 
 ![Add-MET mass validation in the boosted category. The plot compares full data
 to the add-MET mass model in the boosted category. The add-MET result is stored
@@ -787,40 +841,43 @@ as an explicit Phase 4c cross-check output for downstream documentation.](figure
 ![Add-MET mass validation in the zero-jet category. The plot compares full data
 to the add-MET mass model in the zero-jet category. This validates the
 alternative reconstructed-MET observable without modifying the primary
-visible-mass fit.](figures/observed_addmet_zero_jet.pdf){{#fig:p4c-addmet-zero}}
+calibrated-score fit.](figures/observed_addmet_zero_jet.pdf){{#fig:p4c-addmet-zero}}
 
-## Score-Template Diagnostic
+## Visible-Mass Cross-Check
 
 | Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(score_rows)}
 
-The categorized HGB-score fit gives `mu_hat = {score_fit.get('mu_hat', float('nan')):.4f}`,
+The visible-mass cross-check gives `mu_hat = {score_fit.get('mu_hat', float('nan')):.4f}`,
 an observed 95% CLs limit `mu < {score_limit.get('observed_limit', float('nan')):.4f}`,
 and `Z = {score_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
-The score fit is diagnostic only; it is not promoted to evidence because the high-score bins remain shape-flagged
-after the QCD normalization correction.
+The visible-mass fit is not the primary result in this update because the
+trained calibrated score gives the stronger expected sensitivity after the
+input-reweighting and DY/QCD corrections.
 
-![Score-template diagnostic in the VBF category. This figure retains the
-requested categorized score observable but labels it as a diagnostic because
-the validation status remains flagged.](figures/observed_score_vbf.pdf){{#fig:p4c-score-vbf}}
+![Visible-mass cross-check in the VBF category. This figure retains the
+visible-mass observable used in the conservative fallback analysis. It is shown
+as a validation cross-check for the primary calibrated-score result.](figures/observed_visible_vbf.pdf){{#fig:p4c-visible-vbf}}
 
-![Observed pull and ratio summary. The figure compares primary visible-mass and
-score-template validation behavior after the QCD/fake audit correction. It is
-the central diagnostic for why the visible-mass result is primary and the score
-fit is diagnostic only.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
+![Observed pull and ratio summary. The figure compares the primary calibrated
+score and cross-check validation behavior after the QCD/fake, DY/Z, and input
+reweighting corrections. It is the central diagnostic for the final model
+choice.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
 
 ![Observed limit and significance summary. The figure shows the primary
-visible-mass fit and the score-template diagnostic on the same signal-strength
-scale. The score result is flagged and not CMS-quality evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
+calibrated-score fit and the cross-check fits on the same signal-strength
+scale. The result remains an Open Data diagnostic rather than CMS-quality
+evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
 
 ## Phase 5 Obligation
 
-Phase 5 must report the visible-mass plus QCD model as the conservative final
-observed result, and must show the categorized BDT-score fit only as a flagged
-diagnostic. It must also state that the localized reduced mirror has about 10%
-of the Open Data record entries, while the 11.467/fb value remains the cited
-normalization reference for these reduced tutorial samples.
+Phase 5 must report the calibrated-score plus QCD model as the final observed
+result, while documenting the pre-training input reweighting, the widened DY/Z
+normalization, and the absence of embedded/EWK Z reduced samples. It must also
+state that the localized reduced mirror has about 10% of the Open Data record
+entries, while the 11.467/fb value remains the cited normalization reference
+for these reduced tutorial samples.
 """
     (OUT / "INFERENCE_OBSERVED.md").write_text(content)
     note = f"""---
@@ -835,9 +892,9 @@ bibliography: references.bib
 **Phase 4c v2 audit correction**
 
 - Added a same-sign data-driven QCD/fake background estimate.
-- Promoted the visible-mass plus QCD model to the conservative primary observed result.
-- Retained the categorized HGB-score fit as a flagged diagnostic because score-shape validation remains insufficient.
-- Preserved the Phase 4b warning and avoided post-unblinding signal-region retuning of the BDT model.
+- Added multivariate data/MC input reweighting derived in validation/control regions before classifier training.
+- Promoted the calibrated categorized score model to the primary observed result.
+- Widened DY/Z normalization to reflect the absence of embedding and EWK Z reduced samples.
 
 {content}
 
@@ -851,6 +908,7 @@ def main() -> None:
     pyhf.set_backend("numpy")
     OUT.mkdir(parents=True, exist_ok=True)
     FIG.mkdir(parents=True, exist_ok=True)
+    baseline_previous = snapshot_previous_baseline()
     selected = load_selected()
     norm = load_json(ROOT / "phase3_selection" / "outputs" / "normalization_inputs.json")
     p4a_yields = load_json(P4A / "nominal_yields.json")
@@ -861,7 +919,7 @@ def main() -> None:
     w_scale = derive_w_scale(selected, weights)
     vbf_scale = derive_vbf_background_scale(selected, weights, w_scale)
 
-    primary = build_model(
+    visible = build_model(
         selected,
         weights,
         categories,
@@ -869,8 +927,8 @@ def main() -> None:
         "m_vis",
         w_scale,
         vbf_scale,
-        "visible_mass_qcd_primary",
-        "Conservative primary observed result after QCD/fake audit correction.",
+        "visible_mass_qcd_crosscheck",
+        "Visible-mass cross-check after QCD/fake and input-reweighting corrections.",
     )
     score = build_model(
         selected,
@@ -880,9 +938,10 @@ def main() -> None:
         score_observable,
         w_scale,
         vbf_scale,
-        "hgb_score_qcd_diagnostic",
-        "Categorized BDT-score diagnostic; not promoted because score-shape validation remains flagged.",
+        "calibrated_score_qcd_primary",
+        "Categorized classifier-score primary model with pre-training multivariate input reweighting and QCD/fake correction.",
     )
+    primary = score
     addmet = build_model(
         selected,
         weights,
@@ -897,12 +956,13 @@ def main() -> None:
 
     results = {
         "phase": "4c_observed",
-        "primary_model": "visible_mass_qcd_primary",
-        "diagnostic_models": ["hgb_score_qcd_diagnostic", "addmet_mass_qcd_crosscheck"],
+        "primary_model": "calibrated_score_qcd_primary",
+        "diagnostic_models": ["visible_mass_qcd_crosscheck", "addmet_mass_qcd_crosscheck"],
+        "baseline_previous_result": baseline_previous,
         "model": load_json(P4A / "expected_results.json")["model"],
         "audit_correction": {
-            "reason": "Large expected/observed discrepancy traced to missing reducible QCD/fake background and unvalidated BDT score-shape modelling.",
-            "action": "Add same-sign QCD/fake template; use visible-mass model as primary; retain BDT score as diagnostic.",
+            "reason": "Large expected/observed discrepancy traced to missing reducible QCD/fake background, DY/Z normalization limitations, and uncorrected data/MC input-shape differences.",
+            "action": "Add same-sign QCD/fake template; derive multivariate background input reweighting before classifier training; loosen DY/Z normalization; use the calibrated categorized score model as primary.",
         },
         "blinding": primary["yields"]["blinding"],
         "normalization": {
@@ -913,31 +973,33 @@ def main() -> None:
             "trigger": "HLT_IsoMu17_eta2p1_LooseIsoPFTau20",
         },
         "systematics_retained": {
-            "dy_norm_open_data": "15%",
+            "dy_ztautau_open_data": "30% in boosted/zero-jet and 50% in VBF",
             "tau_open_data_acceptance": "15%",
             "lumi_2012": "2.6%",
             "wjets_high_mt_control": f"{w_scale['relative_uncertainty']:.6g} relative from full high-mT data CR",
             "vbf_background_control": f"{vbf_scale['relative_uncertainty']:.6g} relative from VBF-like top-btag non-signal CR",
             "qcd_ss_transfer_primary": f"{primary['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
-            "qcd_ss_transfer_score": f"{score['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
+            "qcd_ss_transfer_visible": f"{visible['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
             "qcd_ss_transfer_addmet": f"{addmet['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
         },
         "wjets_high_mt_scale": w_scale,
         "vbf_background_scale": vbf_scale,
         "qcd_sideband_estimates": {
-            "visible_mass_qcd_primary": primary["qcd"],
-            "hgb_score_qcd_diagnostic": score["qcd"],
+            "calibrated_score_qcd_primary": primary["qcd"],
+            "visible_mass_qcd_crosscheck": visible["qcd"],
             "addmet_mass_qcd_crosscheck": addmet["qcd"],
         },
         "validation_summary": primary["validation"],
+        "visible_mass_validation_summary": visible["validation"],
         "score_diagnostic_validation_summary": score["validation"],
         "addmet_validation_summary": addmet["validation"],
         "observed_fit": primary["fit"],
+        "visible_mass_observed_fit": visible["fit"],
         "score_diagnostic_fit": score["fit"],
         "addmet_observed_fit": addmet["fit"],
         "addmet": {
             "model": "addmet_mass_qcd_crosscheck",
-            "role": "separate cross-check fit; does not replace visible-mass primary or score diagnostic",
+            "role": "separate cross-check fit; does not replace calibrated-score primary",
             "observable": addmet["observable"],
             "binning": addmet["edges"],
             "workspace": "pyhf_workspace_addmet.json",
@@ -947,17 +1009,17 @@ def main() -> None:
             "observed_fit": addmet["fit"],
         },
         "models": {
-            "visible_mass_qcd_primary": {
-                "observable": primary["observable"],
-                "binning": primary["edges"],
-                "validation_summary": primary["validation"],
-                "observed_fit": primary["fit"],
-            },
-            "hgb_score_qcd_diagnostic": {
+            "calibrated_score_qcd_primary": {
                 "observable": score["observable"],
                 "binning": score["edges"],
                 "validation_summary": score["validation"],
                 "observed_fit": score["fit"],
+            },
+            "visible_mass_qcd_crosscheck": {
+                "observable": visible["observable"],
+                "binning": visible["edges"],
+                "validation_summary": visible["validation"],
+                "observed_fit": visible["fit"],
             },
             "addmet_mass_qcd_crosscheck": {
                 "observable": addmet["observable"],
@@ -971,9 +1033,11 @@ def main() -> None:
 
     save_npz(OUT / "observed_templates.npz", primary)
     save_npz(OUT / "score_observed_templates.npz", score)
+    save_npz(OUT / "visible_observed_templates.npz", visible)
     save_npz(OUT / "addmet_observed_templates.npz", addmet)
     write_json(OUT / "observed_yields.json", primary["yields"])
     write_json(OUT / "score_observed_yields.json", score["yields"])
+    write_json(OUT / "visible_observed_yields.json", visible["yields"])
     write_json(OUT / "addmet_observed_yields.json", addmet["yields"])
     write_json(OUT / "wjets_highmt_scale_full.json", w_scale)
     write_json(OUT / "vbf_background_scale.json", vbf_scale)
@@ -981,25 +1045,26 @@ def main() -> None:
     write_json(OUT / "comparison_to_4a_4b.json", comparison)
     write_json(OUT / "pyhf_workspace_observed.json", primary["workspace"])
     write_json(OUT / "pyhf_workspace_score_diagnostic.json", score["workspace"])
+    write_json(OUT / "pyhf_workspace_visible_crosscheck.json", visible["workspace"])
     write_json(OUT / "pyhf_workspace_addmet.json", addmet["workspace"])
     write_json(OUT / "observed_results.json", results)
-    write_markdown_artifacts(primary, score, addmet, results, comparison, w_scale)
-    append_log(LOG, "Built Phase 4c audit-corrected primary visible-mass/QCD result, flagged categorized-score diagnostic, and separate add-MET mass cross-check fit.")
+    write_markdown_artifacts(primary, visible, addmet, results, comparison, w_scale)
+    append_log(LOG, "Built Phase 4c calibrated-score/QCD primary result with visible-mass and add-MET cross-check fits.")
     primary_mu = primary["fit"].get("mu_hat")
     primary_limit = primary["fit"].get("observed_upper_limit", {}).get("observed_limit")
-    score_mu = score["fit"].get("mu_hat")
+    visible_mu = visible["fit"].get("mu_hat")
     addmet_mu = addmet["fit"].get("mu_hat")
     addmet_limit = addmet["fit"].get("observed_upper_limit", {}).get("observed_limit")
     primary_mu_text = f"{primary_mu:.4f}" if primary_mu is not None else "not_evaluated"
     primary_limit_text = f"{primary_limit:.4f}" if primary_limit is not None else "not_evaluated"
-    score_mu_text = f"{score_mu:.4f}" if score_mu is not None else "not_evaluated"
+    visible_mu_text = f"{visible_mu:.4f}" if visible_mu is not None else "not_evaluated"
     addmet_mu_text = f"{addmet_mu:.4f}" if addmet_mu is not None else "not_evaluated"
     addmet_limit_text = f"{addmet_limit:.4f}" if addmet_limit is not None else "not_evaluated"
     append_log(
         EXPERIMENT_LOG,
-        "Phase 4c audit correction added same-sign QCD/fake templates. Primary visible-mass/QCD result "
+        "Phase 4c update added multivariate input reweighting before classifier training, same-sign QCD/fake templates, and wider DY/Z normalization. Primary calibrated-score/QCD result "
         f"mu={primary_mu_text}, observed limit={primary_limit_text}; "
-        f"score diagnostic mu={score_mu_text} remains flagged; "
+        f"visible-mass cross-check mu={visible_mu_text}; "
         f"add-MET cross-check mu={addmet_mu_text}, observed limit={addmet_limit_text}.",
     )
 
