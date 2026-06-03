@@ -171,7 +171,7 @@ def main() -> None:
         if not path.exists() or path.stat().st_size == 0:
             raise FileNotFoundError(path)
     artifact_text = (OUT / "INFERENCE_OBSERVED.md").read_text()
-    required_phrases = ["same-sign QCD/fake", "calibrated-score fit", "multivariate", "Add-MET Mass Cross-Check"]
+    required_phrases = ["same-sign QCD/fake", "calibrated-score fit", "multivariate", "Frozen Baseline For Final Comparison"]
     for phrase in required_phrases:
         if phrase not in artifact_text:
             raise ValueError(f"Artifact does not document required phrase: {phrase}")

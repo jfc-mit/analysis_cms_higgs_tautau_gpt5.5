@@ -3,9 +3,9 @@
 The updated Phase 4c model uses the best fast trained discriminator available
 in the local environment after deriving multivariate background input
 reweighting in validation/control regions before classifier training. The
-observed primary result is the calibrated categorized score fit with the
-same-sign QCD/fake correction; visible mass and add-MET mass are retained as
-cross-checks.
+observed attempted primary result is the calibrated categorized score fit with
+the same-sign QCD/fake correction. The previous visible-mass result is kept as
+a frozen baseline for the final Phase 5 comparison.
 """
 
 from __future__ import annotations
@@ -730,23 +730,23 @@ def save_npz(path: Path, model: dict[str, Any]) -> None:
 
 def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], addmet: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
     primary_fit = primary["fit"]
-    score_fit = score["fit"]
     primary_limit = primary_fit.get("observed_upper_limit", {})
-    score_limit = score_fit.get("observed_upper_limit", {})
+    primary_band = primary_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
+    baseline = results.get("baseline_previous_result", {})
+    baseline_fit = baseline.get("observed_fit", {})
+    baseline_limit = baseline_fit.get("observed_upper_limit", {})
+    baseline_band = baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
+    baseline_text = (
+        f"`mu_hat = {baseline_fit.get('mu_hat', float('nan')):.4f}`, "
+        f"observed 95% CLs `mu < {baseline_limit.get('observed_limit', float('nan')):.4f}`, "
+        f"median expected `mu < {baseline_band[2]:.4f}`"
+        if baseline_fit
+        else "not available"
+    )
     rows = []
     for category in primary["categories"]:
         val = primary["validation"]["score_template_validation"][category]
         rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
-    score_rows = []
-    for category in score["categories"]:
-        val = score["validation"]["score_template_validation"][category]
-        score_rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
-    addmet_fit = addmet["fit"]
-    addmet_limit = addmet_fit.get("observed_upper_limit", {})
-    addmet_rows = []
-    for category in addmet["categories"]:
-        val = addmet["validation"]["score_template_validation"][category]
-        addmet_rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
     content = f"""# Phase 4c Observed Inference: Audit-Corrected Full Data
 
 ## Summary
@@ -763,7 +763,9 @@ only on MC, but the background MC receives a multivariate data/MC input
 reweighting derived before training in W high-mT, same-sign, Z-rich, and
 top/b-tag validation/control regions. The primary score model also includes the
 same-sign data-driven QCD/fake template and wider DY/Z normalization nuisance
-terms. Visible mass and add-MET mass are retained only as cross-checks.
+terms. No alternative mass-fit result is quoted in this Phase 4c note; the
+frozen previous visible-mass baseline is preserved only for the final
+signal-strength comparison.
 
 ## W and QCD Control Inputs
 
@@ -778,10 +780,6 @@ The same-sign QCD/fake estimate uses data minus non-QCD MC in the same-sign
 low-mT region and a transfer factor measured in the lowest fitted-observable
 bin. For the primary calibrated-score model this factor is
 `{primary['qcd']['transfer_sideband']['scale_factor']:.4f} ± {primary['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
-For the visible-mass cross-check it is
-`{score['qcd']['transfer_sideband']['scale_factor']:.4f} ± {score['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
-For the add-MET mass cross-check it is
-`{addmet['qcd']['transfer_sideband']['scale_factor']:.4f} ± {addmet['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
@@ -798,7 +796,9 @@ The primary calibrated-score fit gives `mu_hat = {primary_fit.get('mu_hat', floa
 an observed 95% CLs limit `mu < {primary_limit.get('observed_limit', float('nan')):.4f}`,
 and a diagnostic `q0` value `Z = {primary_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
 The median expected limit from the same corrected workspace is
-`{primary_limit.get('expected_band_minus2_minus1_median_plus1_plus2', [float('nan')]*5)[2]:.4f}`.
+`{primary_band[2]:.4f}`. This attempted optimized result is retained for
+comparison, but the final Phase 5 interpretation keeps the frozen visible-mass
+baseline because the optimized score fails the observed-data validation gate.
 
 ![Primary calibrated-score validation in the VBF category. The plot compares
 localized Run2012B/C TauPlusX data to the calibrated score model after
@@ -816,68 +816,31 @@ normalization is stabilized by the same-sign QCD/fake estimate and the
 background input reweighting. This category contributes the largest data
 statistics to the primary simultaneous fit.](figures/observed_primary_score_zero_jet.pdf){{#fig:p4c-primary-zero}}
 
-## Add-MET Mass Cross-Check
+## Frozen Baseline For Final Comparison
 
-| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-{chr(10).join(addmet_rows)}
-
-The simultaneous add-MET mass fit gives `mu_hat = {addmet_fit.get('mu_hat', float('nan')):.4f}`,
-an observed 95% CLs limit `mu < {addmet_limit.get('observed_limit', float('nan')):.4f}`,
-and `Z = {addmet_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
-This fit uses the same categories and nuisance model as the calibrated-score
-primary fit, but it is kept as a separate cross-check rather than replacing
-the trained-discriminator result.
-
-![Add-MET mass validation in the VBF category. The plot compares full data to
-the QCD-corrected add-MET mass model in the VBF category. It uses the same W
-control scale, VBF background control scale, and same-sign QCD/fake transfer
-machinery as the calibrated-score primary model.](figures/observed_addmet_vbf.pdf){{#fig:p4c-addmet-vbf}}
-
-![Add-MET mass validation in the boosted category. The plot compares full data
-to the add-MET mass model in the boosted category. The add-MET result is stored
-as an explicit Phase 4c cross-check output for downstream documentation.](figures/observed_addmet_boosted.pdf){{#fig:p4c-addmet-boosted}}
-
-![Add-MET mass validation in the zero-jet category. The plot compares full data
-to the add-MET mass model in the zero-jet category. This validates the
-alternative reconstructed-MET observable without modifying the primary
-calibrated-score fit.](figures/observed_addmet_zero_jet.pdf){{#fig:p4c-addmet-zero}}
-
-## Visible-Mass Cross-Check
-
-| Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
-| --- | ---: | ---: | ---: | ---: | ---: | ---: |
-{chr(10).join(score_rows)}
-
-The visible-mass cross-check gives `mu_hat = {score_fit.get('mu_hat', float('nan')):.4f}`,
-an observed 95% CLs limit `mu < {score_limit.get('observed_limit', float('nan')):.4f}`,
-and `Z = {score_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
-The visible-mass fit is not the primary result in this update because the
-trained calibrated score gives the stronger expected sensitivity after the
-input-reweighting and DY/QCD corrections.
-
-![Visible-mass cross-check in the VBF category. This figure retains the
-visible-mass observable used in the conservative fallback analysis. It is shown
-as a validation cross-check for the primary calibrated-score result.](figures/observed_visible_vbf.pdf){{#fig:p4c-visible-vbf}}
+The frozen previous visible-mass baseline gives {baseline_text}. It is not
+retrained or refit in this update; it is carried forward only so the final AN
+and PRL can compare the optimized-score attempt with the previous result using
+the same signal-strength convention.
 
 ![Observed pull and ratio summary. The figure compares the primary calibrated
-score and cross-check validation behavior after the QCD/fake, DY/Z, and input
-reweighting corrections. It is the central diagnostic for the final model
-choice.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
+score validation behavior after the QCD/fake, DY/Z, and input reweighting
+corrections. It is the central diagnostic for the attempted optimized
+model.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
 
 ![Observed limit and significance summary. The figure shows the primary
-calibrated-score fit and the cross-check fits on the same signal-strength
-scale. The result remains an Open Data diagnostic rather than CMS-quality
-evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
+calibrated-score fit and the frozen visible-mass baseline on the same
+signal-strength scale. The result remains an Open Data diagnostic rather than
+CMS-quality evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
 
 ## Phase 5 Obligation
 
-Phase 5 must report the calibrated-score plus QCD model as the final observed
-result, while documenting the pre-training input reweighting, the widened DY/Z
-normalization, and the absence of embedded/EWK Z reduced samples. It must also
-state that the localized reduced mirror has about 10% of the Open Data record
-entries, while the 11.467/fb value remains the cited normalization reference
-for these reduced tutorial samples.
+Phase 5 must report the calibrated-score plus QCD model as an optimized
+attempt, document the observed validation failure, and compare it with the
+frozen visible-mass baseline. It must also document the pre-training input
+reweighting, the widened DY/Z normalization, the absence of embedded/EWK Z
+reduced samples, and the 11.467/fb luminosity reference for these reduced
+tutorial samples.
 """
     (OUT / "INFERENCE_OBSERVED.md").write_text(content)
     note = f"""---
@@ -1049,23 +1012,21 @@ def main() -> None:
     write_json(OUT / "pyhf_workspace_addmet.json", addmet["workspace"])
     write_json(OUT / "observed_results.json", results)
     write_markdown_artifacts(primary, visible, addmet, results, comparison, w_scale)
-    append_log(LOG, "Built Phase 4c calibrated-score/QCD primary result with visible-mass and add-MET cross-check fits.")
+    append_log(LOG, "Built Phase 4c calibrated-score/QCD optimized attempt and preserved the frozen visible-mass baseline for Phase 5 comparison.")
     primary_mu = primary["fit"].get("mu_hat")
     primary_limit = primary["fit"].get("observed_upper_limit", {}).get("observed_limit")
-    visible_mu = visible["fit"].get("mu_hat")
-    addmet_mu = addmet["fit"].get("mu_hat")
-    addmet_limit = addmet["fit"].get("observed_upper_limit", {}).get("observed_limit")
+    baseline_fit = results.get("baseline_previous_result", {}).get("observed_fit", {})
+    baseline_mu = baseline_fit.get("mu_hat")
+    baseline_limit = baseline_fit.get("observed_upper_limit", {}).get("observed_limit")
     primary_mu_text = f"{primary_mu:.4f}" if primary_mu is not None else "not_evaluated"
     primary_limit_text = f"{primary_limit:.4f}" if primary_limit is not None else "not_evaluated"
-    visible_mu_text = f"{visible_mu:.4f}" if visible_mu is not None else "not_evaluated"
-    addmet_mu_text = f"{addmet_mu:.4f}" if addmet_mu is not None else "not_evaluated"
-    addmet_limit_text = f"{addmet_limit:.4f}" if addmet_limit is not None else "not_evaluated"
+    baseline_mu_text = f"{baseline_mu:.4f}" if baseline_mu is not None else "not_evaluated"
+    baseline_limit_text = f"{baseline_limit:.4f}" if baseline_limit is not None else "not_evaluated"
     append_log(
         EXPERIMENT_LOG,
         "Phase 4c update added multivariate input reweighting before classifier training, same-sign QCD/fake templates, and wider DY/Z normalization. Primary calibrated-score/QCD result "
         f"mu={primary_mu_text}, observed limit={primary_limit_text}; "
-        f"visible-mass cross-check mu={visible_mu_text}; "
-        f"add-MET cross-check mu={addmet_mu_text}, observed limit={addmet_limit_text}.",
+        f"frozen baseline visible-mass result mu={baseline_mu_text}, observed limit={baseline_limit_text}.",
     )
 
 

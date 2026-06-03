@@ -62,3 +62,11 @@ Built Phase 4c audit-corrected primary visible-mass/QCD result, flagged categori
 Built Phase 4c calibrated-score/QCD primary result with visible-mass and add-MET cross-check fits.
 
 ## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-03T04:02:54Z
+
+Built Phase 4c calibrated-score/QCD optimized attempt and preserved the frozen visible-mass baseline for Phase 5 comparison.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.

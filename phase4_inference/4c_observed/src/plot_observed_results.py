@@ -157,22 +157,14 @@ def plot_w_highmt() -> None:
 def plot_pull_ratio_summary() -> None:
     results = json.loads((OUT / "observed_results.json").read_text())
     primary = results["validation_summary"]
-    visible = results["visible_mass_validation_summary"]
-    addmet = results["addmet_validation_summary"]
     categories = list(primary["score_template_validation"].keys())
     x = np.arange(len(categories), dtype=float)
-    width = 0.16
     fig, (ax, rax) = plt.subplots(2, 1, figsize=(10, 10), sharex=True, gridspec_kw={"height_ratios": [1, 1]})
     fig.subplots_adjust(hspace=0)
-    for offset, payload, label_text, color in [
-        (-width, primary, "Calibrated score primary", "#0072b2"),
-        (0.0, addmet, "add-MET cross-check", "#009e73"),
-        (width, visible, "Visible-mass cross-check", "#d55e00"),
-    ]:
-        ratios = [payload["score_template_validation"][category]["data_over_background"] for category in categories]
-        pulls = [payload["score_template_validation"][category]["max_abs_pull"] for category in categories]
-        ax.errorbar(x + offset, ratios, yerr=np.zeros(len(ratios)), marker="o", linestyle="", label=label_text, color=color)
-        rax.errorbar(x + offset, pulls, yerr=np.zeros(len(pulls)), marker="o", linestyle="", label=label_text, color=color)
+    ratios = [primary["score_template_validation"][category]["data_over_background"] for category in categories]
+    pulls = [primary["score_template_validation"][category]["max_abs_pull"] for category in categories]
+    ax.errorbar(x, ratios, yerr=np.zeros(len(ratios)), marker="o", linestyle="", label="Calibrated score attempt", color="#0072b2")
+    rax.errorbar(x, pulls, yerr=np.zeros(len(pulls)), marker="o", linestyle="", label="Calibrated score attempt", color="#0072b2")
     ax.axhline(1.0, color="tab:red", linestyle="--")
     rax.axhline(3.0, color="tab:red", linestyle="--")
     ax.set_ylabel("Data/Pred.")
@@ -191,34 +183,27 @@ def plot_pull_ratio_summary() -> None:
 def plot_result_summary() -> None:
     results = json.loads((OUT / "observed_results.json").read_text())
     primary = results["observed_fit"]
-    visible = results["visible_mass_observed_fit"]
-    addmet = results["addmet_observed_fit"]
+    baseline = results.get("baseline_previous_result", {}).get("observed_fit", {})
     primary_limit = primary["observed_upper_limit"]
-    visible_limit = visible["observed_upper_limit"]
-    addmet_limit = addmet["observed_upper_limit"]
+    baseline_limit = baseline.get("observed_upper_limit", {})
+    baseline_band = baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
     labels = [
-        "Primary mu_hat",
-        "Primary obs. limit",
-        "Primary exp. median",
-        "Visible mu_hat",
-        "Visible obs. limit",
-        "Visible exp. median",
-        "Add-MET mu_hat",
-        "Add-MET obs. limit",
-        "Add-MET exp. median",
+        "Optimized score fitted mu",
+        "Optimized score obs. limit",
+        "Optimized score exp. median",
+        "Baseline fitted mu",
+        "Baseline obs. limit",
+        "Baseline exp. median",
     ]
     values = [
         primary["mu_hat"],
         primary_limit["observed_limit"],
         primary_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
-        visible["mu_hat"],
-        visible_limit["observed_limit"],
-        visible_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
-        addmet["mu_hat"],
-        addmet_limit["observed_limit"],
-        addmet_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
+        baseline.get("mu_hat", float("nan")),
+        baseline_limit.get("observed_limit", float("nan")),
+        baseline_band[2],
     ]
-    colors = ["#0072b2", "#0072b2", "#0072b2", "#d55e00", "#d55e00", "#d55e00", "#009e73", "#009e73", "#009e73"]
+    colors = ["#0072b2", "#0072b2", "#0072b2", "#d55e00", "#d55e00", "#d55e00"]
     fig, ax = plt.subplots(figsize=(10, 10))
     y = np.arange(len(values), dtype=float)
     ax.errorbar(values, y, xerr=np.zeros(len(values)), marker="o", linestyle="", color="black")
@@ -237,20 +222,15 @@ def plot_result_summary() -> None:
 def plot_comparison() -> None:
     comparison = json.loads((OUT / "comparison_to_4a_4b.json").read_text())
     p = comparison["primary_fit_comparison"]
-    s = comparison["score_diagnostic_comparison"]
     w = comparison["w_scale_comparison"]
     values = [
         p["median_expected_limit"],
         p["observed_limit"],
         p["mu_hat"],
-        comparison["addmet_comparison"]["phase4c_mu_hat"],
-        comparison["addmet_comparison"]["phase4c_observed_limit"],
-        s["phase4c_mu_hat"],
-        s["phase4c_observed_limit"],
         w["phase4b_10pct_scale"],
         w["phase4c_full_scale"],
     ]
-    labels = ["Primary exp. limit", "Primary obs. limit", "Primary mu", "Add-MET mu", "Add-MET obs. limit", "Score mu", "Score obs. limit", "4b W scale", "4c W scale"]
+    labels = ["Primary exp. limit", "Primary obs. limit", "Primary mu", "4b W scale", "4c W scale"]
     fig, ax = plt.subplots(figsize=(10, 10))
     x = np.arange(len(values), dtype=float)
     ax.errorbar(x, values, yerr=np.zeros(len(values)), marker="o", linestyle="", label="Phase comparison")
