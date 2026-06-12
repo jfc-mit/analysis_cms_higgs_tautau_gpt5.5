@@ -32,6 +32,30 @@ EXP_LOG = ROOT / "experiment_log.md"
 CATEGORIES = ["vbf", "boosted", "zero_jet"]
 CATEGORY_LABELS = {"vbf": "VBF", "boosted": "Boosted", "zero_jet": "Zero-jet"}
 PUBLIC_LUMI = 11.467
+REQUIRED_UPSTREAM_FIGURES = {
+    "approach_comparison",
+    "category_yields",
+    "cutflow_summary",
+    "expected_s_over_b",
+    "gof_toys",
+    "met_pt",
+    "mt_mu_met",
+    "mu_pt",
+    "mva_input_modeling_chi2",
+    "pt_tautau_proxy",
+    "qcd_same_sign_mvis",
+    "sample_event_count_file_size",
+    "sensitivity_nuisance_audit",
+    "signal_injection_recovery",
+    "tau_pt",
+    "vbf_delta_eta_jj",
+    "vbf_dijet_mass",
+    "visible_mass_boosted",
+    "visible_mass_vbf",
+    "visible_mass_zero_jet",
+    "w_high_mt_control_mt",
+    "z_rich_validation_mvis",
+}
 
 SYSTEMATIC_PROGRAM = [
     {
@@ -244,6 +268,9 @@ def append_log(message: str) -> None:
 
 def copy_figures() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
+    for old in FIG.glob("*.*"):
+        if old.suffix.lower() in {".pdf", ".png"}:
+            old.unlink()
     sources = [
         ROOT / "phase2_exploration" / "outputs" / "figures",
         ROOT / "phase3_selection" / "outputs" / "figures",
@@ -256,10 +283,12 @@ def copy_figures() -> None:
         for src in src_dir.glob("*.*"):
             if src.suffix.lower() not in {".pdf", ".png"}:
                 continue
+            if src.stem not in REQUIRED_UPSTREAM_FIGURES:
+                continue
             shutil.copy2(src, FIG / src.name)
             copied += 1
     log.info("Copied %d upstream figure files", copied)
-    append_log(f"Copied {copied} upstream figure files into the Phase 5 figure directory.")
+    append_log(f"Copied {copied} required upstream figure files into the Phase 5 figure directory.")
 
 
 def merge_references() -> None:
