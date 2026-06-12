@@ -15,3 +15,4 @@ mc/*
 !data/.gitkeep
 !mc/.gitkeep
 *.root
+ANALYSIS_NOTE_5_v1-1.pdf
