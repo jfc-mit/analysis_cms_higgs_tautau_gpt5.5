@@ -15,5 +15,8 @@
       "n_parameters": 13.0,
       "observed_mu_hat": 49.99999999999999
     }
-  }
+  },
+  "interpretation": "Per-category fits demonstrate why the optimized classifier is not used as the final result.",
+  "model": "calibrated_score_qcd_primary",
+  "role": "diagnostic_failed_validation"
 }

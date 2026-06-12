@@ -1,5 +1,5 @@
 {
-  "label": "Baseline visible-mass result before multivariate input reweighting",
+  "label": "Validated visible-mass final result",
   "observed_fit": {
     "discovery_diagnostic": {
       "method": "pyhf asymptotic q0 on observed full data",
@@ -166,7 +166,8 @@
     "status": "evaluated"
   },
   "primary_model": "visible_mass_qcd_primary",
-  "source": "Frozen from the previous Phase 4c observed output before the calibrated-score update.",
+  "role": "final_result",
+  "source": "Current validated visible-mass baseline workspace used as the final result.",
   "systematics_retained": {
     "dy_norm_open_data": "15%",
     "lumi_2012": "2.6%",

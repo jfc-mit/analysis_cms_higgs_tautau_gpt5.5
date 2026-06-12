@@ -582,3 +582,19 @@ Phase 4c update added multivariate input reweighting before classifier training,
 - Added a per-category expected/observed mu comparison for the primary calibrated-score model.
 - Expanded comparison figures and tables with CMS 2014, CMS 2018, ATLAS+CMS, and PDG/HXSWG context.
 - Generated PAPER_PRL_v1.tex/pdf with REVTeX PRL formatting, not pandoc article formatting.
+
+## Phase 5 full-panel fixer 2026-06-12T18:09:09Z
+
+- Reclassified machine-readable model roles: `visible_mass_qcd_primary` is the final result and `calibrated_score_qcd_primary` is `diagnostic_failed_validation`.
+- Regenerated final AN and PRL around the validated visible-mass result; classifier values appear only in a rejected-method diagnostic section.
+- Generated clean Phase 5 figures for baseline visible-mass validation, final CLs limit, validation summary, nuisance pulls, systematic program, and failed classifier diagnostics.
+- Corrected the Phase 5 bibliography to cited entries only and updated DOI metadata requested by validation.
+- Expanded the final AN to 30 rendered pages with 31 referenced figures and 20 display equations.
+- Verification passed: `pixi run phase5-docs`, `pixi run lint-plots`, and `pixi run build-pdf`.
+
+## Phase 5 full-panel fixer 2026-06-12T18:09:09Z
+
+- Reclassified machine-readable model roles: `visible_mass_qcd_primary` is the final result and `calibrated_score_qcd_primary` is `diagnostic_failed_validation`.
+- Regenerated final AN and PRL around the validated visible-mass result; classifier values appear only in a rejected-method diagnostic section.
+- Generated clean Phase 5 figures for baseline visible-mass validation, final CLs limit, validation summary, nuisance pulls, systematic program, and failed classifier diagnostics.
+- Corrected the Phase 5 bibliography to cited entries only and updated DOI metadata requested by validation.
