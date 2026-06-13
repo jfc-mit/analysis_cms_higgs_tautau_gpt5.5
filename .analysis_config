@@ -1,6 +1,7 @@
 # The isolation hook allows access to these directories.
 # Set data_dir to the path where your input ROOT files live.
 # Add extra allow= lines for additional paths (one per line).
-data_dir=
+data_dir=/sandbox/work/jfc/analyses/higgs_tautau/data
+mc_dir=/sandbox/work/jfc/analyses/higgs_tautau/mc
 # allow=/path/to/mc/samples
 # allow=/path/to/calibration
