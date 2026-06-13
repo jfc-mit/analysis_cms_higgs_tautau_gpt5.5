@@ -547,6 +547,39 @@ The combined visible-mass validation gives data/background
 validation gives data/background \texttt{1.003} and chi2/ndf
 \texttt{0.685}.
 
+The visible-mass baseline goodness-of-fit is checked with fitted toys
+from the post-fit pyhf/cabinetry model. The observed fit uses
+\texttt{cabinetry.fit.fit(...,\ goodness\_of\_fit=True)}, and each of
+the \texttt{100} toys is refit with cabinetry before evaluating the
+saturated-model GoF statistic. The observed statistic is
+\texttt{24.7215}, the cabinetry saturated GoF p-value is
+\texttt{0.1011}, and the toy p-value is \texttt{0.1683}. The toy central
+95\% interval is \texttt{8.2208} to \texttt{31.6523}, so the observed
+GoF is \texttt{inside} the toy distribution and the check is
+\texttt{PASS}.
+
+{\def\LTcaptype{none} % do not increment counter
+\vspace{1em}
+\begin{table}[htbp]
+\centering
+\small
+\begin{tabular}{@{}
+lr@{}}
+\toprule\noalign{}
+GoF quantity & Value \\
+\midrule\noalign{}
+Number of fitted toys & \texttt{100} \\
+Toy fit failures & \texttt{0} \\
+Observed saturated GoF statistic & \texttt{24.7215} \\
+Cabinetry saturated GoF p-value & \texttt{0.1011} \\
+Toy median statistic & \texttt{16.3962} \\
+Toy central 95\% interval & \texttt{8.2208} to \texttt{31.6523} \\
+Fitted-toy p-value & \texttt{0.1683} \\
+Decision & \texttt{PASS} \\
+\end{tabular}
+\end{table}
+}
+
 The visible-mass baseline fit gives
 
 \begin{equation}\protect\phantomsection\label{eq:baseline-result}{

@@ -2516,7 +2516,7 @@ def write_docs() -> None:
     nn_result = load_json("phase4_inference/4c_observed/outputs/nn_score_result.json")
     visible_yields = load_json("phase4_inference/4c_observed/outputs/baseline_visible_yields.json")
     nn_yields = load_json("phase4_inference/4c_observed/outputs/nn_score_observed_yields.json")
-    baseline_observed_gof_toys()
+    gof_payload = baseline_observed_gof_toys()
     write_json("phase5_documentation/outputs/baseline_visible_result.json", baseline)
     write_json("phase5_documentation/outputs/baseline_visible_yields.json", visible_yields)
     write_json("phase5_documentation/outputs/nn_score_result.json", nn_result)
@@ -2618,6 +2618,7 @@ def write_docs() -> None:
     nprof = nfit.get("profile_mu_interval", {"err_minus": nfit["mu_hat"], "err_plus": nlim["observed_limit"] - nfit["mu_hat"]})
     bval = baseline["validation_summary"]["combined"]
     nval = nn_result["validation_summary"]["combined"]
+    gof_interval = gof_payload["toy_statistic_summary"]["central_95_interval"]
     w_scale = observed["wjets_high_mt_scale"]
     vbf_scale = observed["vbf_background_scale"]
     syst = observed["systematics_retained"]
@@ -2850,6 +2851,29 @@ The combined visible-mass validation gives data/background `{bval['data_over_bac
 and chi2/ndf `{bval['chi2_per_ndf']:.3f}`. The combined $D_{{NN}}$ validation
 gives data/background `{nval['data_over_background']:.3f}` and chi2/ndf
 `{nval['chi2_per_ndf']:.3f}`.
+
+The visible-mass baseline goodness-of-fit is checked with fitted toys from the
+post-fit pyhf/cabinetry model. The observed fit uses
+`cabinetry.fit.fit(..., goodness_of_fit=True)`, and each of the
+`{gof_payload['n_toys']}` toys is refit with cabinetry before evaluating the
+saturated-model GoF statistic. The observed statistic is
+`{gof_payload['observed_statistic']:.4f}`, the cabinetry saturated GoF p-value
+is `{gof_payload['observed_cabinetry_saturated_p_value']:.4f}`, and the toy
+p-value is `{gof_payload['toy_p_value']:.4f}`. The toy central 95% interval is
+`{gof_interval[0]:.4f}` to `{gof_interval[1]:.4f}`, so the observed GoF is
+`{'inside' if gof_payload['within_central_95_interval'] else 'outside'}` the
+toy distribution and the check is `{'PASS' if gof_payload['pass'] else 'FAIL'}`.
+
+| GoF quantity | Value |
+| --- | ---: |
+| Number of fitted toys | `{gof_payload['n_toys']}` |
+| Toy fit failures | `{gof_payload['n_fit_failures']}` |
+| Observed saturated GoF statistic | `{gof_payload['observed_statistic']:.4f}` |
+| Cabinetry saturated GoF p-value | `{gof_payload['observed_cabinetry_saturated_p_value']:.4f}` |
+| Toy median statistic | `{gof_payload['toy_statistic_summary']['median']:.4f}` |
+| Toy central 95% interval | `{gof_interval[0]:.4f}` to `{gof_interval[1]:.4f}` |
+| Fitted-toy p-value | `{gof_payload['toy_p_value']:.4f}` |
+| Decision | `{'PASS' if gof_payload['pass'] else 'FAIL'}` |
 
 The visible-mass baseline fit gives
 

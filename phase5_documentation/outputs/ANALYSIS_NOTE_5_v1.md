@@ -219,6 +219,29 @@ and chi2/ndf `0.873`. The combined $D_{NN}$ validation
 gives data/background `1.003` and chi2/ndf
 `0.685`.
 
+The visible-mass baseline goodness-of-fit is checked with fitted toys from the
+post-fit pyhf/cabinetry model. The observed fit uses
+`cabinetry.fit.fit(..., goodness_of_fit=True)`, and each of the
+`100` toys is refit with cabinetry before evaluating the
+saturated-model GoF statistic. The observed statistic is
+`24.7215`, the cabinetry saturated GoF p-value
+is `0.1011`, and the toy
+p-value is `0.1683`. The toy central 95% interval is
+`8.2208` to `31.6523`, so the observed GoF is
+`inside` the
+toy distribution and the check is `PASS`.
+
+| GoF quantity | Value |
+| --- | ---: |
+| Number of fitted toys | `100` |
+| Toy fit failures | `0` |
+| Observed saturated GoF statistic | `24.7215` |
+| Cabinetry saturated GoF p-value | `0.1011` |
+| Toy median statistic | `16.3962` |
+| Toy central 95% interval | `8.2208` to `31.6523` |
+| Fitted-toy p-value | `0.1683` |
+| Decision | `PASS` |
+
 The visible-mass baseline fit gives
 
 $$
