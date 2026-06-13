@@ -3,25 +3,25 @@
     "addmet_mass": {
       "categories": {
         "boosted": {
-          "background_events": 2818,
-          "signal_events": 748,
-          "sqrt_sum_s2_over_b_plus_1": 17.15500434794041,
-          "sum_s_over_sqrt_b_plus_1": 54.72372283555798
+          "background_events": 455,
+          "signal_events": 229,
+          "sqrt_sum_s2_over_b_plus_1": 13.100348078166464,
+          "sum_s_over_sqrt_b_plus_1": 42.04760147313988
         },
         "vbf": {
-          "background_events": 240,
-          "signal_events": 387,
-          "sqrt_sum_s2_over_b_plus_1": 32.031244201038895,
-          "sum_s_over_sqrt_b_plus_1": 98.74531674808813
+          "background_events": 43,
+          "signal_events": 178,
+          "sqrt_sum_s2_over_b_plus_1": 36.63559289361463,
+          "sum_s_over_sqrt_b_plus_1": 103.45685541081367
         },
         "zero_jet": {
-          "background_events": 5344,
-          "signal_events": 533,
-          "sqrt_sum_s2_over_b_plus_1": 9.180612241443292,
-          "sum_s_over_sqrt_b_plus_1": 31.249320131316395
+          "background_events": 5426,
+          "signal_events": 858,
+          "sqrt_sum_s2_over_b_plus_1": 14.679301921966623,
+          "sum_s_over_sqrt_b_plus_1": 48.473688930348594
         }
       },
-      "combined_metric_sum_over_categories": 58.3668607904226,
+      "combined_metric_sum_over_categories": 64.41524289374772,
       "variable": "m_addmet"
     },
     "nn_classifier": {
@@ -31,25 +31,25 @@
     "visible_mass": {
       "categories": {
         "boosted": {
-          "background_events": 2818,
-          "signal_events": 748,
-          "sqrt_sum_s2_over_b_plus_1": 17.388391605147497,
-          "sum_s_over_sqrt_b_plus_1": 46.39705137952801
+          "background_events": 455,
+          "signal_events": 229,
+          "sqrt_sum_s2_over_b_plus_1": 12.821416080702235,
+          "sum_s_over_sqrt_b_plus_1": 35.288840143692084
         },
         "vbf": {
-          "background_events": 240,
-          "signal_events": 387,
-          "sqrt_sum_s2_over_b_plus_1": 32.93523110905739,
-          "sum_s_over_sqrt_b_plus_1": 83.77960675520612
+          "background_events": 43,
+          "signal_events": 178,
+          "sqrt_sum_s2_over_b_plus_1": 34.38580133330229,
+          "sum_s_over_sqrt_b_plus_1": 84.33867220476843
         },
         "zero_jet": {
-          "background_events": 5344,
-          "signal_events": 533,
-          "sqrt_sum_s2_over_b_plus_1": 10.304534939875426,
-          "sum_s_over_sqrt_b_plus_1": 26.28070178672921
+          "background_events": 5426,
+          "signal_events": 858,
+          "sqrt_sum_s2_over_b_plus_1": 15.828367427161952,
+          "sum_s_over_sqrt_b_plus_1": 41.23691701162493
         }
       },
-      "combined_metric_sum_over_categories": 60.62815765408031,
+      "combined_metric_sum_over_categories": 63.035584841166475,
       "variable": "m_vis"
     }
   },

@@ -38,6 +38,12 @@ xgboost = ">=2.0"
 scikit-learn = ">=1.3"
 # Columnar event processing at scale
 coffea = ">=2024.0"
+pypdf = ">=6.13.2,<7"
+aria2 = ">=1.37.0,<2"
+ca-certificates = ">=2026.5.20,<2027"
+certifi = ">=2026.5.20,<2027"
+openssl = ">=3.6.3,<4"
+xrootd = ">=6.0.3,<7"
 
 # --- Core stack (always needed) ---
 [pypi-dependencies]
@@ -52,7 +58,7 @@ lint-plots = "python conventions/lint_plots.py ."
 # --- Analysis tasks: add as you write scripts ---
 # Each script gets an independently runnable task.
 # The "all" task chains the full sequence — this is the reproducibility contract.
-phase2-explore = "SSL_CERT_FILE=/etc/ssl/certs/ca-certificates.crt python phase2_exploration/src/explore_samples.py"
+phase2-explore = "python phase2_exploration/src/explore_samples.py"
 phase2-plots = "python phase2_exploration/src/plot_exploration.py"
 phase2-local-manifest = "python phase2_exploration/src/localize_samples.py"
 phase3-select = "python phase3_selection/src/build_selection.py"

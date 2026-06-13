@@ -5,19 +5,13 @@ from __future__ import annotations
 import json
 import logging
 import math
-import os
-import ssl
 from pathlib import Path
-from urllib.request import Request, urlopen
 
 import awkward as ak
 import numpy as np
 import uproot
 from rich.logging import RichHandler
 from sklearn.metrics import roc_auc_score
-
-os.environ.setdefault("SSL_CERT_FILE", "/etc/ssl/certs/ca-certificates.crt")
-ssl._create_default_https_context = ssl.create_default_context  # noqa: SLF001
 
 logging.basicConfig(
     level=logging.INFO,
@@ -30,7 +24,6 @@ HERE = Path(__file__).resolve().parent
 ANALYSIS_ROOT = HERE.parent.parent
 OUT = HERE.parent / "outputs"
 FIG = OUT / "figures"
-BASE_URL = "https://root.cern.ch/files/HiggsTauTauReduced"
 ENTRY_STOP = 5_000
 
 SAMPLES = [
@@ -91,17 +84,6 @@ def ensure_dirs() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
 
 
-def head_size(url: str) -> int | None:
-    req = Request(url, method="HEAD")
-    try:
-        with urlopen(req, timeout=30) as response:
-            value = response.headers.get("content-length")
-    except OSError as exc:
-        log.warning("HEAD failed for %s: %s", url, exc)
-        return None
-    return int(value) if value is not None else None
-
-
 def local_sample_path(sample: dict[str, str]) -> Path:
     directory = "data" if sample["role"] == "data" else "mc"
     return ANALYSIS_ROOT / directory / sample["file"]
@@ -111,12 +93,14 @@ def sample_source(sample: dict[str, str]) -> str:
     local_path = local_sample_path(sample)
     if local_path.exists():
         return str(local_path)
-    return f"{BASE_URL}/{sample['file']}"
+    raise FileNotFoundError(f"Required local sample is missing: {local_path}")
 
 
 def open_tree(file_name: str) -> uproot.TTree:
     sample = next((item for item in SAMPLES if item["file"] == file_name), None)
-    source = sample_source(sample) if sample is not None else f"{BASE_URL}/{file_name}"
+    if sample is None:
+        raise KeyError(f"Unknown sample file: {file_name}")
+    source = sample_source(sample)
     root_file = uproot.open(source)
     return root_file["Events"]
 
@@ -339,20 +323,19 @@ def histogram(values: np.ndarray, bins: np.ndarray) -> dict[str, list[float]]:
 
 
 def build_inventory() -> dict[str, object]:
-    inventory: dict[str, object] = {"base_url": BASE_URL, "samples": {}}
+    inventory: dict[str, object] = {"input_policy": "local data/ and mc/ ROOT files only", "samples": {}}
     for sample in SAMPLES:
         log.info("Inventory %s", sample["file"])
-        url = f"{BASE_URL}/{sample['file']}"
         tree = open_tree(sample["file"])
         branches = tree.keys()
+        local_path = local_sample_path(sample)
         inventory["samples"][sample["name"]] = {
             "file": sample["file"],
             "role": sample["role"],
-            "url": url,
             "source_used": sample_source(sample),
-            "local_path": str(local_sample_path(sample)),
-            "local_exists": local_sample_path(sample).exists(),
-            "size_bytes": head_size(url),
+            "local_path": str(local_path),
+            "local_exists": local_path.exists(),
+            "size_bytes": local_path.stat().st_size,
             "trees": {"Events": {"entries": int(tree.num_entries)}},
             "branch_count": len(branches),
             "branches": [

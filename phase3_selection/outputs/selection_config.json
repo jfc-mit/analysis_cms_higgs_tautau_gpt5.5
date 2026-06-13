@@ -1,7 +1,10 @@
 {
   "btag": {
+    "central_eta_abs_max": 2.4,
+    "central_pt_min_gev": 20.0,
+    "medium_csv_threshold": 0.679,
     "sentinel_rule": "Jet_btag < 0 is invalid and excluded from max score",
-    "usage": "diagnostic continuous top handle only"
+    "usage": "central medium-CSV event veto plus inverted-b-veto control handle"
   },
   "categories": {
     "assignment_order": [
@@ -10,33 +13,38 @@
       "zero_jet"
     ],
     "boosted_njet_min": 1,
-    "vbf_delta_eta_jj_min": 2.5,
-    "vbf_mjj_min_gev": 300.0,
+    "boosted_pt_tautau_min_gev": 100.0,
+    "vbf_delta_eta_jj_min": 3.5,
+    "vbf_mjj_min_gev": 500.0,
     "vbf_njet_min": 2
   },
   "jet": {
     "delta_r_lepton_min": 0.5,
     "eta_abs_max": 4.7,
-    "pt_min_gev": 30.0
+    "pt_min_gev": 30.0,
+    "pu_id_required": true
   },
   "muon": {
+    "dxy_abs_max_cm": 0.045,
+    "dz_abs_max_cm": 0.2,
     "eta_abs_max": 2.1,
-    "pfRelIso04_all_max": 0.2,
+    "pfRelIso03_all_max": 0.1,
     "pt_min_gev": 20.0,
     "tight_id_required": true
   },
   "regions": {
-    "signal_mt_max_gev": 40.0,
-    "w_cr_mt_min_gev": 80.0,
+    "signal_mt_max_gev": 30.0,
+    "w_cr_mt_min_gev": 70.0,
     "z_rich_mvis_max_gev": 120.0,
     "z_rich_mvis_min_gev": 60.0
   },
   "tau": {
     "delta_r_mu_tau_min": 0.5,
     "eta_abs_max": 2.3,
+    "idAntiEleTight_required": true,
     "idAntiMuTight_required": true,
-    "idIsoTight_required": true,
-    "pt_min_gev": 20.0
+    "idIsoMedium_required": true,
+    "pt_min_gev": 30.0
   },
   "trigger": {
     "available_alternatives_not_used": [

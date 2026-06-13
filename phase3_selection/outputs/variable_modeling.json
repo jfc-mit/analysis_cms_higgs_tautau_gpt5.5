@@ -1,12 +1,55 @@
 {
-  "candidate_input_count": 16,
-  "fail_count": 13,
+  "candidate_input_count": 15,
+  "fail_count": 14,
   "gate": "data_vs_background_mc_shape_chi2_ndf_le_5",
   "majority_failed": true,
   "mva_result": {
-    "reason": "Majority of candidate MVA inputs failed the data/MC modelling gate in validation/control regions.",
-    "status": "downscoped",
-    "trained": false
+    "class_counts": {
+      "0": 21245,
+      "1": 7714
+    },
+    "inputs": [
+      "m_vis",
+      "mu_pt",
+      "mu_eta",
+      "tau_pt",
+      "tau_eta",
+      "delta_r_mu_tau",
+      "delta_phi_mu_tau",
+      "met_pt",
+      "met_significance",
+      "mt_mu_met",
+      "mt_tau_met",
+      "mt_tot",
+      "pt_tautau_proxy",
+      "m_coll",
+      "tau_id_iso_raw"
+    ],
+    "modelling_gate_majority_failed": true,
+    "modelling_gate_note": "The classifier training remains MC-only and is retained as a candidate discriminator. Data/background-MC input-shape failures are carried as validation requirements rather than used to tune the classifier.",
+    "models": {
+      "hist_gradient_boosting_alternative": {
+        "n_test": 10136,
+        "n_train": 18823,
+        "test_auc": 0.8577345944653637,
+        "train_auc": 0.8883784610852665
+      },
+      "mlp_alternative": {
+        "n_test": 10136,
+        "n_train": 18823,
+        "test_auc": 0.855575578267886,
+        "train_auc": 0.889850832037736
+      },
+      "xgboost_primary": {
+        "n_test": 10136,
+        "n_train": 18823,
+        "test_auc": 0.8541039587193432,
+        "train_auc": 0.8747054629830305
+      }
+    },
+    "split_seed": 31415,
+    "status": "trained_for_phase3_comparison_with_modelling_caveat",
+    "trained": true
   },
   "nn_genmet_regression": {
     "phase3_decision": "Do not construct or fit NN genMET mass. Keep add-MET mass as the reconstructed-MET alternative.",
@@ -15,11 +58,52 @@
   },
   "normalization": "shape_normalized_raw_counts",
   "passing_inputs": [
-    "tau_reliso",
-    "mjj",
-    "delta_eta_jj"
+    "tau_id_iso_raw"
   ],
   "rows": [
+    {
+      "bins": [
+        0.0,
+        10.0,
+        20.0,
+        30.0,
+        40.0,
+        50.0,
+        60.0,
+        70.0,
+        80.0,
+        90.0,
+        100.0,
+        110.0,
+        120.0,
+        130.0,
+        140.0,
+        150.0,
+        160.0,
+        170.0,
+        180.0,
+        190.0,
+        200.0,
+        210.0,
+        220.0,
+        230.0,
+        240.0,
+        250.0
+      ],
+      "chi2": 915.9144932260751,
+      "chi2_ndf": 39.82236927069892,
+      "decision": "remove_from_mva",
+      "ndf": 23,
+      "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
+      "validation_regions": [
+        "w_high_mt",
+        "qcd_same_sign",
+        "z_rich",
+        "top_btag_handle"
+      ],
+      "variable": "m_vis"
+    },
     {
       "bins": [
         20.0,
@@ -40,8 +124,8 @@
         151.25,
         160.0
       ],
-      "chi2": 957.9754166301823,
-      "chi2_ndf": 63.86502777534549,
+      "chi2": 1460.588282846461,
+      "chi2_ndf": 97.37255218976406,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -74,8 +158,8 @@
         1.9249999999999998,
         2.2
       ],
-      "chi2": 124.03016493308941,
-      "chi2_ndf": 8.268677662205961,
+      "chi2": 132.12034411991672,
+      "chi2_ndf": 8.808022941327781,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -87,39 +171,6 @@
         "top_btag_handle"
       ],
       "variable": "mu_eta"
-    },
-    {
-      "bins": [
-        0.0,
-        0.016666666666666666,
-        0.03333333333333333,
-        0.05,
-        0.06666666666666667,
-        0.08333333333333333,
-        0.1,
-        0.11666666666666667,
-        0.13333333333333333,
-        0.15,
-        0.16666666666666666,
-        0.18333333333333332,
-        0.2,
-        0.21666666666666667,
-        0.23333333333333334,
-        0.25
-      ],
-      "chi2": 503.98846024037573,
-      "chi2_ndf": 45.817132749125065,
-      "decision": "remove_from_mva",
-      "ndf": 11,
-      "status": "evaluated",
-      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
-      "validation_regions": [
-        "w_high_mt",
-        "qcd_same_sign",
-        "z_rich",
-        "top_btag_handle"
-      ],
-      "variable": "mu_reliso"
     },
     {
       "bins": [
@@ -141,10 +192,10 @@
         170.0,
         180.0
       ],
-      "chi2": 879.6623559062493,
-      "chi2_ndf": 58.644157060416624,
+      "chi2": 1142.0691461312617,
+      "chi2_ndf": 81.57636758080442,
       "decision": "remove_from_mva",
-      "ndf": 15,
+      "ndf": 14,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -175,8 +226,8 @@
         2.1875,
         2.5
       ],
-      "chi2": 167.1929412134501,
-      "chi2_ndf": 11.146196080896674,
+      "chi2": 170.37271550933121,
+      "chi2_ndf": 11.358181033955415,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -191,27 +242,30 @@
     },
     {
       "bins": [
-        0.0,
-        0.3333333333333333,
-        0.6666666666666666,
+        0.5,
+        0.75,
         1.0,
-        1.3333333333333333,
-        1.6666666666666665,
+        1.25,
+        1.5,
+        1.75,
         2.0,
-        2.333333333333333,
-        2.6666666666666665,
+        2.25,
+        2.5,
+        2.75,
         3.0,
-        3.333333333333333,
-        3.6666666666666665,
+        3.25,
+        3.5,
+        3.75,
         4.0,
-        4.333333333333333,
-        4.666666666666666,
+        4.25,
+        4.5,
+        4.75,
         5.0
       ],
-      "chi2": 12.15323639642553,
-      "chi2_ndf": 2.430647279285106,
-      "decision": "pass",
-      "ndf": 5,
+      "chi2": 1569.0001682013244,
+      "chi2_ndf": 92.29412754125438,
+      "decision": "remove_from_mva",
+      "ndf": 17,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -220,7 +274,41 @@
         "z_rich",
         "top_btag_handle"
       ],
-      "variable": "tau_reliso"
+      "variable": "delta_r_mu_tau"
+    },
+    {
+      "bins": [
+        0.0,
+        0.19634954084936207,
+        0.39269908169872414,
+        0.5890486225480862,
+        0.7853981633974483,
+        0.9817477042468103,
+        1.1780972450961724,
+        1.3744467859455345,
+        1.5707963267948966,
+        1.7671458676442586,
+        1.9634954084936207,
+        2.1598449493429825,
+        2.356194490192345,
+        2.552544031041707,
+        2.748893571891069,
+        2.945243112740431,
+        3.141592653589793
+      ],
+      "chi2": 1548.5164758949272,
+      "chi2_ndf": 103.23443172632848,
+      "decision": "remove_from_mva",
+      "ndf": 15,
+      "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
+      "validation_regions": [
+        "w_high_mt",
+        "qcd_same_sign",
+        "z_rich",
+        "top_btag_handle"
+      ],
+      "variable": "delta_phi_mu_tau"
     },
     {
       "bins": [
@@ -246,8 +334,8 @@
         190.0,
         200.0
       ],
-      "chi2": 1524.3872589381904,
-      "chi2_ndf": 80.23090836516792,
+      "chi2": 2768.9141380356878,
+      "chi2_ndf": 145.7323230545099,
       "decision": "remove_from_mva",
       "ndf": 19,
       "status": "evaluated",
@@ -259,6 +347,44 @@
         "top_btag_handle"
       ],
       "variable": "met_pt"
+    },
+    {
+      "bins": [
+        0.0,
+        5.0,
+        10.0,
+        15.0,
+        20.0,
+        25.0,
+        30.0,
+        35.0,
+        40.0,
+        45.0,
+        50.0,
+        55.0,
+        60.0,
+        65.0,
+        70.0,
+        75.0,
+        80.0,
+        85.0,
+        90.0,
+        95.0,
+        100.0
+      ],
+      "chi2": 1464.7773773353292,
+      "chi2_ndf": 77.09354617554364,
+      "decision": "remove_from_mva",
+      "ndf": 19,
+      "status": "evaluated",
+      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
+      "validation_regions": [
+        "w_high_mt",
+        "qcd_same_sign",
+        "z_rich",
+        "top_btag_handle"
+      ],
+      "variable": "met_significance"
     },
     {
       "bins": [
@@ -280,8 +406,8 @@
         150.0,
         160.0
       ],
-      "chi2": 1631.2309772742087,
-      "chi2_ndf": 108.74873181828058,
+      "chi2": 3424.8302879977696,
+      "chi2_ndf": 228.3220191998513,
       "decision": "remove_from_mva",
       "ndf": 15,
       "status": "evaluated",
@@ -312,21 +438,12 @@
         130.0,
         140.0,
         150.0,
-        160.0,
-        170.0,
-        180.0,
-        190.0,
-        200.0,
-        210.0,
-        220.0,
-        230.0,
-        240.0,
-        250.0
+        160.0
       ],
-      "chi2": 413.4959827328584,
-      "chi2_ndf": 17.978086205776453,
+      "chi2": 767.1514099000105,
+      "chi2_ndf": 51.14342732666737,
       "decision": "remove_from_mva",
-      "ndf": 23,
+      "ndf": 15,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -335,7 +452,7 @@
         "z_rich",
         "top_btag_handle"
       ],
-      "variable": "m_vis"
+      "variable": "mt_tau_met"
     },
     {
       "bins": [
@@ -371,10 +488,10 @@
         290.0,
         300.0
       ],
-      "chi2": 1169.6572519088131,
-      "chi2_ndf": 43.32063895958567,
+      "chi2": 2396.212219365924,
+      "chi2_ndf": 82.6280075643422,
       "decision": "remove_from_mva",
-      "ndf": 27,
+      "ndf": 29,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -383,7 +500,7 @@
         "z_rich",
         "top_btag_handle"
       ],
-      "variable": "m_addmet"
+      "variable": "mt_tot"
     },
     {
       "bins": [
@@ -414,8 +531,8 @@
         240.0,
         250.0
       ],
-      "chi2": 1804.8878303925112,
-      "chi2_ndf": 75.20365959968797,
+      "chi2": 3854.242295861587,
+      "chi2_ndf": 160.5934289942328,
       "decision": "remove_from_mva",
       "ndf": 24,
       "status": "evaluated",
@@ -430,108 +547,6 @@
     },
     {
       "bins": [
-        -0.5,
-        0.5,
-        1.5,
-        2.5,
-        3.5,
-        4.5,
-        5.5,
-        6.5,
-        7.5
-      ],
-      "chi2": 3557.3475639042263,
-      "chi2_ndf": 508.19250912917516,
-      "decision": "remove_from_mva",
-      "ndf": 7,
-      "status": "evaluated",
-      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
-      "validation_regions": [
-        "w_high_mt",
-        "qcd_same_sign",
-        "z_rich",
-        "top_btag_handle"
-      ],
-      "variable": "n_clean_jets"
-    },
-    {
-      "bins": [
-        0.0,
-        50.0,
-        100.0,
-        150.0,
-        200.0,
-        250.0,
-        300.0,
-        350.0,
-        400.0,
-        450.0,
-        500.0,
-        550.0,
-        600.0,
-        650.0,
-        700.0,
-        750.0,
-        800.0,
-        850.0,
-        900.0,
-        950.0,
-        1000.0,
-        1050.0,
-        1100.0,
-        1150.0,
-        1200.0
-      ],
-      "chi2": 68.35617986315916,
-      "chi2_ndf": 2.9720078201373545,
-      "decision": "pass",
-      "ndf": 23,
-      "status": "evaluated",
-      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
-      "validation_regions": [
-        "w_high_mt",
-        "qcd_same_sign",
-        "z_rich",
-        "top_btag_handle"
-      ],
-      "variable": "mjj"
-    },
-    {
-      "bins": [
-        0.0,
-        0.5,
-        1.0,
-        1.5,
-        2.0,
-        2.5,
-        3.0,
-        3.5,
-        4.0,
-        4.5,
-        5.0,
-        5.5,
-        6.0,
-        6.5,
-        7.0,
-        7.5,
-        8.0
-      ],
-      "chi2": 28.44291983576399,
-      "chi2_ndf": 2.0316371311259993,
-      "decision": "pass",
-      "ndf": 14,
-      "status": "evaluated",
-      "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
-      "validation_regions": [
-        "w_high_mt",
-        "qcd_same_sign",
-        "z_rich",
-        "top_btag_handle"
-      ],
-      "variable": "delta_eta_jj"
-    },
-    {
-      "bins": [
         0.0,
         10.0,
         20.0,
@@ -557,12 +572,17 @@
         220.0,
         230.0,
         240.0,
-        250.0
+        250.0,
+        260.0,
+        270.0,
+        280.0,
+        290.0,
+        300.0
       ],
-      "chi2": 323.12948025049064,
-      "chi2_ndf": 15.387118107166222,
+      "chi2": 1017.4936107569371,
+      "chi2_ndf": 35.085986577825416,
       "decision": "remove_from_mva",
-      "ndf": 21,
+      "ndf": 29,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -571,36 +591,36 @@
         "z_rich",
         "top_btag_handle"
       ],
-      "variable": "jet1_pt"
+      "variable": "m_coll"
     },
     {
       "bins": [
-        -1.0,
-        -0.9,
-        -0.8,
-        -0.7,
-        -0.6,
-        -0.5,
-        -0.3999999999999999,
-        -0.29999999999999993,
-        -0.19999999999999996,
-        -0.09999999999999998,
         0.0,
-        0.10000000000000009,
-        0.20000000000000018,
-        0.30000000000000004,
-        0.40000000000000013,
-        0.5,
-        0.6000000000000001,
-        0.7000000000000002,
-        0.8,
-        0.9000000000000001,
-        1.0
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0,
+        13.0,
+        14.0,
+        15.0,
+        16.0,
+        17.0,
+        18.0,
+        19.0,
+        20.0
       ],
-      "chi2": 3387.8205300718137,
-      "chi2_ndf": 338.7820530071814,
-      "decision": "remove_from_mva",
-      "ndf": 10,
+      "chi2": 15.30350616384944,
+      "chi2_ndf": 2.1862151662642058,
+      "decision": "pass",
+      "ndf": 7,
       "status": "evaluated",
       "validation_region_semantics": "union of non-exclusive boolean flags, not selected_events region strings",
       "validation_regions": [
@@ -609,7 +629,7 @@
         "z_rich",
         "top_btag_handle"
       ],
-      "variable": "btag_max"
+      "variable": "tau_id_iso_raw"
     }
   ],
   "validation_remediation": {
@@ -623,19 +643,19 @@
         "results": {
           "m_addmet": {
             "background_role": "background",
-            "chi2": 1169.6572519088131,
-            "chi2_ndf": 43.32063895958567,
-            "data_events": 16600,
-            "mc_events": 18592,
+            "chi2": 1681.0978059057575,
+            "chi2_ndf": 62.26288170021324,
+            "data_events": 43775,
+            "mc_events": 48538,
             "ndf": 27,
             "status": "evaluated"
           },
           "m_vis": {
             "background_role": "background",
-            "chi2": 413.4959827328584,
-            "chi2_ndf": 17.978086205776453,
-            "data_events": 16600,
-            "mc_events": 18592,
+            "chi2": 915.9144932260751,
+            "chi2_ndf": 39.82236927069892,
+            "data_events": 43775,
+            "mc_events": 48538,
             "ndf": 23,
             "status": "evaluated"
           }
@@ -649,19 +669,19 @@
           "qcd_same_sign": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 70.34272640326482,
-              "chi2_ndf": 2.6052861630838824,
-              "data_events": 3138,
-              "mc_events": 1200,
+              "chi2": 125.98384826118075,
+              "chi2_ndf": 4.666068454117806,
+              "data_events": 5211,
+              "mc_events": 2227,
               "ndf": 27,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 75.0965970096735,
-              "chi2_ndf": 3.2650694352031957,
-              "data_events": 3138,
-              "mc_events": 1200,
+              "chi2": 142.14101445514729,
+              "chi2_ndf": 6.180044106745534,
+              "data_events": 5211,
+              "mc_events": 2227,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -669,19 +689,19 @@
           "top_btag_handle": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 329.4112470975078,
-              "chi2_ndf": 12.200416559166955,
-              "data_events": 6689,
-              "mc_events": 12508,
+              "chi2": 160.98440646230668,
+              "chi2_ndf": 5.962385424529877,
+              "data_events": 5559,
+              "mc_events": 16202,
               "ndf": 27,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 132.57476499895887,
-              "chi2_ndf": 5.764120217346038,
-              "data_events": 6689,
-              "mc_events": 12508,
+              "chi2": 93.21072785124255,
+              "chi2_ndf": 4.052640341358372,
+              "data_events": 5559,
+              "mc_events": 16202,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -689,19 +709,19 @@
           "w_high_mt": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 170.9444770431192,
-              "chi2_ndf": 8.54722385215596,
-              "data_events": 4023,
-              "mc_events": 6283,
-              "ndf": 20,
+              "chi2": 23.967076618935216,
+              "chi2_ndf": 1.141289362806439,
+              "data_events": 14065,
+              "mc_events": 15320,
+              "ndf": 21,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 55.30775692889263,
-              "chi2_ndf": 2.404685083864897,
-              "data_events": 4023,
-              "mc_events": 6283,
+              "chi2": 45.22511984911065,
+              "chi2_ndf": 1.9663095586569848,
+              "data_events": 14065,
+              "mc_events": 15320,
               "ndf": 23,
               "status": "evaluated"
             }
@@ -709,19 +729,19 @@
           "z_rich": {
             "m_addmet": {
               "background_role": "background",
-              "chi2": 77.40535341086016,
-              "chi2_ndf": 3.365450148298268,
-              "data_events": 5514,
-              "mc_events": 4396,
+              "chi2": 43.889840769828936,
+              "chi2_ndf": 1.9082539465143016,
+              "data_events": 18940,
+              "mc_events": 14789,
               "ndf": 23,
               "status": "evaluated"
             },
             "m_vis": {
               "background_role": "background",
-              "chi2": 7.047417530937078,
-              "chi2_ndf": 1.4094835061874156,
-              "data_events": 5514,
-              "mc_events": 4396,
+              "chi2": 8.318874467846415,
+              "chi2_ndf": 1.663774893569283,
+              "data_events": 18940,
+              "mc_events": 14789,
               "ndf": 5,
               "status": "evaluated"
             }
@@ -735,19 +755,19 @@
         "results": {
           "m_addmet": {
             "background_role": "background",
-            "chi2": 1109.7159253179886,
-            "chi2_ndf": 123.30176947977651,
-            "data_events": 16600,
-            "mc_events": 18592,
+            "chi2": 1640.172774422955,
+            "chi2_ndf": 182.24141938032832,
+            "data_events": 43775,
+            "mc_events": 48538,
             "ndf": 9,
             "status": "evaluated"
           },
           "m_vis": {
             "background_role": "background",
-            "chi2": 350.2935954871888,
-            "chi2_ndf": 38.921510609687644,
-            "data_events": 16600,
-            "mc_events": 18592,
+            "chi2": 782.7320397535542,
+            "chi2_ndf": 86.9702266392838,
+            "data_events": 43775,
+            "mc_events": 48538,
             "ndf": 9,
             "status": "evaluated"
           }
@@ -760,17 +780,17 @@
         "results": {
           "m_vis": {
             "background_role": "background",
-            "chi2": 7.047417530937078,
-            "chi2_ndf": 1.4094835061874156,
-            "data_events": 5514,
-            "mc_events": 4396,
+            "chi2": 8.318874467846415,
+            "chi2_ndf": 1.663774893569283,
+            "data_events": 18940,
+            "mc_events": 14789,
             "ndf": 5,
             "status": "evaluated"
           }
         }
       }
     ],
-    "best_primary_m_vis_chi2_ndf": 1.4094835061874156,
+    "best_primary_m_vis_chi2_ndf": 1.663774893569283,
     "phase4_blocker": null,
     "primary_m_vis_closure_validated_for_phase4": true
   }

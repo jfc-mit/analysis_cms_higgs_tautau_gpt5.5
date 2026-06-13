@@ -25,7 +25,7 @@ FIG = OUT / "figures"
 
 mh.style.use("CMS")
 
-MIXED_OPEN_LABEL = "Open Data + Open Sim."
+MIXED_OPEN_LABEL = "Open Data + Open Simulation"
 ENERGY_LABEL = r"$8$ TeV"
 
 SAMPLE_LABELS = {

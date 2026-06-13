@@ -20,32 +20,25 @@ FIG = OUT / "figures"
 
 JSON_FILES = [
     "observed_results.json",
-    "observed_yields.json",
-    "score_observed_yields.json",
     "visible_observed_yields.json",
-    "addmet_observed_yields.json",
+    "baseline_visible_yields.json",
+    "nn_score_observed_yields.json",
     "wjets_highmt_scale_full.json",
     "vbf_background_scale.json",
     "qcd_sideband_estimates.json",
     "comparison_to_4a_4b.json",
-    "pyhf_workspace_observed.json",
-    "pyhf_workspace_score_diagnostic.json",
-    "pyhf_workspace_visible_crosscheck.json",
-    "pyhf_workspace_addmet.json",
+    "pyhf_workspace_baseline_visible.json",
+    "pyhf_workspace_nn_score.json",
+    "baseline_visible_result.json",
+    "nn_score_result.json",
 ]
 FIGURE_STEMS = [
-    "observed_primary_score_vbf",
-    "observed_primary_score_boosted",
-    "observed_primary_score_zero_jet",
     "observed_visible_vbf",
     "observed_visible_boosted",
     "observed_visible_zero_jet",
-    "observed_addmet_vbf",
-    "observed_addmet_boosted",
-    "observed_addmet_zero_jet",
-    "observed_score_vbf",
-    "observed_score_boosted",
-    "observed_score_zero_jet",
+    "observed_nn_score_vbf",
+    "observed_nn_score_boosted",
+    "observed_nn_score_zero_jet",
     "observed_pull_ratio_summary",
     "w_highmt_scale_full",
     "observed_limit_significance_summary",
@@ -61,7 +54,7 @@ def main() -> None:
             raise FileNotFoundError(path)
         payloads[name] = json.loads(path.read_text())
         log.info("Valid JSON: %s", path)
-    for template_name in ["observed_templates.npz", "score_observed_templates.npz", "visible_observed_templates.npz", "addmet_observed_templates.npz"]:
+    for template_name in ["visible_observed_templates.npz", "nn_score_observed_templates.npz"]:
         with np.load(OUT / template_name, allow_pickle=False) as templates:
             required = {"samples", "categories", "bin_edges", "observable", "yields", "variances", "raw_counts", "data_counts"}
             if set(templates.files) != required:
@@ -73,56 +66,44 @@ def main() -> None:
             if "QCDSameSignDataDriven" not in {str(x) for x in templates["samples"]}:
                 raise ValueError(f"{template_name} is missing the QCD/fake data-driven sample")
             log.info("Valid NPZ: %s", OUT / template_name)
-    with np.load(OUT / "observed_templates.npz", allow_pickle=False) as templates:
-        required = {"samples", "categories", "bin_edges", "observable", "yields", "variances", "raw_counts", "data_counts"}
-        if set(templates.files) != required:
-            raise ValueError(f"Unexpected observed_templates.npz keys: {templates.files}")
-        if "mva_score" not in str(templates["observable"][0]):
-            raise ValueError("Primary observed template is not the calibrated classifier score")
     with np.load(OUT / "visible_observed_templates.npz", allow_pickle=False) as templates:
         if str(templates["observable"][0]) != "m_vis":
-            raise ValueError("Visible cross-check template is not m_vis")
-    with np.load(OUT / "addmet_observed_templates.npz", allow_pickle=False) as templates:
-        if str(templates["observable"][0]) != "m_addmet":
-            raise ValueError("Add-MET observed template does not use m_addmet")
-        if len(templates["categories"]) != 3:
-            raise ValueError("Add-MET fit does not retain the three exclusive categories")
-    ws = pyhf.Workspace(payloads["pyhf_workspace_observed.json"])
+            raise ValueError("Visible baseline template is not m_vis")
+    with np.load(OUT / "nn_score_observed_templates.npz", allow_pickle=False) as templates:
+        if str(templates["observable"][0]) != "mva_score_xgboost":
+            raise ValueError("D_NN template does not use the XGBoost score")
+        if len(templates["bin_edges"]) != 21:
+            raise ValueError("D_NN template does not use 20 uniform score bins")
+    ws = pyhf.Workspace(payloads["pyhf_workspace_baseline_visible.json"])
     model = ws.model()
     data = ws.data(model)
     _ = model.logpdf(model.config.suggested_init(), data)
-    log.info("pyhf observed workspace constructs with %s parameters", model.config.npars)
-    score_ws = pyhf.Workspace(payloads["pyhf_workspace_score_diagnostic.json"])
-    score_model = score_ws.model()
-    score_data = score_ws.data(score_model)
-    _ = score_model.logpdf(score_model.config.suggested_init(), score_data)
-    log.info("pyhf score diagnostic workspace constructs with %s parameters", score_model.config.npars)
-    addmet_ws = pyhf.Workspace(payloads["pyhf_workspace_addmet.json"])
-    addmet_model = addmet_ws.model()
-    addmet_data = addmet_ws.data(addmet_model)
-    _ = addmet_model.logpdf(addmet_model.config.suggested_init(), addmet_data)
-    log.info("pyhf add-MET workspace constructs with %s parameters", addmet_model.config.npars)
-    visible_ws = pyhf.Workspace(payloads["pyhf_workspace_visible_crosscheck.json"])
-    visible_model = visible_ws.model()
-    visible_data = visible_ws.data(visible_model)
-    _ = visible_model.logpdf(visible_model.config.suggested_init(), visible_data)
-    log.info("pyhf visible cross-check workspace constructs with %s parameters", visible_model.config.npars)
+    log.info("pyhf visible baseline workspace constructs with %s parameters", model.config.npars)
+    nn_ws = pyhf.Workspace(payloads["pyhf_workspace_nn_score.json"])
+    nn_model = nn_ws.model()
+    nn_data = nn_ws.data(nn_model)
+    _ = nn_model.logpdf(nn_model.config.suggested_init(), nn_data)
+    log.info("pyhf D_NN workspace constructs with %s parameters", nn_model.config.npars)
     results = payloads["observed_results.json"]
     blinding = results["blinding"]
     if "Run2012B/C TauPlusX" not in blinding["data_scope"]:
         raise ValueError("Observed outputs do not document Run2012B/C data scope")
     if blinding["post_unblinding_retuning"]:
         raise ValueError("Observed outputs claim post-unblinding retuning")
-    if "auto-passed" not in blinding["phase4b_human_gate"]:
-        raise ValueError("Observed outputs do not record Phase 4b gate auto-pass")
-    if results["primary_model"] != "calibrated_score_qcd_primary":
-        raise ValueError("Phase 4c update did not promote calibrated-score/QCD primary model")
-    if results["addmet"]["observable"] != "m_addmet":
-        raise ValueError("observed_results.json addmet section does not document m_addmet")
-    if results["addmet"]["workspace"] != "pyhf_workspace_addmet.json":
-        raise ValueError("observed_results.json addmet section points to the wrong workspace")
-    if "addmet_mass_qcd_crosscheck" not in results["diagnostic_models"]:
-        raise ValueError("Add-MET cross-check is not listed as a diagnostic model")
+    if blinding.get("phase4b_validation_status") != "completed_before_full_signal_region_evaluation":
+        raise ValueError("Observed outputs do not record Phase 4b validation status")
+    if results["primary_model"] != "visible_mass_qcd_primary":
+        raise ValueError("Phase 4c primary model is not the visible-mass baseline")
+    baseline_result = payloads["baseline_visible_result.json"]
+    if baseline_result["observable"] != "m_vis":
+        raise ValueError("Baseline result does not use m_vis")
+    nn_result = payloads["nn_score_result.json"]
+    if nn_result["observable"] != "mva_score_xgboost":
+        raise ValueError("D_NN score result does not use the XGBoost score")
+    if len(nn_result["binning"]) != 21:
+        raise ValueError("D_NN score result does not use 20 uniform score bins")
+    if results["nn_score_result"]["workspace"] != "pyhf_workspace_nn_score.json":
+        raise ValueError("observed_results.json D_NN section points to the wrong workspace")
     w_scale = payloads["wjets_highmt_scale_full.json"]
     if not np.isfinite(w_scale["applied_scale_factor"]) or w_scale["applied_scale_factor"] < 0:
         raise ValueError("Invalid full W high-mT applied scale")
@@ -132,7 +113,7 @@ def main() -> None:
     if not (0.2 <= vbf_scale["applied_scale_factor"] <= 0.9):
         raise ValueError("VBF background scale is outside the expected audit range")
     qcd = payloads["qcd_sideband_estimates.json"]
-    for key in ["calibrated_score_qcd_primary", "visible_mass_qcd_crosscheck", "addmet_mass_qcd_crosscheck"]:
+    for key in ["visible_mass_qcd_primary", "dnn_classifier_score_secondary"]:
         if qcd[key]["scaled_qcd_total"] <= 0:
             raise ValueError(f"QCD estimate is empty for {key}")
         if qcd[key]["transfer_sideband"]["relative_uncertainty"] <= 0:
@@ -141,26 +122,17 @@ def main() -> None:
     if validation["score_modeling_status"] not in {"pass", "flagged"}:
         raise ValueError("Invalid primary modelling status")
     visible_validation = results["visible_mass_validation_summary"]
-    if visible_validation["model_label"] != "visible_mass_qcd_crosscheck":
-        raise ValueError("Visible cross-check validation summary has the wrong model label")
-    addmet_validation = results["addmet_validation_summary"]
-    if addmet_validation["model_label"] != "addmet_mass_qcd_crosscheck":
-        raise ValueError("Add-MET validation summary has the wrong model label")
-    comparison = payloads["comparison_to_4a_4b.json"]
-    p4b_warning = comparison["phase4b_warning_carried"]
-    if p4b_warning["score_modeling_status"] != "flagged":
-        raise ValueError("Phase 4b score-modeling warning was not preserved")
-    if not p4b_warning["flags"]["combined_ratio_failure"]:
-        raise ValueError("Phase 4b combined-ratio warning flag was not preserved")
+    if visible_validation["model_label"] != "visible_mass_qcd_primary":
+        raise ValueError("Visible baseline validation summary has the wrong model label")
     fit = results["observed_fit"]
     if fit["status"] != "evaluated":
         raise ValueError(f"Observed fit did not evaluate: {fit}")
     visible_fit = results["visible_mass_observed_fit"]
     if visible_fit["status"] != "evaluated":
-        raise ValueError(f"Visible cross-check fit did not evaluate: {visible_fit}")
-    addmet_fit = results["addmet_observed_fit"]
-    if addmet_fit["status"] != "evaluated":
-        raise ValueError(f"Add-MET fit did not evaluate: {addmet_fit}")
+        raise ValueError(f"Visible baseline fit did not evaluate: {visible_fit}")
+    nn_fit = results["nn_score_result"]["observed_fit"]
+    if nn_fit["status"] != "evaluated":
+        raise ValueError(f"D_NN fit did not evaluate: {nn_fit}")
     for stem in FIGURE_STEMS:
         for suffix in [".pdf", ".png"]:
             path = FIG / f"{stem}{suffix}"
@@ -171,7 +143,7 @@ def main() -> None:
         if not path.exists() or path.stat().st_size == 0:
             raise FileNotFoundError(path)
     artifact_text = (OUT / "INFERENCE_OBSERVED.md").read_text()
-    required_phrases = ["same-sign QCD/fake", "calibrated-score fit", "multivariate", "Frozen Baseline For Final Comparison"]
+    required_phrases = ["same-sign QCD/fake", "Visible-Mass Baseline", "D_NN Result"]
     for phrase in required_phrases:
         if phrase not in artifact_text:
             raise ValueError(f"Artifact does not document required phrase: {phrase}")

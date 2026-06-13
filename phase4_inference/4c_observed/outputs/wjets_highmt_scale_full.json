@@ -1,19 +1,19 @@
 {
-  "absolute_uncertainty": 0.037049894579940935,
-  "applied_scale_factor": 0.8528436634946431,
+  "absolute_uncertainty": 0.01393775384099262,
+  "applied_scale_factor": 0.9190154734576896,
   "control_region": "is_w_high_mt",
-  "data_events_full": 4023,
+  "data_events_full": 14065,
   "data_scope": "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; 11.467/fb is retained as the Open Data normalization reference",
   "formula": "(N_data_CR - nonW_MC_CR) / W_MC_CR",
-  "nonw_background_mc_sumw2_full_lumi": 1031.8766522856429,
-  "nonw_background_mc_yield_full_lumi": 1963.569614876483,
+  "nonw_background_mc_sumw2_full_lumi": 1592.8389203939705,
+  "nonw_background_mc_yield_full_lumi": 1923.5178203535465,
   "nuisance": {
-    "hi": 1.0434427740579368,
-    "lo": 0.9565572259420632
+    "hi": 1.0151659621013271,
+    "lo": 0.9848340378986727
   },
-  "raw_scale_factor": 0.8528436634946431,
-  "relative_uncertainty": 0.04344277405793688,
+  "raw_scale_factor": 0.9190154734576896,
+  "relative_uncertainty": 0.015165962101327228,
   "status": "valid",
-  "wjets_mc_sumw2_full_lumi": 4055.220477295576,
-  "wjets_mc_yield_full_lumi": 2414.78066060164
+  "wjets_mc_sumw2_full_lumi": 21606.58209388878,
+  "wjets_mc_yield_full_lumi": 13211.401255264536
 }

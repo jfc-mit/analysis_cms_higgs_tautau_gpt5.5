@@ -7,73 +7,73 @@
   "samples": {
     "DYJetsToLL": {
       "raw_counts": {
-        "boosted": 802,
-        "vbf": 34,
-        "zero_jet": 4432
+        "boosted": 742,
+        "vbf": 29,
+        "zero_jet": 16371
       },
       "role": "background"
     },
     "GluGluToHToTauTau": {
       "raw_counts": {
-        "boosted": 249,
-        "vbf": 23,
-        "zero_jet": 439
+        "boosted": 276,
+        "vbf": 44,
+        "zero_jet": 3155
       },
       "role": "signal"
     },
     "Run2012B_TauPlusX": {
       "raw_counts": {
-        "boosted": 858,
-        "vbf": 34,
-        "zero_jet": 3183
+        "boosted": 423,
+        "vbf": 27,
+        "zero_jet": 9961
       },
       "role": "data"
     },
     "Run2012C_TauPlusX": {
       "raw_counts": {
-        "boosted": 1355,
-        "vbf": 45,
-        "zero_jet": 5283
+        "boosted": 726,
+        "vbf": 44,
+        "zero_jet": 16059
       },
       "role": "data"
     },
     "TTbar": {
       "raw_counts": {
-        "boosted": 1513,
-        "vbf": 170,
-        "zero_jet": 88
+        "boosted": 258,
+        "vbf": 32,
+        "zero_jet": 386
       },
       "role": "background"
     },
     "VBF_HToTauTau": {
       "raw_counts": {
-        "boosted": 499,
-        "vbf": 364,
-        "zero_jet": 94
+        "boosted": 1028,
+        "vbf": 1161,
+        "zero_jet": 2050
       },
       "role": "signal"
     },
     "W1JetsToLNu": {
       "raw_counts": {
-        "boosted": 37,
-        "vbf": 4,
-        "zero_jet": 350
+        "boosted": 0,
+        "vbf": 14,
+        "zero_jet": 864
       },
       "role": "background"
     },
     "W2JetsToLNu": {
       "raw_counts": {
-        "boosted": 238,
-        "vbf": 16,
-        "zero_jet": 348
+        "boosted": 105,
+        "vbf": 32,
+        "zero_jet": 1448
       },
       "role": "background"
     },
     "W3JetsToLNu": {
       "raw_counts": {
-        "boosted": 228,
-        "vbf": 16,
-        "zero_jet": 126
+        "boosted": 165,
+        "vbf": 18,
+        "zero_jet": 781
       },
       "role": "background"
     }

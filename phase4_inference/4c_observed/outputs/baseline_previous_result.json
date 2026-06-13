@@ -160,6 +160,7 @@
       "lower_status": "bounded_at_zero",
       "method": "profile likelihood scan with q(mu)=2DeltaNLL=1; lower side bounded at mu>=0 when needed",
       "mu_hat": 0.43822864200217504,
+      "profile_failures": [],
       "upper": 5.38255638989378,
       "upper_status": "profile_q_equals_1"
     },
@@ -168,6 +169,241 @@
   "primary_model": "visible_mass_qcd_primary",
   "role": "final_result",
   "source": "Current validated visible-mass baseline workspace used as the final result.",
+  "systematic_impact_ranking": {
+    "baseline_mu_hat": 0.43822864200217504,
+    "baseline_observed_limit": 10.764467444563975,
+    "method": "Grouped nuisance impact scan. Normal constrained nuisances are fixed at \u00b11 prefit sigma; grouped MC-stat constraints are fixed to nominal one. The remaining parameters are profiled. Per-source CLs rescans are not repeated in Phase 5; the limit-impact column is a profile-limit proxy equal to the stored baseline observed CLs limit plus the refit delta_mu_hat.",
+    "model": "visible_mass_qcd_primary",
+    "ranking": [
+      {
+        "fraction_of_summed_abs_delta_mu": 0.3990933976911283,
+        "max_abs_delta_mu_hat": 1.561629083490469,
+        "max_abs_delta_observed_limit_proxy": 1.5616290834904696,
+        "parameters": [
+          "tau_open_data_acceptance"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 1,
+        "source": "Tau/open-data acceptance",
+        "variations": [
+          {
+            "delta_mu_hat": 1.561629083490469,
+            "delta_observed_limit_proxy": 1.5616290834904696,
+            "fixed_values": {
+              "tau_open_data_acceptance": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 1.999857725492644,
+            "observed_limit_proxy": 12.326096528054444
+          },
+          {
+            "delta_mu_hat": -0.43822864200217326,
+            "delta_observed_limit_proxy": -0.4382286420021728,
+            "fixed_values": {
+              "tau_open_data_acceptance": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 1.748922670341535e-15,
+            "observed_limit_proxy": 10.326238802561802
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.2627293491571735,
+        "max_abs_delta_mu_hat": 1.028044550734207,
+        "max_abs_delta_observed_limit_proxy": 1.0280445507342062,
+        "parameters": [
+          "dy_norm_open_data"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 2,
+        "source": "DY/Z normalization",
+        "variations": [
+          {
+            "delta_mu_hat": -0.4382286420021683,
+            "delta_observed_limit_proxy": -0.4382286420021675,
+            "fixed_values": {
+              "dy_norm_open_data": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 6.696451664074621e-15,
+            "observed_limit_proxy": 10.326238802561807
+          },
+          {
+            "delta_mu_hat": 1.028044550734207,
+            "delta_observed_limit_proxy": 1.0280445507342062,
+            "fixed_values": {
+              "dy_norm_open_data": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 1.4662731927363821,
+            "observed_limit_proxy": 11.792511995298181
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.12763107741715496,
+        "max_abs_delta_mu_hat": 0.4994129284145846,
+        "max_abs_delta_observed_limit_proxy": 0.49941292841458385,
+        "parameters": [
+          "vbf_background_control"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 3,
+        "source": "VBF background control",
+        "variations": [
+          {
+            "delta_mu_hat": 0.4994129284145846,
+            "delta_observed_limit_proxy": 0.49941292841458385,
+            "fixed_values": {
+              "vbf_background_control": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 0.9376415704167597,
+            "observed_limit_proxy": 11.263880372978559
+          },
+          {
+            "delta_mu_hat": -0.4382286420021748,
+            "delta_observed_limit_proxy": -0.4382286420021746,
+            "fixed_values": {
+              "vbf_background_control": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 2.2091529249359322e-16,
+            "observed_limit_proxy": 10.3262388025618
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.09767494866105363,
+        "max_abs_delta_mu_hat": 0.3821963516309268,
+        "max_abs_delta_observed_limit_proxy": 0.38219635163092747,
+        "parameters": [
+          "wjets_high_mt_control"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 4,
+        "source": "W high-mT control",
+        "variations": [
+          {
+            "delta_mu_hat": 0.3821963516309268,
+            "delta_observed_limit_proxy": 0.38219635163092747,
+            "fixed_values": {
+              "wjets_high_mt_control": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 0.8204249936331018,
+            "observed_limit_proxy": 11.146663796194902
+          },
+          {
+            "delta_mu_hat": -0.2538931740279804,
+            "delta_observed_limit_proxy": -0.25389317402798106,
+            "fixed_values": {
+              "wjets_high_mt_control": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 0.18433546797419467,
+            "observed_limit_proxy": 10.510574270535994
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.0639115242807307,
+        "max_abs_delta_mu_hat": 0.2500820501276235,
+        "max_abs_delta_observed_limit_proxy": 0.25008205012762375,
+        "parameters": [
+          "mc_stat_boosted",
+          "mc_stat_vbf",
+          "mc_stat_zero_jet"
+        ],
+        "prescription": "category staterror factors fixed to nominal 1",
+        "rank": 5,
+        "source": "MC statistical uncertainty",
+        "variations": [
+          {
+            "delta_mu_hat": -0.2500820501276235,
+            "delta_observed_limit_proxy": -0.25008205012762375,
+            "fixed_values": {
+              "mc_stat_boosted": 1.0,
+              "mc_stat_vbf": 1.0,
+              "mc_stat_zero_jet": 1.0
+            },
+            "label": "nominal_fixed",
+            "mu_hat": 0.18814659187455154,
+            "observed_limit_proxy": 10.514385394436351
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.037814738476897064,
+        "max_abs_delta_mu_hat": 0.14796685620896016,
+        "max_abs_delta_observed_limit_proxy": 0.14796685620896,
+        "parameters": [
+          "lumi_2012"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 6,
+        "source": "Luminosity",
+        "variations": [
+          {
+            "delta_mu_hat": 0.11756188908657006,
+            "delta_observed_limit_proxy": 0.11756188908656995,
+            "fixed_values": {
+              "lumi_2012": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 0.5557905310887451,
+            "observed_limit_proxy": 10.882029333650545
+          },
+          {
+            "delta_mu_hat": -0.14796685620896016,
+            "delta_observed_limit_proxy": -0.14796685620896,
+            "fixed_values": {
+              "lumi_2012": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 0.2902617857932149,
+            "observed_limit_proxy": 10.616500588355015
+          }
+        ]
+      },
+      {
+        "fraction_of_summed_abs_delta_mu": 0.01114496431586188,
+        "max_abs_delta_mu_hat": 0.04360959241822171,
+        "max_abs_delta_observed_limit_proxy": 0.043609592418221155,
+        "parameters": [
+          "qcd_ss_transfer"
+        ],
+        "prescription": "fixed at -1 and +1 prefit sigma",
+        "rank": 7,
+        "source": "Same-sign QCD/fake transfer",
+        "variations": [
+          {
+            "delta_mu_hat": -0.04360959241822171,
+            "delta_observed_limit_proxy": -0.043609592418221155,
+            "fixed_values": {
+              "qcd_ss_transfer": -1.0
+            },
+            "label": "-1_sigma",
+            "mu_hat": 0.39461904958395333,
+            "observed_limit_proxy": 10.720857852145754
+          },
+          {
+            "delta_mu_hat": 0.005498024360394038,
+            "delta_observed_limit_proxy": 0.005498024360393927,
+            "fixed_values": {
+              "qcd_ss_transfer": 1.0
+            },
+            "label": "+1_sigma",
+            "mu_hat": 0.4437266663625691,
+            "observed_limit_proxy": 10.769965468924369
+          }
+        ]
+      }
+    ],
+    "ranking_metric": "max_abs_delta_mu_hat",
+    "workspace": "pyhf_workspace_baseline_visible.json"
+  },
   "systematics_retained": {
     "dy_norm_open_data": "15%",
     "lumi_2012": "2.6%",
@@ -195,6 +431,25 @@
       "high_score_shape_failure": false
     },
     "model_label": "visible_mass_qcd_primary",
+    "observed_gof_toy": {
+      "method": "Deterministic post-fit Poisson toy-style combined goodness-of-fit replacement. Toys are generated from the post-fit expected visible-mass bin counts and evaluated with the combined Pearson chi2 statistic without refitting each toy.",
+      "model": "visible_mass_qcd_primary",
+      "n_toys": 10000,
+      "observed_statistic": 14.860045199164562,
+      "pass": true,
+      "random_seed": 20260612,
+      "toy_p_value": 0.6643335666433356,
+      "toy_statistic_summary": {
+        "central_95_interval": [
+          8.151421789775194,
+          31.608713513063925
+        ],
+        "mean": 17.89909681116434,
+        "median": 17.183670561430624
+      },
+      "toy_statistics_artifact": "baseline_observed_gof_toys.json",
+      "workspace": "pyhf_workspace_baseline_visible.json"
+    },
     "pass_criteria": {
       "category_chi2_per_ndf_max": 5.0,
       "combined_chi2_per_ndf_max": 3.0,

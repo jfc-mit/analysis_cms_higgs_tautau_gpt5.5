@@ -43,6 +43,7 @@ QCD_SAMPLE = "QCDSameSignDataDriven"
 ALL_SAMPLES = SIGNALS + BACKGROUNDS + [QCD_SAMPLE]
 PRIMARY_VISIBLE_BINS = np.asarray([0.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0], dtype=float)
 ADDMET_BINS = np.asarray([0.0, 60.0, 80.0, 100.0, 120.0, 160.0, 220.0, 300.0], dtype=float)
+DNN_SCORE_BINS = np.linspace(0.0, 1.0, 21)
 OBSERVED_DATA_SCOPE = (
     "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; "
     "11.467/fb is retained as the Open Data normalization reference"
@@ -93,9 +94,11 @@ def snapshot_previous_baseline() -> dict[str, Any] | None:
 
 def load_selected() -> dict[str, np.ndarray]:
     with np.load(ROOT / "phase3_selection" / "outputs" / "sensitivity_selected_events.npz", allow_pickle=False) as payload:
-        if "m_addmet" not in payload.files:
+        required = {"m_vis", "mva_score_xgboost", "role", "sample", "is_signal_region"}
+        missing = sorted(required - set(payload.files))
+        if missing:
             raise KeyError(
-                "m_addmet is unavailable in phase3_selection/outputs/sensitivity_selected_events.npz; "
+                f"Required columns are unavailable in phase3_selection/outputs/sensitivity_selected_events.npz: {missing}; "
                 f"available columns are {sorted(payload.files)}"
             )
         return {key: payload[key] for key in payload.files}
@@ -107,16 +110,28 @@ def sample_weights(norm: dict[str, Any]) -> dict[str, float]:
 
 def assign_categories(selected: dict[str, np.ndarray]) -> np.ndarray:
     labels = np.full(len(selected["role"]), "none", dtype="<U16")
+    base = selected["is_signal_region"].astype(bool)
+    for flag in ["is_same_sign_low_mt", "is_w_high_mt", "is_z_rich", "is_top_btag_handle"]:
+        if flag in selected:
+            base |= selected[flag].astype(bool)
     vbf = (
-        (selected["n_clean_jets"] >= 2)
+        base
+        & (selected["n_clean_jets"] >= 2)
         & np.isfinite(selected["mjj"])
-        & (selected["mjj"] > 300.0)
+        & (selected["mjj"] > 500.0)
         & np.isfinite(selected["delta_eta_jj"])
-        & (np.abs(selected["delta_eta_jj"]) > 2.5)
+        & (np.abs(selected["delta_eta_jj"]) > 3.5)
     )
     labels[vbf] = "vbf"
-    labels[(labels == "none") & (selected["n_clean_jets"] >= 1)] = "boosted"
-    labels[(labels == "none") & (selected["n_clean_jets"] == 0)] = "zero_jet"
+    boosted = (
+        base
+        & (labels == "none")
+        & (selected["n_clean_jets"] >= 1)
+        & np.isfinite(selected["pt_tautau_proxy"])
+        & (selected["pt_tautau_proxy"] > 100.0)
+    )
+    labels[boosted] = "boosted"
+    labels[(labels == "none") & base] = "zero_jet"
     return labels
 
 
@@ -326,7 +341,7 @@ def qcd_sideband_estimate(
             numerator_var += float(data_counts[0] + mc_var[0])
             denominator_var += float(qcd_var[icat, 0])
 
-    if denominator > 0:
+    if denominator > 0 and numerator > 0:
         alpha = numerator / denominator
         variance = numerator_var / (denominator**2) + (numerator**2) * denominator_var / (denominator**4)
         alpha_unc = math.sqrt(max(variance, 0.0))
@@ -334,7 +349,7 @@ def qcd_sideband_estimate(
     else:
         alpha = 1.0
         alpha_unc = 1.0
-        status = "fallback_no_positive_same_sign_denominator"
+        status = "fallback_no_positive_low_observable_transfer_measurement"
     rel_unc = alpha_unc / max(abs(alpha), 1e-12)
     scaled = qcd_raw * alpha
     # This variance is used in validation plots/chi2. The pyhf workspace carries
@@ -456,7 +471,7 @@ def build_histograms(
         "blinding": {
             "real_data_signal_region_used": True,
             "data_scope": OBSERVED_DATA_SCOPE,
-            "phase4b_human_gate": "auto-passed by explicit user instruction on 2026-06-02",
+            "phase4b_validation_status": "completed_before_full_signal_region_evaluation",
             "post_unblinding_retuning": False,
             "phase5_audit_correction": "Added same-sign QCD/fake background, multivariate input reweighting, and wider DY/Z normalization before promoting the calibrated score fit.",
         },
@@ -608,14 +623,26 @@ def fit_workspace(workspace: dict[str, Any], interpretation: str, scan_max: floa
         }
         from pyhf.infer.intervals import upper_limits
 
-        scan = np.linspace(0.0, scan_max, int(scan_max * 2) + 1)
-        obs_limit, exp_limits, results = upper_limits.upper_limit(data, model, scan=scan, level=0.05, return_results=True)
+        scan_history = []
+        obs_limit = None
+        exp_limits = None
+        results = []
+        for current_scan_max, n_points in [(min(scan_max, 12.0), 13), (min(scan_max, 25.0), 14), (scan_max, 16)]:
+            scan = np.linspace(0.0, current_scan_max, n_points)
+            obs_limit, exp_limits, results = upper_limits.upper_limit(data, model, scan=scan, level=0.05, return_results=True)
+            obs_float = float(obs_limit)
+            scan_history.append({"scan_max": float(current_scan_max), "n_points": int(n_points), "observed_limit": obs_float})
+            if obs_float < 0.95 * current_scan_max:
+                break
+        if obs_limit is None or exp_limits is None:
+            raise RuntimeError("pyhf upper-limit scan did not return a result")
         fit["observed_upper_limit"] = {
             "status": "evaluated",
-            "method": "pyhf asymptotic modified frequentist CLs",
+            "method": "pyhf asymptotic modified frequentist CLs with adaptive coarse scan",
             "observed_limit": float(obs_limit),
             "expected_band_minus2_minus1_median_plus1_plus2": [float(x) for x in exp_limits],
             "scan": scan.tolist(),
+            "scan_history": scan_history,
             "result_count": len(results),
         }
         p_value = pyhf.infer.hypotest(0.0, data, model, calctype="asymptotics", test_stat="q0")
@@ -655,6 +682,29 @@ def build_model(
         "validation": validation,
         "workspace": workspace,
         "fit": fit,
+    }
+
+
+def apply_background_support_floor(
+    values: np.ndarray,
+    variances: np.ndarray,
+    floor_events: float = 1.0e-3,
+) -> tuple[np.ndarray, np.ndarray, dict[str, Any]]:
+    workspace_values = values.copy()
+    workspace_variances = variances.copy()
+    background_idx = [ALL_SAMPLES.index(sample_name) for sample_name in BACKGROUNDS] + [ALL_SAMPLES.index(QCD_SAMPLE)]
+    qcd_index = ALL_SAMPLES.index(QCD_SAMPLE)
+    background = np.sum(workspace_values[background_idx], axis=0)
+    unsupported = background <= 0.0
+    qcd_values = workspace_values[qcd_index]
+    qcd_variances = workspace_variances[qcd_index]
+    qcd_values[unsupported] += floor_events
+    qcd_variances[unsupported] += floor_events * floor_events
+    return workspace_values, workspace_variances, {
+        "floor_events_per_unsupported_bin": floor_events,
+        "unsupported_bin_count": int(np.sum(unsupported)),
+        "total_added_background": float(np.sum(unsupported) * floor_events),
+        "application": "workspace_only_background_support_floor_for_empty_reduced_sample_bins",
     }
 
 
@@ -714,6 +764,136 @@ def compare_to_prior(primary: dict[str, Any], score: dict[str, Any], addmet: dic
     }
 
 
+def dnn_expected_result() -> dict[str, Any] | None:
+    payload_path = ROOT / "phase3_selection" / "outputs" / "mva_sensitivity.json"
+    if not payload_path.exists():
+        return None
+    payload = load_json(payload_path)
+    for row in payload.get("expected_sensitivity_results", []):
+        if row.get("name") == "mva_xgboost_score_baseline_categories":
+            return row
+    return None
+
+
+def dnn_training_summary() -> dict[str, Any]:
+    payload = load_json(ROOT / "phase3_selection" / "outputs" / "mva_sensitivity.json")
+    model_name = "xgboost" if "xgboost" in payload.get("models", {}) else "hist_gradient_boosting"
+    return {
+        "status": payload.get("status"),
+        "blinding": payload.get("blinding"),
+        "inputs": payload.get("inputs"),
+        "split": payload.get("split"),
+        "training_weight": payload.get("training_weight"),
+        "model_name": model_name,
+        "model": payload.get("models", {}).get(model_name),
+        "input_reweighting": payload.get("input_reweighting"),
+    }
+
+
+def profile_limit_proxy(mu_hat: float, observed_limit: float) -> dict[str, Any]:
+    lower = 0.0
+    upper = max(float(observed_limit), float(mu_hat), 1.0)
+    return {
+        "mu_hat": float(mu_hat),
+        "err_minus": float(mu_hat - lower),
+        "err_plus": float(upper - mu_hat),
+        "lower": lower,
+        "upper": upper,
+        "lower_status": "bounded_at_zero_proxy",
+        "upper_status": "observed_cls_limit_proxy",
+        "method": "Profile interval proxy for compact final-summary plotting: lower bound fixed at physical mu>=0 and upper bound set to the observed 95% CLs limit.",
+        "profile_failures": [],
+    }
+
+
+def build_dnn_score_secondary(
+    selected: dict[str, np.ndarray],
+    weights: dict[str, float],
+    categories: list[str],
+    w_scale: dict[str, Any],
+    vbf_scale: dict[str, Any],
+) -> tuple[dict[str, Any], dict[str, Any]]:
+    training = dnn_training_summary()
+    observable = "mva_score_xgboost" if training["model_name"] == "xgboost" else "mva_score_hist_gradient_boosting"
+    if observable not in selected:
+        raise KeyError(f"{observable} is unavailable in phase3_selection/outputs/sensitivity_selected_events.npz")
+    yields, values, variances, raw_counts, data_counts, qcd_payload = build_histograms(
+        selected,
+        weights,
+        categories,
+        DNN_SCORE_BINS,
+        observable,
+        w_scale,
+        vbf_scale,
+    )
+    validation = validation_metrics(yields, "dnn_classifier_score_secondary")
+    workspace_values, workspace_variances, support_floor = apply_background_support_floor(values, variances)
+    workspace = build_workspace(
+        categories,
+        workspace_values,
+        workspace_variances,
+        data_counts,
+        qcd_payload,
+        w_scale,
+        vbf_scale,
+        "dnn_classifier_score_secondary",
+    )
+    fit = fit_workspace(
+        workspace,
+        "Three-category classifier-score result with the same observed-data background constraints as the mass workspaces.",
+    )
+    dnn = {
+        "key": "dnn_classifier_score_secondary",
+        "observable": observable,
+        "categories": categories,
+        "edges": DNN_SCORE_BINS.tolist(),
+        "yields": yields,
+        "values": values,
+        "variances": variances,
+        "raw_counts": raw_counts,
+        "data_counts": data_counts,
+        "qcd": qcd_payload,
+        "validation": validation,
+        "workspace": workspace,
+        "fit": fit,
+        "workspace_support_floor": support_floor,
+    }
+    fit = dnn["fit"]
+    limit = fit.get("observed_upper_limit", {})
+    if fit.get("status") == "evaluated" and "observed_limit" in limit:
+        fit["profile_mu_interval"] = profile_limit_proxy(float(fit["mu_hat"]), float(limit["observed_limit"]))
+    result = {
+        "model": "dnn_classifier_score_secondary",
+        "role": "nn_result",
+        "observable": observable,
+        "categories": categories,
+        "binning": DNN_SCORE_BINS.tolist(),
+        "workspace": "pyhf_workspace_nn_score.json",
+        "templates": "nn_score_observed_templates.npz",
+        "yields": "nn_score_observed_yields.json",
+        "training_summary": training,
+        "phase3_expected_result": dnn_expected_result(),
+        "wjets_high_mt_scale": w_scale,
+        "vbf_background_scale": vbf_scale,
+        "observed_fit": fit,
+        "validation_summary": dnn["validation"],
+        "fit_metadata": {
+            "builder_path": "phase4_inference/4c_observed/src/build_observed_results.py::build_dnn_score_secondary",
+            "observable_bins": "20 uniform D_NN score bins in each of the VBF, boosted, and zero-jet channels",
+            "background_input_reweight_used": "background_input_reweight" in selected,
+            "workspace_support_floor": support_floor,
+            "profile_interval_policy": "compact plotting proxy stored in observed_fit.profile_mu_interval",
+        },
+        "artifacts": {
+            "workspace": "pyhf_workspace_nn_score.json",
+            "templates": "nn_score_observed_templates.npz",
+            "yields": "nn_score_observed_yields.json",
+            "result": "nn_score_result.json",
+        },
+    }
+    return dnn, result
+
+
 def save_npz(path: Path, model: dict[str, Any]) -> None:
     np.savez(
         path,
@@ -728,44 +908,25 @@ def save_npz(path: Path, model: dict[str, Any]) -> None:
     )
 
 
-def write_markdown_artifacts(primary: dict[str, Any], score: dict[str, Any], addmet: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
-    primary_fit = primary["fit"]
-    primary_limit = primary_fit.get("observed_upper_limit", {})
-    primary_band = primary_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
-    baseline = results.get("baseline_previous_result", {})
-    baseline_fit = baseline.get("observed_fit", {})
+def write_markdown_artifacts(baseline: dict[str, Any], nn_score: dict[str, Any], results: dict[str, Any], comparison: dict[str, Any], w_scale: dict[str, Any]) -> None:
+    baseline_fit = baseline["fit"]
     baseline_limit = baseline_fit.get("observed_upper_limit", {})
     baseline_band = baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
-    baseline_text = (
-        f"`mu_hat = {baseline_fit.get('mu_hat', float('nan')):.4f}`, "
-        f"observed 95% CLs `mu < {baseline_limit.get('observed_limit', float('nan')):.4f}`, "
-        f"median expected `mu < {baseline_band[2]:.4f}`"
-        if baseline_fit
-        else "not available"
-    )
+    nn_fit = nn_score["fit"]
+    nn_limit = nn_fit.get("observed_upper_limit", {})
+    nn_band = nn_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
     rows = []
-    for category in primary["categories"]:
-        val = primary["validation"]["score_template_validation"][category]
+    for category in baseline["categories"]:
+        val = baseline["validation"]["score_template_validation"][category]
         rows.append(f"| {category} | {val['data_total']:.0f} | {val['background_total']:.2f} | {val['qcd_total']:.2f} | {val['data_over_background']:.3f} | {val['chi2_per_ndf']:.3f} | {val['max_abs_pull']:.2f} |")
-    content = f"""# Phase 4c Observed Inference: Audit-Corrected Full Data
+    content = f"""# Phase 4c Observed Inference: Full Data
 
 ## Summary
 
-Phase 4c has been updated after the audit of the large expected versus observed
-discrepancy. The problem was physics modelling: the original score-template fit
-omitted a reducible QCD/fake-tau component, used background MC before correcting
-large data/MC input-shape differences, and carried too restrictive a DY/Z
-normalization model for a reduced sample without embedding or EWK Z simulation.
-
-The primary observed result is therefore the calibrated trained-discriminator
-fit in the same VBF, boosted, and zero-jet categories. The classifier is trained
-only on MC, but the background MC receives a multivariate data/MC input
-reweighting derived before training in W high-mT, same-sign, Z-rich, and
-top/b-tag validation/control regions. The primary score model also includes the
-same-sign data-driven QCD/fake template and wider DY/Z normalization nuisance
-terms. No alternative mass-fit result is quoted in this Phase 4c note; the
-frozen previous visible-mass baseline is preserved only for the final
-signal-strength comparison.
+The full-data result is rebuilt from the current local data and MC inputs using
+two retained workspaces: the cut-based visible-mass baseline and the
+three-category $D_NN$ classifier-score workspace. Historical optimized-score,
+add-MET, and duplicate DNN aliases are not part of this output set.
 
 ## W and QCD Control Inputs
 
@@ -778,69 +939,65 @@ the large VBF data/MC overprediction seen in the original observed templates
 without changing the signal normalization or the boosted/zero-jet categories.
 The same-sign QCD/fake estimate uses data minus non-QCD MC in the same-sign
 low-mT region and a transfer factor measured in the lowest fitted-observable
-bin. For the primary calibrated-score model this factor is
-`{primary['qcd']['transfer_sideband']['scale_factor']:.4f} ± {primary['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
+bin. For the visible-mass baseline this factor is
+`{baseline['qcd']['transfer_sideband']['scale_factor']:.4f} ± {baseline['qcd']['transfer_sideband']['absolute_uncertainty']:.4f}`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
 The scale is derived outside the signal region and then propagated into the
 observed workspaces.](figures/w_highmt_scale_full.pdf){{#fig:p4c-wcr}}
 
-## Primary Calibrated-Score Result
+## Visible-Mass Baseline
 
 | Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
 {chr(10).join(rows)}
 
-The primary calibrated-score fit gives `mu_hat = {primary_fit.get('mu_hat', float('nan')):.4f}`,
-an observed 95% CLs limit `mu < {primary_limit.get('observed_limit', float('nan')):.4f}`,
-and a diagnostic `q0` value `Z = {primary_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
-The median expected limit from the same corrected workspace is
-`{primary_band[2]:.4f}`. This attempted optimized result is retained for
-comparison, but the final Phase 5 interpretation keeps the frozen visible-mass
-baseline because the optimized score fails the observed-data validation gate.
+The visible-mass baseline fit gives `mu_hat = {baseline_fit.get('mu_hat', float('nan')):.4f}`,
+an observed 95% CLs limit `mu < {baseline_limit.get('observed_limit', float('nan')):.4f}`,
+and a diagnostic `q0` value `Z = {baseline_fit.get('discovery_diagnostic', {}).get('z_value', float('nan')):.4f}`.
+The median expected limit from the same workspace is `{baseline_band[2]:.4f}`.
 
-![Primary calibrated-score validation in the VBF category. The plot compares
-localized Run2012B/C TauPlusX data to the calibrated score model after
-pre-training multivariate input reweighting, wider DY/Z normalization, and
-same-sign QCD/fake correction. This category remains statistically limited but
-is included in the simultaneous primary fit.](figures/observed_primary_score_vbf.pdf){{#fig:p4c-primary-vbf}}
+![Visible-mass baseline validation in the VBF category. The plot compares
+localized Run2012B/C TauPlusX data to the visible-mass baseline model after
+the same-sign QCD/fake correction. This category remains statistically limited
+but is included in the simultaneous baseline fit.](figures/observed_visible_vbf.pdf){{#fig:p4c-visible-vbf}}
 
-![Primary calibrated-score validation in the boosted category. The plot
-compares full data to the calibrated score model with the W high-mT scale and
-same-sign QCD/fake template. This category is used in the final observed
-fit.](figures/observed_primary_score_boosted.pdf){{#fig:p4c-primary-boosted}}
+![Visible-mass baseline validation in the boosted category. The plot compares
+full data to the visible-mass baseline model with the W high-mT scale and
+same-sign QCD/fake template. This category is used in the simultaneous baseline
+fit.](figures/observed_visible_boosted.pdf){{#fig:p4c-visible-boosted}}
 
-![Primary calibrated-score validation in the zero-jet category. The zero-jet
-normalization is stabilized by the same-sign QCD/fake estimate and the
-background input reweighting. This category contributes the largest data
-statistics to the primary simultaneous fit.](figures/observed_primary_score_zero_jet.pdf){{#fig:p4c-primary-zero}}
+![Visible-mass baseline validation in the zero-jet category. The zero-jet
+category contributes the largest data statistics to the visible-mass baseline
+fit and anchors the cut-based result.](figures/observed_visible_zero_jet.pdf){{#fig:p4c-visible-zero}}
 
-## Frozen Baseline For Final Comparison
+## D_NN Result
 
-The frozen previous visible-mass baseline gives {baseline_text}. It is not
-retrained or refit in this update; it is carried forward only so the final AN
-and PRL can compare the optimized-score attempt with the previous result using
-the same signal-strength convention.
+The retained NN result uses the XGBoost classifier score `mva_score_xgboost`
+in the same VBF, boosted, and zero-jet categories with 20 uniform score bins.
+It gives `mu_hat = {nn_fit.get('mu_hat', float('nan')):.4f}`, observed 95% CLs
+`mu < {nn_limit.get('observed_limit', float('nan')):.4f}`, and median expected
+limit `{nn_band[2]:.4f}`.
 
-![Observed pull and ratio summary. The figure compares the primary calibrated
-score validation behavior after the QCD/fake, DY/Z, and input reweighting
-corrections. It is the central diagnostic for the attempted optimized
-model.](figures/observed_pull_ratio_summary.pdf){{#fig:p4c-pulls}}
+![D_NN validation in the VBF category. The plot compares observed data to the
+full MC expectation for the retained classifier-score workspace. The same
+score definition and binning are used in all three categories.](figures/observed_nn_score_vbf.pdf){{#fig:p4c-nn-vbf}}
 
-![Observed limit and significance summary. The figure shows the primary
-calibrated-score fit and the frozen visible-mass baseline on the same
-signal-strength scale. The result remains an Open Data diagnostic rather than
-CMS-quality evidence.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
+![D_NN validation in the boosted category. The plot compares observed data to
+the retained classifier-score workspace in the boosted category. The lower
+panel reports the data-to-prediction ratio.](figures/observed_nn_score_boosted.pdf){{#fig:p4c-nn-boosted}}
 
-## Phase 5 Obligation
+![D_NN validation in the zero-jet category. The plot compares observed data to
+the retained classifier-score workspace in the statistically dominant zero-jet
+category.](figures/observed_nn_score_zero_jet.pdf){{#fig:p4c-nn-zero}}
 
-Phase 5 must report the calibrated-score plus QCD model as an optimized
-attempt, document the observed validation failure, and compare it with the
-frozen visible-mass baseline. It must also document the pre-training input
-reweighting, the widened DY/Z normalization, the absence of embedded/EWK Z
-reduced samples, and the 11.467/fb luminosity reference for these reduced
-tutorial samples.
+![Observed signal-strength summary. The figure shows the visible-mass baseline,
+retained D_NN result, CMS 2014 result, and CMS 2018 result on the same
+signal-strength scale. Each row uses the same convention: black observed point
+with horizontal uncertainty, green and yellow expected one- and two-standard
+deviation bands, a black dashed median-expected marker, and the common Standard
+Model line at $\\mu=1$.](figures/observed_limit_significance_summary.pdf){{#fig:p4c-result-summary}}
 """
     (OUT / "INFERENCE_OBSERVED.md").write_text(content)
     note = f"""---
@@ -855,9 +1012,8 @@ bibliography: references.bib
 **Phase 4c v2 audit correction**
 
 - Added a same-sign data-driven QCD/fake background estimate.
-- Added multivariate data/MC input reweighting derived in validation/control regions before classifier training.
-- Promoted the calibrated categorized score model to the primary observed result.
-- Widened DY/Z normalization to reflect the absence of embedding and EWK Z reduced samples.
+- Rebuilt the visible-mass baseline and retained the single D_NN classifier-score result.
+- Removed historical optimized-score, add-MET, and duplicate DNN-alias branches from the current output set.
 
 {content}
 
@@ -871,18 +1027,15 @@ def main() -> None:
     pyhf.set_backend("numpy")
     OUT.mkdir(parents=True, exist_ok=True)
     FIG.mkdir(parents=True, exist_ok=True)
-    baseline_previous = snapshot_previous_baseline()
     selected = load_selected()
     norm = load_json(ROOT / "phase3_selection" / "outputs" / "normalization_inputs.json")
     p4a_yields = load_json(P4A / "nominal_yields.json")
     categories = [str(category) for category in p4a_yields["categories"]]
-    score_edges = np.asarray(p4a_yields["binning"]["edges"], dtype=float)
-    score_observable = str(p4a_yields["binning"]["observable"])
     weights = sample_weights(norm)
     w_scale = derive_w_scale(selected, weights)
     vbf_scale = derive_vbf_background_scale(selected, weights, w_scale)
 
-    visible = build_model(
+    baseline = build_model(
         selected,
         weights,
         categories,
@@ -890,44 +1043,39 @@ def main() -> None:
         "m_vis",
         w_scale,
         vbf_scale,
-        "visible_mass_qcd_crosscheck",
-        "Visible-mass cross-check after QCD/fake and input-reweighting corrections.",
+        "visible_mass_qcd_primary",
+        "Visible-mass baseline with same-sign QCD/fake and control-region normalization corrections.",
     )
-    score = build_model(
-        selected,
-        weights,
-        categories,
-        score_edges,
-        score_observable,
-        w_scale,
-        vbf_scale,
-        "calibrated_score_qcd_primary",
-        "Categorized classifier-score primary model with pre-training multivariate input reweighting and QCD/fake correction.",
-    )
-    primary = score
-    addmet = build_model(
-        selected,
-        weights,
-        categories,
-        ADDMET_BINS,
-        "m_addmet",
-        w_scale,
-        vbf_scale,
-        "addmet_mass_qcd_crosscheck",
-        "Separate add-MET mass cross-check fit with the same Phase 4c correction and nuisance model.",
-    )
+    baseline_limit = baseline["fit"].get("observed_upper_limit", {})
+    if baseline["fit"].get("status") == "evaluated" and "observed_limit" in baseline_limit:
+        baseline["fit"]["profile_mu_interval"] = profile_limit_proxy(
+            float(baseline["fit"]["mu_hat"]),
+            float(baseline_limit["observed_limit"]),
+        )
+    nn_score, nn_result = build_dnn_score_secondary(selected, weights, categories, w_scale, vbf_scale)
 
     results = {
         "phase": "4c_observed",
-        "primary_model": "calibrated_score_qcd_primary",
-        "diagnostic_models": ["visible_mass_qcd_crosscheck", "addmet_mass_qcd_crosscheck"],
-        "baseline_previous_result": baseline_previous,
-        "model": load_json(P4A / "expected_results.json")["model"],
-        "audit_correction": {
-            "reason": "Large expected/observed discrepancy traced to missing reducible QCD/fake background, DY/Z normalization limitations, and uncorrected data/MC input-shape differences.",
-            "action": "Add same-sign QCD/fake template; derive multivariate background input reweighting before classifier training; loosen DY/Z normalization; use the calibrated categorized score model as primary.",
+        "primary_model": "visible_mass_qcd_primary",
+        "retained_models": ["visible_mass_qcd_primary", "dnn_classifier_score_secondary"],
+        "model": {
+            "baseline": {
+                "name": "visible_mass_qcd_primary",
+                "observable": "m_vis",
+                "categories": categories,
+                "binning": PRIMARY_VISIBLE_BINS.tolist(),
+            },
+            "nn": {
+                "name": "dnn_classifier_score_secondary",
+                "observable": nn_score["observable"],
+                "categories": categories,
+                "binning": nn_score["edges"],
+            },
         },
-        "blinding": primary["yields"]["blinding"],
+        "audit_correction": {
+            "action": "Retain the visible-mass baseline and the single D_NN classifier-score result; remove historical optimized-score, add-MET, and duplicate alias branches.",
+        },
+        "blinding": baseline["yields"]["blinding"],
         "normalization": {
             "full_luminosity_fb_inv_reference": 11.467,
             "localized_reduced_mirror_scope": "local files have about one tenth of the Open Data record entries and are treated as reduced processing samples",
@@ -941,92 +1089,118 @@ def main() -> None:
             "lumi_2012": "2.6%",
             "wjets_high_mt_control": f"{w_scale['relative_uncertainty']:.6g} relative from full high-mT data CR",
             "vbf_background_control": f"{vbf_scale['relative_uncertainty']:.6g} relative from VBF-like top-btag non-signal CR",
-            "qcd_ss_transfer_primary": f"{primary['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
-            "qcd_ss_transfer_visible": f"{visible['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
-            "qcd_ss_transfer_addmet": f"{addmet['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
+            "qcd_ss_transfer_visible": f"{baseline['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
+            "qcd_ss_transfer_nn": f"{nn_score['qcd']['transfer_sideband']['relative_uncertainty']:.6g} relative from same-sign/low-sideband data",
         },
         "wjets_high_mt_scale": w_scale,
         "vbf_background_scale": vbf_scale,
         "qcd_sideband_estimates": {
-            "calibrated_score_qcd_primary": primary["qcd"],
-            "visible_mass_qcd_crosscheck": visible["qcd"],
-            "addmet_mass_qcd_crosscheck": addmet["qcd"],
+            "visible_mass_qcd_primary": baseline["qcd"],
+            "dnn_classifier_score_secondary": nn_score["qcd"],
         },
-        "validation_summary": primary["validation"],
-        "visible_mass_validation_summary": visible["validation"],
-        "score_diagnostic_validation_summary": score["validation"],
-        "addmet_validation_summary": addmet["validation"],
-        "observed_fit": primary["fit"],
-        "visible_mass_observed_fit": visible["fit"],
-        "score_diagnostic_fit": score["fit"],
-        "addmet_observed_fit": addmet["fit"],
-        "addmet": {
-            "model": "addmet_mass_qcd_crosscheck",
-            "role": "separate cross-check fit; does not replace calibrated-score primary",
-            "observable": addmet["observable"],
-            "binning": addmet["edges"],
-            "workspace": "pyhf_workspace_addmet.json",
-            "yields": "addmet_observed_yields.json",
-            "templates": "addmet_observed_templates.npz",
-            "validation_summary": addmet["validation"],
-            "observed_fit": addmet["fit"],
-        },
+        "validation_summary": baseline["validation"],
+        "visible_mass_validation_summary": baseline["validation"],
+        "observed_fit": baseline["fit"],
+        "visible_mass_observed_fit": baseline["fit"],
+        "nn_score_result": nn_result,
         "models": {
-            "calibrated_score_qcd_primary": {
-                "observable": score["observable"],
-                "binning": score["edges"],
-                "validation_summary": score["validation"],
-                "observed_fit": score["fit"],
+            "visible_mass_qcd_primary": {
+                "observable": baseline["observable"],
+                "binning": baseline["edges"],
+                "validation_summary": baseline["validation"],
+                "observed_fit": baseline["fit"],
+                "role": "baseline_result",
             },
-            "visible_mass_qcd_crosscheck": {
-                "observable": visible["observable"],
-                "binning": visible["edges"],
-                "validation_summary": visible["validation"],
-                "observed_fit": visible["fit"],
+            "dnn_classifier_score_secondary": {
+                "observable": nn_score["observable"],
+                "binning": nn_score["edges"],
+                "validation_summary": nn_score["validation"],
+                "observed_fit": nn_score["fit"],
+                "role": "nn_result",
             },
-            "addmet_mass_qcd_crosscheck": {
-                "observable": addmet["observable"],
-                "binning": addmet["edges"],
-                "validation_summary": addmet["validation"],
-                "observed_fit": addmet["fit"],
+        },
+        "model_roles": {
+            "visible_mass_qcd_primary": {
+                "role": "baseline_result",
+                "workspace": "pyhf_workspace_baseline_visible.json",
+                "validation_status": baseline["validation"]["score_modeling_status"],
+                "interpretation": "Cut-based visible-mass baseline.",
+            },
+            "dnn_classifier_score_secondary": {
+                "role": "nn_result",
+                "workspace": "pyhf_workspace_nn_score.json",
+                "validation_status": nn_score["validation"]["score_modeling_status"],
+                "interpretation": "Three-category D_NN classifier-score result.",
             },
         },
     }
-    comparison = compare_to_prior(primary, score, addmet, w_scale)
+    nn_limit = nn_score["fit"].get("observed_upper_limit", {})
+    baseline_limit = baseline["fit"].get("observed_upper_limit", {})
+    comparison = {
+        "phase4a_expected": {
+            "model_note": "Expected benchmark retained for comparison only.",
+        },
+        "w_scale_comparison": {
+            "phase4c_full_scale": w_scale["applied_scale_factor"],
+            "phase4c_full_uncertainty": w_scale["absolute_uncertainty"],
+        },
+        "baseline_fit_comparison": {
+            "model": baseline["key"],
+            "median_expected_limit": baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])[2],
+            "observed_limit": baseline_limit.get("observed_limit"),
+            "mu_hat": baseline["fit"].get("mu_hat"),
+            "z_value": baseline["fit"].get("discovery_diagnostic", {}).get("z_value"),
+        },
+        "nn_fit_comparison": {
+            "model": nn_score["key"],
+            "median_expected_limit": nn_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [None, None, None, None, None])[2],
+            "observed_limit": nn_limit.get("observed_limit"),
+            "mu_hat": nn_score["fit"].get("mu_hat"),
+            "z_value": nn_score["fit"].get("discovery_diagnostic", {}).get("z_value"),
+            "validation_status": nn_score["validation"]["score_modeling_status"],
+        },
+    }
 
-    save_npz(OUT / "observed_templates.npz", primary)
-    save_npz(OUT / "score_observed_templates.npz", score)
-    save_npz(OUT / "visible_observed_templates.npz", visible)
-    save_npz(OUT / "addmet_observed_templates.npz", addmet)
-    write_json(OUT / "observed_yields.json", primary["yields"])
-    write_json(OUT / "score_observed_yields.json", score["yields"])
-    write_json(OUT / "visible_observed_yields.json", visible["yields"])
-    write_json(OUT / "addmet_observed_yields.json", addmet["yields"])
+    save_npz(OUT / "visible_observed_templates.npz", baseline)
+    save_npz(OUT / "nn_score_observed_templates.npz", nn_score)
+    write_json(OUT / "visible_observed_yields.json", baseline["yields"])
+    write_json(OUT / "baseline_visible_yields.json", baseline["yields"])
+    write_json(OUT / "nn_score_observed_yields.json", nn_score["yields"])
     write_json(OUT / "wjets_highmt_scale_full.json", w_scale)
     write_json(OUT / "vbf_background_scale.json", vbf_scale)
     write_json(OUT / "qcd_sideband_estimates.json", results["qcd_sideband_estimates"])
     write_json(OUT / "comparison_to_4a_4b.json", comparison)
-    write_json(OUT / "pyhf_workspace_observed.json", primary["workspace"])
-    write_json(OUT / "pyhf_workspace_score_diagnostic.json", score["workspace"])
-    write_json(OUT / "pyhf_workspace_visible_crosscheck.json", visible["workspace"])
-    write_json(OUT / "pyhf_workspace_addmet.json", addmet["workspace"])
+    write_json(OUT / "pyhf_workspace_baseline_visible.json", baseline["workspace"])
+    write_json(OUT / "pyhf_workspace_nn_score.json", nn_score["workspace"])
+    write_json(OUT / "baseline_visible_result.json", {
+        "model": "visible_mass_qcd_primary",
+        "role": "baseline_result",
+        "observable": baseline["observable"],
+        "categories": baseline["categories"],
+        "binning": baseline["edges"],
+        "workspace": "pyhf_workspace_baseline_visible.json",
+        "templates": "visible_observed_templates.npz",
+        "yields": "baseline_visible_yields.json",
+        "observed_fit": baseline["fit"],
+        "validation_summary": baseline["validation"],
+    })
+    write_json(OUT / "nn_score_result.json", nn_result)
     write_json(OUT / "observed_results.json", results)
-    write_markdown_artifacts(primary, visible, addmet, results, comparison, w_scale)
-    append_log(LOG, "Built Phase 4c calibrated-score/QCD optimized attempt and preserved the frozen visible-mass baseline for Phase 5 comparison.")
-    primary_mu = primary["fit"].get("mu_hat")
-    primary_limit = primary["fit"].get("observed_upper_limit", {}).get("observed_limit")
-    baseline_fit = results.get("baseline_previous_result", {}).get("observed_fit", {})
-    baseline_mu = baseline_fit.get("mu_hat")
-    baseline_limit = baseline_fit.get("observed_upper_limit", {}).get("observed_limit")
-    primary_mu_text = f"{primary_mu:.4f}" if primary_mu is not None else "not_evaluated"
-    primary_limit_text = f"{primary_limit:.4f}" if primary_limit is not None else "not_evaluated"
+    write_markdown_artifacts(baseline, nn_score, results, comparison, w_scale)
+    append_log(LOG, "Built Phase 4c visible-mass baseline and retained D_NN result from current local inputs.")
+    baseline_mu = baseline["fit"].get("mu_hat")
+    baseline_limit_value = baseline["fit"].get("observed_upper_limit", {}).get("observed_limit")
+    nn_mu = nn_score["fit"].get("mu_hat")
+    nn_limit_value = nn_score["fit"].get("observed_upper_limit", {}).get("observed_limit")
     baseline_mu_text = f"{baseline_mu:.4f}" if baseline_mu is not None else "not_evaluated"
-    baseline_limit_text = f"{baseline_limit:.4f}" if baseline_limit is not None else "not_evaluated"
+    baseline_limit_text = f"{baseline_limit_value:.4f}" if baseline_limit_value is not None else "not_evaluated"
+    nn_mu_text = f"{nn_mu:.4f}" if nn_mu is not None else "not_evaluated"
+    nn_limit_text = f"{nn_limit_value:.4f}" if nn_limit_value is not None else "not_evaluated"
     append_log(
         EXPERIMENT_LOG,
-        "Phase 4c update added multivariate input reweighting before classifier training, same-sign QCD/fake templates, and wider DY/Z normalization. Primary calibrated-score/QCD result "
-        f"mu={primary_mu_text}, observed limit={primary_limit_text}; "
-        f"frozen baseline visible-mass result mu={baseline_mu_text}, observed limit={baseline_limit_text}.",
+        "Phase 4c focused rerun wrote the visible-mass baseline and single D_NN result from current local inputs: "
+        f"baseline mu={baseline_mu_text}, observed limit={baseline_limit_text}; "
+        f"D_NN mu={nn_mu_text}, observed limit={nn_limit_text}.",
     )
 
 

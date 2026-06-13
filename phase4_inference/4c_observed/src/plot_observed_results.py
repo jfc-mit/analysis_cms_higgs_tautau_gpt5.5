@@ -163,8 +163,8 @@ def plot_pull_ratio_summary() -> None:
     fig.subplots_adjust(hspace=0)
     ratios = [primary["score_template_validation"][category]["data_over_background"] for category in categories]
     pulls = [primary["score_template_validation"][category]["max_abs_pull"] for category in categories]
-    ax.errorbar(x, ratios, yerr=np.zeros(len(ratios)), marker="o", linestyle="", label="Calibrated score attempt", color="#0072b2")
-    rax.errorbar(x, pulls, yerr=np.zeros(len(pulls)), marker="o", linestyle="", label="Calibrated score attempt", color="#0072b2")
+    ax.errorbar(x, ratios, yerr=np.zeros(len(ratios)), marker="o", linestyle="", label="Visible-mass baseline", color="#0072b2")
+    rax.errorbar(x, pulls, yerr=np.zeros(len(pulls)), marker="o", linestyle="", label="Visible-mass baseline", color="#0072b2")
     ax.axhline(1.0, color="tab:red", linestyle="--")
     rax.axhline(3.0, color="tab:red", linestyle="--")
     ax.set_ylabel("Data/Pred.")
@@ -182,37 +182,128 @@ def plot_pull_ratio_summary() -> None:
 
 def plot_result_summary() -> None:
     results = json.loads((OUT / "observed_results.json").read_text())
-    primary = results["observed_fit"]
-    baseline = results.get("baseline_previous_result", {}).get("observed_fit", {})
-    primary_limit = primary["observed_upper_limit"]
-    baseline_limit = baseline.get("observed_upper_limit", {})
-    baseline_band = baseline_limit.get("expected_band_minus2_minus1_median_plus1_plus2", [float("nan")] * 5)
-    labels = [
-        "Optimized score fitted mu",
-        "Optimized score obs. limit",
-        "Optimized score exp. median",
-        "Baseline fitted mu",
-        "Baseline obs. limit",
-        "Baseline exp. median",
+    baseline = results["observed_fit"]
+    nn_fit = results["nn_score_result"]["observed_fit"]
+    baseline_limit = baseline["observed_upper_limit"]
+    nn_limit = nn_fit["observed_upper_limit"]
+    baseline_profile = baseline.get("profile_mu_interval", {})
+    nn_profile = nn_fit.get("profile_mu_interval", {})
+    labels = [r"$m_{\mathrm{vis}}$", r"$D_{NN}$"]
+    values = np.asarray([baseline["mu_hat"], nn_fit["mu_hat"]], dtype=float)
+    err_minus = np.asarray([
+        baseline_profile.get("err_minus", baseline["mu_hat"]),
+        nn_profile.get("err_minus", nn_fit["mu_hat"]),
+    ], dtype=float)
+    err_plus = np.asarray([
+        baseline_profile.get("err_plus", baseline_limit["observed_limit"] - baseline["mu_hat"]),
+        nn_profile.get("err_plus", nn_limit["observed_limit"] - nn_fit["mu_hat"]),
+    ], dtype=float)
+    expected = np.asarray([
+        baseline_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
+        nn_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
+    ], dtype=float)
+    published = [
+        {
+            "label": "CMS 2014",
+            "mu": 0.78,
+            "err_minus": 0.27,
+            "err_plus": 0.27,
+            "expected_z": 3.7,
+        },
+        {
+            "label": "CMS 2018",
+            "mu": 1.09,
+            "err_minus": 0.26,
+            "err_plus": 0.27,
+            "expected_z": 4.7,
+        },
     ]
-    values = [
-        primary["mu_hat"],
-        primary_limit["observed_limit"],
-        primary_limit["expected_band_minus2_minus1_median_plus1_plus2"][2],
-        baseline.get("mu_hat", float("nan")),
-        baseline_limit.get("observed_limit", float("nan")),
-        baseline_band[2],
+    rows: list[dict[str, object]] = [
+        {
+            "label": r"$m_{\mathrm{vis}}$",
+            "mu": values[0],
+            "err_minus": err_minus[0],
+            "err_plus": err_plus[0],
+            "band": baseline_limit["expected_band_minus2_minus1_median_plus1_plus2"],
+        },
+        {
+            "label": r"$D_{NN}$",
+            "mu": values[1],
+            "err_minus": err_minus[1],
+            "err_plus": err_plus[1],
+            "band": nn_limit["expected_band_minus2_minus1_median_plus1_plus2"],
+        },
     ]
-    colors = ["#0072b2", "#0072b2", "#0072b2", "#d55e00", "#d55e00", "#d55e00"]
+    for item in published:
+        sigma = 1.0 / float(item["expected_z"])
+        rows.append(
+            {
+                "label": item["label"],
+                "mu": item["mu"],
+                "err_minus": item["err_minus"],
+                "err_plus": item["err_plus"],
+                "band": [
+                    max(0.0, 1.0 - 2.0 * sigma),
+                    max(0.0, 1.0 - sigma),
+                    1.0,
+                    1.0 + sigma,
+                    1.0 + 2.0 * sigma,
+                ],
+            }
+        )
     fig, ax = plt.subplots(figsize=(10, 10))
-    y = np.arange(len(values), dtype=float)
-    ax.errorbar(values, y, xerr=np.zeros(len(values)), marker="o", linestyle="", color="black")
-    for yi, value, color in zip(y, values, colors, strict=True):
-        ax.plot(value, yi, marker="o", color=color)
-    ax.axvline(1.0, color="black", linestyle="--", linewidth=1.2, label="SM mu=1")
-    ax.set_yticks(y, labels)
-    ax.set_xlabel("Signal-strength scale mu")
-    ax.set_xlim(0, max(30.0, float(max(values)) * 1.15))
+    y = np.arange(len(rows), dtype=float)
+    for idx, row in enumerate(rows):
+        band = np.asarray(row["band"], dtype=float)
+        ax.fill_betweenx(
+            [y[idx] - 0.28, y[idx] + 0.28],
+            band[0],
+            band[4],
+            color="#f0e442",
+            alpha=0.95,
+            linewidth=0,
+            label=r"Expected $\pm 2\sigma$" if idx == 0 else None,
+        )
+        ax.fill_betweenx(
+            [y[idx] - 0.28, y[idx] + 0.28],
+            band[1],
+            band[3],
+            color="#009e73",
+            alpha=0.95,
+            linewidth=0,
+            label=r"Expected $\pm 1\sigma$" if idx == 0 else None,
+        )
+    ax.axvline(1.0, color="black", linestyle="-", linewidth=1.2, label="SM mu=1")
+    for idx, row in enumerate(rows):
+        band = np.asarray(row["band"], dtype=float)
+        ax.vlines(
+            band[2],
+            y[idx] - 0.34,
+            y[idx] + 0.34,
+            color="black",
+            linestyle="--",
+            linewidth=1.6,
+            label="Median expected" if idx == 0 else None,
+        )
+        ax.errorbar(
+            float(row["mu"]),
+            y[idx],
+            xerr=np.asarray([[float(row["err_minus"])], [float(row["err_plus"])]], dtype=float),
+            marker="o",
+            linestyle="",
+            color="black",
+            ecolor="black",
+            capsize=4,
+            label=r"Observed $\hat{\mu}$" if idx == 0 else None,
+        )
+    ax.set_yticks(y, [str(row["label"]) for row in rows])
+    ax.set_xlabel(r"Signal strength $\mu$")
+    upper = max(
+        max(float(row["mu"]) + float(row["err_plus"]) for row in rows),
+        max(float(np.asarray(row["band"], dtype=float)[4]) for row in rows),
+        1.2,
+    )
+    ax.set_xlim(0.0, upper * 1.15)
     ax.invert_yaxis()
     ax.legend(fontsize="x-small", loc="lower right")
     label(ax)
@@ -221,16 +312,19 @@ def plot_result_summary() -> None:
 
 def plot_comparison() -> None:
     comparison = json.loads((OUT / "comparison_to_4a_4b.json").read_text())
-    p = comparison["primary_fit_comparison"]
+    p = comparison["baseline_fit_comparison"]
+    n = comparison["nn_fit_comparison"]
     w = comparison["w_scale_comparison"]
     values = [
         p["median_expected_limit"],
         p["observed_limit"],
         p["mu_hat"],
-        w["phase4b_10pct_scale"],
+        n["median_expected_limit"],
+        n["observed_limit"],
+        n["mu_hat"],
         w["phase4c_full_scale"],
     ]
-    labels = ["Primary exp. limit", "Primary obs. limit", "Primary mu", "4b W scale", "4c W scale"]
+    labels = ["Baseline exp. limit", "Baseline obs. limit", "Baseline mu", "D_NN exp. limit", "D_NN obs. limit", "D_NN mu", "4c W scale"]
     fig, ax = plt.subplots(figsize=(10, 10))
     x = np.arange(len(values), dtype=float)
     ax.errorbar(x, values, yerr=np.zeros(len(values)), marker="o", linestyle="", label="Phase comparison")
@@ -270,10 +364,8 @@ def compile_note() -> None:
 
 def main() -> None:
     FIG.mkdir(parents=True, exist_ok=True)
-    plot_template_file("observed_templates.npz", "observed_primary_score", "Calibrated classifier score", 20.0)
     plot_template_file("visible_observed_templates.npz", "observed_visible", r"Visible mass $m_{\mu\tau_h}$ [GeV]", 20.0)
-    plot_template_file("addmet_observed_templates.npz", "observed_addmet", "Add-MET mass [GeV]", 20.0)
-    plot_template_file("score_observed_templates.npz", "observed_score", "Calibrated classifier score", 20.0)
+    plot_template_file("nn_score_observed_templates.npz", "observed_nn_score", r"$D_{NN}$ classifier score", 20.0)
     plot_w_highmt()
     plot_pull_ratio_summary()
     plot_result_summary()

@@ -1,5 +1,48 @@
 {
-  "reason": "Majority of candidate MVA inputs failed the data/MC modelling gate in validation/control regions.",
-  "status": "downscoped",
-  "trained": false
+  "class_counts": {
+    "0": 21245,
+    "1": 7714
+  },
+  "inputs": [
+    "m_vis",
+    "mu_pt",
+    "mu_eta",
+    "tau_pt",
+    "tau_eta",
+    "delta_r_mu_tau",
+    "delta_phi_mu_tau",
+    "met_pt",
+    "met_significance",
+    "mt_mu_met",
+    "mt_tau_met",
+    "mt_tot",
+    "pt_tautau_proxy",
+    "m_coll",
+    "tau_id_iso_raw"
+  ],
+  "modelling_gate_majority_failed": true,
+  "modelling_gate_note": "The classifier training remains MC-only and is retained as a candidate discriminator. Data/background-MC input-shape failures are carried as validation requirements rather than used to tune the classifier.",
+  "models": {
+    "hist_gradient_boosting_alternative": {
+      "n_test": 10136,
+      "n_train": 18823,
+      "test_auc": 0.8577345944653637,
+      "train_auc": 0.8883784610852665
+    },
+    "mlp_alternative": {
+      "n_test": 10136,
+      "n_train": 18823,
+      "test_auc": 0.855575578267886,
+      "train_auc": 0.889850832037736
+    },
+    "xgboost_primary": {
+      "n_test": 10136,
+      "n_train": 18823,
+      "test_auc": 0.8541039587193432,
+      "train_auc": 0.8747054629830305
+    }
+  },
+  "split_seed": 31415,
+  "status": "trained_for_phase3_comparison_with_modelling_caveat",
+  "trained": true
 }

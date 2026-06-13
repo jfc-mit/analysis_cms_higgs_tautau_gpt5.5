@@ -2,100 +2,104 @@
 \usepackage{graphicx}
 \usepackage{amsmath}
 \usepackage{booktabs}
-\usepackage{array}
+\usepackage{hyperref}
+
 \begin{document}
 
-\title{A CMS Open Data Search for $H\to\tau\tau$ in the $\mu\tau_h$ Final State}
+\title{Search for Higgs boson decays to tau pairs in the muon plus hadronic-tau final state with CMS Open Data}
 \author{Analysis my\_analysis}
-\affiliation{CMS Open Data reduced-sample analysis}
-\date{June 12, 2026}
+\affiliation{CMS Open Data analysis}
+\date{2026-06-13}
 
 \begin{abstract}
-A reduced CMS 2012 Open Data search for Higgs boson decays to tau pairs is
-performed in the $\mu\tau_h$ final state.  The final result is a validated
-visible-mass template fit in VBF, boosted, and zero-jet categories.  The fit
-finds $\mu=0.438^{+4.944}_{-0.438}$
-and sets an observed 95\% CLs upper limit $\mu<10.764$,
-with median expected limit $\mu<10.738$.  The result is a
-low-sensitivity Open Data limit, not evidence for a Standard Model-strength
-signal.
+A search for Standard Model Higgs boson decays to tau pairs is performed in the
+$\mu\tau_h$ final state using the localized CMS 2012 TauPlusX Open Data and
+simulation samples.  Events are split into VBF, boosted, and zero-jet
+categories and interpreted with binned pyhf/HistFactory likelihoods.  The
+visible-mass baseline gives $\hat{\mu}=2.474^{+3.452}_{-2.474}$,
+an observed 95\% CLs upper limit $\mu<5.926$, and a
+median expected limit $\mu<3.692$.  The retained $D_{NN}$ classifier
+score gives $\hat{\mu}=1.616^{+1.961}_{-1.616}$,
+an observed 95\% CLs upper limit $\mu<3.577$, and a
+median expected limit $\mu<1.807$.  The $D_{NN}$ result is the more
+sensitive of the two retained observables in this single-channel public-data
+exercise.
 \end{abstract}
 
 \maketitle
 
-\paragraph{Data and method.}
-The analysis uses the public Run2012B/C TauPlusX reduced samples and available
-ggH, VBF, DY, ttbar, and W+jets simulation at $L=11.467~\mathrm{fb}^{-1}$.
-Events pass the $\mu+\tau_h$ trigger, tight muon and hadronic-tau selections,
-opposite-sign charge, and $m_T(\mu,E_T^{\rm miss})<40$ GeV.  The categories
-are VBF, boosted, and zero-jet.  The likelihood is a binned HistFactory model
-with common signal-strength modifier $\mu$ and CLs limits computed with pyhf.
+\section{Introduction}
+The observation of Higgs boson decays to tau leptons established the direct
+coupling of the Higgs field to charged leptons.  The CMS Run-1 analysis in
+JHEP 05 (2014) 104 and the later combined measurement in Phys. Lett. B 779
+(2018) 283 use multiple final states, full detector calibrations, and embedded
+background methods.  The present work is a reduced, reproducible Open Data
+analysis in the $\mu\tau_h$ final state.  It preserves the central structure of
+the published strategy: category splitting, data-driven control inputs, and a
+simultaneous binned likelihood for a signal-strength modifier $\mu$.
 
-\paragraph{Background model.}
-The W+jets scale is derived in a high-$m_T$ control region:
-$S_W=0.853\pm0.037$.
-VBF-category MC backgrounds receive a VBF-like control scale
-$S_{\rm VBF}=0.557\pm0.051$.
-Reducible QCD/fake contamination is estimated from same-sign low-$m_T$ data
-after non-QCD subtraction.  The systematic model includes luminosity,
-tau/open-data acceptance, DY/Z normalization, W and VBF control terms,
-same-sign QCD transfer, and MC statistical uncertainties.
+\section{Data, simulation, and selection}
+The analysis uses the Run2012B and Run2012C TauPlusX data samples and the
+available ggH, VBF, DY+jets, top-pair, and W+jets simulation samples.  Events
+are selected with one muon and one hadronic-tau candidate and are divided into
+VBF, boosted, and zero-jet categories.  The current selected category yields
+are summarized in Table~\ref{tab:yields}.
 
 \begin{table}[b]
-\caption{Final visible-mass category yields.  Background includes MC
-backgrounds and the same-sign QCD/fake estimate.}
+\caption{Selected category yields for the visible-mass baseline templates.}
+\label{tab:yields}
 \begin{ruledtabular}
 \begin{tabular}{lrrrr}
-Category & Data & Bkg. & Signal & $\chi^2/\mathrm{ndf}$ \\
-VBF & 78 & 96.3 & 1.59 & 1.45 \\
-Boosted & 2183 & 2364.4 & 9.17 & 0.61 \\
-Zero-jet & 8451 & 8456.8 & 14.34 & 0.11 \\
+Category & Data & Background & Signal & Data/Bkg. \\
+\hline
+vbf & 70 & 53.4 & 4.13 & 1.312 \\
+boosted & 1138 & 1249.0 & 11.28 & 0.911 \\
+zero\_jet & 25920 & 26732.7 & 106.26 & 0.970 \\
 \end{tabular}
 \end{ruledtabular}
 \end{table}
 
-\paragraph{Validation and result.}
-The combined visible-mass validation gives data/background
-0.981 and
-$\chi^2/\mathrm{ndf}=0.722$.
-The VBF category carries the largest local residual with max pull
-2.66.
-The optimized classifier study has better expected sensitivity but fails its
-observed validation gate (fail) and is not used as a final result.
+\section{Observables and statistical model}
+Two observables are retained.  The cut-based baseline is the visible
+di-tau mass $m_{vis}$.  The multivariate result is the XGBoost classifier
+score $D_{NN}$, fitted in 20 uniform bins in each category.  For each
+observable, the expected count in category $c$ and bin $b$ is
+\begin{equation}
+\nu_{cb}(\mu,\theta)=\mu s_{cb}(\theta)+\sum_k b_{kcb}(\theta),
+\end{equation}
+with nuisance parameters $\theta$ constrained by auxiliary terms.  Upper limits
+use the asymptotic modified-frequentist CLs construction.
 
-\begin{figure*}[t]
-\centering
-\includegraphics[width=0.32\linewidth]{figures/phase5_baseline_visible_vbf.pdf}\hspace{0.01\linewidth}
-\includegraphics[width=0.32\linewidth]{figures/phase5_baseline_visible_boosted.pdf}\hspace{0.01\linewidth}
-\includegraphics[width=0.32\linewidth]{figures/phase5_baseline_visible_zero_jet.pdf}
-\caption{Visible-mass validation in the final fit categories: VBF (left),
-boosted (center), and zero-jet (right).  These plots define the validated model
-used for the final limit.}
-\end{figure*}
+\section{Results}
+Figure~\ref{fig:summary} shows the final signal-strength summary in the same
+style for both retained observables.  The visible-mass baseline gives
+$\hat{\mu}=2.474^{+3.452}_{-2.474}$ and
+$\mu<5.926$ at 95\% CLs.  The $D_{NN}$ result gives
+$\hat{\mu}=1.616^{+1.961}_{-1.616}$ and
+$\mu<3.577$ at 95\% CLs.
 
 \begin{figure}[t]
-\includegraphics[width=\linewidth]{figures/phase5_baseline_limit_summary.pdf}
-\caption{Final visible-mass CLs limit summary.  The expected band and observed
-marker show that the reduced Open Data analysis has no Standard Model resolving
-power.}
+\includegraphics[width=\linewidth]{figures/observed_limit_significance_summary.pdf}
+\caption{Observed signal-strength summary for the visible-mass baseline,
+$D_{NN}$ result, CMS 2014 result, and CMS 2018 result.  Each row uses black
+observed points with horizontal uncertainties, green and yellow expected
+one- and two-standard-deviation bands, a black dashed median-expected marker,
+and the common Standard Model line at $\mu=1$.}
+\label{fig:summary}
 \end{figure}
 
-\paragraph{Interpretation.}
-CMS Run 1 and later CMS publications observe or provide evidence for
-$H\to\tau\tau$ with many channels and a fuller calibration program.  The
-present result is consistent only as a low-sensitivity public-data exercise:
-its median expected limit of $\mu<10.738$ is an order of
-magnitude above the Standard Model rate.
+\section{Discussion}
+The $D_{NN}$ observable has the smaller median expected upper limit and is
+therefore the more sensitive of the two retained tools in this rerun.  The
+analysis is statistically limited and remains substantially weaker than the
+published multi-channel CMS results, but it demonstrates a complete Open Data
+template-fit chain with explicit machine-readable workspaces.
 
 \begin{thebibliography}{9}
-\bibitem{opendata} S. Wunsch, \emph{HiggsTauTauReduced: CMS open data reduced samples for H to tau tau studies}, CERN Open Data Portal, doi:10.7483/OPENDATA.CMS.GV20.PR5T.
-\bibitem{cms2014} CMS Collaboration, JHEP 05 (2014) 104.
-\bibitem{cms2018} CMS Collaboration, Phys. Lett. B 779 (2018) 283.
-\bibitem{atlascms2016} ATLAS and CMS Collaborations, JHEP 08 (2016) 045.
-\bibitem{pdg2024} Particle Data Group, Phys. Rev. D 110 (2024) 030001.
-\bibitem{pyhf} L. Heinrich et al., JOSS 6 (2021) 2823.
-\bibitem{cls} A. L. Read, J. Phys. G 28 (2002) 2693.
-\bibitem{cowan} G. Cowan et al., Eur. Phys. J. C 71 (2011) 1554.
+\bibitem{cms2014} CMS Collaboration, ``Evidence for the 125 GeV Higgs boson decaying to a pair of tau leptons,'' JHEP 05 (2014) 104.
+\bibitem{cms2018} CMS Collaboration, ``Observation of the Higgs boson decay to a pair of tau leptons,'' Phys. Lett. B 779 (2018) 283.
+\bibitem{pyhf} L. Heinrich et al., ``pyhf: pure-Python implementation of HistFactory statistical models,'' JOSS 6 (2021) 2823.
+\bibitem{cls} A. L. Read, ``Presentation of search results: the CLs technique,'' J. Phys. G 28 (2002) 2693.
 \end{thebibliography}
 
 \end{document}

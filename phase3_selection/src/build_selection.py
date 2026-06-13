@@ -56,7 +56,10 @@ BRANCHES = [
     "Muon_phi",
     "Muon_mass",
     "Muon_charge",
+    "Muon_pfRelIso03_all",
     "Muon_pfRelIso04_all",
+    "Muon_dxy",
+    "Muon_dz",
     "Muon_tightId",
     "Tau_pt",
     "Tau_eta",
@@ -64,17 +67,22 @@ BRANCHES = [
     "Tau_mass",
     "Tau_charge",
     "Tau_relIso_all",
+    "Tau_idIsoRaw",
     "Tau_idDecayMode",
     "Tau_idIsoTight",
+    "Tau_idIsoMedium",
     "Tau_idAntiMuTight",
+    "Tau_idAntiEleTight",
     "MET_pt",
     "MET_phi",
+    "MET_significance",
     "nJet",
     "Jet_pt",
     "Jet_eta",
     "Jet_phi",
     "Jet_mass",
     "Jet_btag",
+    "Jet_puId",
 ]
 
 CUTFLOW_STEPS = [
@@ -84,6 +92,7 @@ CUTFLOW_STEPS = [
     "tau_candidate",
     "mu_tau_pair",
     "opposite_sign",
+    "central_b_veto",
     "low_mt_signal_region",
 ]
 
@@ -102,36 +111,44 @@ CONFIG = {
     "muon": {
         "pt_min_gev": 20.0,
         "eta_abs_max": 2.1,
-        "pfRelIso04_all_max": 0.20,
+        "pfRelIso03_all_max": 0.10,
+        "dxy_abs_max_cm": 0.045,
+        "dz_abs_max_cm": 0.20,
         "tight_id_required": True,
     },
     "tau": {
-        "pt_min_gev": 20.0,
+        "pt_min_gev": 30.0,
         "eta_abs_max": 2.3,
-        "idIsoTight_required": True,
+        "idIsoMedium_required": True,
         "idAntiMuTight_required": True,
+        "idAntiEleTight_required": True,
         "delta_r_mu_tau_min": 0.5,
     },
     "jet": {
         "pt_min_gev": 30.0,
         "eta_abs_max": 4.7,
         "delta_r_lepton_min": 0.5,
+        "pu_id_required": True,
     },
     "regions": {
-        "signal_mt_max_gev": 40.0,
-        "w_cr_mt_min_gev": 80.0,
+        "signal_mt_max_gev": 30.0,
+        "w_cr_mt_min_gev": 70.0,
         "z_rich_mvis_min_gev": 60.0,
         "z_rich_mvis_max_gev": 120.0,
     },
     "categories": {
         "assignment_order": ["vbf", "boosted", "zero_jet"],
         "vbf_njet_min": 2,
-        "vbf_mjj_min_gev": 300.0,
-        "vbf_delta_eta_jj_min": 2.5,
+        "vbf_mjj_min_gev": 500.0,
+        "vbf_delta_eta_jj_min": 3.5,
         "boosted_njet_min": 1,
+        "boosted_pt_tautau_min_gev": 100.0,
     },
     "btag": {
-        "usage": "diagnostic continuous top handle only",
+        "usage": "central medium-CSV event veto plus inverted-b-veto control handle",
+        "central_pt_min_gev": 20.0,
+        "central_eta_abs_max": 2.4,
+        "medium_csv_threshold": 0.679,
         "sentinel_rule": "Jet_btag < 0 is invalid and excluded from max score",
     },
 }
@@ -389,6 +406,58 @@ def add_met_mass(
     return np.sqrt(np.maximum(mass2, 0.0))
 
 
+def transverse_mass(pt1: np.ndarray, phi1: np.ndarray, pt2: np.ndarray, phi2: np.ndarray) -> np.ndarray:
+    return np.sqrt(np.maximum(2.0 * pt1 * pt2 * (1.0 - np.cos(delta_phi(phi1, phi2))), 0.0))
+
+
+def total_transverse_mass(
+    mu_pt: np.ndarray,
+    mu_phi: np.ndarray,
+    tau_pt: np.ndarray,
+    tau_phi: np.ndarray,
+    met_pt: np.ndarray,
+    met_phi: np.ndarray,
+) -> np.ndarray:
+    mt_mu_met = transverse_mass(mu_pt, mu_phi, met_pt, met_phi)
+    mt_tau_met = transverse_mass(tau_pt, tau_phi, met_pt, met_phi)
+    mt_mu_tau = transverse_mass(mu_pt, mu_phi, tau_pt, tau_phi)
+    return np.sqrt(np.maximum(mt_mu_met**2 + mt_tau_met**2 + mt_mu_tau**2, 0.0))
+
+
+def collinear_mass(
+    mu_pt: np.ndarray,
+    mu_eta: np.ndarray,
+    mu_phi: np.ndarray,
+    mu_mass: np.ndarray,
+    tau_pt: np.ndarray,
+    tau_eta: np.ndarray,
+    tau_phi: np.ndarray,
+    tau_mass: np.ndarray,
+    met_pt: np.ndarray,
+    met_phi: np.ndarray,
+    fallback: np.ndarray,
+) -> np.ndarray:
+    px_mu = mu_pt * np.cos(mu_phi)
+    py_mu = mu_pt * np.sin(mu_phi)
+    px_tau = tau_pt * np.cos(tau_phi)
+    py_tau = tau_pt * np.sin(tau_phi)
+    px_met = met_pt * np.cos(met_phi)
+    py_met = met_pt * np.sin(met_phi)
+    det = px_mu * py_tau - py_mu * px_tau
+    c_mu = np.full_like(mu_pt, np.nan, dtype=float)
+    c_tau = np.full_like(mu_pt, np.nan, dtype=float)
+    valid_det = np.abs(det) > 1e-6
+    c_mu[valid_det] = (px_met[valid_det] * py_tau[valid_det] - py_met[valid_det] * px_tau[valid_det]) / det[valid_det]
+    c_tau[valid_det] = (px_mu[valid_det] * py_met[valid_det] - py_mu[valid_det] * px_met[valid_det]) / det[valid_det]
+    x_mu = 1.0 / (1.0 + c_mu)
+    x_tau = 1.0 / (1.0 + c_tau)
+    mvis = invariant_mass(mu_pt, mu_eta, mu_phi, mu_mass, tau_pt, tau_eta, tau_phi, tau_mass)
+    physical = np.isfinite(x_mu) & np.isfinite(x_tau) & (x_mu > 0.0) & (x_tau > 0.0) & (x_mu <= 1.0) & (x_tau <= 1.0)
+    out = np.asarray(fallback, dtype=float).copy()
+    out[physical] = mvis[physical] / np.sqrt(np.maximum(x_mu[physical] * x_tau[physical], 1e-12))
+    return out
+
+
 def first_passing(arrays: ak.Array, prefix: str, mask: ak.Array, extra_fields: tuple[str, ...] = ()) -> dict[str, np.ndarray]:
     order = ak.argsort(arrays[f"{prefix}_pt"], axis=1, ascending=False)
     sorted_mask = mask[order]
@@ -415,14 +484,22 @@ def clean_jet_variables(arrays: ak.Array, mu: dict[str, np.ndarray], tau: dict[s
     jet_phi = arrays["Jet_phi"]
     jet_mass = arrays["Jet_mass"]
     jet_btag = arrays["Jet_btag"]
+    jet_puid = arrays["Jet_puId"] if "Jet_puId" in arrays.fields else ak.ones_like(jet_pt)
     dr_mu = np.sqrt((jet_eta - ak.Array(mu["eta"])[:, None]) ** 2 + delta_phi(jet_phi, ak.Array(mu["phi"])[:, None]) ** 2)
     dr_tau = np.sqrt((jet_eta - ak.Array(tau["eta"])[:, None]) ** 2 + delta_phi(jet_phi, ak.Array(tau["phi"])[:, None]) ** 2)
+    lepton_clean = (dr_mu > CONFIG["jet"]["delta_r_lepton_min"]) & (dr_tau > CONFIG["jet"]["delta_r_lepton_min"])
     clean = (
         (jet_pt > CONFIG["jet"]["pt_min_gev"])
         & (abs(jet_eta) < CONFIG["jet"]["eta_abs_max"])
-        & (dr_mu > CONFIG["jet"]["delta_r_lepton_min"])
-        & (dr_tau > CONFIG["jet"]["delta_r_lepton_min"])
+        & lepton_clean
+        & (jet_puid > 0)
     )
+    central = (
+        (jet_pt > CONFIG["btag"]["central_pt_min_gev"])
+        & (abs(jet_eta) < CONFIG["btag"]["central_eta_abs_max"])
+        & lepton_clean
+    )
+    central_btagged = central & (jet_btag > CONFIG["btag"]["medium_csv_threshold"])
     clean_pt = jet_pt[clean]
     clean_eta = jet_eta[clean]
     clean_phi = jet_phi[clean]
@@ -446,27 +523,35 @@ def clean_jet_variables(arrays: ak.Array, mu: dict[str, np.ndarray], tau: dict[s
     detajj = np.abs(jet1_eta - jet2_eta)
     valid_btag = clean_btag[clean_btag >= 0]
     btag_max = ak.to_numpy(ak.fill_none(ak.max(valid_btag, axis=1), -1.0))
+    central_valid_btag = jet_btag[central & (jet_btag >= 0)]
+    central_btag_max = ak.to_numpy(ak.fill_none(ak.max(central_valid_btag, axis=1), -1.0))
+    has_central_btag = ak.to_numpy(ak.any(central_btagged, axis=1)).astype(bool)
     return {
         "n_clean_jets": n_clean,
         "mjj": np.where(n_clean >= 2, mjj, np.nan),
         "delta_eta_jj": np.where(n_clean >= 2, detajj, np.nan),
         "jet1_pt": jet1_pt,
         "btag_max": btag_max,
+        "central_btag_max": central_btag_max,
+        "has_central_btag": has_central_btag,
+        "passes_b_veto": ~has_central_btag,
         "has_positive_btag_score": btag_max > 0.0,
     }
 
 
 def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
     trigger = scalar(arrays, PRIMARY_TRIGGER, 0.0) > 0
-    mu_iso = arrays["Muon_pfRelIso04_all"]
+    mu_iso = arrays["Muon_pfRelIso03_all"]
     mu_mask = (
         (arrays["Muon_pt"] > CONFIG["muon"]["pt_min_gev"])
         & (abs(arrays["Muon_eta"]) < CONFIG["muon"]["eta_abs_max"])
         & (arrays["Muon_tightId"] > 0)
         & (mu_iso >= 0)
-        & (mu_iso < CONFIG["muon"]["pfRelIso04_all_max"])
+        & (mu_iso < CONFIG["muon"]["pfRelIso03_all_max"])
+        & (abs(arrays["Muon_dxy"]) < CONFIG["muon"]["dxy_abs_max_cm"])
+        & (abs(arrays["Muon_dz"]) < CONFIG["muon"]["dz_abs_max_cm"])
     )
-    mu = first_passing(arrays, "Muon", mu_mask, ("pfRelIso04_all",))
+    mu = first_passing(arrays, "Muon", mu_mask, ("pfRelIso03_all", "dxy", "dz"))
     has_muon = mu["index"] >= 0
 
     tau_iso = arrays["Tau_relIso_all"]
@@ -474,8 +559,9 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
         (arrays["Tau_pt"] > CONFIG["tau"]["pt_min_gev"])
         & (abs(arrays["Tau_eta"]) < CONFIG["tau"]["eta_abs_max"])
         & (arrays["Tau_idDecayMode"] > 0)
-        & (arrays["Tau_idIsoTight"] > 0)
+        & (arrays["Tau_idIsoMedium"] > 0)
         & (arrays["Tau_idAntiMuTight"] > 0)
+        & (arrays["Tau_idAntiEleTight"] > 0)
         & (tau_iso >= 0)
     )
     tau_dr_mu = np.sqrt(
@@ -483,14 +569,21 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
         + delta_phi(arrays["Tau_phi"], ak.Array(mu["phi"])[:, None]) ** 2
     )
     tau_mask = tau_pre_mask & (tau_dr_mu > CONFIG["tau"]["delta_r_mu_tau_min"])
-    tau = first_passing(arrays, "Tau", tau_mask, ("relIso_all",))
+    tau = first_passing(arrays, "Tau", tau_mask, ("relIso_all", "idIsoRaw"))
     has_tau = tau["index"] >= 0
 
     met_pt = scalar(arrays, "MET_pt")
     met_phi = scalar(arrays, "MET_phi")
-    mt = np.sqrt(np.maximum(2.0 * mu["pt"] * met_pt * (1.0 - np.cos(delta_phi(mu["phi"], met_phi))), 0.0))
+    met_significance = scalar(arrays, "MET_significance")
+    delta_phi_mu_tau = np.abs(delta_phi(mu["phi"], tau["phi"]))
+    delta_eta_mu_tau = np.abs(mu["eta"] - tau["eta"])
+    delta_r_mu_tau = np.sqrt(np.maximum(delta_phi_mu_tau**2 + delta_eta_mu_tau**2, 0.0))
+    mt = transverse_mass(mu["pt"], mu["phi"], met_pt, met_phi)
+    mt_tau = transverse_mass(tau["pt"], tau["phi"], met_pt, met_phi)
+    mt_tot = total_transverse_mass(mu["pt"], mu["phi"], tau["pt"], tau["phi"], met_pt, met_phi)
     mvis = invariant_mass(mu["pt"], mu["eta"], mu["phi"], mu["mass"], tau["pt"], tau["eta"], tau["phi"], tau["mass"])
     maddmet = add_met_mass(mu["pt"], mu["eta"], mu["phi"], mu["mass"], tau["pt"], tau["eta"], tau["phi"], tau["mass"], met_pt, met_phi)
+    mcoll = collinear_mass(mu["pt"], mu["eta"], mu["phi"], mu["mass"], tau["pt"], tau["eta"], tau["phi"], tau["mass"], met_pt, met_phi, mt_tot)
     px_vismet = mu["pt"] * np.cos(mu["phi"]) + tau["pt"] * np.cos(tau["phi"]) + met_pt * np.cos(met_phi)
     py_vismet = mu["pt"] * np.sin(mu["phi"]) + tau["pt"] * np.sin(tau["phi"]) + met_pt * np.sin(met_phi)
     pt_tautau_proxy = np.sqrt(px_vismet**2 + py_vismet**2)
@@ -498,21 +591,28 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
     pair = trigger & has_muon & has_tau
     os = pair & os_pair
     ss = pair & ~os_pair
-    low_mt = os & (mt < CONFIG["regions"]["signal_mt_max_gev"])
-    high_mt = os & (mt > CONFIG["regions"]["w_cr_mt_min_gev"])
-    qcd_ss = ss & (mt < CONFIG["regions"]["signal_mt_max_gev"])
-    z_rich = low_mt & (mvis >= CONFIG["regions"]["z_rich_mvis_min_gev"]) & (mvis <= CONFIG["regions"]["z_rich_mvis_max_gev"])
 
     jets = clean_jet_variables(arrays, mu, tau)
+    passes_b_veto = jets["passes_b_veto"]
+    low_mt = os & passes_b_veto & (mt < CONFIG["regions"]["signal_mt_max_gev"])
+    high_mt = os & passes_b_veto & (mt > CONFIG["regions"]["w_cr_mt_min_gev"])
+    qcd_ss = ss & passes_b_veto & (mt < CONFIG["regions"]["signal_mt_max_gev"])
+    z_rich = low_mt & (mvis >= CONFIG["regions"]["z_rich_mvis_min_gev"]) & (mvis <= CONFIG["regions"]["z_rich_mvis_max_gev"])
+
     vbf = (
         low_mt
         & (jets["n_clean_jets"] >= CONFIG["categories"]["vbf_njet_min"])
         & (jets["mjj"] > CONFIG["categories"]["vbf_mjj_min_gev"])
         & (jets["delta_eta_jj"] > CONFIG["categories"]["vbf_delta_eta_jj_min"])
     )
-    boosted = low_mt & ~vbf & (jets["n_clean_jets"] >= CONFIG["categories"]["boosted_njet_min"])
+    boosted = (
+        low_mt
+        & ~vbf
+        & (jets["n_clean_jets"] >= CONFIG["categories"]["boosted_njet_min"])
+        & (pt_tautau_proxy > CONFIG["categories"]["boosted_pt_tautau_min_gev"])
+    )
     zero_jet = low_mt & ~vbf & ~boosted
-    top_handle = pair & jets["has_positive_btag_score"] & (jets["n_clean_jets"] >= 1)
+    top_handle = pair & jets["has_central_btag"]
 
     category = np.full(len(arrays), "none", dtype="<U12")
     category[vbf] = "vbf"
@@ -543,6 +643,7 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
         "opposite_sign": os,
         "low_mt": low_mt,
         "is_signal_region": low_mt,
+        "passes_b_veto": passes_b_veto,
         "w_high_mt": high_mt,
         "is_w_high_mt": high_mt,
         "qcd_same_sign": qcd_ss,
@@ -558,21 +659,33 @@ def process_chunk(arrays: ak.Array) -> dict[str, np.ndarray]:
         "mu_pt": mu["pt"],
         "mu_eta": mu["eta"],
         "mu_phi": mu["phi"],
-        "mu_reliso": mu["pfRelIso04_all"],
+        "mu_reliso": mu["pfRelIso03_all"],
+        "mu_dxy": mu["dxy"],
+        "mu_dz": mu["dz"],
         "tau_pt": tau["pt"],
         "tau_eta": tau["eta"],
         "tau_phi": tau["phi"],
         "tau_reliso": tau["relIso_all"],
+        "tau_id_iso_raw": tau["idIsoRaw"],
+        "delta_phi_mu_tau": delta_phi_mu_tau,
+        "delta_eta_mu_tau": delta_eta_mu_tau,
+        "delta_r_mu_tau": delta_r_mu_tau,
         "met_pt": met_pt,
+        "met_phi": met_phi,
+        "met_significance": met_significance,
         "mt_mu_met": mt,
+        "mt_tau_met": mt_tau,
+        "mt_tot": mt_tot,
         "m_vis": mvis,
         "m_addmet": maddmet,
+        "m_coll": mcoll,
         "pt_tautau_proxy": pt_tautau_proxy,
         "n_clean_jets": jets["n_clean_jets"],
         "mjj": jets["mjj"],
         "delta_eta_jj": jets["delta_eta_jj"],
         "jet1_pt": jets["jet1_pt"],
         "btag_max": jets["btag_max"],
+        "central_btag_max": jets["central_btag_max"],
         "keep_summary": keep_summary,
     }
 
@@ -603,6 +716,7 @@ def process_sample(sample: dict[str, object]) -> tuple[dict[str, int], dict[str,
         cutflow["tau_candidate"] += int(np.sum(derived["trigger"] & derived["has_muon"] & derived["has_tau"]))
         cutflow["mu_tau_pair"] += int(np.sum(derived["pair"]))
         cutflow["opposite_sign"] += int(np.sum(derived["opposite_sign"]))
+        cutflow["central_b_veto"] += int(np.sum(derived["opposite_sign"] & derived["passes_b_veto"]))
         cutflow["low_mt_signal_region"] += int(np.sum(derived["low_mt"]))
         for region in ("signal", "w_high_mt", "qcd_same_sign", "z_rich", "top_btag_handle"):
             increment(counts, region, np.sum(derived[region] if region != "signal" else derived["low_mt"]))

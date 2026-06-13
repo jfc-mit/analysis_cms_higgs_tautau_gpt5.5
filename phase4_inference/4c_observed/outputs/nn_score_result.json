@@ -1,0 +1,721 @@
+{
+  "artifacts": {
+    "result": "nn_score_result.json",
+    "templates": "nn_score_observed_templates.npz",
+    "workspace": "pyhf_workspace_nn_score.json",
+    "yields": "nn_score_observed_yields.json"
+  },
+  "binning": [
+    0.0,
+    0.05,
+    0.1,
+    0.15000000000000002,
+    0.2,
+    0.25,
+    0.30000000000000004,
+    0.35000000000000003,
+    0.4,
+    0.45,
+    0.5,
+    0.55,
+    0.6000000000000001,
+    0.65,
+    0.7000000000000001,
+    0.75,
+    0.8,
+    0.8500000000000001,
+    0.9,
+    0.9500000000000001,
+    1.0
+  ],
+  "categories": [
+    "vbf",
+    "boosted",
+    "zero_jet"
+  ],
+  "fit_metadata": {
+    "background_input_reweight_used": false,
+    "builder_path": "phase4_inference/4c_observed/src/build_observed_results.py::build_dnn_score_secondary",
+    "observable_bins": "20 uniform D_NN score bins in each of the VBF, boosted, and zero-jet channels",
+    "profile_interval_policy": "compact plotting proxy stored in observed_fit.profile_mu_interval",
+    "workspace_support_floor": {
+      "application": "workspace_only_background_support_floor_for_empty_reduced_sample_bins",
+      "floor_events_per_unsupported_bin": 0.001,
+      "total_added_background": 0.003,
+      "unsupported_bin_count": 3
+    }
+  },
+  "model": "dnn_classifier_score_secondary",
+  "observable": "mva_score_xgboost",
+  "observed_fit": {
+    "discovery_diagnostic": {
+      "method": "pyhf asymptotic q0 on observed full data",
+      "p_value": 0.018587049105010637,
+      "status": "evaluated",
+      "z_value": 2.0838468722638877
+    },
+    "interpretation": "Three-category classifier-score result with the same observed-data background constraints as the mass workspaces.",
+    "mu_hat": 1.6159540738964726,
+    "npars": 69,
+    "observed_upper_limit": {
+      "expected_band_minus2_minus1_median_plus1_plus2": [
+        0.9687965881319757,
+        1.2167127829238047,
+        1.8069442829064997,
+        2.58412134550018,
+        3.636691546009417
+      ],
+      "method": "pyhf asymptotic modified frequentist CLs with adaptive coarse scan",
+      "observed_limit": 3.576947614842235,
+      "result_count": 2,
+      "scan": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0
+      ],
+      "scan_history": [
+        {
+          "n_points": 13,
+          "observed_limit": 3.576947614842235,
+          "scan_max": 12.0
+        }
+      ],
+      "status": "evaluated"
+    },
+    "parameters": {
+      "dy_ztautau_open_data_boosted": -0.4277824324420992,
+      "dy_ztautau_open_data_vbf": 0.5966525924427558,
+      "dy_ztautau_open_data_zero_jet": -0.2834759597753238,
+      "lumi_2012": 0.0003494508101874241,
+      "mc_stat_boosted[0]": 0.9810910917657337,
+      "mc_stat_boosted[10]": 0.871013650622652,
+      "mc_stat_boosted[11]": 1.0331534122522033,
+      "mc_stat_boosted[12]": 0.9100711624455514,
+      "mc_stat_boosted[13]": 0.985139432884915,
+      "mc_stat_boosted[14]": 1.010782923273805,
+      "mc_stat_boosted[15]": 1.1687560902588847,
+      "mc_stat_boosted[16]": 0.9379556281018796,
+      "mc_stat_boosted[17]": 0.9755310473139412,
+      "mc_stat_boosted[18]": 0.9084232564274991,
+      "mc_stat_boosted[19]": 1.0,
+      "mc_stat_boosted[1]": 0.9386336862069155,
+      "mc_stat_boosted[2]": 0.9414085077439215,
+      "mc_stat_boosted[3]": 1.0551435525902912,
+      "mc_stat_boosted[4]": 0.967947088174978,
+      "mc_stat_boosted[5]": 1.1542792276945963,
+      "mc_stat_boosted[6]": 0.9087856372181559,
+      "mc_stat_boosted[7]": 1.0618354533326007,
+      "mc_stat_boosted[8]": 0.7818627881848853,
+      "mc_stat_boosted[9]": 1.2201943528878296,
+      "mc_stat_vbf[0]": 0.7798435060505665,
+      "mc_stat_vbf[10]": 0.8846628850455727,
+      "mc_stat_vbf[11]": 0.3393483246741053,
+      "mc_stat_vbf[12]": 1.0171963064117342,
+      "mc_stat_vbf[13]": 0.8380467514087733,
+      "mc_stat_vbf[14]": 0.9112340014463424,
+      "mc_stat_vbf[15]": 1.109795235028564,
+      "mc_stat_vbf[16]": 1.4130856362959996,
+      "mc_stat_vbf[17]": 0.9462830316755769,
+      "mc_stat_vbf[18]": 0.984046192698452,
+      "mc_stat_vbf[19]": 1.0,
+      "mc_stat_vbf[1]": 0.8906878626310093,
+      "mc_stat_vbf[2]": 1.174767450542767,
+      "mc_stat_vbf[3]": 0.8607622834013613,
+      "mc_stat_vbf[4]": 1.2661727465152435,
+      "mc_stat_vbf[5]": 0.7385631460368852,
+      "mc_stat_vbf[6]": 1.6576753008155476,
+      "mc_stat_vbf[7]": 1.2137139279631028,
+      "mc_stat_vbf[8]": 1.031842249238745,
+      "mc_stat_vbf[9]": 1.0936272313892437,
+      "mc_stat_zero_jet[0]": 0.9489300423191638,
+      "mc_stat_zero_jet[10]": 1.013399214673332,
+      "mc_stat_zero_jet[11]": 1.006122107802601,
+      "mc_stat_zero_jet[12]": 1.0175530285576906,
+      "mc_stat_zero_jet[13]": 1.0734672679867765,
+      "mc_stat_zero_jet[14]": 1.001241054115995,
+      "mc_stat_zero_jet[15]": 0.955529918751273,
+      "mc_stat_zero_jet[16]": 1.0206805364201592,
+      "mc_stat_zero_jet[17]": 0.9554614054992989,
+      "mc_stat_zero_jet[18]": 1.0003025630118763,
+      "mc_stat_zero_jet[19]": 1.0,
+      "mc_stat_zero_jet[1]": 1.054599061619663,
+      "mc_stat_zero_jet[2]": 0.9992211337896801,
+      "mc_stat_zero_jet[3]": 0.9839421618532578,
+      "mc_stat_zero_jet[4]": 0.9956444843853163,
+      "mc_stat_zero_jet[5]": 0.9799432864637633,
+      "mc_stat_zero_jet[6]": 1.0273645654414836,
+      "mc_stat_zero_jet[7]": 0.9823079042176445,
+      "mc_stat_zero_jet[8]": 0.9764350552559843,
+      "mc_stat_zero_jet[9]": 1.0109069892005216,
+      "mu": 1.6159540738964726,
+      "qcd_ss_transfer": 1.6936204068989877,
+      "tau_open_data_acceptance": 0.0012575593973529575,
+      "vbf_background_control": 0.20645445634134174,
+      "wjets_high_mt_control": 0.026130284173891016
+    },
+    "profile_mu_interval": {
+      "err_minus": 1.6159540738964726,
+      "err_plus": 1.9609935409457624,
+      "lower": 0.0,
+      "lower_status": "bounded_at_zero_proxy",
+      "method": "Profile interval proxy for compact final-summary plotting: lower bound fixed at physical mu>=0 and upper bound set to the observed 95% CLs limit.",
+      "mu_hat": 1.6159540738964726,
+      "profile_failures": [],
+      "upper": 3.576947614842235,
+      "upper_status": "observed_cls_limit_proxy"
+    },
+    "status": "evaluated"
+  },
+  "phase3_expected_result": {
+    "background_total": 26725.55600275325,
+    "bin_edges": [
+      0.0,
+      0.05,
+      0.15000000000000002,
+      0.2,
+      0.25,
+      0.35000000000000003,
+      0.55,
+      0.6000000000000001,
+      0.7000000000000001,
+      0.75,
+      0.8500000000000001,
+      1.0
+    ],
+    "categories": [
+      "vbf",
+      "boosted",
+      "zero_jet"
+    ],
+    "caveat": "Expected-only MC gain; severe input modelling caveats require Phase 4b validation before unqualified promotion.",
+    "family": "expected_only_mva",
+    "low_background_bins_lt5": 0,
+    "low_background_fraction": 0.0,
+    "median_limit": 2.2693933320469215,
+    "median_limit_improvement_factor": 1.2796810582794669,
+    "model_name": "xgboost",
+    "name": "mva_xgboost_score_baseline_categories",
+    "observable": "mva_score_xgboost",
+    "s_over_b": 0.0045529354803164925,
+    "s_over_sqrt_b": 0.7443117423291193,
+    "selection_role": "primary_candidate",
+    "signal_total": 121.67973215612068,
+    "sparse_bin_handling": {
+      "all_pass": true,
+      "categories": {
+        "boosted": {
+          "background_bins": [
+            46.910040559906925,
+            155.83396181639748,
+            114.48545450521155,
+            130.4937541538574,
+            206.21347909768997,
+            249.10530612295935,
+            38.74221013085443,
+            104.23692694682529,
+            42.408960328688245,
+            95.39708258099677,
+            67.4497948198424
+          ],
+          "min_background_bin": 38.74221013085443,
+          "passes_min_background": true
+        },
+        "vbf": {
+          "background_bins": [
+            11.686845444254642,
+            18.36231622898198,
+            7.853589009440131,
+            6.8326452048749795,
+            13.665720196780176,
+            17.89489579117559,
+            12.714848735919595,
+            7.5312723475359,
+            7.456878523299556,
+            10.50604128162648,
+            5.27026403580025
+          ],
+          "min_background_bin": 5.27026403580025,
+          "passes_min_background": true
+        },
+        "zero_jet": {
+          "background_bins": [
+            836.9550738367967,
+            4702.802054925377,
+            3480.5925767120007,
+            2636.7211649379346,
+            3937.319518926572,
+            4906.533016289955,
+            989.6088175494527,
+            1647.7073624113852,
+            668.291027416988,
+            1056.7756269000358,
+            491.1974749838252
+          ],
+          "min_background_bin": 491.1974749838252,
+          "passes_min_background": true
+        }
+      },
+      "initial_edges": [
+        0.0,
+        0.05,
+        0.1,
+        0.15000000000000002,
+        0.2,
+        0.25,
+        0.30000000000000004,
+        0.35000000000000003,
+        0.4,
+        0.45,
+        0.5,
+        0.55,
+        0.6000000000000001,
+        0.65,
+        0.7000000000000001,
+        0.75,
+        0.8,
+        0.8500000000000001,
+        0.9,
+        0.9500000000000001,
+        1.0
+      ],
+      "merge_count": 9,
+      "merged_edges": [
+        0.0,
+        0.05,
+        0.15000000000000002,
+        0.2,
+        0.25,
+        0.35000000000000003,
+        0.55,
+        0.6000000000000001,
+        0.7000000000000001,
+        0.75,
+        0.8500000000000001,
+        1.0
+      ],
+      "merges": [
+        {
+          "category": "vbf",
+          "low_bin_background": 0.0,
+          "low_bin_index": 19,
+          "low_bin_range": [
+            0.9500000000000001,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.9500000000000001
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 0.7620544282922055,
+          "low_bin_index": 18,
+          "low_bin_range": [
+            0.9,
+            1.0
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.9
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 2.5419369362039776,
+          "low_bin_index": 13,
+          "low_bin_range": [
+            0.65,
+            0.7000000000000001
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.65
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 2.9175577403467643,
+          "low_bin_index": 8,
+          "low_bin_range": [
+            0.4,
+            0.45
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.4
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 3.3039913644961834,
+          "low_bin_index": 8,
+          "low_bin_range": [
+            0.45,
+            0.5
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.45
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 3.4001645473442217,
+          "low_bin_index": 6,
+          "low_bin_range": [
+            0.30000000000000004,
+            0.35000000000000003
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.30000000000000004
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 3.6045286677887205,
+          "low_bin_index": 2,
+          "low_bin_range": [
+            0.1,
+            0.15000000000000002
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.1
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 3.670280351805915,
+          "low_bin_index": 11,
+          "low_bin_range": [
+            0.8,
+            0.8500000000000001
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.8
+        },
+        {
+          "category": "vbf",
+          "low_bin_background": 3.670280351805915,
+          "low_bin_index": 6,
+          "low_bin_range": [
+            0.5,
+            0.55
+          ],
+          "merged_with": "previous",
+          "removed_edge": 0.5
+        }
+      ],
+      "method": "common adjacent-bin merging across all fit categories using expected MC background only",
+      "minimum_expected_background_per_fit_bin": 5.0
+    },
+    "z_improvement_factor": 1.2820725297706315,
+    "z_value": 1.0086685432814568
+  },
+  "role": "nn_result",
+  "templates": "nn_score_observed_templates.npz",
+  "training_summary": {
+    "blinding": "Trained only on signal/background MC in signal-region selected events. Collision data are not used in the signal-region classifier target or event weights.",
+    "input_reweighting": null,
+    "inputs": [
+      "m_vis",
+      "mu_pt",
+      "mu_eta",
+      "tau_pt",
+      "tau_eta",
+      "delta_r_mu_tau",
+      "delta_phi_mu_tau",
+      "met_pt",
+      "met_significance",
+      "mt_mu_met",
+      "mt_tau_met",
+      "mt_tot",
+      "pt_tautau_proxy",
+      "m_coll",
+      "tau_id_iso_raw"
+    ],
+    "model": {
+      "n_test": 11584,
+      "n_train": 17375,
+      "overtraining_gap_train_minus_test": 0.02769211165273433,
+      "selection_role": "primary_D_NN",
+      "test_auc": 0.8246828893527044,
+      "train_auc": 0.8523750010054387,
+      "type": "XGBClassifier"
+    },
+    "model_name": "xgboost",
+    "split": {
+      "random_state": 31415,
+      "stratified": true,
+      "test_size": 0.4
+    },
+    "status": "trained_expected_only_mc",
+    "training_weight": {
+      "formula": "nominal sigma*L/Ngen MC event weight times class-balance factor",
+      "max": 3.8278644975120786,
+      "min": 0.24461347020784086,
+      "nominal_sum_background": 26725.55600275324,
+      "nominal_sum_signal": 121.67973215612068,
+      "sum_background": 14479.5,
+      "sum_signal": 14479.500000000002
+    }
+  },
+  "validation_summary": {
+    "combined": {
+      "background_total": 27146.22146315044,
+      "chi2": 39.054826714661864,
+      "chi2_per_ndf": 0.6851723985028397,
+      "data_over_background": 1.0034545705367084,
+      "data_total": 27240.0,
+      "ndf": 57,
+      "ratio_stat_uncertainty": 0.006079868187558351
+    },
+    "flags": {
+      "category_chi2_failure": false,
+      "combined_chi2_failure": false,
+      "combined_ratio_failure": false,
+      "high_score_shape_failure": false
+    },
+    "model_label": "dnn_classifier_score_secondary",
+    "pass_criteria": {
+      "category_chi2_per_ndf_max": 5.0,
+      "combined_chi2_per_ndf_max": 3.0,
+      "combined_ratio_within_3_stat_uncertainties": true
+    },
+    "score_modeling_status": "pass",
+    "score_template_validation": {
+      "boosted": {
+        "background_total": 1252.7754480655158,
+        "bin_data_over_background": [
+          0.9223668631988162,
+          0.8554713032043684,
+          0.8645666397897832,
+          1.010003315177989,
+          0.8285907024811779,
+          1.1781512217827366,
+          0.7514787589413704,
+          0.9911620518792295,
+          0.6157907708513229,
+          1.294701090657348,
+          0.6816705375979116,
+          0.9589644850603528,
+          0.7484761059914443,
+          0.951297568484368,
+          0.9504646052939253,
+          1.3259841784149817,
+          0.8979562115469649,
+          1.0177739012703095,
+          1.0137017091211509,
+          NaN
+        ],
+        "chi2": 12.574489205376768,
+        "chi2_per_ndf": 0.6618152213356193,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 0.9171635681192815,
+        "data_total": 1149.0,
+        "max_abs_pull": 1.8251104627674726,
+        "ndf": 19,
+        "nonqcd_background_total": 1238.639153970731,
+        "pulls": [
+          -0.3208358671402785,
+          -0.6538161375175655,
+          -0.6419894373322453,
+          0.049103773257282136,
+          -0.8740305088970294,
+          0.8230862559000509,
+          -1.229612256801612,
+          -0.03900244003706763,
+          -1.8251104627674726,
+          1.000100323433066,
+          -1.3001412973790205,
+          -0.14621205827121028,
+          -1.0285403324962195,
+          -0.19596886529241303,
+          -0.18459814717851358,
+          1.1467527542447862,
+          -0.42392070614147487,
+          0.0671340723492409,
+          0.04518020740444239,
+          0.0
+        ],
+        "qcd_total": 14.136294094784486
+      },
+      "vbf": {
+        "background_total": 46.62990034619965,
+        "bin_data_over_background": [
+          0.5958181698633238,
+          1.1172683691929544,
+          3.48493753196613,
+          0.9698959232636758,
+          2.2577841311135955,
+          0.8780885496017702,
+          5.21237938020156,
+          1.9067411420014528,
+          1.7272772575528414,
+          1.845362872991036,
+          0.8505994697307787,
+          0.0,
+          1.6303303841444192,
+          1.2462596617832649,
+          1.1298020361869563,
+          2.160360508504371,
+          5.206941964831476,
+          1.6977795284581279,
+          4.141148648996854,
+          NaN
+        ],
+        "chi2": 21.866936227322796,
+        "chi2_per_ndf": 1.1508913803854104,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 1.5226281736153555,
+        "data_total": 71.0,
+        "max_abs_pull": 2.2738369231587,
+        "ndf": 19,
+        "nonqcd_background_total": 39.42584889833477,
+        "pulls": [
+          -0.7812805471802707,
+          0.21239385431791624,
+          1.716325295182558,
+          -0.043865248411064046,
+          1.1286165402170742,
+          -0.19996619806316443,
+          1.9016242289871748,
+          0.9114979897397528,
+          0.5043405567025678,
+          0.5949827357300059,
+          -0.13393760575456326,
+          -2.030657354413597,
+          0.5737312259921478,
+          0.22058207658216708,
+          0.16954212450232053,
+          1.1027930848180807,
+          2.2738369231587,
+          0.6457991617490761,
+          0.7368715004184251,
+          0.0
+        ],
+        "qcd_total": 7.20405144786488
+      },
+      "zero_jet": {
+        "background_total": 25846.816114738725,
+        "bin_data_over_background": [
+          1.0014704662055287,
+          1.206633364561293,
+          0.9979417860872576,
+          0.9450215993570804,
+          0.9576395115345001,
+          0.936925338507174,
+          1.0115524032188068,
+          0.9536609895077549,
+          0.9458131150311433,
+          1.0221584639638925,
+          1.0423018884862516,
+          1.0386745870021388,
+          1.0707394020085284,
+          1.1699307076070085,
+          1.061861185724546,
+          0.9983595573900731,
+          1.106366629370526,
+          1.0049500793745445,
+          1.1477450744644992,
+          NaN
+        ],
+        "chi2": 4.613401281962302,
+        "chi2_per_ndf": 0.2428105937874896,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 1.0067003953017841,
+        "data_total": 26020.0,
+        "max_abs_pull": 1.2686040848443907,
+        "ndf": 19,
+        "nonqcd_background_total": 25064.095144585393,
+        "pulls": [
+          0.009114629290084638,
+          1.2686040848443907,
+          -0.013572990549406059,
+          -0.3647521215155923,
+          -0.2797763375535473,
+          -0.41516938355009286,
+          0.07547298618159931,
+          -0.3014817780337375,
+          -0.3511454975746834,
+          0.14208368945217026,
+          0.26961439274499455,
+          0.24563048060213233,
+          0.44625076717480056,
+          1.0592920988814571,
+          0.3824159083899268,
+          -0.010062372072745445,
+          0.6383255217410815,
+          0.029768933325452454,
+          0.6091470828461684,
+          0.0
+        ],
+        "qcd_total": 782.7209701533283
+      }
+    }
+  },
+  "vbf_background_scale": {
+    "absolute_uncertainty": 0.061189753090194206,
+    "application": "central scale applied only to MC background samples in the VBF fit category",
+    "applied_scale_factor": 0.3448024675775544,
+    "background_mc_sumw2": 105.90467290583874,
+    "background_mc_yield": 220.41605599271347,
+    "control_region": "vbf_like_top_btag_not_signal_region",
+    "data_events": 76,
+    "data_scope": "VBF-like rows with top-btag handle outside the low-mT signal region",
+    "formula": "N_data_CR / MC_background_CR",
+    "nuisance": {
+      "hi": 1.1774632110961651,
+      "lo": 0.8225367889038347
+    },
+    "raw_scale_factor": 0.3448024675775544,
+    "relative_uncertainty": 0.17746321109616522,
+    "rows": {
+      "DYJetsToLL": {
+        "raw_events": 4,
+        "sumw2": 6.959625000244642,
+        "yield": 5.276220238104032
+      },
+      "TTbar": {
+        "raw_events": 451,
+        "sumw2": 91.93558569534234,
+        "yield": 203.62452983027217
+      },
+      "W1JetsToLNu": {
+        "raw_events": 0,
+        "sumw2": 0.0,
+        "yield": 0.0
+      },
+      "W2JetsToLNu": {
+        "raw_events": 11,
+        "sumw2": 5.395234362937648,
+        "yield": 7.703737923392392
+      },
+      "W3JetsToLNu": {
+        "raw_events": 9,
+        "sumw2": 1.614227847314105,
+        "yield": 3.8115680009448796
+      }
+    },
+    "status": "valid"
+  },
+  "wjets_high_mt_scale": {
+    "absolute_uncertainty": 0.01393775384099262,
+    "applied_scale_factor": 0.9190154734576896,
+    "control_region": "is_w_high_mt",
+    "data_events_full": 14065,
+    "data_scope": "Run2012B/C TauPlusX rows in the localized public HiggsTauTauReduced mirror; 11.467/fb is retained as the Open Data normalization reference",
+    "formula": "(N_data_CR - nonW_MC_CR) / W_MC_CR",
+    "nonw_background_mc_sumw2_full_lumi": 1592.8389203939705,
+    "nonw_background_mc_yield_full_lumi": 1923.5178203535465,
+    "nuisance": {
+      "hi": 1.0151659621013271,
+      "lo": 0.9848340378986727
+    },
+    "raw_scale_factor": 0.9190154734576896,
+    "relative_uncertainty": 0.015165962101327228,
+    "status": "valid",
+    "wjets_mc_sumw2_full_lumi": 21606.58209388878,
+    "wjets_mc_yield_full_lumi": 13211.401255264536
+  },
+  "workspace": "pyhf_workspace_nn_score.json",
+  "yields": "nn_score_observed_yields.json"
+}

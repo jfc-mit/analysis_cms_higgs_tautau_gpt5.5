@@ -218,7 +218,7 @@ def plot_modelling() -> None:
     ax.plot(x, values, marker="o", linestyle="", label=r"Shape $\chi^2/\mathrm{ndf}$")
     ax.axhline(5.0, color="tab:red", linestyle="--", label="MVA gate")
     ax.set_xticks(x)
-    ax.set_xticklabels([MODELING_LABELS[name] for name in names], rotation=90)
+    ax.set_xticklabels([MODELING_LABELS.get(name, name.replace("_", " ")) for name in names], rotation=90)
     ax.set_xlabel("Candidate input")
     ax.set_ylabel(r"Validation shape $\chi^2/\mathrm{ndf}$")
     ax.set_ylim(0, np.nanmax(values) * 1.15 if np.any(np.isfinite(values)) else 6)

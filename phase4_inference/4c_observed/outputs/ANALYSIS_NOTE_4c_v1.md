@@ -10,106 +10,87 @@ bibliography: references.bib
 **Phase 4c v2 audit correction**
 
 - Added a same-sign data-driven QCD/fake background estimate.
-- Added multivariate data/MC input reweighting derived in validation/control regions before classifier training.
-- Promoted the calibrated categorized score model to the primary observed result.
-- Widened DY/Z normalization to reflect the absence of embedding and EWK Z reduced samples.
+- Rebuilt the visible-mass baseline and retained the single D_NN classifier-score result.
+- Removed historical optimized-score, add-MET, and duplicate DNN-alias branches from the current output set.
 
-# Phase 4c Observed Inference: Audit-Corrected Full Data
+# Phase 4c Observed Inference: Full Data
 
 ## Summary
 
-Phase 4c has been updated after the audit of the large expected versus observed
-discrepancy. The problem was physics modelling: the original score-template fit
-omitted a reducible QCD/fake-tau component, used background MC before correcting
-large data/MC input-shape differences, and carried too restrictive a DY/Z
-normalization model for a reduced sample without embedding or EWK Z simulation.
-
-The primary observed result is therefore the calibrated trained-discriminator
-fit in the same VBF, boosted, and zero-jet categories. The classifier is trained
-only on MC, but the background MC receives a multivariate data/MC input
-reweighting derived before training in W high-mT, same-sign, Z-rich, and
-top/b-tag validation/control regions. The primary score model also includes the
-same-sign data-driven QCD/fake template and wider DY/Z normalization nuisance
-terms. No alternative mass-fit result is quoted in this Phase 4c note; the
-frozen previous visible-mass baseline is preserved only for the final
-signal-strength comparison.
+The full-data result is rebuilt from the current local data and MC inputs using
+two retained workspaces: the cut-based visible-mass baseline and the
+three-category $D_NN$ classifier-score workspace. Historical optimized-score,
+add-MET, and duplicate DNN aliases are not part of this output set.
 
 ## W and QCD Control Inputs
 
 The full-data W+jets scale from the high-mT control region is
-`0.8528 ± 0.0370`.
+`0.9190 ± 0.0139`.
 The VBF background control scale from the VBF-like top-btag non-signal region is
-`0.5571 ± 0.0515`;
+`0.3448 ± 0.0612`;
 it is applied only to MC backgrounds in the VBF fit category. This addresses
 the large VBF data/MC overprediction seen in the original observed templates
 without changing the signal normalization or the boosted/zero-jet categories.
 The same-sign QCD/fake estimate uses data minus non-QCD MC in the same-sign
 low-mT region and a transfer factor measured in the lowest fitted-observable
-bin. For the primary calibrated-score model this factor is
-`0.0204 ± 0.2533`.
+bin. For the visible-mass baseline this factor is
+`0.6163 ± 0.1944`.
 
 ![Full high-mT W control comparison. The figure shows non-W MC, nominal W MC,
 the scaled control-region prediction, and full data in the control region.
 The scale is derived outside the signal region and then propagated into the
 observed workspaces.](figures/w_highmt_scale_full.pdf){#fig:p4c-wcr}
 
-## Primary Calibrated-Score Result
+## Visible-Mass Baseline
 
 | Category | Data | Background | QCD/fake | Data/background | Chi2/ndf | Max abs pull |
 | --- | ---: | ---: | ---: | ---: | ---: | ---: |
-| vbf | 79 | 60.17 | 0.36 | 1.313 | 1.513 | 2.36 |
-| boosted | 2213 | 2115.53 | 5.64 | 1.046 | 1.904 | 2.63 |
-| zero_jet | 8466 | 14047.12 | 22.93 | 0.603 | 4.025 | 3.22 |
+| vbf | 70 | 53.37 | 14.70 | 1.312 | 1.999 | 2.01 |
+| boosted | 1138 | 1249.00 | 28.15 | 0.911 | 0.492 | 1.07 |
+| zero_jet | 25920 | 26732.68 | 1742.04 | 0.970 | 0.126 | 0.55 |
 
-The primary calibrated-score fit gives `mu_hat = 38.3802`,
-an observed 95% CLs limit `mu < 50.0000`,
-and a diagnostic `q0` value `Z = 12.4698`.
-The median expected limit from the same corrected workspace is
-`1.9735`. This attempted optimized result is retained for
-comparison, but the final Phase 5 interpretation keeps the frozen visible-mass
-baseline because the optimized score fails the observed-data validation gate.
+The visible-mass baseline fit gives `mu_hat = 2.4740`,
+an observed 95% CLs limit `mu < 5.9262`,
+and a diagnostic `q0` value `Z = 1.3259`.
+The median expected limit from the same workspace is `3.6919`.
 
-![Primary calibrated-score validation in the VBF category. The plot compares
-localized Run2012B/C TauPlusX data to the calibrated score model after
-pre-training multivariate input reweighting, wider DY/Z normalization, and
-same-sign QCD/fake correction. This category remains statistically limited but
-is included in the simultaneous primary fit.](figures/observed_primary_score_vbf.pdf){#fig:p4c-primary-vbf}
+![Visible-mass baseline validation in the VBF category. The plot compares
+localized Run2012B/C TauPlusX data to the visible-mass baseline model after
+the same-sign QCD/fake correction. This category remains statistically limited
+but is included in the simultaneous baseline fit.](figures/observed_visible_vbf.pdf){#fig:p4c-visible-vbf}
 
-![Primary calibrated-score validation in the boosted category. The plot
-compares full data to the calibrated score model with the W high-mT scale and
-same-sign QCD/fake template. This category is used in the final observed
-fit.](figures/observed_primary_score_boosted.pdf){#fig:p4c-primary-boosted}
+![Visible-mass baseline validation in the boosted category. The plot compares
+full data to the visible-mass baseline model with the W high-mT scale and
+same-sign QCD/fake template. This category is used in the simultaneous baseline
+fit.](figures/observed_visible_boosted.pdf){#fig:p4c-visible-boosted}
 
-![Primary calibrated-score validation in the zero-jet category. The zero-jet
-normalization is stabilized by the same-sign QCD/fake estimate and the
-background input reweighting. This category contributes the largest data
-statistics to the primary simultaneous fit.](figures/observed_primary_score_zero_jet.pdf){#fig:p4c-primary-zero}
+![Visible-mass baseline validation in the zero-jet category. The zero-jet
+category contributes the largest data statistics to the visible-mass baseline
+fit and anchors the cut-based result.](figures/observed_visible_zero_jet.pdf){#fig:p4c-visible-zero}
 
-## Frozen Baseline For Final Comparison
+## D_NN Result
 
-The frozen previous visible-mass baseline gives `mu_hat = 0.4382`, observed 95% CLs `mu < 10.7645`, median expected `mu < 10.7375`. It is not
-retrained or refit in this update; it is carried forward only so the final AN
-and PRL can compare the optimized-score attempt with the previous result using
-the same signal-strength convention.
+The retained NN result uses the XGBoost classifier score `mva_score_xgboost`
+in the same VBF, boosted, and zero-jet categories with 20 uniform score bins.
+It gives `mu_hat = 1.6160`, observed 95% CLs
+`mu < 3.5769`, and median expected
+limit `1.8069`.
 
-![Observed pull and ratio summary. The figure compares the primary calibrated
-score validation behavior after the QCD/fake, DY/Z, and input reweighting
-corrections. It is the central diagnostic for the attempted optimized
-model.](figures/observed_pull_ratio_summary.pdf){#fig:p4c-pulls}
+![D_NN validation in the VBF category. The plot compares observed data to the
+full MC expectation for the retained classifier-score workspace. The same
+score definition and binning are used in all three categories.](figures/observed_nn_score_vbf.pdf){#fig:p4c-nn-vbf}
+
+![D_NN validation in the boosted category. The plot compares observed data to
+the retained classifier-score workspace in the boosted category. The lower
+panel reports the data-to-prediction ratio.](figures/observed_nn_score_boosted.pdf){#fig:p4c-nn-boosted}
+
+![D_NN validation in the zero-jet category. The plot compares observed data to
+the retained classifier-score workspace in the statistically dominant zero-jet
+category.](figures/observed_nn_score_zero_jet.pdf){#fig:p4c-nn-zero}
 
 ![Observed limit and significance summary. The figure shows the primary
-calibrated-score fit and the frozen visible-mass baseline on the same
-signal-strength scale. The result remains an Open Data diagnostic rather than
-CMS-quality evidence.](figures/observed_limit_significance_summary.pdf){#fig:p4c-result-summary}
-
-## Phase 5 Obligation
-
-Phase 5 must report the calibrated-score plus QCD model as an optimized
-attempt, document the observed validation failure, and compare it with the
-frozen visible-mass baseline. It must also document the pre-training input
-reweighting, the widened DY/Z normalization, the absence of embedded/EWK Z
-reduced samples, and the 11.467/fb luminosity reference for these reduced
-tutorial samples.
+visible-mass baseline and retained D_NN result on the same signal-strength
+scale.](figures/observed_limit_significance_summary.pdf){#fig:p4c-result-summary}
 
 
 # References {-}

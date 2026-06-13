@@ -2,109 +2,118 @@
   "samples": {
     "DYJetsToLL": {
       "counts": {
-        "events": 3045887,
-        "low_mt_signal_region": 5268,
-        "mu_tau_pair": 7909,
-        "muon_candidate": 454623,
-        "opposite_sign": 6894,
-        "tau_candidate": 7909,
-        "trigger": 474378
+        "central_b_veto": 24065,
+        "events": 30458871,
+        "low_mt_signal_region": 17142,
+        "mu_tau_pair": 27169,
+        "muon_candidate": 4503544,
+        "opposite_sign": 24397,
+        "tau_candidate": 27169,
+        "trigger": 4753620
       },
       "role": "background"
     },
     "GluGluToHToTauTau": {
       "counts": {
-        "events": 47696,
-        "low_mt_signal_region": 711,
-        "mu_tau_pair": 973,
-        "muon_candidate": 2725,
-        "opposite_sign": 963,
-        "tau_candidate": 973,
-        "trigger": 3402
+        "central_b_veto": 4913,
+        "events": 476963,
+        "low_mt_signal_region": 3475,
+        "mu_tau_pair": 5050,
+        "muon_candidate": 26152,
+        "opposite_sign": 4991,
+        "tau_candidate": 5050,
+        "trigger": 33520
       },
       "role": "signal"
     },
     "Run2012B_TauPlusX": {
       "counts": {
-        "events": 3564750,
-        "low_mt_signal_region": 4075,
-        "mu_tau_pair": 11933,
-        "muon_candidate": 569417,
-        "opposite_sign": 8898,
-        "tau_candidate": 11933,
-        "trigger": 1000905
+        "central_b_veto": 24201,
+        "events": 35647508,
+        "low_mt_signal_region": 10411,
+        "mu_tau_pair": 33150,
+        "muon_candidate": 5441696,
+        "opposite_sign": 25912,
+        "tau_candidate": 33150,
+        "trigger": 10038076
       },
       "role": "data"
     },
     "Run2012C_TauPlusX": {
       "counts": {
-        "events": 5130317,
-        "low_mt_signal_region": 6683,
-        "mu_tau_pair": 18960,
-        "muon_candidate": 850560,
-        "opposite_sign": 14283,
-        "tau_candidate": 18960,
-        "trigger": 1403282
+        "central_b_veto": 38295,
+        "events": 51303171,
+        "low_mt_signal_region": 16829,
+        "mu_tau_pair": 52341,
+        "muon_candidate": 8115594,
+        "opposite_sign": 40983,
+        "tau_candidate": 52341,
+        "trigger": 13901050
       },
       "role": "data"
     },
     "TTbar": {
       "counts": {
-        "events": 642310,
-        "low_mt_signal_region": 1771,
-        "mu_tau_pair": 9650,
-        "muon_candidate": 77658,
-        "opposite_sign": 8760,
-        "tau_candidate": 9650,
-        "trigger": 87324
+        "central_b_veto": 4567,
+        "events": 6423106,
+        "low_mt_signal_region": 676,
+        "mu_tau_pair": 20903,
+        "muon_candidate": 770160,
+        "opposite_sign": 17489,
+        "tau_candidate": 20903,
+        "trigger": 872546
       },
       "role": "background"
     },
     "VBF_HToTauTau": {
       "counts": {
-        "events": 49165,
-        "low_mt_signal_region": 957,
-        "mu_tau_pair": 1323,
-        "muon_candidate": 4093,
-        "opposite_sign": 1280,
-        "tau_candidate": 1323,
-        "trigger": 4929
+        "central_b_veto": 6258,
+        "events": 491653,
+        "low_mt_signal_region": 4239,
+        "mu_tau_pair": 6705,
+        "muon_candidate": 39781,
+        "opposite_sign": 6561,
+        "tau_candidate": 6705,
+        "trigger": 49109
       },
       "role": "signal"
     },
     "W1JetsToLNu": {
       "counts": {
-        "events": 2978480,
-        "low_mt_signal_region": 391,
-        "mu_tau_pair": 2722,
-        "muon_candidate": 109558,
-        "opposite_sign": 2098,
-        "tau_candidate": 2722,
-        "trigger": 124885
+        "central_b_veto": 6520,
+        "events": 29784800,
+        "low_mt_signal_region": 878,
+        "mu_tau_pair": 7972,
+        "muon_candidate": 1062463,
+        "opposite_sign": 6538,
+        "tau_candidate": 7972,
+        "trigger": 1251689
       },
       "role": "background"
     },
     "W2JetsToLNu": {
       "counts": {
-        "events": 3069385,
-        "low_mt_signal_region": 602,
-        "mu_tau_pair": 4894,
-        "muon_candidate": 206710,
-        "opposite_sign": 3657,
-        "tau_candidate": 4894,
-        "trigger": 236024
+        "central_b_veto": 12849,
+        "events": 30693853,
+        "low_mt_signal_region": 1585,
+        "mu_tau_pair": 16733,
+        "muon_candidate": 2010619,
+        "opposite_sign": 13029,
+        "tau_candidate": 16733,
+        "trigger": 2358002
       },
       "role": "background"
     },
     "W3JetsToLNu": {
       "counts": {
-        "events": 1524114,
-        "low_mt_signal_region": 370,
-        "mu_tau_pair": 2717,
-        "muon_candidate": 132152,
-        "opposite_sign": 1945,
-        "tau_candidate": 2717,
-        "trigger": 151228
+        "central_b_veto": 7513,
+        "events": 15241144,
+        "low_mt_signal_region": 964,
+        "mu_tau_pair": 10445,
+        "muon_candidate": 1292986,
+        "opposite_sign": 7777,
+        "tau_candidate": 10445,
+        "trigger": 1516331
       },
       "role": "background"
     }
@@ -116,6 +125,7 @@
     "tau_candidate",
     "mu_tau_pair",
     "opposite_sign",
+    "central_b_veto",
     "low_mt_signal_region"
   ]
 }

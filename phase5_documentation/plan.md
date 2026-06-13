@@ -20,6 +20,18 @@ Session: executor_phase5_documentation_20260602T162932Z
 
 ## Implementation Plan
 
+Current task update:
+
+1. Consume only the Phase 4c visible-mass baseline and XGBoost `D_NN` result
+   artifacts in final-result documentation.
+2. Remove rejected calibrated-score/add-MET/HGB/input-reweighting result
+   semantics from generated AN/PRL text, metadata, figures, and aliases.
+3. Keep validation plots using true SM Higgs normalization, red data points
+   with error bars, and Data/MC(total signal + background) ratio panels.
+4. Keep the limit summary as two stacked rows: visible mass and `D_NN`, both
+   with expected median as a black dashed line and observed red point with
+   error bar when available.
+
 1. Copy or symlink existing Phase 2-4 figures into the Phase 5 figure directory with stable filenames.
 2. Write a Phase 5 generation script that:
    - reads upstream JSON files,

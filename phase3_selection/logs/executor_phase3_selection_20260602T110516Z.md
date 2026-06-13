@@ -93,3 +93,21 @@ add-MET did not improve the common raw MC-only category metric by at least
 ## Approach comparison completed for visible mass, add-MET mass, and classifier status.
 
 ## Phase 3 selection figures generated as PDF and PNG.
+
+## Selection processing completed and machine-readable summaries were written.
+
+## Approach comparison completed for visible mass, add-MET mass, and classifier status.
+
+## Selection processing completed and machine-readable summaries were written.
+
+## MVA input modelling and classifier feasibility evaluation completed.
+
+## Selection processing completed and machine-readable summaries were written.
+
+## MVA input modelling and classifier feasibility evaluation completed.
+
+## Selection processing completed and machine-readable summaries were written.
+
+## MVA input modelling and classifier feasibility evaluation completed.
+
+## Phase 3 selection figures generated as PDF and PNG.

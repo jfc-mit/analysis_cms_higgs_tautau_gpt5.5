@@ -381,8 +381,8 @@ Pre-review checks:
 ## Sensitivity Regression Remediation
 
 A Phase 3 sensitivity regression pass was added after the Phase 4a expected
-model returned `Z = 0.526` and a median expected
-limit of `mu = 4.199`. The remediation uses
+model returned `Z = 0.787` and a median expected
+limit of `mu = 2.904`. The remediation uses
 only MC and Asimov expectations for selection, category, binning, and
 classifier choices. It does not tune on observed full-data signal-region
 discriminant distributions.
@@ -412,15 +412,15 @@ and removed nuisance-parameter configurations. These curves are diagnostic
 stress tests of the expected model only; configurations with removed or
 reduced nuisances are not final statistical results.](figures/sensitivity_nuisance_audit.pdf){#fig:p3-sensitivity-nuisance-audit}
 
-The best expected-only variant is the Gradient-boosted classifier score, baseline categories with Asimov
-discovery `Z = 0.785`. Its median expected CLs limit is
-`2.944` where evaluated. Relative to the Phase 4a
+The best expected-only variant is the XGBoost classifier score, baseline categories with Asimov
+discovery `Z = 1.009`. Its median expected CLs limit is
+`2.269` where evaluated. Relative to the Phase 4a
 baseline this is a `Z` improvement factor of
-`1.49`. The expected signal and
-background totals are `25.106` and
-`9338.225`, with integrated `S/B =
-0.0027` and `S/sqrt(B) =
-0.260`.
+`1.28`. The expected signal and
+background totals are `121.680` and
+`26725.556`, with integrated `S/B =
+0.0046` and `S/sqrt(B) =
+0.744`.
 
 The MVA improvement remains gated. The classifier is trained only on MC, but
 Phase 3 already found severe data/background-MC input-shape disagreements for

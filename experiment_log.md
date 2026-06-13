@@ -588,6 +588,35 @@ Phase 4c update added multivariate input reweighting before classifier training,
 - Reclassified machine-readable model roles: `visible_mass_qcd_primary` is the final result and `calibrated_score_qcd_primary` is `diagnostic_failed_validation`.
 - Regenerated final AN and PRL around the validated visible-mass result; classifier values appear only in a rejected-method diagnostic section.
 - Generated clean Phase 5 figures for baseline visible-mass validation, final CLs limit, validation summary, nuisance pulls, systematic program, and failed classifier diagnostics.
+- Added quantitative grouped baseline systematic impacts and an observed-data GoF toy-style p-value.
 - Corrected the Phase 5 bibliography to cited entries only and updated DOI metadata requested by validation.
 - Expanded the final AN to 30 rendered pages with 31 referenced figures and 20 display equations.
 - Verification passed: `pixi run phase5-docs`, `pixi run lint-plots`, and `pixi run build-pdf`.
+
+## Phase 5 full-panel fixer 2026-06-12T18:09:09Z
+
+- Reclassified machine-readable model roles: `visible_mass_qcd_primary` is the final result and `calibrated_score_qcd_primary` is `diagnostic_failed_validation`.
+- Regenerated final AN and PRL around the validated visible-mass result; classifier values appear only in a rejected-method diagnostic section.
+- Generated clean Phase 5 figures for baseline visible-mass validation, final CLs limit, validation summary, nuisance pulls, systematic program, and failed classifier diagnostics.
+- Corrected the Phase 5 bibliography to cited entries only and updated DOI metadata requested by validation.
+
+## 2026-06-13T03:15:00Z
+
+Updated the secondary three-category D_NN classifier-score workflow to use the Phase 3 XGBoost score, nominal MC background templates, and the category-preserving merged score binning. Regenerated the Phase 5 AN/PRL outputs with visible-mass validation using true signal normalization, Data/MC lower panels using background plus SM signal, red observed data markers with error bars, and a two-row visible-mass plus D_NN limit summary. Verification passed with `pixi run phase5-docs`, `pixi run lint-plots`, and `pixi run build-pdf`.
+
+## 2026-06-13T03:48:57Z
+
+Phase 4c update added multivariate input reweighting before classifier training, same-sign QCD/fake templates, and wider DY/Z normalization. Primary calibrated-score/QCD result mu=not_evaluated, observed limit=not_evaluated; frozen baseline visible-mass result mu=0.4382, observed limit=10.7645.
+
+## 2026-06-13T11:53:27Z
+
+Phase 4c focused rerun wrote the visible-mass baseline and single D_NN result from current local inputs: baseline mu=2.4740, observed limit=5.9262; D_NN mu=1.6160, observed limit=3.5769.
+
+## Focused final rerun 2026-06-13
+
+- Regenerated the final documentation from the current visible-mass baseline and single D_NN result artifacts.
+- Removed historical optimized-score, add-MET, and duplicate DNN-alias branches from the documented current result set.
+
+## 2026-06-13T12:07:11Z
+
+Phase 4c focused rerun wrote the visible-mass baseline and single D_NN result from current local inputs: baseline mu=2.4740, observed limit=5.9262; D_NN mu=1.6160, observed limit=3.5769.

@@ -70,3 +70,23 @@ Built Phase 4c calibrated-score/QCD optimized attempt and preserved the frozen v
 ## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
 
 ## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-13T03:48:57Z
+
+Built Phase 4c calibrated-score/QCD optimized attempt and preserved the frozen visible-mass baseline for Phase 5 comparison.
+
+## 2026-06-13T11:53:27Z
+
+Built Phase 4c visible-mass baseline and retained D_NN result from current local inputs.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## 2026-06-13T12:07:11Z
+
+Built Phase 4c visible-mass baseline and retained D_NN result from current local inputs.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.
+
+## Generated Phase 4c audit-corrected plots as PDF/PNG and compiled ANALYSIS_NOTE_4c_v1.pdf.

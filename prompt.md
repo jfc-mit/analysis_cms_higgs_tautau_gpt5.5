@@ -10,7 +10,9 @@ To optimize the Higgs signal selection, do some categorization, in particular ad
 
 Also, make sure to apply a tight anti-muon veto, and to normalize the W+jets sample from data using the high mT region. Make sure you put a tight anti-muon veto on the hadronic tau ID. Make sure your Z normalization uncertainty is larger than the MC prediction, at a level of 10–15%, to reflect missing trigger turn-on scale factors and a larger tau efficiency scale factor
 
-Data source: NanoAOD files hosted on the CERN Open Data portal. These are ROOT files retrievable via HTTP/XRootD. The datasets include:
+Data: /sandbox/work/jfc/analyses/higgs_tautau/data
+MC: /sandbox/work/jfc/analyses/higgs_tautau/mc
+The datasets include:
 
 File Process Role GluGluToHToTauTau.root gg→H→ττ (mH=125 GeV) Signal VBF_HToTauTau.root VBF H→ττ Signal (subdominant) DYJetsToLL.root Z/gamma*→ll (Drell-Yan) Dominant irreducible background TTbar.root tt̄Background W1JetsToLNu.root, W2JetsToLNu.root, W3JetsToLNu.rootW+jets (1,2,3 jet bins) Background (fake τ_h) Run2012B_SingleMu.root, Run2012C_SingleMu.rootData (SingleMu trigger) Collision data
 

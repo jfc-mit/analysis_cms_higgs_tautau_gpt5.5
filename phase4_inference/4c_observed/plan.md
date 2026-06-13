@@ -27,27 +27,28 @@ into the 4c outputs and analysis note.
 ## Scripts
 
 1. `src/build_observed_results.py`
-   - Load full selected-event artifact.
-   - Fill full-data score observations for `vbf`, `boosted`, and `zero_jet`
-     using bins `[0.0, 0.2, 0.35, 0.5, 1.0]`.
-   - Derive the full high-mT W+jets scale as
-     `(N_data_CR - nonW_MC_CR) / W_MC_CR` using the high-mT control region.
-   - Build observed background templates using frozen Phase 4a nominal
-     templates with only the full high-mT W normalization update.
-   - Build an observed pyhf workspace and evaluate `mu_hat`, observed CLs
-     upper limit, and an approximate discovery diagnostic if pyhf supports
-     the calculation in the installed environment.
-   - Write JSON/NPZ outputs and the `INFERENCE_OBSERVED.md` and
-     `ANALYSIS_NOTE_4c_v1.md` drafts.
+   - Keep only two result paths in the generated final-result semantics:
+     `visible_mass_qcd_primary` and `dnn_classifier_score_secondary`.
+   - Build the visible-mass baseline/cut-based result from `m_vis` in the
+     VBF, boosted, and zero-jet categories.
+   - Build the `D_NN` result from `mva_score_xgboost` in the same three
+     categories with fixed 20 uniform score bins.
+   - Do not generate calibrated-score primary, score-diagnostic, add-MET, or
+     HGB/input-reweighting variant result sections.
+   - Write JSON/NPZ/workspace outputs and the `INFERENCE_OBSERVED.md` and
+     `ANALYSIS_NOTE_4c_v1.md` drafts around those two result paths.
 
 2. `src/plot_observed_results.py`
-   - Produce PDF and PNG figures for per-category full-data score-template
-     data/MC comparisons, pull/ratio summary, full high-mT W scale, observed
-     result summary, and comparison to Phase 4a/4b.
+   - Produce PDF and PNG figures for visible-mass and `D_NN` data/MC
+     comparisons, full high-mT W scale, validation summary, observed result
+     summary, and comparison to Phase 4a/4b.
+   - Draw validation plots with true SM Higgs normalization, red data points
+     with error bars, and Data/MC(total signal + background) ratios.
 
 3. `src/validate_observed_outputs.py`
-   - Check JSON integrity, workspace construction, required figure existence,
-     full-data source documentation, and preservation of Phase 4b warnings.
+   - Check JSON integrity, visible and `D_NN` workspace construction, required
+     figure existence, full-data source documentation, preservation of Phase
+     4b warnings, and absence of old calibrated-score/add-MET final semantics.
 
 ## Outputs
 

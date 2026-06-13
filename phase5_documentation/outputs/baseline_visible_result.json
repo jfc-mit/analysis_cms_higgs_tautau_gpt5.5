@@ -1,0 +1,219 @@
+{
+  "binning": [
+    0.0,
+    60.0,
+    80.0,
+    100.0,
+    120.0,
+    160.0,
+    250.0
+  ],
+  "categories": [
+    "vbf",
+    "boosted",
+    "zero_jet"
+  ],
+  "model": "visible_mass_qcd_primary",
+  "observable": "m_vis",
+  "observed_fit": {
+    "discovery_diagnostic": {
+      "method": "pyhf asymptotic q0 on observed full data",
+      "p_value": 0.0924299921802953,
+      "status": "evaluated",
+      "z_value": 1.3259387558692708
+    },
+    "interpretation": "Visible-mass baseline with same-sign QCD/fake and control-region normalization corrections.",
+    "mu_hat": 2.4740281448233605,
+    "npars": 27,
+    "observed_upper_limit": {
+      "expected_band_minus2_minus1_median_plus1_plus2": [
+        1.9339067721594145,
+        2.676773005574238,
+        3.691886423810166,
+        5.180310600870211,
+        7.204249359099857
+      ],
+      "method": "pyhf asymptotic modified frequentist CLs with adaptive coarse scan",
+      "observed_limit": 5.926224595767271,
+      "result_count": 2,
+      "scan": [
+        0.0,
+        1.0,
+        2.0,
+        3.0,
+        4.0,
+        5.0,
+        6.0,
+        7.0,
+        8.0,
+        9.0,
+        10.0,
+        11.0,
+        12.0
+      ],
+      "scan_history": [
+        {
+          "n_points": 13,
+          "observed_limit": 5.926224595767271,
+          "scan_max": 12.0
+        }
+      ],
+      "status": "evaluated"
+    },
+    "parameters": {
+      "dy_ztautau_open_data_boosted": -0.6721705550780535,
+      "dy_ztautau_open_data_vbf": 0.8486213655211201,
+      "dy_ztautau_open_data_zero_jet": -0.40018530829394683,
+      "lumi_2012": 0.08684125499811837,
+      "mc_stat_boosted[0]": 0.9929310860406101,
+      "mc_stat_boosted[1]": 1.0146375311149078,
+      "mc_stat_boosted[2]": 0.9877605402531847,
+      "mc_stat_boosted[3]": 0.9525150075243357,
+      "mc_stat_boosted[4]": 1.0981056183260678,
+      "mc_stat_boosted[5]": 0.8856652505679332,
+      "mc_stat_vbf[0]": 1.0955443170540544,
+      "mc_stat_vbf[1]": 1.0580210398664904,
+      "mc_stat_vbf[2]": 0.9452567606417576,
+      "mc_stat_vbf[3]": 0.7443100995082802,
+      "mc_stat_vbf[4]": 0.9818048836197284,
+      "mc_stat_vbf[5]": 0.8484501107129035,
+      "mc_stat_zero_jet[0]": 1.0280605183863207,
+      "mc_stat_zero_jet[1]": 0.9882691563482219,
+      "mc_stat_zero_jet[2]": 0.9997475073486837,
+      "mc_stat_zero_jet[3]": 1.0197839603788474,
+      "mc_stat_zero_jet[4]": 0.9776638532226842,
+      "mc_stat_zero_jet[5]": 1.0349114145093639,
+      "mu": 2.4740281448233605,
+      "qcd_ss_transfer": 0.13537684264221073,
+      "tau_open_data_acceptance": 0.4553488858952769,
+      "vbf_background_control": -0.05151154293321961,
+      "wjets_high_mt_control": 0.061175004925158344
+    },
+    "profile_mu_interval": {
+      "err_minus": 2.4740281448233605,
+      "err_plus": 3.45219645094391,
+      "lower": 0.0,
+      "lower_status": "bounded_at_zero_proxy",
+      "method": "Profile interval proxy for compact final-summary plotting: lower bound fixed at physical mu>=0 and upper bound set to the observed 95% CLs limit.",
+      "mu_hat": 2.4740281448233605,
+      "profile_failures": [],
+      "upper": 5.926224595767271,
+      "upper_status": "observed_cls_limit_proxy"
+    },
+    "status": "evaluated"
+  },
+  "role": "baseline_result",
+  "templates": "visible_observed_templates.npz",
+  "validation_summary": {
+    "combined": {
+      "background_total": 28035.049193707368,
+      "chi2": 15.706594426445232,
+      "chi2_per_ndf": 0.8725885792469573,
+      "data_over_background": 0.9676458854257706,
+      "data_total": 27128.0,
+      "ndf": 18,
+      "ratio_stat_uncertainty": 0.00587499587324696
+    },
+    "flags": {
+      "category_chi2_failure": false,
+      "combined_chi2_failure": false,
+      "combined_ratio_failure": true,
+      "high_score_shape_failure": false
+    },
+    "model_label": "visible_mass_qcd_primary",
+    "pass_criteria": {
+      "category_chi2_per_ndf_max": 5.0,
+      "combined_chi2_per_ndf_max": 3.0,
+      "combined_ratio_within_3_stat_uncertainties": true
+    },
+    "score_modeling_status": "flagged",
+    "score_template_validation": {
+      "boosted": {
+        "background_total": 1249.001462602038,
+        "bin_data_over_background": [
+          0.8669056734297317,
+          0.9489824190703914,
+          1.0508545555806335,
+          0.9367392254199555,
+          1.2738101663126822,
+          0.7755082499861051
+        ],
+        "chi2": 2.952608928656753,
+        "chi2_per_ndf": 0.4921014881094588,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 0.911127836174996,
+        "data_total": 1138.0,
+        "max_abs_pull": 1.0668570965146378,
+        "ndf": 6,
+        "nonqcd_background_total": 1220.852575200735,
+        "pulls": [
+          -0.8418513893018201,
+          -0.30111888731478115,
+          0.22475588143168795,
+          -0.2532182875345767,
+          1.0668570965146378,
+          -0.9488961012281242
+        ],
+        "qcd_total": 28.14888740130324
+      },
+      "vbf": {
+        "background_total": 53.36661803360974,
+        "bin_data_over_background": [
+          1.724270662798238,
+          1.9027898219717687,
+          1.2132884968429802,
+          0.5373548180016888,
+          0.9836396755774772,
+          0.1940820005437046
+        ],
+        "chi2": 11.995940697588805,
+        "chi2_per_ndf": 1.9993234495981342,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 1.3116813952106676,
+        "data_total": 70.0,
+        "max_abs_pull": 2.0141780028128937,
+        "ndf": 6,
+        "nonqcd_background_total": 38.66933220085019,
+        "pulls": [
+          1.706523409069849,
+          2.0141780028128937,
+          0.4450325122820255,
+          -1.1326198840990493,
+          -0.028088690623579146,
+          -1.882852838509836
+        ],
+        "qcd_total": 14.697285832759546
+      },
+      "zero_jet": {
+        "background_total": 26732.68111307172,
+        "bin_data_over_background": [
+          0.9994055548439331,
+          0.9358159361407422,
+          1.019283987351882,
+          1.0703738268816432,
+          0.9879354939171315,
+          1.084048295051316
+        ],
+        "chi2": 0.7580448001996742,
+        "chi2_per_ndf": 0.12634080003327905,
+        "covariance_note": "Diagonal validation covariance: data Poisson + MC/QCD sideband variances + 15% non-QCD normalization proxy.",
+        "data_over_background": 0.9695997154331693,
+        "data_total": 25920.0,
+        "max_abs_pull": 0.5470641780769664,
+        "ndf": 6,
+        "nonqcd_background_total": 24990.644888787534,
+        "pulls": [
+          -0.0041514643886435935,
+          -0.4427883967172484,
+          0.13659815490159455,
+          0.48693085013070186,
+          -0.08322305935927841,
+          0.5470641780769664
+        ],
+        "qcd_total": 1742.036224284189
+      }
+    }
+  },
+  "workspace": "pyhf_workspace_baseline_visible.json",
+  "yields": "baseline_visible_yields.json"
+}

@@ -2,127 +2,127 @@
   "samples": {
     "DYJetsToLL": {
       "raw_counts": {
-        "category_boosted": 802,
-        "category_none": 2641,
-        "category_vbf": 34,
-        "category_zero_jet": 4432,
-        "qcd_same_sign": 518,
-        "signal": 5268,
-        "top_btag_handle": 1020,
-        "w_high_mt": 127,
-        "z_rich": 2810
+        "category_boosted": 742,
+        "category_none": 10027,
+        "category_vbf": 29,
+        "category_zero_jet": 16371,
+        "qcd_same_sign": 1015,
+        "signal": 17142,
+        "top_btag_handle": 381,
+        "w_high_mt": 633,
+        "z_rich": 12303
       },
       "role": "background"
     },
     "GluGluToHToTauTau": {
       "raw_counts": {
-        "category_boosted": 249,
-        "category_none": 262,
-        "category_vbf": 23,
-        "category_zero_jet": 439,
-        "qcd_same_sign": 7,
-        "signal": 711,
-        "top_btag_handle": 254,
-        "w_high_mt": 24,
-        "z_rich": 579
+        "category_boosted": 276,
+        "category_none": 1575,
+        "category_vbf": 44,
+        "category_zero_jet": 3155,
+        "qcd_same_sign": 37,
+        "signal": 3475,
+        "top_btag_handle": 78,
+        "w_high_mt": 141,
+        "z_rich": 3151
       },
       "role": "signal"
     },
     "Run2012B_TauPlusX": {
       "raw_counts": {
-        "category_boosted": 858,
-        "category_none": 7858,
-        "category_vbf": 34,
-        "category_zero_jet": 3183,
-        "qcd_same_sign": 1231,
-        "signal": 4075,
-        "top_btag_handle": 2580,
-        "w_high_mt": 1583,
-        "z_rich": 2044
+        "category_boosted": 423,
+        "category_none": 22739,
+        "category_vbf": 27,
+        "category_zero_jet": 9961,
+        "qcd_same_sign": 1970,
+        "signal": 10411,
+        "top_btag_handle": 2201,
+        "w_high_mt": 5502,
+        "z_rich": 7253
       },
       "role": "data"
     },
     "Run2012C_TauPlusX": {
       "raw_counts": {
-        "category_boosted": 1355,
-        "category_none": 12277,
-        "category_vbf": 45,
-        "category_zero_jet": 5283,
-        "qcd_same_sign": 1907,
-        "signal": 6683,
-        "top_btag_handle": 4109,
-        "w_high_mt": 2440,
-        "z_rich": 3470
+        "category_boosted": 726,
+        "category_none": 35512,
+        "category_vbf": 44,
+        "category_zero_jet": 16059,
+        "qcd_same_sign": 3241,
+        "signal": 16829,
+        "top_btag_handle": 3358,
+        "w_high_mt": 8563,
+        "z_rich": 11687
       },
       "role": "data"
     },
     "TTbar": {
       "raw_counts": {
-        "category_boosted": 1513,
-        "category_none": 7879,
-        "category_vbf": 170,
-        "category_zero_jet": 88,
-        "qcd_same_sign": 187,
-        "signal": 1771,
-        "top_btag_handle": 8809,
-        "w_high_mt": 3978,
-        "z_rich": 846
+        "category_boosted": 258,
+        "category_none": 20227,
+        "category_vbf": 32,
+        "category_zero_jet": 386,
+        "qcd_same_sign": 185,
+        "signal": 676,
+        "top_btag_handle": 15192,
+        "w_high_mt": 2411,
+        "z_rich": 342
       },
       "role": "background"
     },
     "VBF_HToTauTau": {
       "raw_counts": {
-        "category_boosted": 499,
-        "category_none": 366,
-        "category_vbf": 364,
-        "category_zero_jet": 94,
-        "qcd_same_sign": 27,
-        "signal": 957,
-        "top_btag_handle": 896,
-        "w_high_mt": 38,
-        "z_rich": 682
+        "category_boosted": 1028,
+        "category_none": 2466,
+        "category_vbf": 1161,
+        "category_zero_jet": 2050,
+        "qcd_same_sign": 76,
+        "signal": 4239,
+        "top_btag_handle": 308,
+        "w_high_mt": 219,
+        "z_rich": 3407
       },
       "role": "signal"
     },
     "W1JetsToLNu": {
       "raw_counts": {
-        "category_boosted": 37,
-        "category_none": 2331,
-        "category_vbf": 4,
-        "category_zero_jet": 350,
-        "qcd_same_sign": 119,
-        "signal": 391,
-        "top_btag_handle": 74,
-        "w_high_mt": 552,
-        "z_rich": 237
+        "category_boosted": 0,
+        "category_none": 7094,
+        "category_vbf": 14,
+        "category_zero_jet": 864,
+        "qcd_same_sign": 187,
+        "signal": 878,
+        "top_btag_handle": 27,
+        "w_high_mt": 2886,
+        "z_rich": 614
       },
       "role": "background"
     },
     "W2JetsToLNu": {
       "raw_counts": {
-        "category_boosted": 238,
-        "category_none": 4292,
-        "category_vbf": 16,
-        "category_zero_jet": 348,
-        "qcd_same_sign": 232,
-        "signal": 602,
-        "top_btag_handle": 1331,
-        "w_high_mt": 1027,
-        "z_rich": 320
+        "category_boosted": 105,
+        "category_none": 15148,
+        "category_vbf": 32,
+        "category_zero_jet": 1448,
+        "qcd_same_sign": 452,
+        "signal": 1585,
+        "top_btag_handle": 246,
+        "w_high_mt": 5956,
+        "z_rich": 996
       },
       "role": "background"
     },
     "W3JetsToLNu": {
       "raw_counts": {
-        "category_boosted": 228,
-        "category_none": 2347,
-        "category_vbf": 16,
-        "category_zero_jet": 126,
-        "qcd_same_sign": 144,
-        "signal": 370,
-        "top_btag_handle": 1274,
-        "w_high_mt": 599,
-        "z_rich": 183
+        "category_boosted": 165,
+        "category_none": 9481,
+        "category_vbf": 18,
+        "category_zero_jet": 781,
+        "qcd_same_sign": 388,
+        "signal": 964,
+        "top_btag_handle": 356,
+        "w_high_mt": 3434,
+        "z_rich": 534
       },
       "role": "background"
     }

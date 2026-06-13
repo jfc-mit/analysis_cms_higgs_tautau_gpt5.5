@@ -1,44 +1,44 @@
 {
-  "absolute_uncertainty": 0.05145868420469961,
+  "absolute_uncertainty": 0.061189753090194206,
   "application": "central scale applied only to MC background samples in the VBF fit category",
-  "applied_scale_factor": 0.5571017091531486,
-  "background_mc_sumw2": 260.80319778614296,
-  "background_mc_yield": 436.18606083507586,
+  "applied_scale_factor": 0.3448024675775544,
+  "background_mc_sumw2": 105.90467290583874,
+  "background_mc_yield": 220.41605599271347,
   "control_region": "vbf_like_top_btag_not_signal_region",
-  "data_events": 243,
+  "data_events": 76,
   "data_scope": "VBF-like rows with top-btag handle outside the low-mT signal region",
   "formula": "N_data_CR / MC_background_CR",
   "nuisance": {
-    "hi": 1.0923685627942554,
-    "lo": 0.9076314372057446
+    "hi": 1.1774632110961651,
+    "lo": 0.8225367889038347
   },
-  "raw_scale_factor": 0.5571017091531486,
-  "relative_uncertainty": 0.09236856279425538,
+  "raw_scale_factor": 0.3448024675775544,
+  "relative_uncertainty": 0.17746321109616522,
   "rows": {
     "DYJetsToLL": {
-      "raw_events": 14,
-      "sumw2": 24.35868750085625,
-      "yield": 18.466770833364112
+      "raw_events": 4,
+      "sumw2": 6.959625000244642,
+      "yield": 5.276220238104032
     },
     "TTbar": {
-      "raw_events": 737,
-      "sumw2": 150.2362010143399,
-      "yield": 332.75228045434716
+      "raw_events": 451,
+      "sumw2": 91.93558569534234,
+      "yield": 203.62452983027217
     },
     "W1JetsToLNu": {
-      "raw_events": 12,
-      "sumw2": 52.678701555694886,
-      "yield": 25.142482348971406
+      "raw_events": 0,
+      "sumw2": 0.0,
+      "yield": 0.0
     },
     "W2JetsToLNu": {
-      "raw_events": 60,
-      "sumw2": 25.34323710286236,
-      "yield": 38.99479742442242
+      "raw_events": 11,
+      "sumw2": 5.395234362937648,
+      "yield": 7.703737923392392
     },
     "W3JetsToLNu": {
-      "raw_events": 53,
-      "sumw2": 8.186370612389538,
-      "yield": 20.829729773970797
+      "raw_events": 9,
+      "sumw2": 1.614227847314105,
+      "yield": 3.8115680009448796
     }
   },
   "status": "valid"

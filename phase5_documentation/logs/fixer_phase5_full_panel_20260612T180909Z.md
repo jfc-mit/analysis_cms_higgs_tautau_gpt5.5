@@ -24,3 +24,547 @@ Session: `20260612T180909Z`
 - `tectonic --keep-logs --keep-intermediates ANALYSIS_NOTE_5_v1.tex` reported `30 pages`.
 - Public AN/PRL outputs scan clean for stale score-primary wording and non-analysis provenance terms.
 - Fit values were not changed; only model-role metadata and documentation/figure presentation were updated.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 full-panel fixer summary to experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 full-panel fixer summary to experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Appended Phase 5 full-panel fixer summary to experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline, NN-score, and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline, NN-score, and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline, NN-score, and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline, NN-score, and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Reclassified result metadata: visible mass final, calibrated score failed diagnostic; fit numbers unchanged.
+
+## milestone
+
+Copied 44 required upstream figure files into the Phase 5 figure directory.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Generated failed-classifier per-category diagnostic JSON and clean figure.
+
+## milestone
+
+Generated clean Phase 5 baseline, NN-score, and diagnostic figures.
+
+## milestone
+
+Wrote baseline-only final analysis note and PRL markdown.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled baseline-only PAPER_PRL_v1.tex with REVTeX PRL class.
+
+## milestone
+
+Phase 5 full-panel fixer summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled PAPER_PRL_v1.md to TeX and PDF.
+
+## milestone
+
+Appended focused final rerun summary to experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.

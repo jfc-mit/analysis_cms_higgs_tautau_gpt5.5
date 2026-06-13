@@ -1,49 +1,24 @@
 {
-  "addmet_comparison": {
-    "model": "addmet_mass_qcd_crosscheck",
-    "observable": "m_addmet",
-    "phase3_status": "retained as reconstructed-MET alternative observable after visible mass won the raw MC-only metric",
-    "phase4c_expected_median_limit": 13.51855381051554,
-    "phase4c_mu_hat": 39.11617819159213,
-    "phase4c_observed_limit": 50.0,
-    "validation_status": "flagged"
+  "baseline_fit_comparison": {
+    "median_expected_limit": 3.691886423810166,
+    "model": "visible_mass_qcd_primary",
+    "mu_hat": 2.4740281448233605,
+    "observed_limit": 5.926224595767271,
+    "z_value": 1.3259387558692708
+  },
+  "nn_fit_comparison": {
+    "median_expected_limit": 1.8069442829064997,
+    "model": "dnn_classifier_score_secondary",
+    "mu_hat": 1.6159540738964726,
+    "observed_limit": 3.576947614842235,
+    "validation_status": "pass",
+    "z_value": 2.0838468722638877
   },
   "phase4a_expected": {
-    "expected_discovery_z": 0.7867484248039479,
-    "median_expected_limit": 2.90409966080617,
-    "model_note": "historical expected score-template model before Phase 5 QCD audit correction"
-  },
-  "phase4b_warning_carried": {
-    "combined_chi2_per_ndf": 1.732476743083468,
-    "combined_data_over_background": 1.2322415773867215,
-    "flags": {
-      "category_chi2_failure": false,
-      "combined_chi2_failure": false,
-      "combined_ratio_failure": true
-    },
-    "score_modeling_status": "flagged"
-  },
-  "primary_fit_comparison": {
-    "median_expected_limit": 1.9735117795854344,
-    "model": "calibrated_score_qcd_primary",
-    "mu_hat": 38.380184326872644,
-    "observed_limit": 50.0,
-    "observed_limit_over_median_expected": 25.335546773631748,
-    "z_value": 12.469838725635482
-  },
-  "score_diagnostic_comparison": {
-    "model": "calibrated_score_qcd_primary",
-    "phase4b_diagnostic_mu_hat": 2.6207997991774064,
-    "phase4c_expected_median_limit": 1.9735117795854344,
-    "phase4c_mu_hat": 38.380184326872644,
-    "phase4c_observed_limit": 50.0,
-    "validation_status": "flagged"
+    "model_note": "Expected benchmark retained for comparison only."
   },
   "w_scale_comparison": {
-    "full_minus_10pct": 0.009524674590639659,
-    "phase4b_10pct_scale": 0.8433189889040035,
-    "phase4b_10pct_uncertainty": 0.08678270580662092,
-    "phase4c_full_scale": 0.8528436634946431,
-    "phase4c_full_uncertainty": 0.037049894579940935
+    "phase4c_full_scale": 0.9190154734576896,
+    "phase4c_full_uncertainty": 0.01393775384099262
   }
 }

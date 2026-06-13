@@ -16,7 +16,6 @@ import numpy as np
 import pyhf
 from rich.logging import RichHandler
 from scipy.stats import norm
-from sklearn.ensemble import HistGradientBoostingClassifier
 from sklearn.metrics import roc_auc_score
 from sklearn.model_selection import train_test_split
 from sklearn.neural_network import MLPClassifier
@@ -52,65 +51,33 @@ BASELINE_CATEGORIES = ["vbf", "boosted", "zero_jet"]
 BASELINE_BINS = np.asarray([0.0, 40.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0])
 ADDMET_BINS = np.asarray([0.0, 50.0, 70.0, 90.0, 110.0, 130.0, 160.0, 220.0, 320.0])
 PT_TAUTAU_BINS = np.asarray([0.0, 25.0, 50.0, 75.0, 100.0, 130.0, 170.0, 250.0])
-MVA_SCORE_BINS = np.asarray([0.0, 0.20, 0.35, 0.50, 0.65, 0.78, 0.88, 0.94, 0.985, 1.0])
+MVA_SCORE_BINS = np.linspace(0.0, 1.0, 21)
 MVA_COARSE_BINS = np.asarray([0.0, 0.35, 0.55, 0.72, 0.86, 0.94, 1.0])
 MIN_EXPECTED_BACKGROUND_PER_BIN = 5.0
 MAX_STABLE_AUC_GAP = 0.20
 
 MVA_INPUTS = [
     "m_vis",
-    "m_addmet",
     "mu_pt",
     "mu_eta",
-    "abs_mu_eta",
-    "mu_reliso",
     "tau_pt",
     "tau_eta",
-    "abs_tau_eta",
-    "tau_reliso",
-    "met_pt",
-    "mt_mu_met",
-    "pt_tautau_proxy",
-    "delta_phi_mu_tau",
-    "delta_eta_mu_tau",
     "delta_r_mu_tau",
-    "pt_balance_mu_tau",
-    "met_fraction",
-    "n_clean_jets",
-    "mjj",
-    "delta_eta_jj",
-    "jet1_pt",
-    "btag_max",
-]
-
-REWEIGHT_INPUTS = [
-    "m_vis",
-    "mu_pt",
-    "tau_pt",
-    "met_pt",
-    "mt_mu_met",
-    "pt_tautau_proxy",
     "delta_phi_mu_tau",
-    "delta_r_mu_tau",
-    "n_clean_jets",
+    "met_pt",
+    "met_significance",
+    "mt_mu_met",
+    "mt_tau_met",
+    "mt_tot",
+    "pt_tautau_proxy",
+    "m_coll",
+    "tau_id_iso_raw",
 ]
-
-REWEIGHT_BINS = {
-    "m_vis": np.asarray([0.0, 40.0, 60.0, 80.0, 100.0, 120.0, 160.0, 250.0]),
-    "mu_pt": np.asarray([20.0, 25.0, 30.0, 40.0, 55.0, 75.0, 110.0, 160.0]),
-    "tau_pt": np.asarray([20.0, 25.0, 30.0, 40.0, 55.0, 80.0, 120.0, 180.0]),
-    "met_pt": np.asarray([0.0, 20.0, 35.0, 50.0, 75.0, 110.0, 160.0, 220.0]),
-    "mt_mu_met": np.asarray([0.0, 20.0, 40.0, 60.0, 80.0, 120.0, 180.0]),
-    "pt_tautau_proxy": np.asarray([0.0, 25.0, 50.0, 75.0, 100.0, 140.0, 200.0, 300.0]),
-    "delta_phi_mu_tau": np.asarray([0.0, 0.5, 1.0, 1.5, 2.0, 2.5, np.pi]),
-    "delta_r_mu_tau": np.asarray([0.5, 1.0, 1.5, 2.0, 2.6, 3.4, 5.0]),
-    "n_clean_jets": np.asarray([-0.5, 0.5, 1.5, 2.5, 4.5, 8.5]),
-}
 
 MODEL_DISPLAY_LABELS = {
-    "hist_gradient_boosting": "Gradient-boosted classifier",
     "xgboost": "XGBoost classifier",
     "mlp": "Neural-network classifier",
+    "d_nn": "$D_{NN}$ classifier",
     "transformer": "Transformer discriminator",
 }
 
@@ -241,156 +208,6 @@ def weighted_shape_chi2(
     chi2 = float(np.sum((data_shape - mc_shape) ** 2 / np.maximum(data_var + mc_var, 1e-12)))
     ndf = int(np.sum(active) - 1)
     return {"status": "evaluated", "chi2": chi2, "ndf": ndf, "chi2_ndf": chi2 / ndf if ndf > 0 else None}
-
-
-def normalize_background_reweight(
-    selected: dict[str, np.ndarray],
-    weights: dict[str, float],
-    reweight: np.ndarray,
-    mask: np.ndarray | None = None,
-) -> np.ndarray:
-    out = np.asarray(reweight, dtype=float).copy()
-    bkg = selected["role"] == "background"
-    if mask is not None:
-        bkg &= mask
-    nominal = nominal_event_weight_array(selected, weights)
-    denom = np.sum(nominal[bkg])
-    if denom <= 0:
-        return out
-    mean = np.sum(nominal[bkg] * out[bkg]) / denom
-    if mean > 0 and np.isfinite(mean):
-        out[selected["role"] == "background"] /= mean
-    out[selected["role"] != "background"] = 1.0
-    return np.clip(out, 0.05, 20.0)
-
-
-def compute_input_reweights(selected: dict[str, np.ndarray], weights: dict[str, float]) -> tuple[np.ndarray, dict[str, Any]]:
-    control = validation_control_mask(selected)
-    data_control = control & (selected["role"] == "data")
-    bkg_control = control & (selected["role"] == "background")
-    nominal = nominal_event_weight_array(selected, weights)
-    rows: list[dict[str, Any]] = []
-    threshold = 3.0
-    for variable in REWEIGHT_INPUTS:
-        bins = REWEIGHT_BINS[variable]
-        pre = weighted_shape_chi2(
-            selected[variable][data_control],
-            selected[variable][bkg_control],
-            nominal[bkg_control],
-            bins,
-        )
-        rows.append(
-            {
-                "variable": variable,
-                "bins": bins.tolist(),
-                "pre_chi2_ndf": pre["chi2_ndf"],
-                "selected_for_nd_reweight": pre["chi2_ndf"] is not None and float(pre["chi2_ndf"]) > threshold,
-            }
-        )
-    selected_variables = [str(row["variable"]) for row in rows if row["selected_for_nd_reweight"]]
-    correction = np.ones(len(selected["role"]), dtype=float)
-    nd_payload: dict[str, Any] = {
-        "status": "not_applied",
-        "reason": "No validation/control input exceeded the chi2/ndf threshold.",
-        "variables": selected_variables,
-    }
-    if selected_variables and int(np.sum(data_control)) >= 50 and int(np.sum(bkg_control)) >= 50:
-        control_mask = data_control | bkg_control
-        x_control = np.column_stack(
-            [
-                np.nan_to_num(selected[name][control_mask].astype(float), nan=-999.0, posinf=999.0, neginf=-999.0)
-                for name in selected_variables
-            ]
-        )
-        y_control = (selected["role"][control_mask] == "data").astype(int)
-        control_weight = np.ones(np.sum(control_mask), dtype=float)
-        control_weight[y_control == 0] = nominal[control_mask][y_control == 0]
-        data_sum = float(np.sum(control_weight[y_control == 1]))
-        mc_sum = float(np.sum(control_weight[y_control == 0]))
-        if data_sum > 0 and mc_sum > 0:
-            control_weight[y_control == 0] *= data_sum / mc_sum
-        x_train, x_test, y_train, y_test, w_train, w_test = train_test_split(
-            x_control,
-            y_control,
-            control_weight,
-            test_size=0.35,
-            random_state=8675309,
-            stratify=y_control,
-        )
-        density_model = HistGradientBoostingClassifier(
-            max_iter=160,
-            learning_rate=0.05,
-            max_leaf_nodes=19,
-            l2_regularization=0.10,
-            random_state=8675309,
-        )
-        density_model.fit(x_train, y_train, sample_weight=w_train)
-        train_prob = np.clip(density_model.predict_proba(x_train)[:, 1], 1e-3, 1.0 - 1e-3)
-        test_prob = np.clip(density_model.predict_proba(x_test)[:, 1], 1e-3, 1.0 - 1e-3)
-        train_auc = float(roc_auc_score(y_train, train_prob, sample_weight=w_train))
-        test_auc = float(roc_auc_score(y_test, test_prob, sample_weight=w_test))
-        bkg_all = selected["role"] == "background"
-        x_all_bkg = np.column_stack(
-            [
-                np.nan_to_num(selected[name][bkg_all].astype(float), nan=-999.0, posinf=999.0, neginf=-999.0)
-                for name in selected_variables
-            ]
-        )
-        p_data = np.clip(density_model.predict_proba(x_all_bkg)[:, 1], 1e-3, 1.0 - 1e-3)
-        odds = p_data / (1.0 - p_data)
-        odds_control = p_data[:1]
-        del odds_control
-        # The classifier was trained with balanced data/MC priors, so the odds
-        # approximate the multivariate density ratio p(data)/p(background MC).
-        correction[bkg_all] = np.clip(odds, 0.10, 10.0)
-        correction = normalize_background_reweight(selected, weights, correction, control)
-        nd_payload = {
-            "status": "applied",
-            "method": "HistGradientBoostingClassifier density-ratio reweighting in validation/control regions",
-            "variables": selected_variables,
-            "train_auc_data_vs_background": train_auc,
-            "test_auc_data_vs_background": test_auc,
-            "weight_cap": [0.10, 10.0],
-            "control_data_weight_sum": data_sum,
-            "control_background_weight_sum_after_prior_balance": data_sum,
-        }
-    post_values_for_summary = []
-    for row in rows:
-        variable = str(row["variable"])
-        post = weighted_shape_chi2(
-            selected[variable][data_control],
-            selected[variable][bkg_control],
-            nominal[bkg_control] * correction[bkg_control],
-            REWEIGHT_BINS[variable],
-        )
-        row["post_chi2_ndf"] = post["chi2_ndf"]
-        row["reweighted"] = bool(nd_payload["status"] == "applied" and row["selected_for_nd_reweight"])
-        row["reweight_type"] = "multivariate_density_ratio" if row["reweighted"] else "none"
-        if post["chi2_ndf"] is not None:
-            post_values_for_summary.append(float(post["chi2_ndf"]))
-    pre_values = [row["pre_chi2_ndf"] for row in rows if row["pre_chi2_ndf"] is not None]
-    payload = {
-        "method": (
-            "Multivariate density-ratio reweighting derived in non-signal validation/control regions "
-            "before classifier training. Data events are not used in the signal-region training target."
-        ),
-        "control_regions": ["is_w_high_mt", "is_same_sign_low_mt", "is_z_rich", "is_top_btag_handle"],
-        "application": "background MC events receive the correction; signal MC and data events keep weight 1",
-        "shape_chi2_threshold_for_reweight": threshold,
-        "normalization": "background corrections are renormalized to preserve the nominal weighted background total",
-        "nd_reweight": nd_payload,
-        "rows": rows,
-        "summary": {
-            "control_data_events": int(np.sum(data_control)),
-            "control_background_events": int(np.sum(bkg_control)),
-            "reweighted_variable_count": int(sum(row["reweighted"] for row in rows)),
-            "median_pre_chi2_ndf": float(np.median(pre_values)) if pre_values else None,
-            "median_post_chi2_ndf": float(np.median(post_values_for_summary)) if post_values_for_summary else None,
-            "max_weight": float(np.max(correction[selected["role"] == "background"])) if np.any(selected["role"] == "background") else 1.0,
-            "min_weight": float(np.min(correction[selected["role"] == "background"])) if np.any(selected["role"] == "background") else 1.0,
-        },
-    }
-    return correction, payload
 
 
 def weighted_hist(values: np.ndarray, event_weight: float, bins: np.ndarray) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
@@ -1005,8 +822,6 @@ def fit_classifier(model: Any, x_train: np.ndarray, y_train: np.ndarray, sample_
 
 
 def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float]) -> tuple[dict[str, Any], dict[str, np.ndarray]]:
-    input_reweight, reweight_payload = compute_input_reweights(selected, weights)
-    selected["background_input_reweight"] = input_reweight
     sr_mc = (
         selected["is_signal_region"].astype(bool)
         & np.isin(selected["role"], ["signal", "background"])
@@ -1019,11 +834,13 @@ def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float])
         ]
     )
     y = (selected["role"][sr_mc] == "signal").astype(int)
-    training_shape_weight = input_reweight[sr_mc].astype(float)
+    training_shape_weight = nominal_event_weight_array(selected, weights)[sr_mc].astype(float)
     class_balance = np.ones_like(training_shape_weight)
+    class_weight_sums: dict[str, float] = {}
     for label_value in [0, 1]:
         label_mask = y == label_value
         label_sum = float(np.sum(training_shape_weight[label_mask]))
+        class_weight_sums["signal" if label_value == 1 else "background"] = label_sum
         if label_sum > 0:
             class_balance[label_mask] = 0.5 * len(y) / label_sum
     training_weight = training_shape_weight * class_balance
@@ -1031,33 +848,14 @@ def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float])
         x,
         y,
         training_weight,
-        test_size=0.35,
+        test_size=0.40,
         random_state=31415,
         stratify=y,
     )
-    models: dict[str, Any] = {
-        "hist_gradient_boosting": HistGradientBoostingClassifier(
-            max_iter=240,
-            learning_rate=0.045,
-            max_leaf_nodes=23,
-            l2_regularization=0.05,
-            random_state=2718,
-        ),
-        "mlp": make_pipeline(
-            StandardScaler(),
-            MLPClassifier(
-                hidden_layer_sizes=(48, 24),
-                activation="relu",
-                alpha=2e-3,
-                max_iter=500,
-                early_stopping=True,
-                random_state=1618,
-            ),
-        ),
-    }
+    models: dict[str, Any] = {}
     if XGBClassifier is not None:
         models["xgboost"] = XGBClassifier(
-            n_estimators=220,
+            n_estimators=180,
             max_depth=3,
             learning_rate=0.045,
             subsample=0.85,
@@ -1066,9 +864,21 @@ def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float])
             reg_lambda=2.0,
             objective="binary:logistic",
             eval_metric="logloss",
-            n_jobs=2,
+            n_jobs=4,
             random_state=57721,
         )
+    models["mlp"] = make_pipeline(
+        StandardScaler(),
+        MLPClassifier(
+            hidden_layer_sizes=(32, 16),
+            activation="relu",
+            alpha=1e-3,
+            max_iter=500,
+            early_stopping=True,
+            random_state=1618,
+        ),
+    )
+    primary_model_name = "xgboost" if "xgboost" in models else "mlp"
     full_x = np.column_stack(
         [
             np.nan_to_num(selected[name].astype(float), nan=-999.0, posinf=999.0, neginf=-999.0)
@@ -1080,14 +890,18 @@ def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float])
         "status": "trained_expected_only_mc",
         "blinding": (
             "Trained only on signal/background MC in signal-region selected events. "
-            "Data enter only through pre-training background-shape reweights derived in validation/control regions."
+            "Collision data are not used in the signal-region classifier target or event weights."
         ),
+        "score_definition": "D_NN",
+        "primary_model_name": primary_model_name,
+        "alternative_model_name": "mlp" if primary_model_name == "xgboost" else None,
         "inputs": MVA_INPUTS,
-        "input_reweighting": reweight_payload,
-        "split": {"test_size": 0.35, "random_state": 31415, "stratified": True},
+        "split": {"test_size": 0.40, "random_state": 31415, "stratified": True},
         "class_counts": {"background": int(np.sum(y == 0)), "signal": int(np.sum(y == 1))},
         "training_weight": {
-            "formula": "background_control_shape_reweight times class-balance factor; signal shape reweight fixed to 1",
+            "formula": "nominal sigma*L/Ngen MC event weight times class-balance factor",
+            "nominal_sum_background": class_weight_sums.get("background"),
+            "nominal_sum_signal": class_weight_sums.get("signal"),
             "sum_background": float(np.sum(training_weight[y == 0])),
             "sum_signal": float(np.sum(training_weight[y == 1])),
             "min": float(np.min(training_weight)),
@@ -1099,22 +913,24 @@ def train_mva_models(selected: dict[str, np.ndarray], weights: dict[str, float])
         "tau_antimuon_veto": tau_antimuon_status(),
     }
     for name, model in models.items():
-        log.info("Training expected-only %s with pre-training data/MC input reweighting", name)
+        log.info("Training expected-only %s with nominal MC weights and class balancing", name)
         fit_classifier(model, x_train, y_train, w_train)
         train_score = model.predict_proba(x_train)[:, 1]
         test_score = model.predict_proba(x_test)[:, 1]
         full_score = model.predict_proba(full_x)[:, 1]
-        scores[name] = full_score.astype(float)
         train_auc = float(roc_auc_score(y_train, train_score, sample_weight=w_train))
         test_auc = float(roc_auc_score(y_test, test_score, sample_weight=w_test))
         metadata["models"][name] = {
             "type": type(model).__name__,
+            "selection_role": "primary_D_NN" if name == primary_model_name else "architecture_crosscheck_not_a_result_branch",
             "train_auc": train_auc,
             "test_auc": test_auc,
             "overtraining_gap_train_minus_test": float(train_auc - test_auc),
             "n_train": int(len(y_train)),
             "n_test": int(len(y_test)),
         }
+        if name == primary_model_name:
+            scores[name] = full_score.astype(float)
     return metadata, scores
 
 
@@ -1458,9 +1274,10 @@ def plot_nuisance_audit(payload: dict[str, Any]) -> None:
 def plot_mva_scores(selected: dict[str, np.ndarray], scores: dict[str, np.ndarray], weights: dict[str, float]) -> None:
     fig, ax = plt.subplots(figsize=(10, 10))
     bins = np.linspace(0.0, 1.0, 31)
-    score = scores.get("hist_gradient_boosting")
+    score = scores.get("xgboost", scores.get("hist_gradient_boosting"))
     if score is None:
         return
+    score_label = "XGBoost classifier score" if "xgboost" in scores else "Gradient-boosted classifier score"
     for role, color in [("signal", "tab:green"), ("background", "tab:blue")]:
         mask = (
             selected["is_signal_region"].astype(bool)
@@ -1486,7 +1303,7 @@ def plot_mva_scores(selected: dict[str, np.ndarray], scores: dict[str, np.ndarra
             label=role.title(),
             color=color,
         )
-    ax.set_xlabel("Gradient-boosted classifier score")
+    ax.set_xlabel(score_label)
     ax.set_ylabel("Expected events")
     ax.set_yscale("log")
     ymin, ymax = ax.get_ylim()
@@ -1498,6 +1315,9 @@ def plot_mva_scores(selected: dict[str, np.ndarray], scores: dict[str, np.ndarra
 
 
 def plot_input_reweighting(payload: dict[str, Any]) -> None:
+    if "rows" not in payload:
+        log.info("Skipping input reweighting plot: %s", payload.get("reason", "payload has no rows"))
+        return
     rows = payload["rows"]
     labels = [str(row["variable"]) for row in rows]
     pre = np.asarray([row["pre_chi2_ndf"] if row["pre_chi2_ndf"] is not None else np.nan for row in rows], dtype=float)
@@ -1706,7 +1526,14 @@ def main() -> None:
     }
     write_json(OUT / "sensitivity_scan.json", scan_payload)
     write_json(OUT / "mva_sensitivity.json", mva_payload)
-    write_json(OUT / "input_reweighting.json", mva_metadata["input_reweighting"])
+    input_reweighting = mva_metadata.get(
+        "input_reweighting",
+        {
+            "status": "not_available",
+            "reason": "Classifier training metadata did not provide an input-reweighting payload for this rerun.",
+        },
+    )
+    write_json(OUT / "input_reweighting.json", input_reweighting)
     write_json(OUT / "sensitivity_recommendation.json", recommendation)
     write_json(OUT / "missing_component_feasibility.json", missing)
     np.savez_compressed(
@@ -1718,7 +1545,7 @@ def main() -> None:
 
     plot_variant_summary(results)
     plot_mva_scores(selected, mva_scores, weights)
-    plot_input_reweighting(mva_metadata["input_reweighting"])
+    plot_input_reweighting(input_reweighting)
     plot_nuisance_audit(audit)
     write_selection_regression_section(best, phase4a_baseline)
 
