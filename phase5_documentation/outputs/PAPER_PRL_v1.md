@@ -47,6 +47,16 @@ points with horizontal uncertainties, green and yellow expected one- and
 two-standard-deviation bands, a black dashed median-expected marker, and the
 common Standard Model line at $\mu=1$.](figures/observed_limit_significance_summary.pdf)
 
+![Combined visible-mass post-fit Data/MC validation. The plot sums the VBF,
+boosted, and zero-jet post-fit visible-mass expectations and compares them with
+the summed observed data. The lower panel is the combined Data/post-fit ratio
+for the baseline result.](figures/phase5_baseline_visible_combined.pdf)
+
+![Combined $D_{NN}$ score post-fit Data/MC validation. The plot sums the VBF,
+boosted, and zero-jet post-fit classifier-score expectations and compares them
+with the summed observed score distribution. The lower panel is the combined
+Data/post-fit ratio for the secondary result.](figures/phase5_nn_score_combined.pdf)
+
 # Discussion
 
 The $D_{NN}$ observable has the smaller median expected upper limit and is

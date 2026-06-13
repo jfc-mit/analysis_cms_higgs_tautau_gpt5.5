@@ -13,6 +13,8 @@ from functools import lru_cache
 from pathlib import Path
 from statistics import NormalDist
 
+import cabinetry.fit as cabinetry_fit
+import cabinetry.model_utils as cabinetry_model_utils
 import matplotlib.pyplot as plt
 import hist
 import mplhep as mh
@@ -26,6 +28,8 @@ logging.basicConfig(
     handlers=[RichHandler(rich_tracebacks=True)],
 )
 log = logging.getLogger(__name__)
+logging.getLogger("cabinetry").setLevel(logging.WARNING)
+logging.getLogger("pyhf").setLevel(logging.WARNING)
 
 ROOT = Path(__file__).resolve().parents[2]
 OUT = ROOT / "phase5_documentation" / "outputs"
@@ -602,6 +606,29 @@ def baseline_workspace_model() -> tuple[pyhf.Workspace, pyhf.pdf.Model, list[flo
     return ws, model, data
 
 
+def saturated_gof_statistic(model: pyhf.pdf.Model, data: list[float], best_twice_nll: float) -> tuple[float, int]:
+    """Return the cabinetry saturated-model GoF statistic and degrees of freedom."""
+    if model.config.nauxdata > 0:
+        main_data, aux_data = model.fullpdf_tv.split(pyhf.tensorlib.astensor(data))
+        best_constraint_pars = cabinetry_model_utils._parameters_maximizing_constraint_term(
+            model,
+            pyhf.tensorlib.tolist(aux_data),
+        )
+        constraint_ll = pyhf.tensorlib.to_numpy(
+            model.constraint_logpdf(aux_data, pyhf.tensorlib.astensor(best_constraint_pars))
+        )
+    else:
+        main_data = pyhf.tensorlib.astensor(data)
+        constraint_ll = 0.0
+    poisson_ll = pyhf.tensorlib.to_numpy(
+        sum(pyhf.tensorlib.poisson_dist(main_data).log_prob(main_data))
+    )
+    saturated_nll = -(poisson_ll + constraint_ll)
+    statistic = max(0.0, float(best_twice_nll) - 2.0 * float(saturated_nll))
+    n_dof = int(sum(model.config.channel_nbins.values()) - cabinetry_model_utils.unconstrained_parameter_count(model))
+    return statistic, n_dof
+
+
 def fit_with_fixed(model: pyhf.pdf.Model, data: list[float], fixed_values: dict[str, float]) -> list[float]:
     init = list(model.config.suggested_init())
     bounds = list(model.config.suggested_bounds())
@@ -613,6 +640,20 @@ def fit_with_fixed(model: pyhf.pdf.Model, data: list[float], fixed_values: dict[
             fixed[idx] = True
     pars = pyhf.infer.mle.fit(data, model, init_pars=init, par_bounds=bounds, fixed_params=fixed)
     return [float(x) for x in pyhf.tensorlib.tolist(pars)]
+
+
+@lru_cache(maxsize=4)
+def postfit_expected_by_category(workspace_relpath: str) -> dict[str, np.ndarray]:
+    workspace = load_json(workspace_relpath)
+    ws = pyhf.Workspace(workspace)
+    model = ws.model()
+    data = ws.data(model)
+    pars = fit_with_fixed(model, data, {})
+    expected = np.asarray(pyhf.tensorlib.tolist(model.expected_data(pars))[: model.config.nmaindata], dtype=float)
+    return {
+        channel: expected[model.config.channel_slices[channel]].copy()
+        for channel in model.config.channels
+    }
 
 
 @lru_cache(maxsize=1)
@@ -701,33 +742,66 @@ def baseline_impact_scan() -> dict[str, object]:
 @lru_cache(maxsize=1)
 def baseline_observed_gof_toys() -> dict[str, object]:
     _ws, model, data = baseline_workspace_model()
-    pars = fit_with_fixed(model, data, {})
-    expected = np.asarray(pyhf.tensorlib.tolist(model.expected_data(pars))[: model.config.nmaindata], dtype=float)
-    observed = np.asarray(pyhf.tensorlib.tolist(data)[: model.config.nmaindata], dtype=float)
+    fit_result = cabinetry_fit.fit(model, data, goodness_of_fit=True)
+    observed_stat, n_dof = saturated_gof_statistic(model, data, float(fit_result.best_twice_nll))
 
-    def pearson(counts: np.ndarray) -> float:
-        return float(np.sum((counts - expected) ** 2 / np.maximum(expected, 1e-9)))
-
-    observed_stat = pearson(observed)
-    rng = np.random.default_rng(20260612)
-    toys = rng.poisson(expected, size=(10000, expected.size))
-    toy_stats = np.asarray([pearson(toy) for toy in toys], dtype=float)
-    p_value = float((np.count_nonzero(toy_stats >= observed_stat) + 1) / (toy_stats.size + 1))
+    random_seed = 20260612
+    n_requested = 100
+    random_state = np.random.get_state()
+    np.random.seed(random_seed)
+    try:
+        toy_data_samples = pyhf.tensorlib.tolist(
+            model.make_pdf(pyhf.tensorlib.astensor(fit_result.bestfit)).sample((n_requested,))
+        )
+    finally:
+        np.random.set_state(random_state)
+    toy_stats = []
+    toy_fit_failures = []
+    init = [float(x) for x in pyhf.tensorlib.tolist(fit_result.bestfit)]
+    bounds = list(model.config.suggested_bounds())
+    fixed = list(model.config.suggested_fixed())
+    for toy_index, toy_sample in enumerate(toy_data_samples):
+        toy_data = [float(x) for x in toy_sample]
+        try:
+            toy_fit = cabinetry_fit.fit(
+                model,
+                toy_data,
+                init_pars=init,
+                par_bounds=bounds,
+                fix_pars=fixed,
+            )
+            toy_stat, _ = saturated_gof_statistic(model, toy_data, float(toy_fit.best_twice_nll))
+            toy_stats.append(toy_stat)
+        except Exception as exc:  # noqa: BLE001
+            toy_fit_failures.append({"toy_index": toy_index, "error": f"{type(exc).__name__}: {exc}"})
+    if not toy_stats:
+        raise RuntimeError("All GoF toy fits failed")
+    toy_stats_array = np.asarray(toy_stats, dtype=float)
+    interval = [float(x) for x in np.quantile(toy_stats_array, [0.025, 0.975])]
+    p_value = float((np.count_nonzero(toy_stats_array >= observed_stat) + 1) / (toy_stats_array.size + 1))
+    within_central_95 = bool(interval[0] <= observed_stat <= interval[1])
     payload = {
         "model": "visible_mass_qcd_primary",
         "workspace": "pyhf_workspace_baseline_visible.json",
-        "method": "Deterministic post-fit Poisson toy-style combined goodness-of-fit replacement. Toys are generated from the post-fit expected visible-mass bin counts and evaluated with the combined Pearson chi2 statistic without refitting each toy.",
-        "random_seed": 20260612,
-        "n_toys": int(toy_stats.size),
+        "method": "Cabinetry-compatible saturated-model goodness-of-fit toy check. The observed fit uses cabinetry.fit.fit(..., goodness_of_fit=True), and each toy is refit with cabinetry.fit.fit using the same pyhf model. Toys are sampled from the full fitted pyhf model with model.make_pdf(bestfit).sample, so both main-channel counts and auxiliary constraint terms fluctuate. The cabinetry saturated-model GoF statistic is compared with the toy-statistic distribution. Cabinetry 0.6.0 exposes saturated GoF but no public toy-runner API, so the toy loop is implemented explicitly with pyhf sampling and cabinetry refits.",
+        "cabinetry_version": "0.6.0",
+        "random_seed": random_seed,
+        "n_toys": int(toy_stats_array.size),
+        "n_toys_requested": n_requested,
+        "toy_fit_failures": toy_fit_failures[:10],
+        "n_fit_failures": len(toy_fit_failures),
+        "n_degrees_of_freedom": n_dof,
         "observed_statistic": observed_stat,
+        "observed_cabinetry_saturated_p_value": float(fit_result.goodness_of_fit),
         "toy_p_value": p_value,
-        "pass": p_value > 0.05,
+        "within_central_95_interval": within_central_95,
+        "pass": within_central_95 and p_value > 0.025,
         "toy_statistic_summary": {
-            "mean": float(np.mean(toy_stats)),
-            "median": float(np.median(toy_stats)),
-            "central_95_interval": [float(x) for x in np.quantile(toy_stats, [0.025, 0.975])],
+            "mean": float(np.mean(toy_stats_array)),
+            "median": float(np.median(toy_stats_array)),
+            "central_95_interval": interval,
         },
-        "toy_statistics": [float(x) for x in toy_stats],
+        "toy_statistics": [float(x) for x in toy_stats_array],
     }
     write_json("phase5_documentation/outputs/baseline_observed_gof_toys.json", payload)
     write_json("phase4_inference/4c_observed/outputs/baseline_observed_gof_toys.json", payload)
@@ -938,9 +1012,12 @@ def make_visible_validation_figure(category: str, visible_yields: dict, baseline
     data = np.asarray(totals["data_counts"], dtype=float)
     background = np.asarray(totals["background_bins"], dtype=float)
     signal = np.asarray(totals["signal_bins"], dtype=float)
-    total_mc = background + signal
+    nominal_total_mc = background + signal
+    postfit_total = postfit_expected_by_category(
+        "phase4_inference/4c_observed/outputs/pyhf_workspace_baseline_visible.json"
+    )[category]
     qcd = np.asarray(totals["qcd_bins"], dtype=float)
-    ratio = np.divide(data, total_mc, out=np.zeros_like(data), where=total_mc > 0)
+    ratio = np.divide(data, postfit_total, out=np.zeros_like(data), where=postfit_total > 0)
     pulls = baseline["validation_summary"]["score_template_validation"][category]["pulls"]
 
     fig, (ax, rax) = plt.subplots(
@@ -950,20 +1027,21 @@ def make_visible_validation_figure(category: str, visible_yields: dict, baseline
         gridspec_kw={"height_ratios": [3.2, 1.0]},
         sharex=True,
     )
-    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Background")
+    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Final-fit validation background")
     ax.stairs(qcd, edges, fill=True, color="#e69f00", alpha=0.35, label="QCD/fake")
-    ax.stairs(total_mc, edges, color="#009e73", linewidth=1.8, label="Background + SM Higgs")
+    ax.stairs(nominal_total_mc, edges, color="#009e73", linewidth=1.1, label="Nominal bkg. + SM Higgs")
+    ax.stairs(postfit_total, edges, color="black", linewidth=1.8, label="Post-fit total")
     ax.errorbar(centers, data, yerr=np.sqrt(np.maximum(data, 1.0)), fmt="o", color="#d62728", label="Data")
     ax.set_ylabel("Events")
     ax.set_yscale("log")
-    ax.set_ylim(max(0.03, 0.2 * np.min(background[background > 0])), max(np.max(data), np.max(total_mc)) * 8.0)
+    ax.set_ylim(max(0.03, 0.2 * np.min(background[background > 0])), max(np.max(data), np.max(nominal_total_mc), np.max(postfit_total)) * 8.0)
     ax.legend(fontsize="x-small", loc="upper left")
     ax.tick_params(labelbottom=False)
     cms_label(ax)
 
     rax.axhline(1.0, color="black", linewidth=1.0)
-    rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, total_mc), fmt="o", color="#d62728")
-    rax.set_ylabel("Data / MC")
+    rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, postfit_total), fmt="o", color="#d62728")
+    rax.set_ylabel("Data / post-fit")
     rax.set_xlabel("Visible mass [GeV]")
     rax.set_ylim(0.0, max(2.4, float(np.max(ratio)) * 1.25))
     fig.subplots_adjust(hspace=0)
@@ -979,8 +1057,115 @@ def make_nn_score_validation_figure(category: str, nn_payload: dict) -> None:
     data = np.asarray(totals["data_counts"], dtype=float)
     background = np.asarray(totals["background_bins"], dtype=float)
     signal = np.asarray(totals["signal_bins"], dtype=float)
-    total_mc = background + signal
+    nominal_total_mc = background + signal
+    postfit_total = postfit_expected_by_category(
+        "phase4_inference/4c_observed/outputs/pyhf_workspace_nn_score.json"
+    )[category]
     qcd = np.asarray(totals["qcd_bins"], dtype=float)
+    ratio = np.divide(data, postfit_total, out=np.zeros_like(data), where=postfit_total > 0)
+
+    fig, (ax, rax) = plt.subplots(
+        2,
+        1,
+        figsize=(10, 10),
+        gridspec_kw={"height_ratios": [3.2, 1.0]},
+        sharex=True,
+    )
+    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Final-fit validation background")
+    ax.stairs(qcd, edges, fill=True, color="#e69f00", alpha=0.35, label="QCD/fake")
+    ax.stairs(nominal_total_mc, edges, color="#009e73", linewidth=1.1, label="Nominal bkg. + SM Higgs")
+    ax.stairs(postfit_total, edges, color="black", linewidth=1.8, label="Post-fit total")
+    ax.errorbar(centers, data, yerr=np.sqrt(np.maximum(data, 1.0)), fmt="o", color="#d62728", label="Data")
+    ax.set_ylabel("Events")
+    ax.set_yscale("log")
+    positive = postfit_total[postfit_total > 0]
+    ax.set_ylim(max(0.03, 0.2 * np.min(positive)), max(np.max(data), np.max(nominal_total_mc), np.max(postfit_total)) * 8.0)
+    ax.legend(fontsize="x-small", loc="upper right")
+    ax.tick_params(labelbottom=False)
+    cms_label(ax)
+
+    rax.axhline(1.0, color="black", linewidth=1.0)
+    rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, postfit_total), fmt="o", color="#d62728")
+    rax.set_ylabel("Data / post-fit")
+    rax.set_xlabel(r"$D_{NN}$ score")
+    rax.set_ylim(0.0, max(2.4, float(np.max(ratio)) * 1.25))
+    fig.subplots_adjust(hspace=0)
+    save(fig, f"phase5_nn_score_{category}")
+
+
+def make_combined_postfit_validation_figure(
+    *,
+    yields_payload: dict,
+    workspace_relpath: str,
+    output_stem: str,
+    xlabel: str,
+    model_label: str,
+    legend_loc: str = "upper right",
+) -> None:
+    setup_style()
+    edges = np.asarray(yields_payload["binning"]["edges"], dtype=float)
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    data = np.zeros(len(edges) - 1, dtype=float)
+    background = np.zeros(len(edges) - 1, dtype=float)
+    signal = np.zeros(len(edges) - 1, dtype=float)
+    qcd = np.zeros(len(edges) - 1, dtype=float)
+    for category in CATEGORIES:
+        totals = yields_payload["totals"][category]
+        data += np.asarray(totals["data_counts"], dtype=float)
+        background += np.asarray(totals["background_bins"], dtype=float)
+        signal += np.asarray(totals["signal_bins"], dtype=float)
+        qcd += np.asarray(totals["qcd_bins"], dtype=float)
+    nominal_total_mc = background + signal
+    postfit_by_category = postfit_expected_by_category(workspace_relpath)
+    postfit_total = np.sum([postfit_by_category[category] for category in CATEGORIES], axis=0)
+    ratio = np.divide(data, postfit_total, out=np.zeros_like(data), where=postfit_total > 0)
+
+    fig, (ax, rax) = plt.subplots(
+        2,
+        1,
+        figsize=(10, 10),
+        gridspec_kw={"height_ratios": [3.2, 1.0]},
+        sharex=True,
+    )
+    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Final-fit validation background")
+    ax.stairs(qcd, edges, fill=True, color="#e69f00", alpha=0.35, label="QCD/fake")
+    ax.stairs(nominal_total_mc, edges, color="#009e73", linewidth=1.1, label="Nominal bkg. + SM Higgs")
+    ax.stairs(postfit_total, edges, color="black", linewidth=1.8, label="Post-fit total")
+    ax.errorbar(centers, data, yerr=np.sqrt(np.maximum(data, 1.0)), fmt="o", color="#d62728", label="Data")
+    ax.set_ylabel("Events")
+    ax.set_yscale("log")
+    positive = postfit_total[postfit_total > 0]
+    ax.set_ylim(max(0.03, 0.2 * np.min(positive)), max(np.max(data), np.max(nominal_total_mc), np.max(postfit_total)) * 8.0)
+    ax.legend(fontsize="x-small", loc=legend_loc)
+    ax.tick_params(labelbottom=False)
+    cms_label(ax)
+
+    rax.axhline(1.0, color="black", linewidth=1.0)
+    rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, postfit_total), fmt="o", color="#d62728")
+    rax.set_ylabel("Data / post-fit")
+    rax.set_xlabel(xlabel)
+    rax.set_ylim(0.0, max(2.4, float(np.max(ratio)) * 1.25))
+    fig.subplots_adjust(hspace=0)
+    save(fig, output_stem)
+
+
+def make_prefit_validation_figure(
+    *,
+    yields_payload: dict,
+    category: str,
+    output_stem: str,
+    xlabel: str,
+    legend_loc: str = "upper right",
+) -> None:
+    setup_style()
+    totals = yields_payload["totals"][category]
+    edges = np.asarray(yields_payload["binning"]["edges"], dtype=float)
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    data = np.asarray(totals["data_counts"], dtype=float)
+    background = np.asarray(totals["background_bins"], dtype=float)
+    signal = np.asarray(totals["signal_bins"], dtype=float)
+    qcd = np.asarray(totals["qcd_bins"], dtype=float)
+    total_mc = background + signal
     ratio = np.divide(data, total_mc, out=np.zeros_like(data), where=total_mc > 0)
 
     fig, (ax, rax) = plt.subplots(
@@ -990,25 +1175,77 @@ def make_nn_score_validation_figure(category: str, nn_payload: dict) -> None:
         gridspec_kw={"height_ratios": [3.2, 1.0]},
         sharex=True,
     )
-    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Background")
+    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Pre-fit background")
     ax.stairs(qcd, edges, fill=True, color="#e69f00", alpha=0.35, label="QCD/fake")
-    ax.stairs(total_mc, edges, color="#009e73", linewidth=1.8, label="Background + SM Higgs")
+    ax.stairs(total_mc, edges, color="#009e73", linewidth=1.8, label="Pre-fit bkg. + SM Higgs")
     ax.errorbar(centers, data, yerr=np.sqrt(np.maximum(data, 1.0)), fmt="o", color="#d62728", label="Data")
     ax.set_ylabel("Events")
     ax.set_yscale("log")
     positive = total_mc[total_mc > 0]
     ax.set_ylim(max(0.03, 0.2 * np.min(positive)), max(np.max(data), np.max(total_mc)) * 8.0)
-    ax.legend(fontsize="x-small", loc="upper right")
+    ax.legend(fontsize="x-small", loc=legend_loc)
     ax.tick_params(labelbottom=False)
     cms_label(ax)
 
     rax.axhline(1.0, color="black", linewidth=1.0)
     rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, total_mc), fmt="o", color="#d62728")
-    rax.set_ylabel("Data / MC")
-    rax.set_xlabel(r"$D_{NN}$ score")
+    rax.set_ylabel("Data / pre-fit")
+    rax.set_xlabel(xlabel)
     rax.set_ylim(0.0, max(2.4, float(np.max(ratio)) * 1.25))
     fig.subplots_adjust(hspace=0)
-    save(fig, f"phase5_nn_score_{category}")
+    save(fig, output_stem)
+
+
+def make_combined_prefit_validation_figure(
+    *,
+    yields_payload: dict,
+    output_stem: str,
+    xlabel: str,
+    model_label: str,
+    legend_loc: str = "upper right",
+) -> None:
+    setup_style()
+    edges = np.asarray(yields_payload["binning"]["edges"], dtype=float)
+    centers = 0.5 * (edges[:-1] + edges[1:])
+    data = np.zeros(len(edges) - 1, dtype=float)
+    background = np.zeros(len(edges) - 1, dtype=float)
+    signal = np.zeros(len(edges) - 1, dtype=float)
+    qcd = np.zeros(len(edges) - 1, dtype=float)
+    for category in CATEGORIES:
+        totals = yields_payload["totals"][category]
+        data += np.asarray(totals["data_counts"], dtype=float)
+        background += np.asarray(totals["background_bins"], dtype=float)
+        signal += np.asarray(totals["signal_bins"], dtype=float)
+        qcd += np.asarray(totals["qcd_bins"], dtype=float)
+    total_mc = background + signal
+    ratio = np.divide(data, total_mc, out=np.zeros_like(data), where=total_mc > 0)
+
+    fig, (ax, rax) = plt.subplots(
+        2,
+        1,
+        figsize=(10, 10),
+        gridspec_kw={"height_ratios": [3.2, 1.0]},
+        sharex=True,
+    )
+    ax.stairs(background, edges, fill=True, color="#56b4e9", alpha=0.35, label="Pre-fit background")
+    ax.stairs(qcd, edges, fill=True, color="#e69f00", alpha=0.35, label="QCD/fake")
+    ax.stairs(total_mc, edges, color="#009e73", linewidth=1.8, label="Pre-fit bkg. + SM Higgs")
+    ax.errorbar(centers, data, yerr=np.sqrt(np.maximum(data, 1.0)), fmt="o", color="#d62728", label="Data")
+    ax.set_ylabel("Events")
+    ax.set_yscale("log")
+    positive = total_mc[total_mc > 0]
+    ax.set_ylim(max(0.03, 0.2 * np.min(positive)), max(np.max(data), np.max(total_mc)) * 8.0)
+    ax.legend(fontsize="x-small", loc=legend_loc)
+    ax.tick_params(labelbottom=False)
+    cms_label(ax)
+
+    rax.axhline(1.0, color="black", linewidth=1.0)
+    rax.errorbar(centers, ratio, yerr=ratio_uncertainty(data, total_mc), fmt="o", color="#d62728")
+    rax.set_ylabel("Data / pre-fit")
+    rax.set_xlabel(xlabel)
+    rax.set_ylim(0.0, max(2.4, float(np.max(ratio)) * 1.25))
+    fig.subplots_adjust(hspace=0)
+    save(fig, output_stem)
 
 
 def make_baseline_limit_figure(baseline: dict, nn_payload: dict) -> None:
@@ -1229,6 +1466,22 @@ def make_all_figures(observed: dict, visible_yields: dict, baseline: dict, nn_pa
     for category in CATEGORIES:
         make_visible_validation_figure(category, visible_yields, baseline)
         make_nn_score_validation_figure(category, nn_payload)
+    make_combined_postfit_validation_figure(
+        yields_payload=visible_yields,
+        workspace_relpath="phase4_inference/4c_observed/outputs/pyhf_workspace_baseline_visible.json",
+        output_stem="phase5_baseline_visible_combined",
+        xlabel="Visible mass [GeV]",
+        model_label="Combined categories",
+        legend_loc="upper left",
+    )
+    make_combined_postfit_validation_figure(
+        yields_payload=nn_payload["model"]["yields"],
+        workspace_relpath="phase4_inference/4c_observed/outputs/pyhf_workspace_nn_score.json",
+        output_stem="phase5_nn_score_combined",
+        xlabel=r"$D_{NN}$ score",
+        model_label="Combined categories",
+        legend_loc="upper right",
+    )
     make_baseline_limit_figure(baseline, nn_payload)
     make_validation_summary_figure(baseline)
     make_nuisance_pull_figure(baseline)
@@ -1345,7 +1598,8 @@ def gof_summary_table(baseline: dict) -> str:
     interval = gof["toy_statistic_summary"]["central_95_interval"]
     return "\n".join(
         [
-            f"| Observed combined Pearson chi2 | {gof['observed_statistic']:.4f} |",
+            f"| Observed saturated GoF statistic | {gof['observed_statistic']:.4f} |",
+            f"| Cabinetry saturated GoF p-value | {gof['observed_cabinetry_saturated_p_value']:.4f} |",
             f"| Toy median | {gof['toy_statistic_summary']['median']:.4f} |",
             f"| Toy central 95% interval | {interval[0]:.4f} to {interval[1]:.4f} |",
             f"| Toy-style p-value | {gof['toy_p_value']:.4f} |",
@@ -1626,7 +1880,7 @@ q(\\mu)= -2\\ln\\frac{{L(\\mu,\\hat{{\\boldsymbol{{\\theta}}}}_\\mu)}}
 {{L(\\hat{{\\mu}},\\hat{{\\boldsymbol{{\\theta}}}})}} = 1,
 $$ {{#eq:profile-interval}}
 
-with the lower side bounded at $\\mu=0$ when required. Asymptotic formulae are used for the reported limits and diagnostics [@cowan_asymptotic; @read_cls]. The final bins all have enough total expected background for an initial asymptotic interpretation. The observed-data combined goodness of fit is additionally checked with the stored post-fit Poisson toy-style ensemble described below.
+with the lower side bounded at $\\mu=0$ when required. Asymptotic formulae are used for the reported limits and diagnostics [@cowan_asymptotic; @read_cls]. The final bins all have enough total expected background for an initial asymptotic interpretation. The observed-data combined goodness of fit is additionally checked with the stored fitted-toy saturated-model ensemble described below.
 
 # Systematic Uncertainties
 
@@ -1658,11 +1912,13 @@ The visible-mass final result passes the configured full-data validation gate. C
 
 The VBF category has the largest residual local tension: max |pull| = {baseline_val['score_template_validation']['vbf']['max_abs_pull']:.2f} and one bin ratio reaches {min(baseline_val['score_template_validation']['vbf']['bin_data_over_background']):.3f}. This does not invalidate the final result because the VBF event count is small, the combined validation passes, and the final interpretation is a weak upper limit rather than evidence. It is nevertheless a leading target for a future analysis with fuller background samples and a richer VBF validation region.
 
-![Baseline visible-mass validation in VBF. This regenerated Phase 5 figure compares the final visible-mass model to the full data in the VBF category. The residual local deficit is visible in the ratio panel and is included in the validation summary rather than hidden by the combined pass.](figures/phase5_baseline_visible_vbf.pdf){{#fig:baseline-visible-vbf}}
+![Baseline visible-mass post-fit validation in VBF. This regenerated Phase 5 figure compares the post-fit total expectation from the retained baseline workspace to the full data in the VBF category. The residual local deficit is visible in the Data/post-fit ratio panel and is included in the validation summary rather than hidden by the combined pass.](figures/phase5_baseline_visible_vbf.pdf){{#fig:baseline-visible-vbf}}
 
-![Baseline visible-mass validation in boosted. This regenerated Phase 5 figure shows that the boosted category is globally compatible with the final background model. Its residual pulls are below the VBF maximum and do not drive the final limit.](figures/phase5_baseline_visible_boosted.pdf){{#fig:baseline-visible-boosted}}
+![Baseline visible-mass post-fit validation in boosted. This regenerated Phase 5 figure shows the post-fit total expectation from the retained baseline workspace. Its Data/post-fit ratio panel is globally compatible with the final model, and its residual pulls are below the VBF maximum.](figures/phase5_baseline_visible_boosted.pdf){{#fig:baseline-visible-boosted}}
 
-![Baseline visible-mass validation in zero-jet. This regenerated Phase 5 figure shows the dominant-statistics zero-jet category for the final result. The ratio panel has no shared-axis text artifact and is the public validation plot used by the final AN.](figures/phase5_baseline_visible_zero_jet.pdf){{#fig:baseline-visible-zero}}
+![Baseline visible-mass post-fit validation in zero-jet. This regenerated Phase 5 figure shows the dominant-statistics zero-jet category for the final result using the post-fit total expectation from the baseline workspace. The Data/post-fit ratio panel has no shared-axis text artifact and is the public validation plot used by the final AN.](figures/phase5_baseline_visible_zero_jet.pdf){{#fig:baseline-visible-zero}}
+
+![Baseline visible-mass combined post-fit validation. This regenerated Phase 5 figure sums the VBF, boosted, and zero-jet post-fit visible-mass expectations bin-by-bin and compares the combined prediction with full observed data. The lower panel is Data/post-fit model and provides the compact global Data/MC check for the baseline result.](figures/phase5_baseline_visible_combined.pdf){{#fig:baseline-visible-combined}}
 
 ![Baseline validation summary. The figure compares data/background, chi2/ndf, and max absolute pull across the final visible-mass categories. It highlights that the combined result passes while VBF carries the largest localized residual tension.](figures/phase5_baseline_validation_summary.pdf){{#fig:baseline-validation-summary}}
 
@@ -1680,9 +1936,9 @@ The DY/Z normalization and tau/open-data acceptance pulls are sizable but remain
 
 The expected and validation-stage health checks are retained as context. The expected Asimov classifier study had median limit {expected_lim[2]:.3f}, while the full-data final baseline has median expected limit {baseline_band[2]:.4f}; this loss of sensitivity is the cost of using the validated robust model. The 10% validation sample had combined score-template data/background {partial_val['data_over_background']:.3f} and chi2/ndf {partial_val['chi2_per_ndf']:.3f}, already indicating that aggressive classifier use needed full-data scrutiny.
 
-![Expected-stage goodness-of-fit toy study. This upstream figure records the expected-stage toy validation artifact. The final observed baseline result is validated separately by the stored post-fit Poisson toy-style ensemble in `baseline_observed_gof_toys.json`.](figures/gof_toys.pdf){{#fig:gof-toys}}
+![Expected-stage goodness-of-fit toy study. This upstream figure records the expected-stage toy validation artifact. The final observed baseline result is validated separately by the stored fitted-toy saturated-model ensemble in `baseline_observed_gof_toys.json`.](figures/gof_toys.pdf){{#fig:gof-toys}}
 
-The observed-data combined goodness-of-fit replacement uses the post-fit expected visible-mass bin counts of the final baseline model and generates {baseline_gof['n_toys']} deterministic Poisson toys with seed {baseline_gof['random_seed']}. The statistic is the combined Pearson chi2 over the 18 visible-mass bins, evaluated without refitting each toy; this is a toy-style validation replacement for the final baseline model, not the discovery `q0` p-value. The observed statistic gives p = {baseline_gof['toy_p_value']:.4f}, so the combined GoF decision is {'PASS' if baseline_gof['pass'] else 'FAIL'}.
+The observed-data combined goodness-of-fit check uses `cabinetry.fit.fit(..., goodness_of_fit=True)` for the observed final baseline fit, then generates {baseline_gof['n_toys']} deterministic post-fit model toys with seed {baseline_gof['random_seed']}. Each toy is refit with `cabinetry.fit.fit` and evaluated with the same saturated-model GoF statistic used by cabinetry. The observed statistic is compared with the fitted-toy distribution, giving toy p = {baseline_gof['toy_p_value']:.4f}; the observed statistic is {'inside' if baseline_gof['within_central_95_interval'] else 'outside'} the toy central 95% interval, so the combined GoF decision is {'PASS' if baseline_gof['pass'] else 'FAIL'}.
 
 | Goodness-of-fit quantity | Value |
 |---|---:|
@@ -1704,11 +1960,13 @@ The $D_NN$ score workspace uses the same W high-$m_T$, VBF-background, QCD/fake,
 |---|---:|---:|---:|---:|---:|---:|---:|
 {nn_category_yield_table(nn_payload)}
 
-![$D_NN$ score validation in VBF. This figure compares observed data to the full MC expectation, including the Standard Model Higgs signal at its true normalization, for the VBF category. The lower panel is Data/MC using background plus signal in the denominator.](figures/phase5_nn_score_vbf.pdf){{#fig:nn-score-vbf}}
+![$D_NN$ score post-fit validation in VBF. This figure compares observed data to the retained secondary classifier-score post-fit total expectation, including the fitted signal and constrained background treatment, for the VBF category. The lower panel is Data/post-fit model.](figures/phase5_nn_score_vbf.pdf){{#fig:nn-score-vbf}}
 
-![$D_NN$ score validation in boosted. This figure compares observed data to the full MC expectation in the boosted category. The same three-category $D_NN$ score workspace and nuisance program used for the secondary limit are used here.](figures/phase5_nn_score_boosted.pdf){{#fig:nn-score-boosted}}
+![$D_NN$ score post-fit validation in boosted. This figure compares observed data to the retained secondary classifier-score post-fit total expectation in the boosted category. The same three-category $D_NN$ score workspace and nuisance program used for the secondary limit define the model.](figures/phase5_nn_score_boosted.pdf){{#fig:nn-score-boosted}}
 
-![$D_NN$ score validation in zero-jet. This figure compares observed data to the full MC expectation in the statistically dominant zero-jet category. The full-data normalization mismatch visible in this category is included in the quoted secondary $D_NN$ validation metrics.](figures/phase5_nn_score_zero_jet.pdf){{#fig:nn-score-zero}}
+![$D_NN$ score post-fit validation in zero-jet. This figure compares observed data to the retained secondary classifier-score post-fit total expectation in the statistically dominant zero-jet category. The full-data normalization mismatch visible in this Data/post-fit panel is included in the quoted secondary $D_NN$ validation metrics.](figures/phase5_nn_score_zero_jet.pdf){{#fig:nn-score-zero}}
+
+![$D_NN$ score combined post-fit validation. This figure sums the VBF, boosted, and zero-jet post-fit score expectations bin-by-bin and compares the combined secondary classifier-score model with full observed data. The lower panel is Data/post-fit model and is the compact global Data/MC score comparison requested for the retained $D_NN$ result.](figures/phase5_nn_score_combined.pdf){{#fig:nn-score-combined}}
 
 # Final Result
 
@@ -1984,20 +2242,32 @@ The observed 95% CLs limits are listed in the table above the figure, and both
 rows show that the reduced Open Data analysis has no Standard Model resolving
 power.](figures/phase5_baseline_limit_summary.pdf){{#fig:prl-limit}}
 
-![Visible-mass validation in the VBF category. This category has the largest
-local residual tension but does not invalidate the combined weak-limit
-interpretation.](figures/phase5_baseline_visible_vbf.pdf){{#fig:prl-vbf}}
+![Visible-mass post-fit validation in the VBF category. The plotted model is
+the post-fit total expectation from the retained baseline workspace. This
+category has the largest local residual tension but does not invalidate the
+combined weak-limit interpretation.](figures/phase5_baseline_visible_vbf.pdf){{#fig:prl-vbf}}
 
-![$D_NN$ score validation in the VBF category. The lower panel is Data/MC using
-background plus Standard Model signal in the denominator.](figures/phase5_nn_score_vbf.pdf){{#fig:prl-nn-vbf}}
+![Combined visible-mass post-fit validation. This plot sums the VBF, boosted,
+and zero-jet post-fit visible-mass expectations and compares them with the
+summed observed data. It is the compact global Data/MC check for the baseline
+result.](figures/phase5_baseline_visible_combined.pdf){{#fig:prl-visible-combined}}
 
-![$D_NN$ score validation in the boosted category. The plot uses the same
+![$D_NN$ score post-fit validation in the VBF category. The lower panel is
+Data/post-fit using the retained secondary classifier-score model in the
+denominator.](figures/phase5_nn_score_vbf.pdf){{#fig:prl-nn-vbf}}
+
+![$D_NN$ score post-fit validation in the boosted category. The plot uses the same
 three-category $D_NN$ score workspace and nuisance program as the secondary
 limit.](figures/phase5_nn_score_boosted.pdf){{#fig:prl-nn-boosted}}
 
-![$D_NN$ score validation in the zero-jet category. The full-data normalization
+![$D_NN$ score post-fit validation in the zero-jet category. The full-data normalization
 mismatch visible in this category is included in the quoted secondary $D_NN$
 validation metrics.](figures/phase5_nn_score_zero_jet.pdf){{#fig:prl-nn-zero}}
+
+![Combined $D_NN$ score post-fit validation. This plot sums the VBF, boosted,
+and zero-jet post-fit score expectations and compares them with the summed
+observed score distribution. It is the compact global Data/MC score check for
+the secondary result.](figures/phase5_nn_score_combined.pdf){{#fig:prl-nn-combined}}
 
 ## Result and Interpretation
 
@@ -2173,23 +2443,26 @@ and $\chi^2/\mathrm{{ndf}}={nn_val['combined']['chi2_per_ndf']:.3f}$.
 
 \begin{{figure*}}[t]
 \centering
-\includegraphics[width=0.24\linewidth]{{figures/phase5_baseline_visible_vbf.pdf}}\hspace{{0.005\linewidth}}
-\includegraphics[width=0.24\linewidth]{{figures/phase5_baseline_visible_boosted.pdf}}\hspace{{0.005\linewidth}}
-\includegraphics[width=0.24\linewidth]{{figures/phase5_baseline_visible_zero_jet.pdf}}\hspace{{0.005\linewidth}}
-\includegraphics[width=0.24\linewidth]{{figures/phase5_baseline_limit_summary.pdf}}
-\caption{{Final visible-mass validation and limit summary.  The first three
-panels show the VBF, boosted, and zero-jet validation distributions; the right
+\includegraphics[width=0.19\linewidth]{{figures/phase5_baseline_visible_vbf.pdf}}\hspace{{0.004\linewidth}}
+\includegraphics[width=0.19\linewidth]{{figures/phase5_baseline_visible_boosted.pdf}}\hspace{{0.004\linewidth}}
+\includegraphics[width=0.19\linewidth]{{figures/phase5_baseline_visible_zero_jet.pdf}}\hspace{{0.004\linewidth}}
+\includegraphics[width=0.19\linewidth]{{figures/phase5_baseline_visible_combined.pdf}}\hspace{{0.004\linewidth}}
+\includegraphics[width=0.19\linewidth]{{figures/phase5_baseline_limit_summary.pdf}}
+\caption{{Visible-mass post-fit validation and limit summary.  The first three
+panels show the VBF, boosted, and zero-jet post-fit validation distributions,
+the fourth panel shows their combined Data/post-fit comparison, and the right
 panel shows the CLs limit that defines the final result.}}
 \end{{figure*}}
 
 \begin{{figure*}}[t]
 \centering
-\includegraphics[width=0.32\linewidth]{{figures/phase5_nn_score_vbf.pdf}}\hspace{{0.01\linewidth}}
-\includegraphics[width=0.32\linewidth]{{figures/phase5_nn_score_boosted.pdf}}\hspace{{0.01\linewidth}}
-\includegraphics[width=0.32\linewidth]{{figures/phase5_nn_score_zero_jet.pdf}}
-\caption{{$D_{{NN}}$ score validation in the VBF (left), boosted (center),
-and zero-jet (right) categories.  The lower panels use Data/MC with background
-plus Standard Model Higgs signal in the denominator.}}
+\includegraphics[width=0.24\linewidth]{{figures/phase5_nn_score_vbf.pdf}}\hspace{{0.006\linewidth}}
+\includegraphics[width=0.24\linewidth]{{figures/phase5_nn_score_boosted.pdf}}\hspace{{0.006\linewidth}}
+\includegraphics[width=0.24\linewidth]{{figures/phase5_nn_score_zero_jet.pdf}}\hspace{{0.006\linewidth}}
+\includegraphics[width=0.24\linewidth]{{figures/phase5_nn_score_combined.pdf}}
+\caption{{$D_{{NN}}$ score post-fit validation in the VBF, boosted,
+zero-jet, and combined categories.  The lower panels use Data/post-fit with the
+post-fit classifier-score model in the denominator.}}
 \end{{figure*}}
 
 \begin{{table}}[b]
@@ -2242,10 +2515,12 @@ def write_docs() -> None:
     baseline = load_json("phase4_inference/4c_observed/outputs/baseline_visible_result.json")
     nn_result = load_json("phase4_inference/4c_observed/outputs/nn_score_result.json")
     visible_yields = load_json("phase4_inference/4c_observed/outputs/baseline_visible_yields.json")
+    nn_yields = load_json("phase4_inference/4c_observed/outputs/nn_score_observed_yields.json")
+    baseline_observed_gof_toys()
     write_json("phase5_documentation/outputs/baseline_visible_result.json", baseline)
     write_json("phase5_documentation/outputs/baseline_visible_yields.json", visible_yields)
     write_json("phase5_documentation/outputs/nn_score_result.json", nn_result)
-    write_json("phase5_documentation/outputs/nn_score_observed_yields.json", load_json("phase4_inference/4c_observed/outputs/nn_score_observed_yields.json"))
+    write_json("phase5_documentation/outputs/nn_score_observed_yields.json", nn_yields)
 
     FIG.mkdir(parents=True, exist_ok=True)
     for old in FIG.glob("*.*"):
@@ -2283,6 +2558,54 @@ def write_docs() -> None:
             if src.exists():
                 target_name = stem.replace("observed_visible", "phase5_baseline_visible").replace("observed_nn_score", "phase5_nn_score")
                 shutil.copy2(src, FIG / f"{target_name}{suffix}")
+    nn_payload = {"result": nn_result, "model": {"yields": nn_yields}}
+    for category in CATEGORIES:
+        make_prefit_validation_figure(
+            yields_payload=visible_yields,
+            category=category,
+            output_stem=f"phase5_prefit_baseline_visible_{category}",
+            xlabel="Visible mass [GeV]",
+            legend_loc="upper left",
+        )
+        make_prefit_validation_figure(
+            yields_payload=nn_yields,
+            category=category,
+            output_stem=f"phase5_prefit_nn_score_{category}",
+            xlabel=r"$D_{NN}$ score",
+            legend_loc="upper right",
+        )
+        make_visible_validation_figure(category, visible_yields, baseline)
+        make_nn_score_validation_figure(category, nn_payload)
+    make_combined_prefit_validation_figure(
+        yields_payload=visible_yields,
+        output_stem="phase5_prefit_baseline_visible_combined",
+        xlabel="Visible mass [GeV]",
+        model_label="Combined categories",
+        legend_loc="upper left",
+    )
+    make_combined_prefit_validation_figure(
+        yields_payload=nn_yields,
+        output_stem="phase5_prefit_nn_score_combined",
+        xlabel=r"$D_{NN}$ score",
+        model_label="Combined categories",
+        legend_loc="upper right",
+    )
+    make_combined_postfit_validation_figure(
+        yields_payload=visible_yields,
+        workspace_relpath="phase4_inference/4c_observed/outputs/pyhf_workspace_baseline_visible.json",
+        output_stem="phase5_baseline_visible_combined",
+        xlabel="Visible mass [GeV]",
+        model_label="Combined categories",
+        legend_loc="upper left",
+    )
+    make_combined_postfit_validation_figure(
+        yields_payload=nn_yields,
+        workspace_relpath="phase4_inference/4c_observed/outputs/pyhf_workspace_nn_score.json",
+        output_stem="phase5_nn_score_combined",
+        xlabel=r"$D_{NN}$ score",
+        model_label="Combined categories",
+        legend_loc="upper right",
+    )
     merge_references()
 
     bfit = baseline["observed_fit"]
@@ -2420,18 +2743,25 @@ normalization weights and class balancing. In the current rerun the stored
 training metric is test AUC `{training_model.get('test_auc', float('nan')):.4f}`
 with train AUC `{training_model.get('train_auc', float('nan')):.4f}`.
 
-![Visible-mass distribution in the VBF category. The pre-fit comparison shows
-the fitted baseline observable in the most signal-enriched topology. The final
-fit uses the corresponding Phase-4c template with the same category
-definition.](figures/visible_mass_vbf.pdf){{#fig:visible-vbf-prefit}}
+![Baseline visible-mass pre-fit validation in the VBF category. The plot
+compares data with the nominal visible-mass background plus Standard Model
+Higgs prediction before profiling nuisance parameters in the signal fit. The
+lower panel is Data/pre-fit.](figures/phase5_prefit_baseline_visible_vbf.pdf){{#fig:visible-vbf-prefit}}
 
-![Visible-mass distribution in the boosted category. The pre-fit comparison
-shows the baseline observable in the recoil-enhanced category. This is a major
-contributor to the simultaneous visible-mass baseline fit.](figures/visible_mass_boosted.pdf){{#fig:visible-boosted-prefit}}
+![Baseline visible-mass pre-fit validation in the boosted category. The plot
+shows the boosted-category nominal visible-mass prediction before the post-fit
+profile update. This is a major contributor to the simultaneous visible-mass
+baseline fit.](figures/phase5_prefit_baseline_visible_boosted.pdf){{#fig:visible-boosted-prefit}}
 
-![Visible-mass distribution in the zero-jet category. The pre-fit comparison
-shows the broad baseline observable in the highest-statistics category. It
-anchors the background-rich part of the simultaneous fit.](figures/visible_mass_zero_jet.pdf){{#fig:visible-zero-prefit}}
+![Baseline visible-mass pre-fit validation in the zero-jet category. The plot
+shows the highest-statistics baseline category before post-fit nuisance
+profiling. It anchors the background-rich part of the simultaneous
+fit.](figures/phase5_prefit_baseline_visible_zero_jet.pdf){{#fig:visible-zero-prefit}}
+
+![Baseline visible-mass combined pre-fit validation. The plot sums the VBF,
+boosted, and zero-jet nominal visible-mass predictions and compares them with
+the summed observed data before profiling. The lower panel is the combined
+Data/pre-fit ratio.](figures/phase5_prefit_baseline_visible_combined.pdf){{#fig:visible-combined-prefit}}
 
 ![MVA input modelling summary. The figure records the data/background modelling
 quality of candidate classifier inputs. It documents the validation context for
@@ -2441,6 +2771,25 @@ using a single retained $D_{{NN}}$ tool.](figures/mva_input_modeling_chi2.pdf){{
 score response for signal and background before observed-data fitting. It
 checks that the retained classifier has the intended signal/background
 ordering.](figures/mva_score_templates.pdf){{#fig:mva-score-templates}}
+
+![$D_{{NN}}$ score pre-fit validation in the VBF category. The plot compares
+data with the nominal classifier-score background plus Standard Model Higgs
+prediction before profiling nuisance parameters in the secondary score fit. The
+lower panel is Data/pre-fit.](figures/phase5_prefit_nn_score_vbf.pdf){{#fig:nn-vbf-prefit}}
+
+![$D_{{NN}}$ score pre-fit validation in the boosted category. The plot shows
+the boosted-category nominal classifier-score prediction before the post-fit
+profile update. It uses the same score binning as the secondary
+workspace.](figures/phase5_prefit_nn_score_boosted.pdf){{#fig:nn-boosted-prefit}}
+
+![$D_{{NN}}$ score pre-fit validation in the zero-jet category. The plot shows
+the statistically dominant classifier-score category before nuisance profiling.
+The lower panel is Data/pre-fit.](figures/phase5_prefit_nn_score_zero_jet.pdf){{#fig:nn-zero-prefit}}
+
+![$D_{{NN}}$ score combined pre-fit validation. The plot sums the VBF, boosted,
+and zero-jet nominal classifier-score predictions and compares them with the
+summed observed data before profiling. The lower panel is the combined
+Data/pre-fit ratio.](figures/phase5_prefit_nn_score_combined.pdf){{#fig:nn-combined-prefit}}
 
 # Background Model
 
@@ -2518,31 +2867,46 @@ $$ {{#eq:nn-result}}
 
 with median expected limit `{nband[2]:.4f}`.
 
-![Visible-mass baseline in the VBF category. The plot compares data with the
-baseline visible-mass prediction after the data-driven reducible-background
-correction. The lower panel shows the data-to-prediction ratio.](figures/phase5_baseline_visible_vbf.pdf){{#fig:p5-visible-vbf}}
+![Visible-mass baseline post-fit validation in the VBF category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace, with the nominal background plus Standard Model Higgs template
+overlaid for reference. The lower panel shows the Data/post-fit
+ratio.](figures/phase5_baseline_visible_vbf.pdf){{#fig:p5-visible-vbf}}
 
-![Visible-mass baseline in the boosted category. The plot compares data with
-the baseline visible-mass prediction in the boosted category. This category has
-substantially more events than the VBF category and constrains the broad
-visible-mass shape.](figures/phase5_baseline_visible_boosted.pdf){{#fig:p5-visible-boosted}}
+![Visible-mass baseline post-fit validation in the boosted category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace. This category has substantially more events than the VBF category
+and constrains the broad visible-mass shape.](figures/phase5_baseline_visible_boosted.pdf){{#fig:p5-visible-boosted}}
 
-![Visible-mass baseline in the zero-jet category. The plot compares data with
-the baseline visible-mass prediction in the statistically dominant category.
-This category controls the global normalization behavior of the baseline
-workspace.](figures/phase5_baseline_visible_zero_jet.pdf){{#fig:p5-visible-zero}}
+![Visible-mass baseline post-fit validation in the zero-jet category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace in the statistically dominant category. This category controls the
+global normalization behavior of the baseline workspace.](figures/phase5_baseline_visible_zero_jet.pdf){{#fig:p5-visible-zero}}
 
-![$D_{{NN}}$ score in the VBF category. The plot compares data with the retained
-classifier-score prediction in the VBF category. The same score definition and
-binning are used in the other categories.](figures/phase5_nn_score_vbf.pdf){{#fig:p5-nn-vbf}}
+![Combined visible-mass baseline post-fit validation. The plot sums the VBF,
+boosted, and zero-jet post-fit visible-mass model expectations and compares
+them with the summed observed data. The lower panel is the combined
+Data/post-fit ratio used as the global baseline Data/MC check.](figures/phase5_baseline_visible_combined.pdf){{#fig:p5-visible-combined}}
 
-![$D_{{NN}}$ score in the boosted category. The plot compares data with the
-retained classifier-score prediction in the boosted category. The ratio panel
-checks whether the classifier ordering is modelled in observed data.](figures/phase5_nn_score_boosted.pdf){{#fig:p5-nn-boosted}}
+![$D_{{NN}}$ score post-fit validation in the VBF category. The plot compares
+data with the post-fit classifier-score total in the VBF category. The same
+score definition and binning are used in the other
+categories.](figures/phase5_nn_score_vbf.pdf){{#fig:p5-nn-vbf}}
 
-![$D_{{NN}}$ score in the zero-jet category. The plot compares data with the
-retained classifier-score prediction in the zero-jet category. The category has
-the largest statistical weight in the combined classifier fit.](figures/phase5_nn_score_zero_jet.pdf){{#fig:p5-nn-zero}}
+![$D_{{NN}}$ score post-fit validation in the boosted category. The plot
+compares data with the post-fit classifier-score total in the boosted category.
+The ratio panel checks whether the classifier ordering is modelled in observed
+data.](figures/phase5_nn_score_boosted.pdf){{#fig:p5-nn-boosted}}
+
+![$D_{{NN}}$ score post-fit validation in the zero-jet category. The plot
+compares data with the post-fit classifier-score total in the zero-jet category.
+The category has the largest statistical weight in the combined classifier
+fit.](figures/phase5_nn_score_zero_jet.pdf){{#fig:p5-nn-zero}}
+
+![Combined $D_{{NN}}$ score post-fit validation. The plot sums the VBF,
+boosted, and zero-jet post-fit classifier-score expectations and compares them
+with the summed observed score distribution. The lower panel is the combined
+Data/post-fit ratio used as the global score Data/MC check.](figures/phase5_nn_score_combined.pdf){{#fig:p5-nn-combined}}
 
 ![Observed result summary. The figure compares the visible-mass baseline,
 retained $D_{{NN}}$ result, CMS 2014 result, and CMS 2018 result on the same
@@ -2678,6 +3042,16 @@ and the common Standard Model line at $\mu=1$.}}
 \label{{fig:summary}}
 \end{{figure}}
 
+\begin{{figure*}}[t]
+\includegraphics[width=0.48\linewidth]{{figures/phase5_baseline_visible_combined.pdf}}\hfill
+\includegraphics[width=0.48\linewidth]{{figures/phase5_nn_score_combined.pdf}}
+\caption{{Combined post-fit Data/MC validation.  The left panel shows the
+visible-mass baseline summed over VBF, boosted, and zero-jet categories; the
+right panel shows the corresponding combined $D_{{NN}}$ score distribution.
+Both lower panels use Data/post-fit model ratios.}}
+\label{{fig:combined-postfit}}
+\end{{figure*}}
+
 \section{{Discussion}}
 The $D_{{NN}}$ observable has the smaller median expected upper limit and is
 therefore the more sensitive of the two retained tools in this rerun.  The
@@ -2742,6 +3116,16 @@ result, CMS 2014 result, and CMS 2018 result. Each row uses black observed
 points with horizontal uncertainties, green and yellow expected one- and
 two-standard-deviation bands, a black dashed median-expected marker, and the
 common Standard Model line at $\\mu=1$.](figures/observed_limit_significance_summary.pdf)
+
+![Combined visible-mass post-fit Data/MC validation. The plot sums the VBF,
+boosted, and zero-jet post-fit visible-mass expectations and compares them with
+the summed observed data. The lower panel is the combined Data/post-fit ratio
+for the baseline result.](figures/phase5_baseline_visible_combined.pdf)
+
+![Combined $D_{{NN}}$ score post-fit Data/MC validation. The plot sums the VBF,
+boosted, and zero-jet post-fit classifier-score expectations and compares them
+with the summed observed score distribution. The lower panel is the combined
+Data/post-fit ratio for the secondary result.](figures/phase5_nn_score_combined.pdf)
 
 # Discussion
 

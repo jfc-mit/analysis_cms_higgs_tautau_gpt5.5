@@ -568,3 +568,115 @@ Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
 ## milestone
 
 Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.
+
+## milestone
+
+Wrote corrected cited-only Phase 5 bibliography.
+
+## milestone
+
+Wrote focused final analysis note and PRL markdown for baseline plus D_NN outputs.
+
+## milestone
+
+Compiled ANALYSIS_NOTE_5_v1.md to TeX and PDF.
+
+## milestone
+
+Focused final rerun summary already present in experiment_log.md.

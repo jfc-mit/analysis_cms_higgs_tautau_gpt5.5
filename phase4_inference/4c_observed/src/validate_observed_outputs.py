@@ -31,6 +31,7 @@ JSON_FILES = [
     "pyhf_workspace_nn_score.json",
     "baseline_visible_result.json",
     "nn_score_result.json",
+    "baseline_observed_gof_toys.json",
 ]
 FIGURE_STEMS = [
     "observed_visible_vbf",
@@ -133,6 +134,28 @@ def main() -> None:
     nn_fit = results["nn_score_result"]["observed_fit"]
     if nn_fit["status"] != "evaluated":
         raise ValueError(f"D_NN fit did not evaluate: {nn_fit}")
+    gof = payloads["baseline_observed_gof_toys.json"]
+    required_gof_keys = {
+        "method",
+        "observed_cabinetry_saturated_p_value",
+        "observed_statistic",
+        "toy_p_value",
+        "toy_statistic_summary",
+        "toy_statistics",
+        "within_central_95_interval",
+    }
+    missing_gof_keys = required_gof_keys.difference(gof)
+    if missing_gof_keys:
+        raise ValueError(f"Observed GoF toy artifact is missing keys: {sorted(missing_gof_keys)}")
+    if "cabinetry.fit.fit" not in gof["method"] or "each toy is refit" not in gof["method"]:
+        raise ValueError("Observed GoF toy artifact does not document the fitted-toy cabinetry method")
+    if gof["n_toys"] != len(gof["toy_statistics"]):
+        raise ValueError("Observed GoF toy count does not match stored toy statistics")
+    if gof.get("n_fit_failures", 0) != 0:
+        raise ValueError(f"Observed GoF toy fits had failures: {gof['n_fit_failures']}")
+    interval = gof["toy_statistic_summary"]["central_95_interval"]
+    if gof["within_central_95_interval"] != (interval[0] <= gof["observed_statistic"] <= interval[1]):
+        raise ValueError("Observed GoF central-interval flag is inconsistent with the stored interval")
     for stem in FIGURE_STEMS:
         for suffix in [".pdf", ".png"]:
             path = FIG / f"{stem}{suffix}"

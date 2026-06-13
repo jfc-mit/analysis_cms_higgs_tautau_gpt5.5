@@ -103,18 +103,25 @@ normalization weights and class balancing. In the current rerun the stored
 training metric is test AUC `0.8247`
 with train AUC `0.8524`.
 
-![Visible-mass distribution in the VBF category. The pre-fit comparison shows
-the fitted baseline observable in the most signal-enriched topology. The final
-fit uses the corresponding Phase-4c template with the same category
-definition.](figures/visible_mass_vbf.pdf){#fig:visible-vbf-prefit}
+![Baseline visible-mass pre-fit validation in the VBF category. The plot
+compares data with the nominal visible-mass background plus Standard Model
+Higgs prediction before profiling nuisance parameters in the signal fit. The
+lower panel is Data/pre-fit.](figures/phase5_prefit_baseline_visible_vbf.pdf){#fig:visible-vbf-prefit}
 
-![Visible-mass distribution in the boosted category. The pre-fit comparison
-shows the baseline observable in the recoil-enhanced category. This is a major
-contributor to the simultaneous visible-mass baseline fit.](figures/visible_mass_boosted.pdf){#fig:visible-boosted-prefit}
+![Baseline visible-mass pre-fit validation in the boosted category. The plot
+shows the boosted-category nominal visible-mass prediction before the post-fit
+profile update. This is a major contributor to the simultaneous visible-mass
+baseline fit.](figures/phase5_prefit_baseline_visible_boosted.pdf){#fig:visible-boosted-prefit}
 
-![Visible-mass distribution in the zero-jet category. The pre-fit comparison
-shows the broad baseline observable in the highest-statistics category. It
-anchors the background-rich part of the simultaneous fit.](figures/visible_mass_zero_jet.pdf){#fig:visible-zero-prefit}
+![Baseline visible-mass pre-fit validation in the zero-jet category. The plot
+shows the highest-statistics baseline category before post-fit nuisance
+profiling. It anchors the background-rich part of the simultaneous
+fit.](figures/phase5_prefit_baseline_visible_zero_jet.pdf){#fig:visible-zero-prefit}
+
+![Baseline visible-mass combined pre-fit validation. The plot sums the VBF,
+boosted, and zero-jet nominal visible-mass predictions and compares them with
+the summed observed data before profiling. The lower panel is the combined
+Data/pre-fit ratio.](figures/phase5_prefit_baseline_visible_combined.pdf){#fig:visible-combined-prefit}
 
 ![MVA input modelling summary. The figure records the data/background modelling
 quality of candidate classifier inputs. It documents the validation context for
@@ -124,6 +131,25 @@ using a single retained $D_{NN}$ tool.](figures/mva_input_modeling_chi2.pdf){#fi
 score response for signal and background before observed-data fitting. It
 checks that the retained classifier has the intended signal/background
 ordering.](figures/mva_score_templates.pdf){#fig:mva-score-templates}
+
+![$D_{NN}$ score pre-fit validation in the VBF category. The plot compares
+data with the nominal classifier-score background plus Standard Model Higgs
+prediction before profiling nuisance parameters in the secondary score fit. The
+lower panel is Data/pre-fit.](figures/phase5_prefit_nn_score_vbf.pdf){#fig:nn-vbf-prefit}
+
+![$D_{NN}$ score pre-fit validation in the boosted category. The plot shows
+the boosted-category nominal classifier-score prediction before the post-fit
+profile update. It uses the same score binning as the secondary
+workspace.](figures/phase5_prefit_nn_score_boosted.pdf){#fig:nn-boosted-prefit}
+
+![$D_{NN}$ score pre-fit validation in the zero-jet category. The plot shows
+the statistically dominant classifier-score category before nuisance profiling.
+The lower panel is Data/pre-fit.](figures/phase5_prefit_nn_score_zero_jet.pdf){#fig:nn-zero-prefit}
+
+![$D_{NN}$ score combined pre-fit validation. The plot sums the VBF, boosted,
+and zero-jet nominal classifier-score predictions and compares them with the
+summed observed data before profiling. The lower panel is the combined
+Data/pre-fit ratio.](figures/phase5_prefit_nn_score_combined.pdf){#fig:nn-combined-prefit}
 
 # Background Model
 
@@ -209,31 +235,46 @@ $$ {#eq:nn-result}
 
 with median expected limit `1.8069`.
 
-![Visible-mass baseline in the VBF category. The plot compares data with the
-baseline visible-mass prediction after the data-driven reducible-background
-correction. The lower panel shows the data-to-prediction ratio.](figures/phase5_baseline_visible_vbf.pdf){#fig:p5-visible-vbf}
+![Visible-mass baseline post-fit validation in the VBF category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace, with the nominal background plus Standard Model Higgs template
+overlaid for reference. The lower panel shows the Data/post-fit
+ratio.](figures/phase5_baseline_visible_vbf.pdf){#fig:p5-visible-vbf}
 
-![Visible-mass baseline in the boosted category. The plot compares data with
-the baseline visible-mass prediction in the boosted category. This category has
-substantially more events than the VBF category and constrains the broad
-visible-mass shape.](figures/phase5_baseline_visible_boosted.pdf){#fig:p5-visible-boosted}
+![Visible-mass baseline post-fit validation in the boosted category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace. This category has substantially more events than the VBF category
+and constrains the broad visible-mass shape.](figures/phase5_baseline_visible_boosted.pdf){#fig:p5-visible-boosted}
 
-![Visible-mass baseline in the zero-jet category. The plot compares data with
-the baseline visible-mass prediction in the statistically dominant category.
-This category controls the global normalization behavior of the baseline
-workspace.](figures/phase5_baseline_visible_zero_jet.pdf){#fig:p5-visible-zero}
+![Visible-mass baseline post-fit validation in the zero-jet category. The plot
+compares data with the post-fit visible-mass total from the retained baseline
+workspace in the statistically dominant category. This category controls the
+global normalization behavior of the baseline workspace.](figures/phase5_baseline_visible_zero_jet.pdf){#fig:p5-visible-zero}
 
-![$D_{NN}$ score in the VBF category. The plot compares data with the retained
-classifier-score prediction in the VBF category. The same score definition and
-binning are used in the other categories.](figures/phase5_nn_score_vbf.pdf){#fig:p5-nn-vbf}
+![Combined visible-mass baseline post-fit validation. The plot sums the VBF,
+boosted, and zero-jet post-fit visible-mass model expectations and compares
+them with the summed observed data. The lower panel is the combined
+Data/post-fit ratio used as the global baseline Data/MC check.](figures/phase5_baseline_visible_combined.pdf){#fig:p5-visible-combined}
 
-![$D_{NN}$ score in the boosted category. The plot compares data with the
-retained classifier-score prediction in the boosted category. The ratio panel
-checks whether the classifier ordering is modelled in observed data.](figures/phase5_nn_score_boosted.pdf){#fig:p5-nn-boosted}
+![$D_{NN}$ score post-fit validation in the VBF category. The plot compares
+data with the post-fit classifier-score total in the VBF category. The same
+score definition and binning are used in the other
+categories.](figures/phase5_nn_score_vbf.pdf){#fig:p5-nn-vbf}
 
-![$D_{NN}$ score in the zero-jet category. The plot compares data with the
-retained classifier-score prediction in the zero-jet category. The category has
-the largest statistical weight in the combined classifier fit.](figures/phase5_nn_score_zero_jet.pdf){#fig:p5-nn-zero}
+![$D_{NN}$ score post-fit validation in the boosted category. The plot
+compares data with the post-fit classifier-score total in the boosted category.
+The ratio panel checks whether the classifier ordering is modelled in observed
+data.](figures/phase5_nn_score_boosted.pdf){#fig:p5-nn-boosted}
+
+![$D_{NN}$ score post-fit validation in the zero-jet category. The plot
+compares data with the post-fit classifier-score total in the zero-jet category.
+The category has the largest statistical weight in the combined classifier
+fit.](figures/phase5_nn_score_zero_jet.pdf){#fig:p5-nn-zero}
+
+![Combined $D_{NN}$ score post-fit validation. The plot sums the VBF,
+boosted, and zero-jet post-fit classifier-score expectations and compares them
+with the summed observed score distribution. The lower panel is the combined
+Data/post-fit ratio used as the global score Data/MC check.](figures/phase5_nn_score_combined.pdf){#fig:p5-nn-combined}
 
 ![Observed result summary. The figure compares the visible-mass baseline,
 retained $D_{NN}$ result, CMS 2014 result, and CMS 2018 result on the same
