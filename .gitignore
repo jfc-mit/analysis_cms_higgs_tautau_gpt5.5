@@ -10,9 +10,6 @@ __pycache__/
 .slurm_*.out
 
 # Local Open Data copies
-data/*
-mc/*
-!data/.gitkeep
-!mc/.gitkeep
+./data
+./mc
 *.root
-ANALYSIS_NOTE_5_v1-1.pdf
