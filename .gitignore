@@ -10,6 +10,6 @@ __pycache__/
 .slurm_*.out
 
 # Local Open Data copies
-./data
-./mc
+data
+mc
 *.root
